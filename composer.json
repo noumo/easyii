@@ -1,15 +1,16 @@
 {
     "name": "noumo/easyii",
     "version": "dev-master",
-    "description": "Eeasy CMS based on Yii2 Framework.",
-    "keywords": ["yii2", "extension", "cms", "control panel", "admin", "easy"],
+    "description": "Eeasy CMS based on Yii2 Framework - Development package",
+    "keywords": ["easyii"],
     "homepage": "http://easyiicms.com",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
     "minimum-stability": "dev",
     "support": {
         "wiki": "http://easyiicms.com/docs",
-        "source": "https://github.com/noumo/easyii.git"
+        "source": "https://github.com/noumo/easyii.git",
+        "issues": "https://github.com/noumo/easyii/issues"
     },
     "authors": [
         {
