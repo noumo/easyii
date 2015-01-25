@@ -41,7 +41,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
 
     public function bootstrap($app)
     {
-        Yii::setAlias('easyii', '@vendor/noumo/easyiicms');
+        Yii::setAlias('easyii', '@vendor/noumo/easyii');
 
         if(!$app->user->isGuest && strpos($app->request->pathInfo, 'admin') === false) {
             $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
