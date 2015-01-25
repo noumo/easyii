@@ -1,0 +1,69 @@
+body {
+    background: #1d212a;
+    font-family: 'Open Sans', sans-serif;
+}
+#wrapper{
+    height: 100%;
+}
+#wrapper .logo{
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+    color: #B3B8C3;
+}
+#wrapper .logo:hover{
+    color: #fff;
+    text-decoration: none;
+}
+#wrapper .logo img{
+    vertical-align: top;
+    margin-right: 8px;
+}
+#wrapper .panel-heading{
+    font-size: 24px;
+    color: #777;
+}
+#wrapper .vertical-align-parent {
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+#wrapper .vertical-align-child {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+#wrapper .panel {
+    border-radius: 0;
+}
+#wrapper .panel .panel-body {
+    padding: 15px 20px;
+}
+#wrapper .tooltip{
+    min-width: 200px;
+}
+#wrapper .tooltip .tooltip-inner{
+    font-size: 12px;
+    text-align: left;
+    padding: 5px 8px 5px 10px;
+    background: #27b6af;
+}
+#wrapper .tooltip .tooltip-arrow{
+    border-right-color: #27b6af;
+}
+#wrapper .panel .recaptcha-tip{
+    margin-bottom: 20px;
+}
+#wrapper .btn-primary, #wrapper .btn-primary:focus, #wrapper .btn-primary:active {
+    background: #27b6af !important;
+    border-radius: 0;
+    border: none !important;
+}
+#wrapper .btn-primary:hover{
+    background: #289f98 !important;
+}
+#wrapper .form-control{
+    border-radius: 0;
+}

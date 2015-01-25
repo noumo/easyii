@@ -1,0 +1,54 @@
+#easyii-navbar {
+    font-family: 'Open Sans', sans-serif !important;
+    background: #1d212a;
+    color: #B3B8C3;
+}
+#easyii-navbar .navbar-left li:first-child {
+    border-right: 1px solid #111;
+}
+#easyii-navbar .navbar-text{
+    color: #B3B8C3;
+}
+#easyii-navbar .switcher{
+    margin-top: 15px;
+    border: none;
+    background: #b3b8c3;
+    color: #FFF;
+    height: 20px;
+    min-width: 40px;
+    font-size: 11px;
+    border-radius: 10px;
+    padding: 1px;
+}
+#easyii-navbar .switcher .slider{
+    background: #f0f3f3;
+    height: 18px;
+    border-radius: 10px;
+    box-shadow: 0 0 2px 1px #999;
+}
+#easyii-navbar .switcher.is-active{
+    background: #27b6af;
+}
+#easyii-navbar .switcher .textNo{
+    color: #fff;
+}
+/*#easyii-navbar li.live-edit a:hover{
+    background: #27b6af;
+}*/
+
+span.easyiicms-edit{
+    display: inline-block;
+}
+
+.easyiicms-edit{
+    position: relative;
+}
+.easyiicms-goedit{
+    position: absolute; top: 0; left: 0;
+
+}
+.easyiicms-goedit:hover{
+    border: 1px solid #337ab7;
+    box-shadow: 0px 0px 10px #337ab7;
+    background-color: rgba(51, 122, 183, 0.2);
+}

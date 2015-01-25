@@ -1,0 +1,27 @@
+{
+    "name": "noumo/yii2-easyii",
+    "version": "dev-master",
+    "description": "Simple CMS for Yii2 Framework.",
+    "keywords": ["yii2", "extension", "cms", "control panel", "admin", "easy", "simple"],
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+        "wiki": "https://bitbucket.org/noumo/easyiicms/wiki",
+        "source": "https://noumo@bitbucket.org/noumo/easyiicms.git"
+    },
+    "authors": [
+        {
+            "name": "Ivan Vasilkov",
+            "email": "noumohope@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "yii\\easyii\\": "/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "yiisoft/yii2": "*"
+    }
+}

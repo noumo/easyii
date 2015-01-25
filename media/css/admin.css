@@ -1,0 +1,169 @@
+#admin-body{
+    font-family: 'Open Sans', sans-serif;
+    background: #f0f3f3;
+}
+#admin-body .wrapper {
+    height: 100%;
+    display: table;
+    width: 100%;
+}
+
+/*--------------- HEADER ---------------*/
+#admin-body .header {
+    display: table-row;
+    height: 50px;
+    background: #1d212a;
+    color: #B3B8C3;
+    line-height: 50px;
+}
+#admin-body .header .logo{
+    float: left;
+    width: 220px;
+    text-align: center;
+    font-size: 18px;
+    color: #FFF;
+}
+#admin-body .header .nav{
+    margin-left: 220px;
+    padding-right: 20px;
+}
+#admin-body .header .nav a{
+    color: #B3B8C3;
+}
+#admin-body .header .nav a:hover, #admin-body .header .nav a:focus, #admin-body .header .nav a:active{
+    color: #fff;
+    text-decoration: none;
+}
+#admin-body .header .nav a i{
+    margin-right: 5px;
+}
+
+#admin-body .box {
+    display: table-cell;
+}
+
+/*--------------- LEFT MENU ---------------*/
+#admin-body .sidebar {
+    background: #1d212a;
+    width: 220px;
+    padding: 0;
+    vertical-align: top;
+}
+#admin-body .sidebar a.menu-item{
+    border-top: 1px solid #333;
+    display: block;
+    padding: 15px 20px;
+    color: #B3B8C3;
+}
+#admin-body .sidebar a.menu-item:hover{
+    text-decoration: none;
+    color: #FFF;
+
+}
+#admin-body .sidebar a.active{
+    border-color: #27b6af;
+    background: #27b6af;
+    color: #fff;
+}
+#admin-body .sidebar a.active:hover{
+    background: #27b6af;
+    color: #fff;
+}
+
+#admin-body .sidebar a.menu-item i{
+    margin-right: 10px;
+}
+#admin-body .sidebar a.menu-item .badge{
+    background: #fff;
+    color: #555;
+    margin-top: 2px;
+    float: right;
+}
+
+/*--------------- CONTENT ---------------*/
+#admin-body .main {
+    height: 100%;
+    display: table;
+    width: 100%;
+    background: #fff;
+}
+#admin-body .main .page-title{
+    font-size: 18px;
+    background: #f6f8f8;
+    padding: 13px 20px;
+}
+
+#admin-body .main .container-fluid{
+    padding: 20px;
+}
+#admin-body .main a, #admin-body .main .btn, #admin-body .main .form-control{
+    border-radius: 0 !important;
+}
+
+#admin-body .table {
+    table-layout: fixed;
+}
+#admin-body .table th{
+    font-size: 14px;
+    color: #565656;
+}
+#admin-body .table td{
+    font-size: 14px;
+}
+#admin-body .table td.control{
+    vertical-align: middle;
+    text-align: right;
+}
+#admin-body .table td.status{
+    vertical-align: middle;
+    text-align: center;
+}
+#admin-body .table td.vtop{
+    vertical-align: top;
+}
+
+#admin-body .switcher{
+    border: none;
+    background: #b3b8c3;
+    color: #FFF;
+    height: 20px;
+    min-width: 40px;
+    font-size: 11px;
+    border-radius: 10px;
+    padding: 1px;
+}
+#admin-body .switcher .slider{
+    background: #f0f3f3;
+    height: 18px;
+    border-radius: 10px;
+    box-shadow: none;
+}
+#admin-body .switcher.is-active{
+    background: #27b6af;
+}
+#admin-body .switcher .textNo{
+    color: #fff;
+}
+
+
+
+.confirm-delete{
+    color: #a94442;
+}
+.color-red{
+    color: #a94442;
+}
+.font-16 {
+    font-size: 16px;
+}
+.font-12 {
+    font-size: 12px;
+}
+
+#notify-alert {
+    display: none;
+    position: fixed;
+    top: 70px;
+    right: 10px;
+    width: 300px;
+}
