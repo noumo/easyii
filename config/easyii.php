@@ -18,7 +18,7 @@ return [
         'user' => [
             'identityClass' => 'yii\easyii\models\Admin',
             'enableAutoLogin' => true,
-            'absoluteAuthTimeout' => 86400,
+            'authTimeout' => 86400,
         ],
         'i18n' => [
             'translations' => [
