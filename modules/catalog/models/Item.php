@@ -33,6 +33,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii/catalog', 'Title'),
             'thumb' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
+            'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
 

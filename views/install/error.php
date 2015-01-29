@@ -3,17 +3,17 @@ use yii\easyii\assets\EmptyAsset;
 
 $asset = EmptyAsset::register($this);
 
-$this->title = Yii::t('easyii/install', 'Installation completed');
+$this->title = Yii::t('easyii/install', 'Installation error');
 ?>
 <div class="container">
     <div id="wrapper" class="col-md-6 col-md-offset-3 vertical-align-parent">
         <div class="vertical-align-child">
             <div class="panel">
                 <div class="panel-heading text-center">
-                    <?= Yii::t('easyii/install', 'Installation completed') ?>
+                    <?= Yii::t('easyii/install', 'Installation error') ?>
                 </div>
                 <div class="panel-body text-center">
-                    <a href="/admin">Go to control panel</a>
+                    <?= Yii::t('easyii/install', $error) ?>
                 </div>
             </div>
             <div class="text-center">

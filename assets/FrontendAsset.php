@@ -12,6 +12,7 @@ class FrontendAsset extends \yii\web\AssetBundle
     ];
     public $depends = [
         'yii\web\JqueryAsset',
+        'yii\bootstrap\BootstrapAsset',
         'yii\easyii\assets\SwitcherAsset'
     ];
 }

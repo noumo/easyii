@@ -34,4 +34,13 @@ class News extends \yii\easyii\components\ActiveRecord
             'image' => Yii::t('easyii/news', 'Preview')
         ];
     }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        if($this->image){
+            @unlink(Yii::getAlias('@webroot').$this->image);
+        }
+    }
 }

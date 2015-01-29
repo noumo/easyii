@@ -40,7 +40,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
     {
         if (parent::beforeSave($insert)) {
             if($this->isNewRecord) {
-                $this->auth_key = self::generateAuthKey();
+                $this->auth_key = $this->generateAuthKey();
                 $this->password = $this->hashPassword($this->password);
             }
             else{
@@ -102,7 +102,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
         return sha1($password.$this->getAuthKey().Setting::get('password_salt'));
     }
 
-    public static function generateAuthKey()
+    private function generateAuthKey()
     {
         return Yii::$app->security->generateRandomString();
     }

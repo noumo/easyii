@@ -15,11 +15,24 @@ class InstallController extends \yii\web\Controller
 {
     public $layout = 'empty';
 
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action)) {
+            $this->registerI18n();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function actionIndex()
     {
-        $this->checkDbConnection();
-        //$this->checkIsInstalled();
-        $this->registerI18n();
+        if(!$this->checkDbConnection()){
+            return $this->showError('Cannot connect to database. Please configure `config/db.php`.');
+        }
+        if($this->checkIsInstalled()){
+            return $this->showError('EasyiiCMS is already installed. If you want to reinstall easyiiCMS, please drop all tables with prefix `easyii_` from your database manually.');
+        }
 
         $installForm = new InstallForm();
 
@@ -29,14 +42,35 @@ class InstallController extends \yii\web\Controller
             $this->insertSettings($installForm);
             $this->loadModules();
 
+            Yii::$app->cache->flush();
             Yii::$app->session->setFlash('root_password', $installForm->root_password);
+
             return $this->redirect('/admin/install/finish');
         }
         else {
+            $installForm->robot_email = 'noreply@'.Yii::$app->request->serverName;
+
             return $this->render('index', [
                 'model' => $installForm
             ]);
         }
+    }
+
+    public function actionFinish()
+    {
+        $root_password = Yii::$app->session->getFlash('root_password', null, true);
+        if($root_password)
+        {
+            $loginForm = new LoginForm([
+                'username' => 'root',
+                'password' => $root_password,
+            ]);
+            if($loginForm->login()){
+                return $this->redirect('/admin/');
+            }
+        }
+
+        return $this->render('finish');
     }
 
     private function registerI18n()
@@ -51,37 +85,25 @@ class InstallController extends \yii\web\Controller
         ];
     }
 
-
-    public function actionFinish()
-    {
-        $root_password = Yii::$app->session->getFlash('root_password', null, true);
-        if($root_password)
-        {
-            $loginForm = new LoginForm([
-                'username' => 'root',
-                'password' => $root_password,
-            ]);
-            if($loginForm->login()) return $this->redirect('/admin/');
-        }
-
-        return $this->render('finish');
-    }
-
     private function checkIsInstalled()
     {
-        if(Yii::$app->db->createCommand("SHOW TABLES LIKE 'easyii_%'")->query()->count() > 0){
-            throw new ServerErrorHttpException('easyiiCMS is already installed. If you want to reinstall easyiiCMS, please drop all tables with prefix `easyii_` from your database manually.');
-        }
+        return Yii::$app->db->createCommand("SHOW TABLES LIKE 'easyii_%'")->query()->count() > 0;
     }
 
     private function checkDbConnection()
     {
         try{
             Yii::$app->db->createCommand('SELECT NOW()')->query();
+            return true;
         }
         catch(\Exception $e){
-            throw new ServerErrorHttpException('Cannot connect to database. Please configure `config/db.php`.');
+            return false;
         }
+    }
+
+    private function showError($text)
+    {
+        return $this->render('error', ['error' => $text]);
     }
 
     private function createUploadsDir()
@@ -104,7 +126,8 @@ class InstallController extends \yii\web\Controller
     {
         $db = Yii::$app->db;
         $password_salt = Yii::$app->security->generateRandomString();
-        $root_password = sha1($installForm->root_password.$password_salt);
+        $root_auth_key = Yii::$app->security->generateRandomString();
+        $root_password = sha1($installForm->root_password.$root_auth_key.$password_salt);
 
         $db->createCommand()->insert(Setting::tableName(), [
             'name' => 'recaptcha_key',
@@ -122,7 +145,7 @@ class InstallController extends \yii\web\Controller
 
         $db->createCommand()->insert(Setting::tableName(), [
             'name' => 'root_auth_key',
-            'value' => Admin::generateAuthKey(),
+            'value' => $root_auth_key,
             'title' => 'Root authorization key',
             'visibility' => Setting::VISIBLE_NONE
         ])->execute();
