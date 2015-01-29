@@ -19,6 +19,12 @@
             "role" : "Developer"
         }
     ],
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": ">=2.0.2",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-swiftmailer": "*"
+    },
     "autoload": {
         "psr-4": {
             "yii\\easyii\\": "/"
