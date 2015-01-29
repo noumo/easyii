@@ -55,4 +55,14 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
         $view = Yii::$app->getView();
         echo $view->render('@easyii/views/layouts/frontend-toolbar.php');
     }
+
+    public static function installed()
+    {
+        try{
+            return Yii::$app->db->createCommand("SHOW TABLES LIKE 'easyii_%'")->query()->count() > 0;
+        }
+        catch(\Exception $e){
+            return false;
+        }
+    }
 }
