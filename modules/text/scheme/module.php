@@ -5,6 +5,6 @@ return [
         'en' => 'Text blocks',
         'ru' => 'Текстовые блоки',
     ],
-    'icon' => 'align-font',
+    'icon' => 'font',
     'order_num' => 20,
 ];

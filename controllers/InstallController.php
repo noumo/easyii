@@ -201,7 +201,7 @@ class InstallController extends \yii\web\Controller
             }
             $module = new Module();
             $module->name = $moduleName;
-            $module->title = $moduleConfig['title'][$language] ? $moduleConfig['title'][$language] : $moduleConfig['title']['en'];
+            $module->title = !empty($moduleConfig['title'][$language]) ? $moduleConfig['title'][$language] : $moduleConfig['title']['en'];
             $module->icon = $moduleConfig['icon'];
             $module->order_num = $moduleConfig['order_num'];
             $module->status = Module::STATUS_ON;

@@ -14,10 +14,12 @@ class SortableModel extends \yii\base\Behavior
 
     public function findMaxOrderNum()
     {
-        $maxOrderNum = (int)(new \yii\db\Query())
-            ->select('MAX(`order_num`)')
-            ->from($this->owner->tableName())
-            ->scalar();
-        $this->owner->order_num = ++$maxOrderNum;
+        if(!$this->owner->order_num) {
+            $maxOrderNum = (int)(new \yii\db\Query())
+                ->select('MAX(`order_num`)')
+                ->from($this->owner->tableName())
+                ->scalar();
+            $this->owner->order_num = ++$maxOrderNum;
+        }
     }
 }
