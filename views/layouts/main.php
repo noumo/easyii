@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\easyii\assets\AdminAsset;
 
-$adminAsset = AdminAsset::register($this);
+$asset = AdminAsset::register($this);
 $moduleName = $this->context->module->id;
 ?>
 <?php $this->beginPage() ?>
@@ -21,7 +21,7 @@ $moduleName = $this->context->module->id;
         <div class="wrapper">
             <div class="header">
                 <div class="logo">
-                    <img src="<?= $adminAsset->baseUrl ?>/img/logo_20.png">
+                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png">
                     EasyiiCMS
                 </div>
                 <div class="nav">
