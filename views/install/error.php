@@ -13,7 +13,7 @@ $this->title = Yii::t('easyii/install', 'Installation error');
                     <?= Yii::t('easyii/install', 'Installation error') ?>
                 </div>
                 <div class="panel-body text-center">
-                    <?= Yii::t('easyii/install', $error) ?>
+                    <?= $error ?>
                 </div>
             </div>
             <div class="text-center">
