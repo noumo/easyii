@@ -1,9 +1,7 @@
 <?php
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
-use yii\easyii\assets\EmptyAsset;
 
-$asset = EmptyAsset::register($this);
+$asset = \yii\easyii\assets\EmptyAsset::register($this);
 ?>
 <div class="container">
     <div id="wrapper" class="col-md-4 col-md-offset-4 vertical-align-parent">

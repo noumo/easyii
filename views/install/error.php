@@ -1,7 +1,5 @@
 <?php
-use yii\easyii\assets\EmptyAsset;
-
-$asset = EmptyAsset::register($this);
+$asset = \yii\easyii\assets\EmptyAsset::register($this);
 
 $this->title = Yii::t('easyii/install', 'Installation error');
 ?>

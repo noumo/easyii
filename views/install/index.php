@@ -1,12 +1,9 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
-use yii\bootstrap\BootstrapPluginAsset;
 
-use yii\easyii\assets\EmptyAsset;
+$asset = \yii\easyii\assets\EmptyAsset::register($this);
 
-BootstrapPluginAsset::register($this);
-$asset = EmptyAsset::register($this);
 $this->registerJs('$("input").tooltip({ placement: "right", trigger: "focus" })');
 
 $this->title = Yii::t('easyii/install', 'Installation');
