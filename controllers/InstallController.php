@@ -5,7 +5,6 @@ use Yii;
 use yii\helpers\FileHelper;
 use yii\web\ServerErrorHttpException;
 
-use yii\easyii\AdminModule;
 use yii\easyii\models\InstallForm;
 use yii\easyii\models\LoginForm;
 use yii\easyii\models\Module;
@@ -30,7 +29,7 @@ class InstallController extends \yii\web\Controller
         if(!$this->checkDbConnection()){
             return $this->showError('Cannot connect to database. Please configure `config/db.php`.');
         }
-        if(AdminModule::installed()){
+        if($this->module->installed){
             return $this->showError('EasyiiCMS is already installed. If you want to reinstall easyiiCMS, please drop all tables with prefix `easyii_` from your database manually.');
         }
 

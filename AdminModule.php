@@ -15,6 +15,8 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
     public $settings;
     public $activeModules;
 
+    private $_installed;
+
     public function init()
     {
         parent::init();
@@ -56,13 +58,15 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
         echo $view->render('@easyii/views/layouts/frontend-toolbar.php');
     }
 
-    public static function installed()
+    public function getInstalled()
     {
-        try{
-            return Yii::$app->db->createCommand("SHOW TABLES LIKE 'easyii_%'")->query()->count() > 0;
+        if($this->_installed === null) {
+            try {
+                $this->_installed = Yii::$app->db->createCommand("SHOW TABLES LIKE 'easyii_%'")->query()->count() > 0 ? true : false;
+            } catch (\Exception $e) {
+                $this->_installed = false;
+            }
         }
-        catch(\Exception $e){
-            return false;
-        }
+        return $this->_installed;
     }
 }
