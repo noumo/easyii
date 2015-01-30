@@ -28,7 +28,7 @@ class InstallController extends \yii\web\Controller
     {
         if(!$this->checkDbConnection()){
             $configFile = str_replace(Yii::getAlias('@webroot'), Yii::getAlias('@app'), '').'/config/db.php';
-            return $this->showError(Yii::t('easyii/install', 'Cannot connect to database. Please configure `{0}`.', $configFile);
+            return $this->showError(Yii::t('easyii/install', 'Cannot connect to database. Please configure `{0}`.', $configFile));
         }
         if($this->module->installed){
             return $this->showError(Yii::t('easyii/install', 'EasyiiCMS is already installed. If you want to reinstall easyiiCMS, please drop all tables with prefix `easyii_` from your database manually.'));
