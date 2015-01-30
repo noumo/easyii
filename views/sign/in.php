@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
 
 $asset = \yii\easyii\assets\EmptyAsset::register($this);
 ?>
