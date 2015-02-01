@@ -34,7 +34,7 @@ class ReCaptcha extends InputWidget
     {
         parent::init();
 
-        if (empty(Setting::get('recaptcha_key'))) {
+        if (!Setting::get('recaptcha_key')) {
             throw new InvalidConfigException('Required `recaptcha_key` setting isn\'t set.');
         }
 

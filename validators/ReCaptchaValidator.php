@@ -20,7 +20,7 @@ class ReCaptchaValidator extends Validator
     public function init()
     {
         parent::init();
-        if (empty(Setting::get('recaptcha_secret'))) {
+        if (!Setting::get('recaptcha_secret')) {
             throw new InvalidConfigException('Required `recatpcha_secret` setting isn\'t set.');
         }
 
