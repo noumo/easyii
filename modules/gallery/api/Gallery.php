@@ -166,7 +166,8 @@ class Gallery extends \yii\easyii\components\API
             'title' => $is_string ? $data : $data['title'],
             'thumb' => $is_string ? '' : $data['thumb'],
             'slug' => $is_string ? '' : $data['slug'],
-            'photos' => []
+            'photos' => [],
+            'empty' => $is_string ? true : false
         ];
     }
 

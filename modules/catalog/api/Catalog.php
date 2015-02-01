@@ -186,7 +186,8 @@ class Catalog extends \yii\easyii\components\API
             'id' => $is_string ? '' : $data['category_id'],
             'title' => $is_string ? $data : $data['title'],
             'slug' => $is_string ? '' : $data['slug'],
-            'thumb' => $is_string ? '' : $data['thumb']
+            'thumb' => $is_string ? '' : $data['thumb'],
+            'empty' => $is_string ? true : false
         ];
     }
 
@@ -199,6 +200,7 @@ class Catalog extends \yii\easyii\components\API
             'title' => $is_string ? $data : $data['title'],
             'thumb' => $is_string ? '' : $data['thumb'],
             'description' => $is_string ? $data : $data['description'],
+            'empty' => $is_string ? true : false
         ];
         if($is_string){
             $temp->data = new \stdClass();

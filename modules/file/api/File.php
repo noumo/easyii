@@ -119,6 +119,7 @@ class File extends \yii\easyii\components\API
             'downloads' => $is_string ? '' : $data['downloads'],
             'time' => $is_string ? '' : $data['time'],
             'date' => $is_string ? '' : Yii::$app->formatter->asDatetime($data['time'], 'medium'),
+            'empty' => $is_string ? true : false
         ];
     }
 

@@ -40,7 +40,8 @@ class Page extends \yii\easyii\components\API
             'id' => $is_string ? '' : $data['page_id'],
             'title' => $is_string ? $data : $data['title'],
             'text' => $is_string ? $data : $data['text'],
-            'slug' => $is_string ? '' : $data['slug']
+            'slug' => $is_string ? '' : $data['slug'],
+            'empty' => $is_string ? true : false
         ];
     }
 
