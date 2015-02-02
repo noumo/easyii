@@ -26,8 +26,8 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
             [['name', 'title', 'text'], 'trim'],
             [['name', 'title', 'text'], EscapeValidator::className()],
             ['title', 'string', 'max' => 128],
-            ['reCaptcha', ReCaptchaValidator::className(), 'when' => function(){
-                return Yii::$app->getModule('admin')->activeModules['guestbook']->settings['enableCaptcha'];
+            ['reCaptcha', ReCaptchaValidator::className(), 'when' => function($model){
+                return $model->isNewRecord && Yii::$app->getModule('admin')->activeModules['guestbook']->settings['enableCaptcha'];
             }],
         ];
     }
@@ -38,6 +38,7 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
             if($insert){
                 $this->ip = Yii::$app->request->userIP;
                 $this->time = time();
+                $this->new = 1;
                 $this->status = Yii::$app->getModule('admin')->activeModules['guestbook']->settings['preModerate'] ? self::STATUS_OFF : self::STATUS_ON;
             }
             return true;

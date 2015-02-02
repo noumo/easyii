@@ -28,8 +28,8 @@ class Feedback extends \yii\easyii\components\ActiveRecord
             ['title', 'string', 'max' => 128],
             ['email', 'email'],
             ['phone', 'match', 'pattern' => '/^[\d\s-\+\(\)]+$/'],
-            ['reCaptcha', ReCaptchaValidator::className(), 'when' => function(){
-                return Yii::$app->getModule('admin')->activeModules['feedback']->settings['enableCaptcha'];
+            ['reCaptcha', ReCaptchaValidator::className(), 'when' => function($model){
+                return $model->isNewRecord && Yii::$app->getModule('admin')->activeModules['feedback']->settings['enableCaptcha'];
             }],
         ];
     }
