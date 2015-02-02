@@ -1,6 +1,8 @@
 $(function(){
     var photosBody = $('#photo-table > tbody');
     var uploadButton = $('#photo-upload');
+    var uploadingText = $('#uploading-text');
+    var uploadingTextInterval;
 
     if(location.hash){
         $('img'+location.hash).closest('tr').addClass('info');
@@ -15,6 +17,8 @@ $(function(){
         var formData = new FormData();
         formData.append('Photo[image]', fileData);
         uploadButton.addClass('disabled');
+        uploadingText.show();
+        uploadingTextInterval = setInterval(dotsAnimation, 300);
 
         $.ajax({
             url: '/admin/photos/upload?module='+$this.data('module')+'&item_id='+$this.data('id'),
@@ -26,6 +30,8 @@ $(function(){
             type: 'post',
             success: function(response){
                 uploadButton.removeClass('disabled');
+                uploadingText.hide();
+                clearInterval(uploadingTextInterval);
 
                 if(response.result === 'success'){
                     var html = $(photoTemplate
@@ -133,5 +139,11 @@ $(function(){
             table.hide();
             $('.empty').show();
         }
+    }
+
+    var dots = 0;
+    function dotsAnimation() {
+        dots = ++dots % 4;
+        $("span", uploadingText).html(Array(dots+1).join("."));
     }
 });

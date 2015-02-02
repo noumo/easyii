@@ -87,6 +87,7 @@ return [
     'File is incorrect' => 'Некорректный файл',
     'File upload error. Check uploads folder for write permissions' => 'Ошибка загрузки файла. Проверьте права на запись папки uploads',
     'Change image' => 'Изменить изображение',
+    'Uploading. Please wait' => 'Загружаем. Пожалуйста подождите',
 
     'Logs' => 'Логи',
 

@@ -11,8 +11,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '<module:\w+>/<controller:\w+>/<action:[\w-]+>/<id:\d+>' => '<module>/<controller>/<action>',
-                '<module:\w+>/<submodule:\w+>/<controller:\w+>/<action:[\w-]+>/<id:\d+>' => '<module>/<submodule>/<controller>/<action>'
+                'admin/<controller:\w+>/<action:[\w-]+>/<id:\d+>' => 'admin/<controller>/<action>',
+                'admin/<module:\w+>/<controller:\w+>/<action:[\w-]+>/<id:\d+>' => 'admin/<module>/<controller>/<action>'
             ],
          ],
         'user' => [

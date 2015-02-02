@@ -26,6 +26,7 @@ var photoTemplate = '{$photoTemplate}';
 $photoTemplate = str_replace('>\\', '>', $photoTemplate);
 ?>
 <button id="photo-upload" class="btn btn-success text-uppercase"><span class="glyphicon glyphicon-arrow-up"></span> <?= Yii::t('easyii', 'Upload')?></button>
+<small id="uploading-text" class="smooth"><?= Yii::t('easyii', 'Uploading. Please wait')?><span></span></small>
 
 <table id="photo-table" class="table table-hover" style="display: <?= count($photos) ? 'table' : 'none' ?>;">
     <thead>
