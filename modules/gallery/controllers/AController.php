@@ -63,7 +63,7 @@ class AController extends Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/gallery', 'Album created'));
-                    return $this->redirect('/admin/gallery/a/edit/'.$model->primaryKey);
+                    return $this->redirect('/admin/gallery/a/photos/'.$model->primaryKey);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
