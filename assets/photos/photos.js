@@ -43,6 +43,7 @@ $(function(){
 
                     notify.success(response.message);
                     checkEmpty();
+                    $('.colorbox').colorbox();
                 }else{
                     alert(response.error);
                 }
