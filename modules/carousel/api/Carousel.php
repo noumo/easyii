@@ -41,7 +41,7 @@ class Carousel extends \yii\easyii\components\API
         }
 
         $widget = \yii\bootstrap\Carousel::widget([
-            'options' => ['class' => 'slide'],
+            'options' => ['class' => 'slide', 'style' => 'width: '.Yii::$app->getModule('admin')->activeModules['carousel']->settings['imageWidth'].'px'],
             'clientOptions' => $this->clientOptions,
             'items' => $this->_items
         ]);
