@@ -146,6 +146,7 @@ class Gallery extends \yii\easyii\components\API
 
             if(LIVE_EDIT){
                 $temp->box = $this->wrapLiveEdit($temp->box, $photo->item_id, [
+                    'action' => 'photos',
                     'hash' => 'photo-'.$photo->primaryKey
                 ]);
             }
