@@ -144,7 +144,7 @@ class Gallery extends \yii\easyii\components\API
             $temp->thumb = $photo->thumb;
             $temp->box = '<a class="easyii-box" href="'.$photo->image.'" rel="album-'.$photo->item_id.'" title="'.$photo->description.'"><img src="'.$photo->thumb.'"></a>';
 
-            if($admin->liveEdit){
+            if(LIVE_EDIT){
                 $temp->box = $this->wrapLiveEdit($temp->box, $photo->item_id, [
                     'hash' => 'photo-'.$photo->primaryKey
                 ]);
