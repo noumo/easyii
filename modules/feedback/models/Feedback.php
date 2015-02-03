@@ -14,6 +14,8 @@ class Feedback extends \yii\easyii\components\ActiveRecord
 
     const FLASH_KEY = 'eaysiicms_feedback_send_result';
 
+    public $reCaptcha;
+
     public static function tableName()
     {
         return 'easyii_feedback';
