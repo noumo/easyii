@@ -23,6 +23,9 @@
     font-size: 18px;
     color: #FFF;
 }
+#admin-body .header .logo img{
+    vertical-align: baseline;
+}
 #admin-body .header .nav{
     margin-left: 220px;
     padding-right: 20px;
