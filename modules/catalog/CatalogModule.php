@@ -17,6 +17,7 @@ class CatalogModule extends \yii\easyii\components\Module
         'itemThumbHeight' => 100,
 
         'itemPhotos' => true,
+        'photoMaxWidth' => 1280,
         'photoThumbCrop' => true,
         'photoThumbWidth' => 100,
         'photoThumbHeight' => 100,

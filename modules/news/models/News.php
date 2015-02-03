@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\news\models;
 
 use Yii;
+use yii\helpers\StringHelper;
 
 class News extends \yii\easyii\components\ActiveRecord
 {
@@ -33,6 +34,20 @@ class News extends \yii\easyii\components\ActiveRecord
             'short' => Yii::t('easyii/news', 'Short'),
             'image' => Yii::t('easyii/news', 'Preview')
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $settings = Yii::$app->getModule('admin')->activeModules['news']->settings;
+            if($this->short && $settings['enableShort']){
+                $this->short = StringHelper::truncate($this->short, $settings['shortMaxLength']);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function afterDelete()

@@ -99,7 +99,7 @@ class File extends \yii\easyii\components\API
     private function parseFile($file)
     {
         if(LIVE_EDIT){
-            $file->title = $this->wrapLiveEdit($file->title, $file->primaryKey);
+            $file->title = $this->wrapLiveEdit($file->title, 'a/edit/'.$file->primaryKey);
         }
         return $this->createObject($file->attributes);
     }

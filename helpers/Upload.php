@@ -5,6 +5,7 @@ use Yii;
 use yii\web\UploadedFile;
 use \yii\web\HttpException;
 use yii\helpers\Inflector;
+use yii\helpers\StringHelper;
 use yii\helpers\FileHelper;
 
 class Upload
@@ -38,7 +39,7 @@ class Upload
     static function getFileName($fileInstanse, $namePostfix = true)
     {
         $baseName = str_ireplace('.'.$fileInstanse->extension, '', $fileInstanse->name);
-        $fileName =  Inflector::slug($baseName);
+        $fileName =  StringHelper::truncate(Inflector::slug($baseName), 32, '');
         if($namePostfix || !$fileName) {
             $fileName .= ($fileName ? '-' : '') . substr(uniqid(md5(rand()), true), 0, 10);
         }

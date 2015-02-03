@@ -28,6 +28,8 @@ var fieldTemplate = \'\
 
 ?>
 <?= $this->render('_menu') ?>
+<?= $this->render('_submenu', ['model' => $model]) ?>
+<br>
 
 <?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii/catalog', 'Add field'), ['class' => 'btn btn-default', 'id' => 'addField']) ?>
 

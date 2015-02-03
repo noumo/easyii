@@ -26,8 +26,8 @@ class Page extends \yii\easyii\components\API
     private function parsePage($page)
     {
         if(LIVE_EDIT){
-            $page->title = $this->wrapLiveEdit($page->title, $page->primaryKey);
-            $page->text = $this->wrapLiveEdit($page->text, $page->primaryKey, ['tag' => 'div']);
+            $page->title = $this->wrapLiveEdit($page->title, 'a/edit/'.$page->primaryKey);
+            $page->text = $this->wrapLiveEdit($page->text, 'a/edit/'.$page->primaryKey, 'div');
         }
         return $this->createObject($page->attributes);
     }

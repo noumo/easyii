@@ -4,9 +4,10 @@ namespace yii\easyii\modules\gallery;
 class GalleryModule extends \yii\easyii\components\Module
 {
     public $settings = [
-        'thumbWidth' => 100,
-        'thumbHeight' => 100,
-        'thumbCrop' => true,
+        'photoMaxWidth' => 1280,
+        'photoThumbWidth' => 100,
+        'photoThumbHeight' => 100,
+        'photoThumbCrop' => true,
 
         'albumThumb' => true,
         'albumThumbWidth' => 100,

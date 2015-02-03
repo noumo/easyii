@@ -7,11 +7,6 @@ class API extends \yii\base\Object
 {
     static $classes;
     public $module;
-    public $defaultLiveOptions = [
-        'tag' => 'span',
-        'action' => 'edit',
-        'hash' => ''
-    ];
 
     public function init()
     {
@@ -43,15 +38,9 @@ class API extends \yii\base\Object
         return $data;
     }
 
-    public function wrapLiveEdit($text, $id, $options = null)
+    public function wrapLiveEdit($text, $path, $tag = 'span')
     {
-        if($options !== null){
-            $options = array_merge($this->defaultLiveOptions, $options);
-        }
-        else{
-            $options = $this->defaultLiveOptions;
-        }
-        return '<'.$options['tag'].' class="easyiicms-edit" data-module="'.$this->module.'" data-action="'.$options['action'].'" data-id="'.$id.'" data-hash="'.$options['hash'].'" >'.$text.'</'.$options['tag'].'>';
+        return '<'.$tag.' class="easyiicms-edit" data-edit="/admin/'.$this->module.'/'.$path.'">'.$text.'</'.$tag.'>';
     }
 
     public function  errorText($text)

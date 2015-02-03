@@ -141,7 +141,7 @@ class Catalog extends \yii\easyii\components\API
     private function parseCategory($category)
     {
         if(LIVE_EDIT){
-            $category->title = $this->wrapLiveEdit($category->title, $category->primaryKey);
+            $category->title = $this->wrapLiveEdit($category->title, 'a/edit/'.$category->primaryKey);
         }
         return $this->createCatObject($category->attributes);
     }
@@ -149,8 +149,8 @@ class Catalog extends \yii\easyii\components\API
     private function parseItem($item)
     {
         if(LIVE_EDIT){
-            $item->title = $this->wrapLiveEdit($item->title, $item->primaryKey);
-            $item->description = $this->wrapLiveEdit($item->description, $item->primaryKey, ['tag' => 'div']);
+            $item->title = $this->wrapLiveEdit($item->title, 'items/edit/'.$item->primaryKey);
+            $item->description = $this->wrapLiveEdit($item->description, 'items/edit/'.$item->primaryKey, 'div');
         }
         return $this->createItemObject($item->attributes);
     }
@@ -168,9 +168,7 @@ class Catalog extends \yii\easyii\components\API
             $temp->box = '<a class="easyii-box" href="'.$photo->image.'" rel="album-'.$photo->item_id.'" title="'.$photo->description.'"><img src="'.$photo->thumb.'"></a>';
 
             if(LIVE_EDIT){
-                $temp->box = $this->wrapLiveEdit($temp->box, $photo->item_id, [
-                    'hash' => 'photo-'.$photo->primaryKey
-                ]);
+                $temp->box = $this->wrapLiveEdit($temp->box, 'items/photos/'.$photo->item_id.'#'.'photo-'.$photo->primaryKey);
             }
 
             $result[] = $temp;

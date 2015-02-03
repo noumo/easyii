@@ -46,6 +46,6 @@ class Carousel extends \yii\easyii\components\API
             'items' => $this->_items
         ]);
 
-        return LIVE_EDIT ? $this->wrapLiveEdit($widget, null, ['tag' => 'div']) : $widget;
+        return LIVE_EDIT ? $this->wrapLiveEdit($widget, '', 'div') : $widget;
     }
 }

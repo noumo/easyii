@@ -17,7 +17,7 @@ $this->title = Yii::t('easyii/catalog', 'Catalog');
             <th><?= Yii::t('easyii', 'Name') ?></th>
             <th width="100"><?= Yii::t('easyii/catalog', 'Items') ?></th>
             <th width="100"><?= Yii::t('easyii', 'Status') ?></th>
-            <th width="<?= IS_ROOT ? 200 : 120 ?>"></th>
+            <th width="<?= IS_ROOT ? 160 : 120 ?>"></th>
         </tr>
         </thead>
         <tbody>
@@ -41,7 +41,6 @@ $this->title = Yii::t('easyii/catalog', 'Catalog');
                         <a href="/admin/catalog/a/down/<?= $item->primaryKey ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
                         <a href="/admin/catalog/a/edit/<?= $item->primaryKey ?>" class="btn btn-default" title="<?= Yii::t('easyii/catalog', 'Edit category') ?>"><span class="glyphicon glyphicon-pencil"></span></a>
                         <?php if(IS_ROOT) : ?>
-                        <a href="/admin/catalog/a/fields/<?= $item->primaryKey ?>" class="btn btn-default" title="<?= Yii::t('easyii/catalog', 'Manage fields') ?>"><span class="glyphicon glyphicon-cog"></span></a>
                         <a href="/admin/catalog/a/delete/<?= $item->primaryKey ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
                         <?php endif; ?>
                     </div>

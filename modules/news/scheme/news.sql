@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `easyii_news` (
 `news_id` int(11) NOT NULL,
   `title` varchar(256) NOT NULL,
   `image` varchar(128) NOT NULL,
-  `short` tinytext NOT NULL,
+  `short` varchar(1024) NOT NULL,
   `text` text NOT NULL,
   `time` int(11) NOT NULL,
   `views` int(11) NOT NULL,

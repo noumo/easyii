@@ -132,9 +132,9 @@ class Guestbook extends \yii\easyii\components\API
     private function parseGuestbook($guestbook)
     {
         if(LIVE_EDIT){
-            if($guestbook->title) $guestbook->title = $this->wrapLiveEdit($guestbook->title, $guestbook->primaryKey);
-            if($guestbook->answer) $guestbook->answer = $this->wrapLiveEdit($guestbook->answer, $guestbook->primaryKey, ['tag' => 'div', 'action' => 'view']);
-            $guestbook->text = $this->wrapLiveEdit($guestbook->text, $guestbook->primaryKey, ['tag' => 'div', 'action' => 'view']);
+            if($guestbook->title) $guestbook->title = $this->wrapLiveEdit($guestbook->title, 'a/view/'.$guestbook->primaryKey);
+            if($guestbook->answer) $guestbook->answer = $this->wrapLiveEdit($guestbook->answer, 'a/view/'.$guestbook->primaryKey, 'div');
+            $guestbook->text = $this->wrapLiveEdit($guestbook->text, 'a/view/'.$guestbook->primaryKey, 'div');
         }
         return $this->createObject($guestbook->attributes);
     }

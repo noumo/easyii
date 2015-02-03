@@ -9,6 +9,7 @@ class NewsModule extends \yii\easyii\components\Module
         'imageHeight' => '',
         'imageCrop' => false,
 
-        'enableShort' => true
+        'enableShort' => true,
+        'shortMaxLength' => 256
     ];
 }

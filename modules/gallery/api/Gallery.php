@@ -126,7 +126,7 @@ class Gallery extends \yii\easyii\components\API
     private function parseAlbum($album)
     {
         if(LIVE_EDIT){
-            $album->title = $this->wrapLiveEdit($album->title, $album->primaryKey);
+            $album->title = $this->wrapLiveEdit($album->title, 'a/edit/'.$album->primaryKey);
         }
         return $this->createObject($album->attributes);
     }
@@ -145,10 +145,7 @@ class Gallery extends \yii\easyii\components\API
             $temp->box = '<a class="easyii-box" href="'.$photo->image.'" rel="album-'.$photo->item_id.'" title="'.$photo->description.'"><img src="'.$photo->thumb.'"></a>';
 
             if(LIVE_EDIT){
-                $temp->box = $this->wrapLiveEdit($temp->box, $photo->item_id, [
-                    'action' => 'photos',
-                    'hash' => 'photo-'.$photo->primaryKey
-                ]);
+                $temp->box = $this->wrapLiveEdit($temp->box, 'a/photos/'.$photo->item_id.'#'.'photo-'.$photo->primaryKey);
             }
 
             $result[] = $temp;

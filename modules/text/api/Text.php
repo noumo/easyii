@@ -46,7 +46,7 @@ class Text extends \yii\easyii\components\API
     private function parseText($text)
     {
         return (object)[
-            'text' => LIVE_EDIT ? $this->wrapLiveEdit($text['text'], $text['text_id']) : $text['text'],
+            'text' => LIVE_EDIT ? $this->wrapLiveEdit($text['text'], 'a/edit/'.$text['text_id']) : $text['text'],
             'slug' => $text['slug']
         ];
     }

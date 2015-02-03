@@ -94,8 +94,8 @@ class News extends \yii\easyii\components\API
     private function parseNews($news)
     {
         if(LIVE_EDIT){
-            $news->title = $this->wrapLiveEdit($news->title, $news->primaryKey);
-            $news->text = $this->wrapLiveEdit($news->text, $news->primaryKey, ['tag' => 'div']);
+            $news->title = $this->wrapLiveEdit($news->title, 'a/edit/'.$news->primaryKey);
+            $news->text = $this->wrapLiveEdit($news->text, 'a/edit/'.$news->primaryKey, 'div');
         }
         return $this->createObject($news->attributes);
     }

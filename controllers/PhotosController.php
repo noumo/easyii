@@ -45,9 +45,14 @@ class PhotosController extends Controller
         $settings = array_merge($this->defaultSettings, Yii::$app->getModule('admin')->activeModules[$module]->settings);
 
         if($model->image && $model->validate(['image'])){
-            $model->image = Image::upload($model->image, $module);
+            $model->image = Image::upload($model->image, $module, !empty($settings['photoMaxWidth']) ? $settings['photoMaxWidth'] : null);
             if($model->image){
-                $model->thumb = Image::createThumbnail($model->image, $settings['photoThumbWidth'], $settings['photoThumbHeight'], $settings['photoThumbCrop']);
+                $model->thumb = Image::createThumbnail(
+                    $model->image,
+                    $settings['photoThumbWidth'],
+                    $settings['photoThumbHeight'],
+                    $settings['photoThumbCrop']
+                );
                 if($model->save()){
                     $success = [
                         'message' => Yii::t('easyii', 'Photo uploaded'),
@@ -112,9 +117,14 @@ class PhotosController extends Controller
             $settings = array_merge($this->defaultSettings, Yii::$app->getModule('admin')->activeModules[$model->module]->settings);
 
             if($model->image && $model->validate(['image'])){
-                $model->image = Image::upload($model->image, $model->module);
+                $model->image = Image::upload($model->image, $model->module, !empty($settings['photoMaxWidth']) ? $settings['photoMaxWidth'] : null);
                 if($model->image){
-                    $model->thumb = Image::createThumbnail($model->image, $settings['photoThumbWidth'], $settings['photoThumbHeight'], $settings['photoThumbCrop']);
+                    $model->thumb = Image::createThumbnail(
+                        $model->image,
+                        $settings['photoThumbWidth'],
+                        $settings['photoThumbHeight'],
+                        $settings['photoThumbCrop']
+                    );
                     if($model->save()){
                         @unlink(Yii::getAlias('@webroot').$oldImage);
                         @unlink(Yii::getAlias('@webroot').$oldThumb);
