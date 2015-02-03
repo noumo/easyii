@@ -193,22 +193,16 @@ class Catalog extends \yii\easyii\components\API
 
     private function createItemObject($data)
     {
-        $is_string = !is_array($data);
-
         $temp = (object)[
-            'id' => $is_string ? '' : $data['category_id'],
-            'title' => $is_string ? $data : $data['title'],
-            'thumb' => $is_string ? '' : $data['thumb'],
-            'description' => $is_string ? $data : $data['description'],
-            'empty' => $is_string ? true : false
+            'id' => $data['category_id'],
+            'slug' => $data['slug'],
+            'title' => $data['title'],
+            'thumb' => $data['thumb'],
+            'description' => $data['description'],
         ];
-        if($is_string){
-            $temp->data = new \stdClass();
-        }
-        else{
-            foreach($data['data'] as $key => $value){
-                $temp->{$key} = $value;
-            }
+
+        foreach($data['data'] as $key => $value){
+            $temp->{$key} = $value;
         }
         return $temp;
     }
