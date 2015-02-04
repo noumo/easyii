@@ -11,4 +11,4 @@ This repository is development package (yii2 extension).
 
 #### Contacts ####
 
-Feel free to mail me on noumohope@gmail.com
+Feel free to email me on noumohope@gmail.com
