@@ -8,7 +8,6 @@ class DownloadController extends \yii\web\Controller
 {
     public function actionIndex($id)
     {
-        var_dump($id);
         $model = File::findOne($id);
         if($model){
             $model->updateCounters(['downloads' => 1]);
