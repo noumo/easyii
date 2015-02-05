@@ -103,7 +103,7 @@ class InstallController extends \yii\web\Controller
 
     private function createUploadsDir()
     {
-        $uploadsDir = Yii::getAlias('@webroot' . DIRECTORY_SEPARATOR . 'uploads');
+        $uploadsDir = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . 'uploads';
         $uploadsDirExists = file_exists($uploadsDir);
         if(($uploadsDirExists && !is_writable($uploadsDir)) || (!$uploadsDirExists && !mkdir($uploadsDir, 0777))){
             throw new ServerErrorHttpException('Cannot create uploads folder at `'.$uploadsDir.'` Please check write permissions.');
