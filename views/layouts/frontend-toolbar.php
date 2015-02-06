@@ -17,7 +17,7 @@ $this->registerCss('body {padding-'.$position.': 50px;}');
         <?= Html::checkbox('', LIVE_EDIT) ?>
 
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/admin/sign/out"><span class="glyphicon glyphicon-log-out"></span> Выйти</a></li>
+            <li><a href="/admin/sign/out"><span class="glyphicon glyphicon-log-out"></span> <?= Yii::t('easyii', 'Logout') ?></a></li>
         </ul>
     </div>
 </nav>
