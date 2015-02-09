@@ -12,3 +12,11 @@ This repository is development package (yii2 extension).
 #### Contacts ####
 
 Feel free to email me on noumohope@gmail.com
+
+#### Changelog ####
+
+1.0.3
+- GD support added (image scale quality improved)
+
+1.0.2
+- Minor fixes
