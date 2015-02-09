@@ -15,6 +15,9 @@ Feel free to email me on noumohope@gmail.com
 
 #### Changelog ####
 
+1.0.4
+- Photo multi upload added
+
 1.0.3
 - GD support added (image scale quality improved)
 
