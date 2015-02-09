@@ -146,7 +146,7 @@ class ModulesController extends \yii\easyii\components\Controller
         } else{
             $this->error = Yii::t('easyii', 'Not found');
         }
-        return $this->formatResponse(Yii::t('easyii', 'MOdule deleted'));
+        return $this->formatResponse(Yii::t('easyii', 'Module deleted'));
     }
 
     public function actionUp($id)
