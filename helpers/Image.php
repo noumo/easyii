@@ -5,6 +5,7 @@ use Yii;
 use yii\web\UploadedFile;
 use yii\web\HttpException;
 use yii\helpers\FileHelper;
+use yii\easyii\helpers\GD;
 
 class Image
 {
@@ -40,19 +41,42 @@ class Image
 
     static function copyResizedImage($inputFile, $outputFile, $width, $height = null, $crop = true)
     {
-        $image = new \Imagick($inputFile);
+        if (extension_loaded('gd'))
+        {
+            $image = new GD($inputFile);
 
-        if($height && !$crop) {
-            $image->resizeImage($width, $height, \Imagick::FILTER_LANCZOS, 1, true);
-        }
-        else{
-            $image->resizeImage($width, null, \Imagick::FILTER_LANCZOS, 1);
-        }
+            if($height) {
+                if($crop){
+                    $image->cropThumbnail($width, $height);
+                } else {
+                    $image->resize($width, $height);
+                }
+            } else {
+                $image->resize($width);
+            }
 
-        if($height && $crop){
-            $image->cropThumbnailImage($width, $height);
+            return $image->save($outputFile);
         }
+        elseif(extension_loaded('imagick'))
+        {
+            $image = new \Imagick($inputFile);
 
-        return $image->writeImage($outputFile);
+            if($height && !$crop) {
+                $image->resizeImage($width, $height, \Imagick::FILTER_LANCZOS, 1, true);
+            }
+            else{
+                $image->resizeImage($width, null, \Imagick::FILTER_LANCZOS, 1);
+            }
+
+            if($height && $crop){
+                $image->cropThumbnailImage($width, $height);
+            }
+
+            return $image->writeImage($outputFile);
+        }
+        else {
+            throw new HttpException(500, 'Please install GD or Imagick extension');
+        }
+        return false;
     }
 }
