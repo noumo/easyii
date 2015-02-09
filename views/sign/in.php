@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 $asset = \yii\easyii\assets\EmptyAsset::register($this);
+$this->title = Yii::t('easyii', 'Sign in');
 ?>
 <div class="container">
     <div id="wrapper" class="col-md-4 col-md-offset-4 vertical-align-parent">
