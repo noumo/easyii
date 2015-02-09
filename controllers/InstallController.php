@@ -88,7 +88,7 @@ class InstallController extends \yii\web\Controller
     private function checkDbConnection()
     {
         try{
-            Yii::$app->db->createCommand('SELECT NOW()')->query();
+            Yii::$app->db->open();
             return true;
         }
         catch(\Exception $e){
