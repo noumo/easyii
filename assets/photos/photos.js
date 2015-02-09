@@ -13,40 +13,59 @@ $(function(){
     });
     $('#photo-file').on('change', function(){
         var $this = $(this);
-        var fileData = $this.prop('files')[0];
-        var formData = new FormData();
-        formData.append('Photo[image]', fileData);
+
         uploadButton.addClass('disabled');
         uploadingText.show();
         uploadingTextInterval = setInterval(dotsAnimation, 300);
 
-        $.ajax({
-            url: '/admin/photos/upload?module='+$this.data('module')+'&item_id='+$this.data('id'),
-            dataType: 'json',
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: formData,
-            type: 'post',
-            success: function(response){
-                uploadButton.removeClass('disabled');
-                uploadingText.hide();
-                clearInterval(uploadingTextInterval);
+        var uploaded = 0;
+        $.each($this.prop('files'), function(i, file){
+            if(/^image\/(jpeg|png|gif)$/.test(file.type))
+            {
+                var formData = new FormData();
+                formData.append('Photo[image]', file);
 
-                if(response.result === 'success'){
-                    var html = $(photoTemplate
-                        .replace(/\{\{photo_id\}\}/g, response.photo.id)
-                        .replace(/\{\{photo_thumb\}\}/g, response.photo.thumb)
-                        .replace(/\{\{photo_image\}\}/g, response.photo.image)
-                        .replace(/\{\{photo_description\}\}/g, ''))
-                        .hide().prependTo(photosBody).fadeIn();
+                $.ajax({
+                    url: '/admin/photos/upload?module='+$this.data('module')+'&item_id='+$this.data('id'),
+                    dataType: 'json',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    type: 'post',
+                    success: function(response){
+                        if(response.result === 'success'){
+                            var html = $(photoTemplate
+                                .replace(/\{\{photo_id\}\}/g, response.photo.id)
+                                .replace(/\{\{photo_thumb\}\}/g, response.photo.thumb)
+                                .replace(/\{\{photo_image\}\}/g, response.photo.image)
+                                .replace(/\{\{photo_description\}\}/g, ''))
+                                .hide();
 
-                    notify.success(response.message);
-                    checkEmpty();
-                    $('.colorbox').colorbox();
-                }else{
-                    alert(response.error);
-                }
+                            var prevId = $('tr[data-id='+( response.photo.id - 1 )+']', photosBody);
+                            if(prevId.get(0)){
+                                prevId.before(html);
+                            } else {
+                                photosBody.prepend(html);
+                            }
+                            html.fadeIn();
+
+                            checkEmpty();
+                            colorbox();
+                        } else {
+                            alert(response.error);
+                        }
+
+                        if(++uploaded >= $this.prop('files').length)
+                        {
+                            uploadButton.removeClass('disabled');
+                            uploadingText.hide();
+                            clearInterval(uploadingTextInterval);
+                        }
+                    }
+                });
+            } else {
+                uploaded++;
             }
         });
     });
@@ -147,4 +166,9 @@ $(function(){
         dots = ++dots % 4;
         $("span", uploadingText).html(Array(dots+1).join("."));
     }
+
+    function colorbox(){
+        $('.colorbox').colorbox();
+    }
+    colorbox();
 });

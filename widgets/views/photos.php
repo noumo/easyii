@@ -1,5 +1,10 @@
 <?php
 use yii\helpers\Html;
+use yii\easyii\assets\ColorboxAsset;
+use yii\easyii\assets\PhotosAsset;
+
+ColorboxAsset::register($this);
+PhotosAsset::register($this);
 
 $module = $this->context->module;
 $item_id = $this->context->item_id;
@@ -51,10 +56,11 @@ $photoTemplate = str_replace('>\\', '>', $photoTemplate);
 </table>
 <p class="empty" style="display: <?= count($photos) ? 'none' : 'block' ?>;"><?= Yii::t('easyii', 'No photos uploaded yet') ?>.</p>
 
-<?= Html::beginForm('/admin/photos/upload?module='.$module.'&item_id='.$item_id, 'post', ['enctype' => 'multipart/form-data']) ?>
-<?= Html::fileInput('Photo[image]', null, [
+<?= Html::beginForm('/admin/photos/upload1?module='.$module.'&item_id='.$item_id, 'post', ['enctype' => 'multipart/form-data']) ?>
+<?= Html::fileInput('', null, [
     'id' => 'photo-file',
     'class' => 'hidden',
+    'multiple' => 'multiple',
     'data-module' => $module,
     'data-id' => $item_id,
 ])

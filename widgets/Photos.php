@@ -4,9 +4,6 @@ namespace yii\easyii\widgets;
 use Yii;
 use yii\base\Widget;
 use yii\base\InvalidConfigException;
-
-use yii\easyii\assets\ColorboxAsset;
-use yii\easyii\assets\PhotosAsset;
 use yii\easyii\models\Photo;
 
 class Photos extends Widget
@@ -28,12 +25,6 @@ class Photos extends Widget
 
     public function run()
     {
-        $view = Yii::$app->getView();
-        $view->registerJs('$(".colorbox").colorbox();');
-
-        ColorboxAsset::register($view);
-        PhotosAsset::register($view);
-
         $photos = Photo::find()->where(['module' => $this->module, 'item_id' => $this->item_id])->sort()->all();
         echo $this->render('photos', [
             'photos' => $photos
