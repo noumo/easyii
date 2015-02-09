@@ -58,10 +58,9 @@
     padding: 15px 20px;
     color: #B3B8C3;
 }
-#admin-body .sidebar a.menu-item:hover{
+#admin-body .sidebar a.menu-item:hover, #admin-body .sidebar a.menu-item:focus{
     text-decoration: none;
     color: #FFF;
-
 }
 #admin-body .sidebar a.active{
     border-color: #27b6af;
