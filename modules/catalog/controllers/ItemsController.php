@@ -122,14 +122,21 @@ class ItemsController extends Controller
 
     public function actionClearImage($id)
     {
-        if(($model = Item::findOne($id)))
-        {
-            $model->updateAttributes(['thumb' => '']);
-            @unlink(Yii::getAlias('@webroot').$model->thumb);
-        } else{
-            $this->error = Yii::t('easyii', 'Not found');
+        $model = Item::findOne($id);
+
+        if($model === null){
+            $this->flash('error', Yii::t('easyii', 'Not found'));
         }
-        return $this->formatResponse(Yii::t('easyii/catalog', 'Image cleared'));
+        elseif($model->thumb){
+            $model->thumb = '';
+            if($model->update()){
+                @unlink(Yii::getAlias('@webroot').$model->thumb);
+                $this->flash('success', Yii::t('easyii/catalog', 'Image cleared'));
+            } else {
+                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+            }
+        }
+        return $this->back();
     }
 
     public function actionDelete($id)

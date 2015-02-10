@@ -135,10 +135,13 @@ class AController extends Controller
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
         elseif($model->thumb){
-            @unlink(Yii::getAlias('@webroot').$model->thumb);
             $model->thumb = '';
-            $model->update();
-            $this->flash('success', Yii::t('easyii/gallery', 'Category image cleared'));
+            if($model->update()){
+                @unlink(Yii::getAlias('@webroot').$model->thumb);
+                $this->flash('success', Yii::t('easyii/gallery', 'Album image cleared'));
+            } else {
+                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+            }
         }
         return $this->back();
     }

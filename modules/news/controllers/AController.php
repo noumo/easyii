@@ -132,8 +132,12 @@ class AController extends Controller
         }
         else{
             $model->image = '';
-            $model->update();
-            $this->flash('success', Yii::t('easyii/news', 'News image cleared'));
+            if($model->update()){
+                @unlink(Yii::getAlias('@webroot').$model->image);
+                $this->flash('success', Yii::t('easyii/news', 'News image cleared'));
+            } else {
+                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+            }
         }
         return $this->back();
     }

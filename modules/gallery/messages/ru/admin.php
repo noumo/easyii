@@ -8,5 +8,5 @@ return [
     'Album updated' => 'Альбом обновлен',
     'Album deleted' => 'Альбом удален',
     'Clear image' => 'Очистить изображение',
-    'Category image cleared' => 'Изображение успешно очищено',
+    'Album image cleared' => 'Изображение успешно очищено',
 ];
