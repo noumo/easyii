@@ -96,6 +96,9 @@ class News extends \yii\easyii\components\API
         if(LIVE_EDIT){
             $news->title = $this->wrapLiveEdit($news->title, 'a/edit/'.$news->primaryKey);
             $news->text = $this->wrapLiveEdit($news->text, 'a/edit/'.$news->primaryKey, 'div');
+            if($news->short) {
+                $news->short = $this->wrapLiveEdit($news->short, 'a/edit/'.$news->primaryKey);
+            }
         }
         return $this->createObject($news->attributes);
     }
