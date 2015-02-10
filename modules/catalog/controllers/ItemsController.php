@@ -56,10 +56,6 @@ class ItemsController extends Controller
                 }
             }
 
-            if(!$model->slug && $this->module->settings['itemAutoSlug']){
-                $model->slug = \yii\easyii\helpers\Data::generateSlug($model->title);
-            }
-
             if($model->save()){
                 $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
                 return $this->redirect('/admin/catalog/items/edit/'.$model->primaryKey);

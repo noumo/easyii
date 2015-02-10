@@ -60,10 +60,6 @@ class AController extends Controller
                     }
                 }
 
-                if($model->slug == '' && $this->module->settings['categoryAutoSlug']){
-                    $model->slug = \yii\easyii\helpers\Data::generateSlug($model->title);
-                }
-
                 $model->status = Category::STATUS_ON;
 
                 if($model->save()){

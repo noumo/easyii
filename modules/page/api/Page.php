@@ -50,14 +50,11 @@ class Page extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return $this->createObject('');
         }
-        elseif(preg_match('/^[a-zA-Z][\w_-]*$/', $id_slug)){
+        elseif(preg_match(PageModel::$slugPattern, $id_slug)){
             return $this->createObject('<a href="/admin/page/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/page/api', 'Create page').'</a>');
         }
-        elseif(is_numeric($id_slug)){
-            return $this->createObject($this->errorText('WRONG PAGE_ID'));
-        }
         else{
-            return $this->createObject($this->errorText('WRONG PAGE_SLUG'));
+            return $this->createObject($this->errorText('WRONG PAGE IDENTIFIER'));
         }
     }
 }

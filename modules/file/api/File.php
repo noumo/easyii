@@ -128,14 +128,11 @@ class File extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return $this->createObject('');
         }
-        elseif(preg_match('/^[a-zA-Z][\w_-]*$/', $id_slug)){
+        elseif(preg_match(FileModel::$slugPattern, $id_slug)){
             return $this->createObject('<a href="/admin/file/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/file/api', 'Create file').'</a>');
         }
-        elseif(is_numeric($id_slug)){
-            return $this->createObject($this->errorText('WRONG FILE_ID'));
-        }
         else{
-            return $this->createObject($this->errorText('WRONG FILE_SLUG'));
+            return $this->createObject($this->errorText('WRONG FILE IDENTIFIER'));
         }
     }    
 }

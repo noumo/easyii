@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\catalog\models;
 
 use Yii;
+use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SortableModel;
 use yii\easyii\models\Photo;
 
@@ -17,13 +18,15 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             ['title', 'required'],
-            [['title', 'slug'], 'trim'],
-            ['title', 'string', 'max' => 256],
+            ['title', 'trim'],
+            ['title', 'string', 'max' => 128],
             ['thumb', 'image'],
-            ['slug',  'match', 'pattern' => '/^[a-zA-Z][\w_-]*$/'],
-            ['slug', 'unique'],
+            ['description', 'safe'],
+            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['description', 'safe']
+            ['slug', 'unique', 'when' => function($model){
+                return $model->slug && !self::autoSlug();
+            }]
         ];
     }
 
@@ -57,6 +60,18 @@ class Item extends \yii\easyii\components\ActiveRecord
         }
     }
 
+    public function beforeValidate()
+    {
+        if(self::autoSlug()){
+            $this->attachBehavior('sluggable', [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'ensureUnique' => true
+            ]);
+        }
+        return parent::beforeValidate();
+    }
+
     public function afterFind()
     {
         parent::afterFind();
@@ -84,5 +99,10 @@ class Item extends \yii\easyii\components\ActiveRecord
         if($this->thumb) {
             @unlink(Yii::getAlias('@webroot') . $this->thumb);
         }
+    }
+
+    public static function autoSlug()
+    {
+        return Yii::$app->getModule('admin')->activeModules['catalog']->settings['itemAutoSlug'];
     }
 }

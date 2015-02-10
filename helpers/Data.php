@@ -22,9 +22,4 @@ class Data
         }
         return $data;
     }
-
-    public static function generateSlug($string)
-    {
-        return StringHelper::truncate(Inflector::slug($string), 128, '');
-    }
 }

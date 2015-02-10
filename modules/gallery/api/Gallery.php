@@ -174,14 +174,11 @@ class Gallery extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return $this->createObject('');
         }
-        elseif(preg_match('/^[a-zA-Z][\w_-]*$/', $id_slug)){
+        elseif(preg_match(Album::$slugPattern, $id_slug)){
             return $this->createObject('<a href="/admin/gallery/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/gallery/api', 'Create album').'</a>');
         }
-        elseif(is_numeric($id_slug)){
-            return $this->createObject($this->errorText('WRONG ALBUM_ID'));
-        }
         else{
-            return $this->createObject($this->errorText('WRONG ALBUM_SLUG'));
+            return $this->createObject($this->errorText('WRONG ALBUM IDENTIFIER'));
         }
     }
 }

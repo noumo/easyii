@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\page\models;
 
 use Yii;
+use yii\behaviors\SluggableBehavior;
 
 class Page extends \yii\easyii\components\ActiveRecord
 {
@@ -14,11 +15,13 @@ class Page extends \yii\easyii\components\ActiveRecord
     {
         return [
             [['title','text'], 'required'],
-            [['title', 'text', 'slug'], 'trim'],
-            ['title', 'string', 'max' => 256],
-            ['slug', 'unique'],
-            ['slug',  'match', 'pattern' => '/^[a-zA-Z][\w_-]*$/'],
-            ['slug', 'default', 'value' => null]
+            [['title', 'text'], 'trim'],
+            ['title', 'string', 'max' => 128],
+            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+            ['slug', 'default', 'value' => null],
+            ['slug', 'unique', 'when' => function($model){
+                return $model->slug && !self::autoSlug();
+            }],
         ];
     }
 
@@ -29,5 +32,22 @@ class Page extends \yii\easyii\components\ActiveRecord
             'text' => Yii::t('easyii', 'Text'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
+    }
+
+    public function beforeValidate()
+    {
+        if(self::autoSlug()){
+            $this->attachBehavior('sluggable', [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'ensureUnique' => true
+            ]);
+        }
+        return parent::beforeValidate();
+    }
+
+    public static function autoSlug()
+    {
+        return Yii::$app->getModule('admin')->activeModules['page']->settings['autoSlug'];
     }
 }
