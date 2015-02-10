@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `easyii_catalog_items` (
   `item_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `title` varchar(256) NOT NULL,
+  `title` varchar(128) NOT NULL,
   `description` text NOT NULL,
   `data` text NOT NULL,
   `thumb` varchar(128) NOT NULL,

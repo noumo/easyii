@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\file\models;
 
 use Yii;
+use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SortableModel;
 
 class File extends \yii\easyii\components\ActiveRecord
@@ -16,11 +17,14 @@ class File extends \yii\easyii\components\ActiveRecord
         return [
             ['file', 'file'],
             ['title', 'required'],
-            [['title', 'slug'], 'trim'],
-            ['slug',  'match', 'pattern' => '/^[a-zA-Z][\w_-]*$/'],
-            ['slug', 'unique'],
+            ['title', 'string', 'max' => 128],
+            ['title', 'trim'],
+            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            [['downloads', 'size'], 'number', 'integerOnly' => true],
+            ['slug', 'unique', 'when' => function($model){
+                return $model->slug && !self::autoSlug();
+            }],
+            [['downloads', 'size'], 'integer'],
             ['time', 'default', 'value' => time()]
         ];
     }
@@ -44,7 +48,7 @@ class File extends \yii\easyii\components\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if(!$this->isNewRecord && $this->file !== $this->oldAttributes['file']){
+            if(!$insert && $this->file !== $this->oldAttributes['file']){
                 @unlink(Yii::getAlias('@webroot').$this->oldAttributes['file']);
             }
             return true;
@@ -53,10 +57,27 @@ class File extends \yii\easyii\components\ActiveRecord
         }
     }
 
+    public function beforeValidate()
+    {
+        if(self::autoSlug()){
+            $this->attachBehavior('sluggable', [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'ensureUnique' => true
+            ]);
+        }
+        return parent::beforeValidate();
+    }
+
     public function afterDelete()
     {
         parent::afterDelete();
 
         @unlink(Yii::getAlias('@webroot').$this->file);
+    }
+
+    public static function autoSlug()
+    {
+        return Yii::$app->getModule('admin')->activeModules['file']->settings['autoSlug'];
     }
 }

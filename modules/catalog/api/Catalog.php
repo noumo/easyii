@@ -210,14 +210,11 @@ class Catalog extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return $this->createCatObject('');
         }
-        elseif(preg_match('/^[a-zA-Z][\w_-]*$/', $id_slug)){
+        elseif(preg_match(Category::$slugPattern, $id_slug)){
             return $this->createCatObject('<a href="/admin/catalog/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/catalog/api', 'Create category').'</a>');
         }
-        elseif(is_numeric($id_slug)){
-            return $this->createCatObject($this->errorText('WRONG CATEGORY_ID'));
-        }
         else{
-            return $this->createCatObject($this->errorText('WRONG CATEGORY_SLUG'));
+            return $this->createCatObject($this->errorText('WRONG CATEGORY IDENTIFIER'));
         }
     }
 }

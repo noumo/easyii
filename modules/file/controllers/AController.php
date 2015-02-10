@@ -50,10 +50,6 @@ class AController extends Controller
                         $model->file = Upload::file($fileInstanse, 'files', false);
                         $model->size = $fileInstanse->size;
 
-                        if(!$model->slug && $this->module->settings['autoSlug']){
-                            $model->slug = \yii\easyii\helpers\Data::generateSlug($model->title);
-                        }
-
                         if($model->save()){
                             $this->flash('success', Yii::t('easyii/file', 'File created'));
                             return $this->redirect('/admin/file');

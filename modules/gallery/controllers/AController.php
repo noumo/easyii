@@ -56,11 +56,6 @@ class AController extends Controller
                         $model->thumb = '';
                     }
                 }
-
-                if(!$model->slug && $this->module->settings['autoSlug']){
-                    $model->slug = \yii\easyii\helpers\Data::generateSlug($model->title);
-                }
-
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/gallery', 'Album created'));
                     return $this->redirect('/admin/gallery/a/photos/'.$model->primaryKey);

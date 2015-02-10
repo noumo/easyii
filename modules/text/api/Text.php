@@ -56,14 +56,11 @@ class Text extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return '';
         }
-        elseif(preg_match('/^[a-zA-Z][\w_-]*$/', $id_slug)){
+        elseif(preg_match(TextModel::$slugPattern, $id_slug)){
             return '<a href="/admin/text/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/text/api', 'Create text').'</a>';
         }
-        elseif(is_numeric($id_slug)){
-            return $this->errorText('WRONG TEXT_ID');
-        }
         else{
-            return $this->errorText('WRONG TEXT_SLUG');
+            return $this->errorText('WRONG TEXT IDENTIFIER');
         }
     }
 }
