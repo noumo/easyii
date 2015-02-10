@@ -70,13 +70,20 @@ class AController extends Controller
         }
 
         if (Yii::$app->request->post('Feedback')) {
-            $model->answer = trim(Yii::$app->request->post('Guestbook')['answer']);
-            if($this->sendAnswer($model)){
-                $this->flash('success', Yii::t('easyii/feedback', 'Answer successfully sent'));
+            if(filter_var(Setting::get('admin_email'), FILTER_VALIDATE_EMAIL))
+            {
+                $model->answer = trim(Yii::$app->request->post('Feedback')['answer']);
+                if($this->sendAnswer($model)){
+                    $this->flash('success', Yii::t('easyii/feedback', 'Answer successfully sent'));
+                }
+                else{
+                    $this->flash('error', Yii::t('easyii/feedback/api', 'An error has occurred'));
+                }
             }
-            else{
-                $this->flash('error', Yii::t('easyii/feedback/api', 'An error has occurred'));
+            else {
+                $this->flash('error', Yii::t('easyii/feedback', 'Please fill correct `Admin E-mail` in Settings'));
             }
+
             return $this->refresh();
         }
         else {
@@ -91,7 +98,7 @@ class AController extends Controller
         }
     }
 
-    public function actionSetanswer($id)
+    public function actionSetAnswer($id)
     {
         $model = Feedback::findOne($id);
 
@@ -140,7 +147,7 @@ class AController extends Controller
 
         if($sent) {
             $model->status = Feedback::STATUS_ANSWER;
-            $model->update;
+            $model->update();
             return true;
         }
 

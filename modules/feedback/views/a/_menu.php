@@ -55,7 +55,7 @@ if($action === 'view')
     </li>
     <?php if($action === 'view' && isset($noanswer) && !$noanswer) : ?>
         <li class="pull-right">
-            <a href="/admin/feedback/a/setanswer/<?= Yii::$app->request->get('id') ?>" class="text-warning"><span class="glyphicon glyphicon-ok"></span> <?= Yii::t('easyii/feedback', 'Mark as answered') ?></a>
+            <a href="/admin/feedback/a/set-answer/<?= Yii::$app->request->get('id') ?>" class="text-warning"><span class="glyphicon glyphicon-ok"></span> <?= Yii::t('easyii/feedback', 'Mark as answered') ?></a>
         </li>
     <?php endif; ?>    
 </ul>

@@ -6,7 +6,7 @@ $this->title = Yii::t('easyii/feedback', 'View feedback');
 $this->registerCss('.feedback-view dt{margin-bottom: 10px;}');
 
 if($model->status == Feedback::STATUS_ANSWER) {
-    $this->registerJs('$(".send-answer").click(function(){return confirm("Are you sure you want to resend the answer?");})');
+    $this->registerJs('$(".send-answer").click(function(){return confirm("'.Yii::t('easyii/feedback', 'Are you sure you want to resend the answer?').'");})');
 }
 ?>
 <?= $this->render('_menu', ['noanswer' => $model->status == Feedback::STATUS_ANSWER]) ?>
