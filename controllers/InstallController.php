@@ -2,9 +2,9 @@
 namespace yii\easyii\controllers;
 
 use Yii;
-use yii\helpers\FileHelper;
 use yii\web\ServerErrorHttpException;
 
+use yii\easyii\helpers\WebConsole;
 use yii\easyii\models\InstallForm;
 use yii\easyii\models\LoginForm;
 use yii\easyii\models\Module;
@@ -38,9 +38,11 @@ class InstallController extends \yii\web\Controller
 
         if ($installForm->load(Yii::$app->request->post())) {
             $this->createUploadsDir();
-            $this->createAdminTables();
+
+            WebConsole::migrate();
+
             $this->insertSettings($installForm);
-            $this->loadModules();
+            $this->installModules();
 
             Yii::$app->cache->flush();
             Yii::$app->session->setFlash('root_password', $installForm->root_password);
@@ -107,13 +109,6 @@ class InstallController extends \yii\web\Controller
         $uploadsDirExists = file_exists($uploadsDir);
         if(($uploadsDirExists && !is_writable($uploadsDir)) || (!$uploadsDirExists && !mkdir($uploadsDir, 0777))){
             throw new ServerErrorHttpException('Cannot create uploads folder at `'.$uploadsDir.'` Please check write permissions.');
-        }
-    }
-
-    private function createAdminTables()
-    {
-        foreach(FileHelper::findFiles(Yii::getAlias('@easyii') .DIRECTORY_SEPARATOR. 'scheme', ['only' => ['*.sql']]) as $sqlFile){
-            $this->createTableFromFile($sqlFile);
         }
     }
 
@@ -188,33 +183,24 @@ class InstallController extends \yii\web\Controller
         ])->execute();
     }
 
-    private function loadModules()
+    private function installModules()
     {
         $language = substr(Yii::$app->language, 0, 2);
 
-        foreach(glob(Yii::getAlias('@easyii'). DIRECTORY_SEPARATOR .'modules/*') as $module){
+        foreach(glob(Yii::getAlias('@easyii'). DIRECTORY_SEPARATOR .'modules/*') as $module)
+        {
             $moduleName = basename($module);
-            $moduleConfig = require($module. DIRECTORY_SEPARATOR .'scheme/module.php');
+            $moduleClass = '\yii\easyii\modules\\' . $moduleName . '\\' . ucfirst($moduleName) . 'Module';
+            $moduleConfig = $moduleClass::$installConfig;
 
-            foreach(FileHelper::findFiles($module. DIRECTORY_SEPARATOR .'scheme', ['only' => ['*.sql'], 'recursive' => false]) as $sqlFile){
-                $this->createTableFromFile($sqlFile);
-            }
-            $module = new Module();
-            $module->name = $moduleName;
-            $module->title = !empty($moduleConfig['title'][$language]) ? $moduleConfig['title'][$language] : $moduleConfig['title']['en'];
-            $module->icon = $moduleConfig['icon'];
-            $module->order_num = $moduleConfig['order_num'];
-            $module->status = Module::STATUS_ON;
+            $module = new Module([
+                'name' => $moduleName,
+                'title' => !empty($moduleConfig['title'][$language]) ? $moduleConfig['title'][$language] : $moduleConfig['title']['en'],
+                'icon' => $moduleConfig['icon'],
+                'order_num' => $moduleConfig['order_num'],
+                'status' => Module::STATUS_ON,
+            ]);
             $module->save();
-        }
-    }
-
-    private function createTableFromFile($sqlFile)
-    {
-        $tableName = 'easyii_'.basename($sqlFile, '.sql');
-        Yii::$app->db->createCommand(file_get_contents($sqlFile))->execute();
-        if(!Yii::$app->db->createCommand("SHOW TABLES LIKE '".$tableName."'")->queryScalar()){
-            throw new ServerErrorHttpException('Cannot create `'.$tableName.'` table. Check your database.');
         }
     }
 }

@@ -57,6 +57,10 @@ $moduleName = $this->context->module->id;
                             <i class="glyphicon glyphicon-user"></i>
                             <?= Yii::t('easyii', 'Admins') ?>
                         </a>
+                        <a href="/admin/system" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'system') ? 'active' :'' ?>">
+                            <i class="glyphicon glyphicon-hdd"></i>
+                            <?= Yii::t('easyii', 'System') ?>
+                        </a>
                         <a href="/admin/logs" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>">
                             <i class="glyphicon glyphicon-align-justify"></i>
                             <?= Yii::t('easyii', 'Logs') ?>

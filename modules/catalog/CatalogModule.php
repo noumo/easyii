@@ -25,4 +25,13 @@ class CatalogModule extends \yii\easyii\components\Module
         'categoryAutoSlug' => true,
         'itemAutoSlug' => true,
     ];
+
+    public static $installConfig = [
+        'title' => [
+            'en' => 'Catalog',
+            'ru' => 'Каталог',
+        ],
+        'icon' => 'list-alt',
+        'order_num' => 100,
+    ];
 }

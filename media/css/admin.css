@@ -1,3 +1,6 @@
+html{
+    overflow-y: scroll;
+}
 #admin-body{
     font-family: 'Open Sans', sans-serif;
     background: #f0f3f3;
@@ -147,7 +150,15 @@
     color: #fff;
 }
 
-
+h4{
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 300;
+    color: #555;
+}
+h4 b{
+    font-weight: 400;
+}
 
 .confirm-delete{
     color: #a94442;

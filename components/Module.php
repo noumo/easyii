@@ -9,6 +9,14 @@ class Module extends \yii\base\Module
     public $settings = [];
     public $i18n;
 
+    public static $installConfig = [
+        'title' => [
+            'en' => 'Custom Module',
+        ],
+        'icon' => 'asterisk',
+        'order_num' => 0,
+    ];
+
     public function init()
     {
         parent::init();
