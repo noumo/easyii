@@ -12,6 +12,8 @@ use yii\easyii\assets\LiveAsset;
 
 class AdminModule extends \yii\base\Module implements BootstrapInterface
 {
+    const VERSION = 1.06;
+
     public $settings;
     public $activeModules;
 

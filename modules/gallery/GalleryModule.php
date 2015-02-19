@@ -16,4 +16,13 @@ class GalleryModule extends \yii\easyii\components\Module
 
         'autoSlug' => true
     ];
+
+    public static $installConfig = [
+        'title' => [
+            'en' => 'Photo Gallery',
+            'ru' => 'Фотогалерея',
+        ],
+        'icon' => 'camera',
+        'order_num' => 90,
+    ];
 }
