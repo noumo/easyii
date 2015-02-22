@@ -58,13 +58,24 @@ class m000000_000000_install extends \yii\db\Migration
         //PHOTOS
         $this->createTable(models\Photo::tableName(), [
             'photo_id' => 'pk',
-            'module' => Schema::TYPE_STRING . '(64) NOT NULL',
+            'model' => Schema::TYPE_STRING . '(128) NOT NULL',
             'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
             'thumb' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) NOT NULL',
             'description' => Schema::TYPE_STRING . '(1024) NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . " NOT NULL",
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+
+        //SEOTEXT
+        $this->createTable(models\SeoText::tableName(), [
+            'seotext_id' => 'pk',
+            'model' => Schema::TYPE_STRING . '(128) NOT NULL',
+            'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
+            'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'keywords' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'description' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        $this->createIndex('model_item', models\SeoText::tableName(), ['model', 'item_id'], true);
 
         //SETTINGS
         $this->createTable(models\Setting::tableName(), [
@@ -92,8 +103,8 @@ class m000000_000000_install extends \yii\db\Migration
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
             'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', Category::tableName(), 'slug', true);
@@ -168,10 +179,12 @@ class m000000_000000_install extends \yii\db\Migration
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
+            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'views' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        $this->createIndex('slug', News::tableName(), 'slug', true);
 
         //PAGE MODULE
         $this->createTable(Page::tableName(), [

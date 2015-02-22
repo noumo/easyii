@@ -4,6 +4,7 @@ namespace yii\easyii\modules\catalog\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
+use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
 
 class Category extends \yii\easyii\components\ActiveRecord
@@ -65,7 +66,8 @@ class Category extends \yii\easyii\components\ActiveRecord
     {
         return [
             CacheFlush::className(),
-            SortableModel::className()
+            SortableModel::className(),
+            'seo' => SeoBehavior::className(),
         ];
     }
 

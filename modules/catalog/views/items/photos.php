@@ -7,7 +7,4 @@ $this->title = Yii::t('easyii', 'Photos') . ' ' . $model->title;
 <?= $this->render('_menu', ['category' => $model->category]) ?>
 <?= $this->render('_submenu', ['model' => $model]) ?>
 
-<?= Photos::widget([
-    'module' => 'catalog',
-    'item_id' => $model->primaryKey
-])?>
+<?= Photos::widget(['model' => $model])?>

@@ -3,6 +3,7 @@ namespace yii\easyii\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
 use yii\easyii\models\Photo;
 
@@ -43,7 +44,8 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
-            SortableModel::className()
+            SortableModel::className(),
+            'seo' => SeoBehavior::className(),
         ];
     }
 
@@ -80,7 +82,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['module' => 'catalog'])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['model' => Photo::className()])->sort();
     }
 
     public function getCategory()

@@ -4,9 +4,9 @@ namespace yii\easyii\widgets;
 use Yii;
 use yii\base\Widget;
 use yii\base\InvalidConfigException;
-use yii\easyii\models\Photo;
+use yii\helpers\Html;
 
-class Photos extends Widget
+class SeoForm extends Widget
 {
     public $model;
 
@@ -21,9 +21,8 @@ class Photos extends Widget
 
     public function run()
     {
-        $photos = Photo::find()->where(['model' => get_class($this->model), 'item_id' => $this->model->primaryKey])->sort()->all();
-        echo $this->render('photos', [
-            'photos' => $photos
+        echo $this->render('seo_form', [
+            'model' => $this->model->seoText
         ]);
     }
 

@@ -1,5 +1,5 @@
 <?php
-$this->title = Yii::t('easyii', 'Update log');
+$this->title = Yii::t('easyii', 'Update');
 ?>
 <ul class="nav nav-pills">
     <li>

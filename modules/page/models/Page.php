@@ -3,6 +3,7 @@ namespace yii\easyii\modules\page\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\SeoBehavior;
 
 class Page extends \yii\easyii\components\ActiveRecord
 {
@@ -31,6 +32,13 @@ class Page extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
             'slug' => Yii::t('easyii', 'Slug'),
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            'seo' => SeoBehavior::className(),
         ];
     }
 

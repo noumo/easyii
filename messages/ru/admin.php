@@ -42,6 +42,7 @@ return [
     'No' => 'Нет',
     'Add' => 'Добавить',
     'Edit' => 'Редактировать',
+    'Update' => 'Обновить',
     'Move up' => 'Переместить выше',
     'Move down' => 'Переместить ниже',
     'Anti-spam check' => 'Проверка на спам',
@@ -90,8 +91,11 @@ return [
     'Change image' => 'Изменить изображение',
     'Uploading. Please wait' => 'Загружаем. Пожалуйста подождите',
 
-    'Logs' => 'Логи',
-
+    'System' => 'Система',
+    'Current version' => 'Текущая версия',
     'Flush cache' => 'Сбросить кэш',
+    'Clear assets' => 'Очистить assets',
     'Cache flushed' => 'Кэш успешно сброшен',
+    'Logs' => 'Логи',
+    'Seo texts' => 'Seo тексты',
 ];
