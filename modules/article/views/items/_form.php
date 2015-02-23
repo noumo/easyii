@@ -9,7 +9,7 @@ use yii\easyii\widgets\SeoForm;
     'options' => ['enctype' => 'multipart/form-data']
 ]); ?>
 <?= $form->field($model, 'title') ?>
-<?php if($this->context->module->settings['itemThumb']) : ?>
+<?php if($this->context->module->settings['articleThumb']) : ?>
     <?php if($model->thumb) : ?>
         <img src="<?= Yii::$app->request->baseUrl.$model->thumb ?>">
         <a href="/admin/article/items/clear-image/<?= $model->primaryKey ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>

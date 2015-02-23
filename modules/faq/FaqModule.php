@@ -5,10 +5,6 @@ use Yii;
 
 class FaqModule extends \yii\easyii\components\Module
 {
-    public $settings = [
-        'autoSlug' => true
-    ];
-
     public static $installConfig = [
         'title' => [
             'en' => 'FAQ',

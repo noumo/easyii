@@ -9,10 +9,10 @@ class ArticleModule extends \yii\easyii\components\Module
         'categoryThumbWidth' => 100,
         'categoryThumbHeight' => 100,
 
-        'itemThumb' => true,
-        'itemThumbCrop' => true,
-        'itemThumbWidth' => 100,
-        'itemThumbHeight' => 100,
+        'articleThumb' => true,
+        'articleThumbCrop' => true,
+        'articleThumbWidth' => 100,
+        'articleThumbHeight' => 100,
 
         'enableShort' => true,
         'shortMaxLength' => 255,

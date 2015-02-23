@@ -51,10 +51,10 @@ class ItemsController extends Controller
             else {
                 $model->category_id = $category->primaryKey;
 
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
+                if (isset($_FILES) && $this->module->settings['articleThumb']) {
                     $model->thumb = UploadedFile::getInstance($model, 'thumb');
                     if ($model->thumb && $model->validate(['thumb'])) {
-                        $model->thumb = Image::upload($model->thumb, 'article', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
+                        $model->thumb = Image::upload($model->thumb, 'article', $this->module->settings['articleThumbWidth'], $this->module->settings['articleThumbHeight'], $this->module->settings['articleThumbCrop']);
                     } else {
                         $model->thumb = '';
                     }
@@ -89,10 +89,10 @@ class ItemsController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
+                if (isset($_FILES) && $this->module->settings['articleThumb']) {
                     $model->thumb = UploadedFile::getInstance($model, 'thumb');
                     if ($model->thumb && $model->validate(['thumb'])) {
-                        $model->thumb = Image::upload($model->thumb, 'article', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
+                        $model->thumb = Image::upload($model->thumb, 'article', $this->module->settings['articleThumbWidth'], $this->module->settings['articleThumbHeight'], $this->module->settings['articleThumbCrop']);
                     } else {
                         $model->thumb = $model->oldAttributes['thumb'];
                     }
