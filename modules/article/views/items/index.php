@@ -10,7 +10,8 @@ $this->title = Yii::t('easyii/article', 'Articles');
             <?php if(IS_ROOT) : ?>
                 <th width="30">#</th>
             <?php endif; ?>
-            <th><?= Yii::t('easyii', 'Name') ?></th>
+            <th><?= Yii::t('easyii', 'Title') ?></th>
+            <th width="120"><?= Yii::t('easyii', 'Views') ?></th>
             <th width="120"></th>
         </tr>
         </thead>
@@ -21,6 +22,7 @@ $this->title = Yii::t('easyii/article', 'Articles');
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
                 <td><a href="/admin/article/items/edit/<?= $item->primaryKey ?>"><?= $item->title ?></a></td>
+                <td><?= $item->views ?></td>
                 <td class="text-right">
                     <div class="btn-group btn-group-sm" role="group">
                         <a href="/admin/article/items/up/<?= $item->primaryKey ?>?category_id=<?= $model->primaryKey ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
