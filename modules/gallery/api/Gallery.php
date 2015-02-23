@@ -104,9 +104,9 @@ class Gallery extends \yii\easyii\components\API
         $albumObject = $this->parseAlbum($album);
         $albumObject->photos = $this->parsePhotos($this->_adp->models);
 
-        $albumObject->seo_title = $album->seo->title;
-        $albumObject->seo_keywords = $album->seo->keywords;
-        $albumObject->seo_description = $album->seo->description;
+        $albumObject->seo_title = $album->seo_title;
+        $albumObject->seo_keywords = $album->seo_keywords;
+        $albumObject->seo_description = $album->seo_description;
 
         return $albumObject;
     }

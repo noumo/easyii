@@ -61,9 +61,9 @@ class News extends \yii\easyii\components\API
         $news->updateCounters(['views' => 1]);
 
         $result = $this->parseNews($news);
-        $result->seo_title = $news->seo->title;
-        $result->seo_keywords = $news->seo->keywords;
-        $result->seo_description = $news->seo->description;
+        $result->seo_title = $news->seo_title;
+        $result->seo_keywords = $news->seo_keywords;
+        $result->seo_description = $news->seo_description;
 
         return $result;
     }

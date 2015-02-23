@@ -102,9 +102,9 @@ class Article extends \yii\easyii\components\API
 
         $catObject = $this->parseCategory($category);
 
-        $catObject->seo_title = $category->seo->title;
-        $catObject->seo_keywords = $category->seo->keywords;
-        $catObject->seo_description = $category->seo->description;
+        $catObject->seo_title = $category->seo_title;
+        $catObject->seo_keywords = $category->seo_keywords;
+        $catObject->seo_description = $category->seo_description;
 
         $catObject->items = [];
 
@@ -147,9 +147,9 @@ class Article extends \yii\easyii\components\API
         $item->updateCounters(['views' => 1]);
 
         $itemObject = $this->parseItem($item);
-        $itemObject->seo_title = $item->seo->title;
-        $itemObject->seo_keywords = $item->seo->keywords;
-        $itemObject->seo_description = $item->seo->description;
+        $itemObject->seo_title = $item->seo_title;
+        $itemObject->seo_keywords = $item->seo_keywords;
+        $itemObject->seo_description = $item->seo_description;
 
         return $itemObject;
     }
