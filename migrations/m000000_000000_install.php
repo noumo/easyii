@@ -178,7 +178,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(News::tableName(), [
             'news_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
