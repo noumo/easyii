@@ -21,7 +21,7 @@ class News extends \yii\easyii\components\ActiveRecord
         return [
             [['text', 'title'], 'required'],
             [['title', 'short', 'text'], 'trim'],
-            ['title', 'string', 'max' => 256],
+            ['title', 'string', 'max' => 128],
             ['image', 'image'],
             ['time', 'default', 'value' => time()],
             ['views', 'number', 'integerOnly' => true],

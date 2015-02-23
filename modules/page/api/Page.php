@@ -20,7 +20,18 @@ class Page extends \yii\easyii\components\API
     {
         $page = PageModel::find()->where(['or', 'page_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
 
-        return $page ? $this->parsePage($page) : $this->notFound($id_slug);
+
+        if($page){
+            $result = $this->parsePage($page);
+
+            $result->seo_title = $page->seo_title;
+            $result->seo_keywords = $page->seo_keywords;
+            $result->seo_description = $page->seo_description;
+
+            return $result;
+        } else {
+            return $this->notFound($id_slug);
+        }
     }
 
     private function parsePage($page)

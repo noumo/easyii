@@ -26,7 +26,7 @@ $(function(){
                 formData.append('Photo[image]', file);
 
                 $.ajax({
-                    url: '/admin/photos/upload?module='+$this.data('module')+'&item_id='+$this.data('id'),
+                    url: $this.closest('form').attr('action'),
                     dataType: 'json',
                     cache: false,
                     contentType: false,
@@ -109,7 +109,7 @@ $(function(){
         var changeButton = $this.siblings('.change-image-button').addClass('disabled');
         formData.append('Photo[image]', fileData);
         $.ajax({
-            url: '/admin/photos/image/'+tr.data('id'),
+            url: $this.siblings('.change-image-button').attr('href'),
             dataType: 'json',
             cache: false,
             contentType: false,

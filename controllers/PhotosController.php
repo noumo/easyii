@@ -34,40 +34,34 @@ class PhotosController extends Controller
         ];
     }
 
-    public function actionUpload($module, $item_id)
+    public function actionUpload($model, $item_id, $maxWidth, $thumbWidth, $thumbHeight = null, $thumbCrop = true)
     {
         $success = null;
-        $model = new Photo;
-        $model->module = $module;
-        $model->item_id = $item_id;
-        $model->image = UploadedFile::getInstance($model, 'image');
+        
+        $photo = new Photo;
+        $photo->model = $model;
+        $photo->item_id = $item_id;
+        $photo->image = UploadedFile::getInstance($photo, 'image');
 
-        $settings = array_merge($this->defaultSettings, Yii::$app->getModule('admin')->activeModules[$module]->settings);
-
-        if($model->image && $model->validate(['image'])){
-            $model->image = Image::upload($model->image, $module, !empty($settings['photoMaxWidth']) ? $settings['photoMaxWidth'] : null);
-            if($model->image){
-                $model->thumb = Image::createThumbnail(
-                    $model->image,
-                    $settings['photoThumbWidth'],
-                    $settings['photoThumbHeight'],
-                    $settings['photoThumbCrop']
-                );
-                if($model->save()){
+        if($photo->image && $photo->validate(['image'])){
+            $photo->image = Image::upload($photo->image, 'photos', $maxWidth);
+            if($photo->image){
+                $photo->thumb = Image::createThumbnail($photo->image, $thumbWidth, $thumbHeight, $thumbCrop);
+                if($photo->save()){
                     $success = [
                         'message' => Yii::t('easyii', 'Photo uploaded'),
                         'photo' => [
-                            'id' => $model->primaryKey,
-                            'thumb' => $model->thumb,
-                            'image' => $model->image,
+                            'id' => $photo->primaryKey,
+                            'thumb' => $photo->thumb,
+                            'image' => $photo->image,
                             'description' => ''
                         ]
                     ];
                 }
                 else{
-                    @unlink(Yii::getAlias('@webroot').$model->image);
-                    @unlink(Yii::getAlias('@webroot').$model->thumb);
-                    $this->error = Yii::t('easyii', 'Create error. {0}', $model->formatErrors());
+                    @unlink(Yii::getAlias('@webroot').$photo->image);
+                    @unlink(Yii::getAlias('@webroot').$photo->thumb);
+                    $this->error = Yii::t('easyii', 'Create error. {0}', $photo->formatErrors());
                 }
             }
             else{
@@ -103,45 +97,38 @@ class PhotosController extends Controller
         return $this->formatResponse(Yii::t('easyii', 'Photo description saved'));
     }
 
-    public function actionImage($id)
+    public function actionImage($id, $maxWidth, $thumbWidth, $thumbHeight = null, $thumbCrop = true)
     {
         $success = null;
 
-        if(($model = Photo::findOne($id)))
+        if(($photo = Photo::findOne($id)))
         {
-            $oldImage = $model->image;
-            $oldThumb = $model->thumb;
+            $oldImage = $photo->image;
+            $oldThumb = $photo->thumb;
 
-            $model->image = UploadedFile::getInstance($model, 'image');
+            $photo->image = UploadedFile::getInstance($photo, 'image');
 
-            $settings = array_merge($this->defaultSettings, Yii::$app->getModule('admin')->activeModules[$model->module]->settings);
-
-            if($model->image && $model->validate(['image'])){
-                $model->image = Image::upload($model->image, $model->module, !empty($settings['photoMaxWidth']) ? $settings['photoMaxWidth'] : null);
-                if($model->image){
-                    $model->thumb = Image::createThumbnail(
-                        $model->image,
-                        $settings['photoThumbWidth'],
-                        $settings['photoThumbHeight'],
-                        $settings['photoThumbCrop']
-                    );
-                    if($model->save()){
+            if($photo->image && $photo->validate(['image'])){
+                $photo->image = Image::upload($photo->image, 'photos', $maxWidth);
+                if($photo->image){
+                    $photo->thumb = Image::createThumbnail($photo->image, $thumbWidth, $thumbHeight, $thumbCrop);
+                    if($photo->save()){
                         @unlink(Yii::getAlias('@webroot').$oldImage);
                         @unlink(Yii::getAlias('@webroot').$oldThumb);
 
                         $success = [
                             'message' => Yii::t('easyii', 'Photo uploaded'),
                             'photo' => [
-                                'thumb' => $model->thumb,
-                                'image' => $model->image
+                                'thumb' => $photo->thumb,
+                                'image' => $photo->image
                             ]
                         ];
                     }
                     else{
-                        @unlink(Yii::getAlias('@webroot').$model->image);
-                        @unlink(Yii::getAlias('@webroot').$model->thumb);
+                        @unlink(Yii::getAlias('@webroot').$photo->image);
+                        @unlink(Yii::getAlias('@webroot').$photo->thumb);
 
-                        $this->error = Yii::t('easyii', 'Update error. {0}', $model->formatErrors());
+                        $this->error = Yii::t('easyii', 'Update error. {0}', $photo->formatErrors());
                     }
                 }
                 else{

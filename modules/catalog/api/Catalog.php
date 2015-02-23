@@ -95,7 +95,13 @@ class Catalog extends \yii\easyii\components\API
         ]);
 
         $catObject = $this->parseCategory($category);
+
+        $catObject->seo_title = $category->seo->title;
+        $catObject->seo_keywords = $category->seo->keywords;
+        $catObject->seo_description = $category->seo->description;
+
         $catObject->items = [];
+
         foreach($this->_adp->models as $item){
             $catObject->items[] = $this->parseItem($item);
         }
@@ -110,7 +116,7 @@ class Catalog extends \yii\easyii\components\API
         $query = Category::find()->status(Category::STATUS_ON)->sort();
 
         if($this->_catsOptions['where']){
-            $query->andWhere($this->_albumsOptions['where']);
+            $query->andWhere($this->_catsOptions['where']);
         }
 
         $this->_adp = new ActiveDataProvider([
@@ -128,12 +134,15 @@ class Catalog extends \yii\easyii\components\API
 
     private function findItem($id_slug)
     {
-        if(!($item = Item::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one())){
+        if(!($item = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one())){
             return null;
         }
 
         $itemObject = $this->parseItem($item);
         $itemObject->photos = $this->parsePhotos($item->photos);
+        $itemObject->seo_title = $item->seo->title;
+        $itemObject->seo_keywords = $item->seo->keywords;
+        $itemObject->seo_description = $item->seo->description;
 
         return $itemObject;
     }
@@ -192,7 +201,8 @@ class Catalog extends \yii\easyii\components\API
     private function createItemObject($data)
     {
         $temp = (object)[
-            'id' => $data['category_id'],
+            'id' => $data['item_id'],
+            'category' => $data['category_id'],
             'slug' => $data['slug'],
             'title' => $data['title'],
             'thumb' => $data['thumb'],

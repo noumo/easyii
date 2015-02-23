@@ -6,7 +6,6 @@ use yii\easyii\widgets\SeoForm;
 ?>
 <?php $form = ActiveForm::begin([
     'enableAjaxValidation' => true,
-    'options' => ['enctype' => 'multipart/form-data']
 ]); ?>
 <?= $form->field($model, 'title') ?>
 <?= $form->field($model, 'text')->widget(Redactor::className(),[

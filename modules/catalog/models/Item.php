@@ -64,7 +64,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function beforeValidate()
     {
-        if(self::autoSlug()){
+        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
             $this->attachBehavior('sluggable', [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -82,7 +82,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['model' => Photo::className()])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['model' => Item::className()])->sort();
     }
 
     public function getCategory()

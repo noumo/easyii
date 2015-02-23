@@ -44,7 +44,7 @@ class Page extends \yii\easyii\components\ActiveRecord
 
     public function beforeValidate()
     {
-        if(self::autoSlug()){
+        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
             $this->attachBehavior('sluggable', [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',

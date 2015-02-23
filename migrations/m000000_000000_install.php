@@ -5,6 +5,7 @@ use yii\easyii\models;
 use yii\easyii\modules\carousel\models\Carousel;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
+use yii\easyii\modules\faq\models\Faq;
 use yii\easyii\modules\feedback\models\Feedback;
 use yii\easyii\modules\file\models\File;
 use yii\easyii\modules\gallery\models\Album;
@@ -65,6 +66,7 @@ class m000000_000000_install extends \yii\db\Migration
             'description' => Schema::TYPE_STRING . '(1024) NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . " NOT NULL",
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        $this->createIndex('model_item', models\Photo::tableName(), ['model', 'item_id']);
 
         //SEOTEXT
         $this->createTable(models\SeoText::tableName(), [
@@ -194,6 +196,15 @@ class m000000_000000_install extends \yii\db\Migration
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL'
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', Page::tableName(), 'slug', true);
+
+        //FAQ MODULE
+        $this->createTable(Faq::tableName(), [
+            'faq_id' => 'pk',
+            'question' => Schema::TYPE_TEXT . ' NOT NULL',
+            'answer' => Schema::TYPE_TEXT . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
 
         //SUBSCRIBE MODULE
         $this->createTable(Subscriber::tableName(), [

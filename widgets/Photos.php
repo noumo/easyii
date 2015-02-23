@@ -10,6 +10,11 @@ class Photos extends Widget
 {
     public $model;
 
+    public $maxWidth = 1280;
+    public $thumbWidth = 100;
+    public $thumbHeight = 100;
+    public $thumbCrop = true;
+
     public function init()
     {
         parent::init();

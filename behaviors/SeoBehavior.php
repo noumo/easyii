@@ -14,6 +14,7 @@ class SeoBehavior extends \yii\base\Behavior
         return [
             ActiveRecord::EVENT_AFTER_INSERT => 'afterInsert',
             ActiveRecord::EVENT_AFTER_UPDATE => 'afterUpdate',
+            ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ];
     }
 
@@ -39,6 +40,13 @@ class SeoBehavior extends \yii\base\Behavior
         }
     }
 
+    public function afterDelete()
+    {
+        if(!$this->seoText->isNewRecord){
+            $this->seoText->delete();
+        }
+    }
+
     public function getSeo_title()
     {
         return $this->seoText->title;
@@ -58,7 +66,7 @@ class SeoBehavior extends \yii\base\Behavior
     {
         if(!$this->_model)
         {
-            if($this->owner && !$this->owner->isNewRecord) {
+            if($this->owner && $this->owner->primaryKey) {
                 $itemModel = get_class($this->owner);
                 $this->_model = SeoText::findOne(['model' => $itemModel, 'item_id' => $this->owner->primaryKey]);
                 if(!$this->_model){
