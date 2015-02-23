@@ -10,7 +10,7 @@ class Faq extends \yii\easyii\components\API
     public function api_all()
     {
         $data = Data::cache(FaqModel::CACHE_KEY, 3600, function(){
-            return FaqModel::find()->select(['question', 'answer'])->status(FaqModel::STATUS_ON)->sort()->asArray()->all();
+            return FaqModel::find()->select(['faq_id', 'question', 'answer'])->status(FaqModel::STATUS_ON)->sort()->asArray()->all();
         });
 
         $result = [];
