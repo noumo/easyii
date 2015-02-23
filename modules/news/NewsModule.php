@@ -4,10 +4,10 @@ namespace yii\easyii\modules\news;
 class NewsModule extends \yii\easyii\components\Module
 {
     public $settings = [
-        'enableImage' => true,
-        'imageWidth' => 100,
-        'imageHeight' => '',
-        'imageCrop' => false,
+        'enableThumb' => true,
+        'thumbWidth' => 100,
+        'thumbHeight' => '',
+        'thumbCrop' => false,
 
         'enableShort' => true,
         'shortMaxLength' => 256

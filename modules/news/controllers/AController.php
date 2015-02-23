@@ -44,13 +44,13 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['enableImage']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'news', $this->module->settings['imageWidth'], $this->module->settings['imageHeight'], $this->module->settings['imageCrop']);
+                if(isset($_FILES) && $this->module->settings['enableThumb']){
+                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
+                    if($model->thumb && $model->validate(['thumb'])){
+                        $model->thumb = Image::upload($model->thumb, 'news', $this->module->settings['thumbWidth'], $this->module->settings['thumbHeight'], $this->module->settings['thumbCrop']);
                     }
                     else{
-                        $model->image = '';
+                        $model->thumb = '';
                     }
                 }
                 $model->status = News::STATUS_ON;
@@ -87,13 +87,13 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['enableImage']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'news', $this->module->settings['imageWidth'], $this->module->settings['imageHeight'], $this->module->settings['imageCrop']);
+                if(isset($_FILES) && $this->module->settings['enableThumb']){
+                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
+                    if($model->thumb && $model->validate(['thumb'])){
+                        $model->thumb = Image::upload($model->thumb, 'news', $this->module->settings['thumbWidth'], $this->module->settings['thumbHeight'], $this->module->settings['thumbCrop']);
                     }
                     else{
-                        $model->image = $model->oldAttributes['image'];
+                        $model->thumb = $model->oldAttributes['thumb'];
                     }
                 }
 
@@ -131,9 +131,9 @@ class AController extends Controller
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
         else{
-            $model->image = '';
+            $model->thumb = '';
             if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->image);
+                @unlink(Yii::getAlias('@webroot').$model->thumb);
                 $this->flash('success', Yii::t('easyii/news', 'News image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));

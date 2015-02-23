@@ -7,7 +7,6 @@ return [
     'News updated' => 'Новость обновлена',
     'News deleted' => 'Новость удалена',
     'News image cleared' => 'Изображение новости очищено',
-    'Preview' => 'Изображение',
     'Short' => 'Коротко',
     'Clear image' => 'Очистить изображение',
 ];

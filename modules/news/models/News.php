@@ -22,7 +22,7 @@ class News extends \yii\easyii\components\ActiveRecord
             [['text', 'title'], 'required'],
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['thumb', 'image'],
             ['time', 'default', 'value' => time()],
             ['views', 'number', 'integerOnly' => true],
             ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
@@ -36,7 +36,7 @@ class News extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
             'short' => Yii::t('easyii/news', 'Short'),
-            'image' => Yii::t('easyii/news', 'Preview'),
+            'thumb' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
@@ -71,8 +71,8 @@ class News extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        if($this->image){
-            @unlink(Yii::getAlias('@webroot').$this->image);
+        if($this->thumb){
+            @unlink(Yii::getAlias('@webroot').$this->thumb);
         }
     }
 }

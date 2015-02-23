@@ -115,7 +115,7 @@ class News extends \yii\easyii\components\API
 
         return (object)[
             'id' => $is_string ? '' : $data['news_id'],
-            'image' => $is_string ? '' : $data['image'],
+            'thumb' => $is_string ? '' : $data['thumb'],
             'title' => $is_string ? $data : $data['title'],
             'short' => $is_string ? $data : $data['short'],
             'text' => $is_string ? $data : $data['text'],
