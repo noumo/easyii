@@ -68,6 +68,18 @@ ALTER TABLE `easyii_photos` ADD INDEX (  `model` ,  `item_id` ) COMMENT  '';
 UPDATE `easyii_photos` SET `model` = 'yii\\easyii\\modules\\gallery\\models\\Album' WHERE `model` = 'gallery';
 UPDATE `easyii_photos` SET `model` = 'yii\\easyii\\modules\\catalog\\models\\Item' WHERE `model` = 'catalog';
 
-INSERT INTO `easyii_modules` (`name`, `title`, `icon`, `settings`, `notice`, `order_num`, `status`) VALUES
-('faq', 'FAQ', 'question-sign', '[]', 0, 45, 1),
-('article', 'Articles', 'pencil', '{"categoryThumb":true,"categoryThumbCrop":true,"categoryThumbWidth":100,"categoryThumbHeight":100,"articleThumb":true,"articleThumbCrop":true,"articleThumbWidth":100,"articleThumbHeight":100,"enableShort":true,"shortMaxLength":255,"categoryAutoSlug":true,"itemAutoSlug":true}', 0, 65, 1);
+ALTER TABLE `easyii_modules` ADD  `class` VARCHAR( 128 ) NOT NULL AFTER  `name`;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\CarouselModule' WHERE `name` = 'carousel' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\page\\CatalogModule' WHERE `name` = 'catalog' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\FeedbackModule' WHERE `name` = 'feedback' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\FileModule' WHERE `name` = 'file' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\GalleryModule' WHERE `name` = 'gallery' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\GuestbookModule' WHERE `name` = 'guestbook' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\NewsModule' WHERE `name` = 'news' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\PageModule' WHERE `name` = 'page' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\SubscribeModule' WHERE `name` = 'subscribe' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\TextModule' WHERE `name` = 'text' LIMIT 1;
+
+INSERT INTO `easyii_modules` (`name`, `class`, `title`, `icon`, `settings`, `notice`, `order_num`, `status`) VALUES
+('faq', 'yii\\easyii\\modules\\faq\\FaqModule', 'FAQ', 'question-sign', '[]', 0, 45, 1),
+('article', 'yii\\easyii\\modules\\article\\ArticleModule', 'Articles', 'pencil', '{"categoryThumb":true,"categoryThumbCrop":true,"categoryThumbWidth":100,"categoryThumbHeight":100,"articleThumb":true,"articleThumbCrop":true,"articleThumbWidth":100,"articleThumbHeight":100,"enableShort":true,"shortMaxLength":255,"categoryAutoSlug":true,"itemAutoSlug":true}', 0, 65, 1);

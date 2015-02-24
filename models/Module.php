@@ -22,10 +22,12 @@ class Module extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'title'], 'required'],
-            [['name', 'title', 'icon'], 'trim'],
+            [['name', 'class', 'title'], 'required'],
+            [['name', 'class', 'title', 'icon'], 'trim'],
             ['name',  'match', 'pattern' => '/^[a-z]+$/'],
             ['name', 'unique'],
+            ['class',  'match', 'pattern' => '/^[\w\\\]+$/'],
+            ['class',  'checkExists'],
             ['icon', 'string'],
             ['status', 'in', 'range' => [0,1]],
         ];
@@ -35,6 +37,7 @@ class Module extends \yii\easyii\components\ActiveRecord
     {
         return [
             'name' => Yii::t('easyii', 'Name'),
+            'class' => Yii::t('easyii', 'Class'),
             'title' => Yii::t('easyii', 'Title'),
             'icon' => Yii::t('easyii', 'Icon'),
             'order_num' => Yii::t('easyii', 'Order'),
@@ -94,9 +97,21 @@ class Module extends \yii\easyii\components\ActiveRecord
         $this->settings = $newSettings;
     }
 
+    public function checkExists($attribute)
+    {
+        if(!class_exists($this->$attribute)){
+            $this->addError($attribute, Yii::t('easyii', 'Class does not exist'));
+        }
+    }
+
     static function getDefaultSettings($moduleName)
     {
-        return Yii::createObject('\\yii\\easyii\\modules\\'.$moduleName.'\\'.ucfirst($moduleName).'Module', [$moduleName])->settings;
+        $modules = Yii::$app->getModule('admin')->activeModules;
+        if(isset($modules[$moduleName])){
+            return Yii::createObject($modules[$moduleName]->class, [$moduleName])->settings;
+        } else {
+            return [];
+        }
     }
 
 }

@@ -31,7 +31,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
 
         $modules = [];
         foreach($this->activeModules as $name => $module){
-            $modules[$name]['class'] = '\\yii\\easyii\\modules\\'.$name.'\\'.ucfirst($name).'Module';
+            $modules[$name]['class'] = $module->class;
             if(is_array($module->settings)){
                 $modules[$name]['settings'] = $module->settings;
             }

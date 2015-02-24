@@ -47,6 +47,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(models\Module::tableName(), [
             'module_id' => 'pk',
             'name' => Schema::TYPE_STRING . '(64) NOT NULL',
+            'class' => Schema::TYPE_STRING . '(128) NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'icon' => Schema::TYPE_STRING . '(32) NOT NULL',
             'settings' => Schema::TYPE_TEXT . ' NOT NULL',

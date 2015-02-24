@@ -23,7 +23,7 @@ class SeoText extends \yii\easyii\components\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'h1' => 'H1',
+            'h1' => 'Seo H1',
             'title' => 'Seo Title',
             'keywords' => 'Seo Keywords',
             'description' => 'Seo Description',

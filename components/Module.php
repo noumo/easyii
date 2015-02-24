@@ -41,7 +41,13 @@ class Module extends \yii\base\Module
 
     public static function getModuleName($namespace)
     {
-        preg_match('/modules\\\(\w+)/', $namespace, $matches);
-        return $matches[1];
+        foreach(\yii\easyii\models\Module::findAllActive() as $module)
+        {
+            $moduleClassPath = preg_replace('/[\w]+$/', '', $module->class);
+            if(strpos($namespace, $moduleClassPath) !== false){
+                return $module->name;
+            }
+        }
+        return false;
     }
 }
