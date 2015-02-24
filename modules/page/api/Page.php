@@ -24,6 +24,7 @@ class Page extends \yii\easyii\components\API
         if($page){
             $result = $this->parsePage($page);
 
+            $result->seo_h1 = $page->seo_h1;
             $result->seo_title = $page->seo_title;
             $result->seo_keywords = $page->seo_keywords;
             $result->seo_description = $page->seo_description;

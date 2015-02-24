@@ -73,6 +73,7 @@ class m000000_000000_install extends \yii\db\Migration
             'seotext_id' => 'pk',
             'model' => Schema::TYPE_STRING . '(128) NOT NULL',
             'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
+            'h1' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'keywords' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'description' => Schema::TYPE_STRING . '(128) DEFAULT NULL',

@@ -77,6 +77,7 @@ class File extends \yii\easyii\components\API
         if($file){
             $result = $this->parseFile($file);
 
+            $result->seo_h1 = $file->seo_h1;
             $result->seo_title = $file->seo_title;
             $result->seo_keywords = $file->seo_keywords;
             $result->seo_description = $file->seo_description;

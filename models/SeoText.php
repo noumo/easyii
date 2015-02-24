@@ -14,18 +14,24 @@ class SeoText extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'keywords', 'description'], 'trim'],
-            [['title', 'keywords', 'description'], 'string', 'max' => 255],
-            [['title', 'keywords', 'description'], EscapeValidator::className()],
+            [['h1', 'title', 'keywords', 'description'], 'trim'],
+            [['h1', 'title', 'keywords', 'description'], 'string', 'max' => 255],
+            [['h1', 'title', 'keywords', 'description'], EscapeValidator::className()],
         ];
     }
 
     public function attributeLabels()
     {
         return [
+            'h1' => 'H1',
             'title' => 'Seo Title',
             'keywords' => 'Seo Keywords',
             'description' => 'Seo Description',
         ];
+    }
+
+    public function isEmpty()
+    {
+        return (!$this->h1 && !$this->title && !$this->keywords && !$this->description);
     }
 }
