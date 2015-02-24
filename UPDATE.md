@@ -69,15 +69,15 @@ UPDATE `easyii_photos` SET `model` = 'yii\\easyii\\modules\\gallery\\models\\Alb
 UPDATE `easyii_photos` SET `model` = 'yii\\easyii\\modules\\catalog\\models\\Item' WHERE `model` = 'catalog';
 
 ALTER TABLE `easyii_modules` ADD  `class` VARCHAR( 128 ) NOT NULL AFTER  `name`;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\CarouselModule' WHERE `name` = 'carousel' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\page\\CatalogModule' WHERE `name` = 'catalog' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\FeedbackModule' WHERE `name` = 'feedback' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\FileModule' WHERE `name` = 'file' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\GalleryModule' WHERE `name` = 'gallery' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\GuestbookModule' WHERE `name` = 'guestbook' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\NewsModule' WHERE `name` = 'news' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\PageModule' WHERE `name` = 'page' LIMIT 1;
-UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\SubscribeModule' WHERE `name` = 'subscribe' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\carousel\\CarouselModule' WHERE `name` = 'carousel' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\catalog\\CatalogModule' WHERE `name` = 'catalog' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\feedback\\FeedbackModule' WHERE `name` = 'feedback' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\file\\FileModule' WHERE `name` = 'file' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\gallery\\GalleryModule' WHERE `name` = 'gallery' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\guestbook\\GuestbookModule' WHERE `name` = 'guestbook' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\news\\NewsModule' WHERE `name` = 'news' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\page\\PageModule' WHERE `name` = 'page' LIMIT 1;
+UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\subscribe\\SubscribeModule' WHERE `name` = 'subscribe' LIMIT 1;
 UPDATE `easyii_modules` SET `class` = 'yii\\easyii\\modules\\text\\TextModule' WHERE `name` = 'text' LIMIT 1;
 
 INSERT INTO `easyii_modules` (`name`, `class`, `title`, `icon`, `settings`, `notice`, `order_num`, `status`) VALUES
