@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `easyii_seotext` (
   `seotext_id` int(11) NOT NULL AUTO_INCREMENT,
   `model` varchar(128) NOT NULL,
   `item_id` int(11) NOT NULL,
+  `h1` varchar(128) DEFAULT NULL,
   `title` varchar(128) DEFAULT NULL,
   `keywords` varchar(128) DEFAULT NULL,
   `description` varchar(128) DEFAULT NULL,
