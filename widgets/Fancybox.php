@@ -6,9 +6,9 @@ use yii\base\Widget;
 use yii\base\InvalidConfigException;
 use yii\helpers\Json;
 
-use yii\easyii\assets\ColorboxAsset;
+use yii\easyii\assets\FancyboxAsset;
 
-class Colorbox extends Widget
+class Fancybox extends Widget
 {
     public $options = [];
     public $selector;
@@ -18,18 +18,15 @@ class Colorbox extends Widget
         parent::init();
 
         if (empty($this->selector)) {
-            throw new InvalidConfigException('Required `reCaptcha` param isn\'t set.');
+            throw new InvalidConfigException('Required `selector` param isn\'t set.');
         }
     }
 
     public function run()
     {
-        $view = Yii::$app->getView();
-        $view->registerAssetBundle(ColorboxAsset::className());
-
         $clientOptions = (count($this->options)) ? Json::encode($this->options) : '';
 
-        $view->registerJs('$("'.$this->selector.'").colorbox('.$clientOptions.');');
+        $this->view->registerAssetBundle(FancyboxAsset::className());
+        $this->view->registerJs('$("'.$this->selector.'").fancybox('.$clientOptions.');');
     }
-
 }

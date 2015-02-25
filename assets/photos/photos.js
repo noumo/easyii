@@ -51,7 +51,6 @@ $(function(){
                             html.fadeIn();
 
                             checkEmpty();
-                            colorbox();
                         } else {
                             alert(response.error);
                         }
@@ -83,7 +82,7 @@ $(function(){
                     function(response){
                         if(response.result === 'success'){
                             notify.success(response.message);
-                            tr.find('.colorbox').attr('title', text);
+                            tr.find('.plugin-box').attr('title', text);
                         }
                         else{
                             alert(response.error);
@@ -119,7 +118,7 @@ $(function(){
             success: function(response){
                 changeButton.removeClass('disabled');
                 if(response.result === 'success'){
-                    tr.find('.colorbox').attr('href', response.photo.image).children('img').attr('src', response.photo.thumb);
+                    tr.find('.plugin-box').attr('href', response.photo.image).children('img').attr('src', response.photo.thumb);
                     notify.success(response.message);
                 }else{
                     alert(response.error);
@@ -166,9 +165,4 @@ $(function(){
         dots = ++dots % 4;
         $("span", uploadingText).html(Array(dots+1).join("."));
     }
-
-    function colorbox(){
-        $('.colorbox').colorbox();
-    }
-    colorbox();
 });

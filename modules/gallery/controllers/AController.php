@@ -56,7 +56,7 @@ class AController extends Controller
                         $model->thumb = '';
                     }
                 }
-                $models->status = Album::STATUS_ON;
+                $model->status = Album::STATUS_ON;
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/gallery', 'Album created'));

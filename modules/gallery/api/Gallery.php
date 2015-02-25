@@ -5,8 +5,8 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\widgets\LinkPager;
 
-use yii\easyii\widgets\Colorbox;
 use yii\easyii\models\Photo;
+use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\gallery\models\Album;
 
 class Gallery extends \yii\easyii\components\API
@@ -74,9 +74,9 @@ class Gallery extends \yii\easyii\components\API
         return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
     }
 
-    public function api_colorbox($options = [])
+    public function api_plugin($options = [])
     {
-        Colorbox::widget([
+        Fancybox::widget([
             'selector' => '.easyii-box',
             'options' => $options
         ]);

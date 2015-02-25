@@ -1,10 +1,10 @@
 <?php
+use yii\easyii\widgets\Fancybox;
 use yii\helpers\Html;
-use yii\easyii\assets\ColorboxAsset;
 use yii\easyii\assets\PhotosAsset;
 
-ColorboxAsset::register($this);
 PhotosAsset::register($this);
+Fancybox::widget(['selector' => '.plugin-box']);
 
 $model = get_class($this->context->model);
 $item_id = $this->context->model->primaryKey;
@@ -19,7 +19,7 @@ $linkParams = http_build_query([
 ]);
 
 $photoTemplate = '<tr data-id="{{photo_id}}">'.(IS_ROOT ? '<td>{{photo_id}}</td>' : '').'\
-    <td><a href="{{photo_image}}" class="colorbox" title="{{photo_description}}" rel="easyii-photos"><img class="photo-thumb" id="photo-{{photo_id}}" src="{{photo_thumb}}"></a></td>\
+    <td><a href="{{photo_image}}" class="plugin-box" title="{{photo_description}}" rel="easyii-photos"><img class="photo-thumb" id="photo-{{photo_id}}" src="{{photo_thumb}}"></a></td>\
     <td>\
         <textarea class="form-control photo-description">{{photo_description}}</textarea>\
         <a href="#" class="btn btn-sm btn-primary disabled save-photo-description">'. Yii::t('easyii', 'Save') .'</a>\

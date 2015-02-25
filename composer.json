@@ -23,14 +23,13 @@
         "php": ">=5.4.0",
         "yiisoft/yii2": ">=2.0.2",
         "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-swiftmailer": "*"
+        "yiisoft/yii2-swiftmailer": "*",
+        "bower-asset/fancybox": "*",
+        "bower-asset/jquery.switcher": "*"
     },
     "autoload": {
         "psr-4": {
             "yii\\easyii\\": "/"
         }
-    },
-    "require": {
-        "php": ">=5.4"
     }
 }
