@@ -198,6 +198,7 @@ class InstallController extends \yii\web\Controller
                 'class' => $moduleClass,
                 'title' => !empty($moduleConfig['title'][$language]) ? $moduleConfig['title'][$language] : $moduleConfig['title']['en'],
                 'icon' => $moduleConfig['icon'],
+                'settings' => Yii::createObject($moduleClass, [$moduleName])->settings,
                 'order_num' => $moduleConfig['order_num'],
                 'status' => Module::STATUS_ON,
             ]);
