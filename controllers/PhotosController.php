@@ -157,13 +157,13 @@ class PhotosController extends Controller
         return $this->formatResponse(Yii::t('easyii', 'Photo deleted'));
     }
 
-    public function actionUp($id, $module, $item_id)
+    public function actionUp($id, $model, $item_id)
     {
-        return $this->move($id, 'up', ['module' => $module, 'item_id' => $item_id]);
+        return $this->move($id, 'up', ['model' => $model, 'item_id' => $item_id]);
     }
 
-    public function actionDown($id, $module, $item_id)
+    public function actionDown($id, $model, $item_id)
     {
-        return $this->move($id, 'down', ['module' => $module, 'item_id' => $item_id]);
+        return $this->move($id, 'down', ['model' => $model, 'item_id' => $item_id]);
     }
 }
