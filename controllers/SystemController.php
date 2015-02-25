@@ -18,6 +18,9 @@ class SystemController extends \yii\easyii\components\Controller
     {
         $result = WebConsole::migrate();
 
+        Setting::set('easyii_version', \yii\easyii\AdminModule::VERSION);
+        Yii::$app->cache->flush();
+
         return $this->render('update', ['result' => $result]);
     }
 

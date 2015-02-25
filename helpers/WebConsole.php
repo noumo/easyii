@@ -27,7 +27,11 @@ class WebConsole
 
             $oldApp = Yii::$app;
 
-            $consoleConfig = require(Yii::getAlias('@app/config/console.php'));
+            $consoleConfigFile = Yii::getAlias('@app/config/console.php');
+
+            if(!file_exists($consoleConfigFile) || !is_array(($consoleConfig = require($consoleConfigFile)))){
+                throw new \yii\web\ServerErrorHttpException('Cannot find `'.Yii::getAlias('@app/config/console.php').'`. Please create and configure console config.');
+            }
 
             self::$_console = new \yii\console\Application($consoleConfig);
 
