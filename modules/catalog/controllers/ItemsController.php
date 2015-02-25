@@ -10,6 +10,7 @@ use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
 use yii\easyii\helpers\Image;
 use yii\easyii\behaviors\SortableController;
+use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
 {
@@ -44,25 +45,30 @@ class ItemsController extends Controller
         $model = new Item;
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->category_id = $category->primaryKey;
-            $model->data = Yii::$app->request->post('Data');
+            if(Yii::$app->request->isAjax){
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+            else {
+                $model->category_id = $category->primaryKey;
+                $model->data = Yii::$app->request->post('Data');
 
-            if(isset($_FILES) && $this->module->settings['itemThumb']){
-                $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                if($model->thumb && $model->validate(['thumb'])){
-                    $model->thumb = Image::upload($model->thumb, 'catalog', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
-                }else{
-                    $model->thumb = '';
+                if (isset($_FILES) && $this->module->settings['itemThumb']) {
+                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
+                    if ($model->thumb && $model->validate(['thumb'])) {
+                        $model->thumb = Image::upload($model->thumb, 'catalog', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
+                    } else {
+                        $model->thumb = '';
+                    }
                 }
-            }
 
-            if($model->save()){
-                $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
-                return $this->redirect('/admin/catalog/items/edit/'.$model->primaryKey);
-            }
-            else{
-                $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                return $this->refresh();
+                if ($model->save()) {
+                    $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
+                    return $this->redirect('/admin/catalog/items/edit/' . $model->primaryKey);
+                } else {
+                    $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
+                    return $this->refresh();
+                }
             }
         }
         else {
@@ -81,24 +87,29 @@ class ItemsController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->data = Yii::$app->request->post('Data');
+            if(Yii::$app->request->isAjax){
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+            else {
+                $model->data = Yii::$app->request->post('Data');
 
-            if(isset($_FILES) && $this->module->settings['itemThumb']){
-                $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                if($model->thumb && $model->validate(['thumb'])){
-                    $model->thumb = Image::upload($model->thumb, 'catalog', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
-                }else{
-                    $model->thumb = $model->oldAttributes['thumb'];
+                if (isset($_FILES) && $this->module->settings['itemThumb']) {
+                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
+                    if ($model->thumb && $model->validate(['thumb'])) {
+                        $model->thumb = Image::upload($model->thumb, 'catalog', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
+                    } else {
+                        $model->thumb = $model->oldAttributes['thumb'];
+                    }
                 }
-            }
 
-            if($model->save()){
-                $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
-                return $this->redirect('/admin/catalog/items/edit/'.$model->primaryKey);
-            }
-            else{
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-                return $this->refresh();
+                if ($model->save()) {
+                    $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
+                    return $this->redirect('/admin/catalog/items/edit/' . $model->primaryKey);
+                } else {
+                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+                    return $this->refresh();
+                }
             }
         }
         else {

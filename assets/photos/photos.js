@@ -26,7 +26,7 @@ $(function(){
                 formData.append('Photo[image]', file);
 
                 $.ajax({
-                    url: '/admin/photos/upload?module='+$this.data('module')+'&item_id='+$this.data('id'),
+                    url: $this.closest('form').attr('action'),
                     dataType: 'json',
                     cache: false,
                     contentType: false,
@@ -51,7 +51,6 @@ $(function(){
                             html.fadeIn();
 
                             checkEmpty();
-                            colorbox();
                         } else {
                             alert(response.error);
                         }
@@ -83,7 +82,7 @@ $(function(){
                     function(response){
                         if(response.result === 'success'){
                             notify.success(response.message);
-                            tr.find('.colorbox').attr('title', text);
+                            tr.find('.plugin-box').attr('title', text);
                         }
                         else{
                             alert(response.error);
@@ -109,7 +108,7 @@ $(function(){
         var changeButton = $this.siblings('.change-image-button').addClass('disabled');
         formData.append('Photo[image]', fileData);
         $.ajax({
-            url: '/admin/photos/image/'+tr.data('id'),
+            url: $this.siblings('.change-image-button').attr('href'),
             dataType: 'json',
             cache: false,
             contentType: false,
@@ -119,7 +118,7 @@ $(function(){
             success: function(response){
                 changeButton.removeClass('disabled');
                 if(response.result === 'success'){
-                    tr.find('.colorbox').attr('href', response.photo.image).children('img').attr('src', response.photo.thumb);
+                    tr.find('.plugin-box').attr('href', response.photo.image).children('img').attr('src', response.photo.thumb);
                     notify.success(response.message);
                 }else{
                     alert(response.error);
@@ -166,9 +165,4 @@ $(function(){
         dots = ++dots % 4;
         $("span", uploadingText).html(Array(dots+1).join("."));
     }
-
-    function colorbox(){
-        $('.colorbox').colorbox();
-    }
-    colorbox();
 });

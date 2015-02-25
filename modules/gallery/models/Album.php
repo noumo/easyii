@@ -3,6 +3,7 @@ namespace yii\easyii\modules\gallery\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
 use yii\easyii\models\Photo;
 
@@ -22,7 +23,7 @@ class Album extends \yii\easyii\components\ActiveRecord
     {
         return self::find()
             ->select([self::tableName().'.*', 'COUNT(p.photo_id) as photo_count'])
-            ->join('LEFT JOIN', ['p' => Photo::find()->where(['module' => 'gallery'])], self::tableName().'.album_id = p.item_id')
+            ->join('LEFT JOIN', ['p' => Photo::find()->where(['model' => Album::className()])], self::tableName().'.album_id = p.item_id')
             ->groupBy(self::tableName().'.album_id');
     }
 
@@ -54,24 +55,13 @@ class Album extends \yii\easyii\components\ActiveRecord
     {
         return [
             SortableModel::className(),
+            'seo' => SeoBehavior::className(),
         ];
-    }
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if($insert){
-                $this->status = self::STATUS_ON;
-            }
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function beforeValidate()
     {
-        if(self::autoSlug()){
+        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
             $this->attachBehavior('sluggable', [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -83,7 +73,7 @@ class Album extends \yii\easyii\components\ActiveRecord
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'album_id'])->where(['module' => 'gallery'])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'album_id'])->where(['model' => Album::className()])->sort();
     }
 
     public function afterDelete()

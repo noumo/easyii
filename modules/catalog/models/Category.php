@@ -3,14 +3,13 @@ namespace yii\easyii\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
-use yii\easyii\behaviors\CacheFlush;
+use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
 
 class Category extends \yii\easyii\components\ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
-    const CACHE_KEY = 'easyii_catalog_categories';
 
     public $item_count;
 
@@ -64,8 +63,8 @@ class Category extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
-            CacheFlush::className(),
-            SortableModel::className()
+            SortableModel::className(),
+            'seo' => SeoBehavior::className(),
         ];
     }
 
@@ -85,7 +84,7 @@ class Category extends \yii\easyii\components\ActiveRecord
 
     public function beforeValidate()
     {
-        if(self::autoSlug()){
+        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
             $this->attachBehavior('sluggable', [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',

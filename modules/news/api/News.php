@@ -59,7 +59,14 @@ class News extends \yii\easyii\components\API
         }
 
         $news->updateCounters(['views' => 1]);
-        return $this->parseNews($news);
+
+        $result = $this->parseNews($news);
+        $result->seo_h1 = $news->seo_h1;
+        $result->seo_title = $news->seo_title;
+        $result->seo_keywords = $news->seo_keywords;
+        $result->seo_description = $news->seo_description;
+
+        return $result;
     }
 
     public function api_pagination()
@@ -109,10 +116,11 @@ class News extends \yii\easyii\components\API
 
         return (object)[
             'id' => $is_string ? '' : $data['news_id'],
-            'image' => $is_string ? '' : $data['image'],
+            'thumb' => $is_string ? '' : $data['thumb'],
             'title' => $is_string ? $data : $data['title'],
             'short' => $is_string ? $data : $data['short'],
             'text' => $is_string ? $data : $data['text'],
+            'slug' => $is_string ? '' : $data['slug'],
             'views' => $is_string ? '' : $data['views'],
             'time' => $is_string ? '' : $data['time'],
             'date' => $is_string ? '' : Yii::$app->formatter->asDatetime($data['time'], 'medium'),

@@ -89,11 +89,4 @@ class SettingsController extends \yii\easyii\components\Controller
         }
         return $this->formatResponse(Yii::t('easyii', 'Setting deleted'));
     }
-
-    public function actionFlushcache()
-    {
-        Yii::$app->cache->flush();
-        $this->flash('success', Yii::t('easyii', 'Cache flushed'));
-        return $this->back();
-    }
 }

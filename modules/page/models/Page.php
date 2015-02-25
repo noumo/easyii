@@ -3,6 +3,7 @@ namespace yii\easyii\modules\page\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\SeoBehavior;
 
 class Page extends \yii\easyii\components\ActiveRecord
 {
@@ -34,9 +35,16 @@ class Page extends \yii\easyii\components\ActiveRecord
         ];
     }
 
+    public function behaviors()
+    {
+        return [
+            'seo' => SeoBehavior::className(),
+        ];
+    }
+
     public function beforeValidate()
     {
-        if(self::autoSlug()){
+        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
             $this->attachBehavior('sluggable', [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',

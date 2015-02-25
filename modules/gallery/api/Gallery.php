@@ -5,8 +5,8 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\widgets\LinkPager;
 
-use yii\easyii\widgets\Colorbox;
 use yii\easyii\models\Photo;
+use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\gallery\models\Album;
 
 class Gallery extends \yii\easyii\components\API
@@ -48,6 +48,22 @@ class Gallery extends \yii\easyii\components\API
         return $this->findAlbums();
     }
 
+    public function api_last($limit = 1)
+    {
+        if($limit === 1 && $this->_last){
+            return $this->_last;
+        }
+
+        $result[] = $this->parsePhotos(Photo::find()->where(['model' => Album::className()])->sort()->all());
+
+        if($limit > 1){
+            return $result;
+        }else{
+            $this->_last = $result[0];
+            return $this->_last;
+        }
+    }
+
     public function api_pagination()
     {
         return $this->_adp ? $this->_adp->pagination : null;
@@ -58,9 +74,9 @@ class Gallery extends \yii\easyii\components\API
         return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
     }
 
-    public function api_colorbox($options = [])
+    public function api_plugin($options = [])
     {
-        Colorbox::widget([
+        Fancybox::widget([
             'selector' => '.easyii-box',
             'options' => $options
         ]);
@@ -79,7 +95,7 @@ class Gallery extends \yii\easyii\components\API
         }
 
         $this->_adp = new ActiveDataProvider([
-            'query' => Photo::find()->where(['module' => 'gallery', 'item_id' => $album->primaryKey])->sort(),
+            'query' => Photo::find()->where(['model' => Album::className(), 'item_id' => $album->primaryKey])->sort(),
             'pagination' => [
                 'pageSize' => $this->_albumOptions['pageSize']
             ]
@@ -87,6 +103,11 @@ class Gallery extends \yii\easyii\components\API
 
         $albumObject = $this->parseAlbum($album);
         $albumObject->photos = $this->parsePhotos($this->_adp->models);
+
+        $albumObject->seo_h1 = $album->seo_h1;
+        $albumObject->seo_title = $album->seo_title;
+        $albumObject->seo_keywords = $album->seo_keywords;
+        $albumObject->seo_description = $album->seo_description;
 
         return $albumObject;
     }

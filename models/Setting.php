@@ -64,4 +64,20 @@ class Setting extends \yii\easyii\components\ActiveRecord
         }
         return isset(self::$_data[$name]) ? self::$_data[$name] : null;
     }
+
+    public static function set($name, $value)
+    {
+        if(self::get($name)){
+            $setting = Setting::find()->where(['name' => $name])->one();
+            $setting->value = $value;
+        } else {
+            $setting = new Setting([
+                'name' => $name,
+                'value' => $value,
+                'title' => $name,
+                'visibility' => self::VISIBLE_NONE
+            ]);
+        }
+        $setting->save();
+    }
 }

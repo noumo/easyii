@@ -56,6 +56,8 @@ class AController extends Controller
                         $model->thumb = '';
                     }
                 }
+                $model->status = Album::STATUS_ON;
+
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/gallery', 'Album created'));
                     return $this->redirect('/admin/gallery/a/photos/'.$model->primaryKey);

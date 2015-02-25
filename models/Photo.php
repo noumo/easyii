@@ -14,7 +14,7 @@ class Photo extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['module', 'item_id'], 'required'],
+            [['model', 'item_id'], 'required'],
             ['item_id', 'integer'],
             ['image', 'image'],
             ['description', 'trim']

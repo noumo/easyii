@@ -74,7 +74,18 @@ class File extends \yii\easyii\components\API
     {
         $file = FileModel::find()->where(['or', 'file_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
 
-        return $file ? $this->parseFile($file) : $this->notFound($id_slug);
+        if($file){
+            $result = $this->parseFile($file);
+
+            $result->seo_h1 = $file->seo_h1;
+            $result->seo_title = $file->seo_title;
+            $result->seo_keywords = $file->seo_keywords;
+            $result->seo_description = $file->seo_description;
+
+            return $result;
+        } else {
+            return $this->notFound($id_slug);
+        }
     }
 
     protected function getAdp()

@@ -11,9 +11,9 @@ $this->registerCss('body {padding-'.$position.': 50px;}');
 <nav id="easyii-navbar" class="navbar navbar-inverse navbar-fixed-<?= $position ?>">
     <div class="container">
         <ul class="nav navbar-nav navbar-left">
-            <li><a href="/admin"><span class="glyphicon glyphicon-arrow-left"></span> <?= Yii::t('easyii', 'Control panel') ?></a></li>
+            <li><a href="/admin"><span class="glyphicon glyphicon-arrow-left"></span> <?= Yii::t('easyii', 'Control Panel') ?></a></li>
         </ul>
-        <p class="navbar-text"><i class="glyphicon glyphicon-pencil"></i> Live edit</p>
+        <p class="navbar-text"><i class="glyphicon glyphicon-pencil"></i> <?= Yii::t('easyii', 'Live edit') ?></p>
         <?= Html::checkbox('', LIVE_EDIT) ?>
 
         <ul class="nav navbar-nav navbar-right">

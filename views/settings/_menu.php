@@ -12,7 +12,6 @@ $action = $this->context->action->id;
         </a>
     </li>
     <li <?= ($action==='create') ? 'class="active"' : '' ?>><a href="/admin/settings/create"><?= Yii::t('easyii', 'Create') ?></a></li>
-    <li class="pull-right"><a class="text-warning" href="/admin/settings/flushcache"><span class="glyphicon glyphicon-flash"></span> <?= Yii::t('easyii', 'Flush cache') ?></a></li>
 </ul>
 <br/>
 <?php endif; ?>
