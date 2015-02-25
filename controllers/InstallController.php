@@ -190,7 +190,7 @@ class InstallController extends \yii\web\Controller
         foreach(glob(Yii::getAlias('@easyii'). DIRECTORY_SEPARATOR .'modules/*') as $module)
         {
             $moduleName = basename($module);
-            $moduleClass = '\yii\easyii\modules\\' . $moduleName . '\\' . ucfirst($moduleName) . 'Module';
+            $moduleClass = 'yii\easyii\modules\\' . $moduleName . '\\' . ucfirst($moduleName) . 'Module';
             $moduleConfig = $moduleClass::$installConfig;
 
             $module = new Module([
