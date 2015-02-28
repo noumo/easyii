@@ -53,7 +53,7 @@ class SettingsController extends \yii\easyii\components\Controller
     {
         $model = Setting::findOne($id);
 
-        if($model === null || (!IS_ROOT && $model->root)){
+        if($model === null || ($model->visibility < (IS_ROOT ? Setting::VISIBLE_ROOT : Setting::VISIBLE_ALL))){
             $this->flash('error', Yii::t('easyii', 'Not found'));
             return $this->redirect('/admin/settings');
         }
