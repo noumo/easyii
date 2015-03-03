@@ -65,6 +65,8 @@ class GD
         }
 
         $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+        imagealphablending($resizedImage, false);
+
         imagecopyresampled(
             $resizedImage,
             $this->_image,
@@ -125,6 +127,7 @@ class GD
         }
 
         $resizedImage = imagecreatetruecolor($width, $height);
+        imagealphablending($resizedImage, false);
 
         imagecopyresampled(
             $resizedImage,
@@ -149,6 +152,7 @@ class GD
                 return imagejpeg($this->_image, $file, $quality);
                 break;
             case 'image/png':
+                imagesavealpha($this->_image, true);
                 return imagepng($this->_image, $file);
                 break;
             case 'image/gif':
