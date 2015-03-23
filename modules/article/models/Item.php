@@ -23,7 +23,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             [['text', 'title'], 'required'],
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
-            ['thumb', 'image'],
+            ['image', 'image'],
             ['views', 'number', 'integerOnly' => true],
             ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
@@ -39,7 +39,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
             'short' => Yii::t('easyii/article', 'Short'),
-            'thumb' => Yii::t('easyii', 'Image'),
+            'image' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
@@ -48,7 +48,7 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             SortableModel::className(),
-            'seo' => SeoBehavior::className(),
+            'seoBehavior' => SeoBehavior::className(),
             [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -82,8 +82,8 @@ class Item extends \yii\easyii\components\ActiveRecord
                 $this->short = StringHelper::truncate($this->short, $settings['shortMaxLength']);
             }
 
-            if(!$this->isNewRecord && $this->thumb != $this->oldAttributes['thumb']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['thumb']);
+            if(!$this->isNewRecord && $this->image != $this->oldAttributes['image']){
+                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
             }
 
             return true;
@@ -96,8 +96,8 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        if($this->thumb){
-            @unlink(Yii::getAlias('@webroot').$this->thumb);
+        if($this->image){
+            @unlink(Yii::getAlias('@webroot').$this->image);
         }
     }
 

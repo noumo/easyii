@@ -52,11 +52,11 @@ class ItemsController extends Controller
                 $model->category_id = $category->primaryKey;
 
                 if (isset($_FILES) && $this->module->settings['articleThumb']) {
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if ($model->thumb && $model->validate(['thumb'])) {
-                        $model->thumb = Image::upload($model->thumb, 'article', $this->module->settings['articleThumbWidth'], $this->module->settings['articleThumbHeight'], $this->module->settings['articleThumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if ($model->image && $model->validate(['image'])) {
+                        $model->image = Image::upload($model->image, 'article');
                     } else {
-                        $model->thumb = '';
+                        $model->image = '';
                     }
                 }
 
@@ -90,11 +90,11 @@ class ItemsController extends Controller
             }
             else {
                 if (isset($_FILES) && $this->module->settings['articleThumb']) {
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if ($model->thumb && $model->validate(['thumb'])) {
-                        $model->thumb = Image::upload($model->thumb, 'article', $this->module->settings['articleThumbWidth'], $this->module->settings['articleThumbHeight'], $this->module->settings['articleThumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if ($model->image && $model->validate(['image'])) {
+                        $model->image = Image::upload($model->image, 'article');
                     } else {
-                        $model->thumb = $model->oldAttributes['thumb'];
+                        $model->image = $model->oldAttributes['image'];
                     }
                 }
 
@@ -121,8 +121,8 @@ class ItemsController extends Controller
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
-        elseif($model->thumb){
-            $model->thumb = '';
+        elseif($model->image){
+            $model->image = '';
             if($model->update()){
                 $this->flash('success', Yii::t('easyii/article', 'Image cleared'));
             } else {

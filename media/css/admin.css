@@ -150,6 +150,18 @@ html{
     color: #fff;
 }
 
+#admin-body .actions li i{
+    margin-right: 8px;
+}
+#admin-body .actions .glyphicon-menu-hamburger{
+    cursor: pointer;
+    font-size: 15px;
+    color: #777;
+}
+#admin-body .actions .glyphicon-menu-hamburger:hover{
+    color: #337ab7;
+}
+
 /*--------------- HELPERS ---------------*/
 
 h4{
@@ -163,7 +175,7 @@ h4 b{
 }
 
 .confirm-delete{
-    color: #a94442;
+    color: #a94442 !important;
 }
 .color-red{
     color: #a94442;

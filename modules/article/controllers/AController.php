@@ -19,10 +19,6 @@ class AController extends Controller
     {
         return [
             [
-                'class' => SortableController::className(),
-                'model' => Category::className()
-            ],
-            [
                 'class' => StatusController::className(),
                 'model' => Category::className()
             ]
@@ -31,15 +27,13 @@ class AController extends Controller
 
     public function actionIndex()
     {
-        $data = new ActiveDataProvider([
-            'query' => Category::findWithItemCount()->sort(),
-        ]);
+        $tree = Category::getTree();
         return $this->render('index', [
-            'data' => $data
+            'tree' => $tree
         ]);
     }
 
-    public function actionCreate($slug = null)
+    public function actionCreate($parent = null)
     {
         $model = new Category;
 
@@ -60,7 +54,16 @@ class AController extends Controller
 
                 $model->status = Category::STATUS_ON;
 
+                $parent = Yii::$app->request->post('parent', null);
+                if($parent && ($parentCategory = Category::findOne((int)$parent))){
+                    $model->appendTo($parentCategory);
+                    $model->order_num = $parentCategory->order_num;
+                } else {
+                    $model->makeRoot();
+                }
+
                 if($model->save()){
+
                     $this->flash('success', Yii::t('easyii/article', 'Category created'));
                     return $this->redirect('/admin/article/items/'.$model->primaryKey);
                 }
@@ -71,10 +74,9 @@ class AController extends Controller
             }
         }
         else {
-            if($slug) $model->slug = $slug;
-
             return $this->render('create', [
-                'model' => $model
+                'model' => $model,
+                'parent' => $parent
             ]);
         }
     }
@@ -145,12 +147,54 @@ class AController extends Controller
 
     public function actionUp($id)
     {
-        return $this->move($id, 'up');
+        return $this->move($id, true);
     }
 
     public function actionDown($id)
     {
-        return $this->move($id, 'down');
+        return $this->move($id, false);
+    }
+
+    private function move($id, $up)
+    {
+        if(($model = Category::findOne($id)))
+        {
+            $orderDir = $up ? 'ASC' : 'DESC';
+
+            if($model->primaryKey == $model->tree){
+                $swapCat = Category::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy('order_num '.$orderDir)->one();
+                if($swapCat)
+                {
+                    Category::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
+                    Category::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
+                    Category::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
+                }
+            } else {
+                $where = [
+                    'and',
+                    ['tree' => $model->tree],
+                    ['depth' => $model->depth],
+                    [($up ? '<' : '>'), 'lft', $model->lft]
+                ];
+
+                $swapCat = Category::find()->where($where)->orderBy(['lft' => ($up ? SORT_DESC : SORT_ASC)])->one();
+                if($swapCat)
+                {
+                    if($up) {
+                        $model->insertBefore($swapCat);
+                    } else {
+                        $model->insertAfter($swapCat);
+                    }
+
+                    $swapCat->update();
+                    $model->update();
+                }
+            }
+        }
+        else {
+            $this->flash('error', Yii::t('easyii', 'Not found'));
+        }
+        return $this->back();
     }
 
     public function actionOn($id)

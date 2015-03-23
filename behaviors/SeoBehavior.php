@@ -47,6 +47,11 @@ class SeoBehavior extends \yii\base\Behavior
         }
     }
 
+    public function getSeo()
+    {
+        return $this->owner->hasOne(SeoText::className(), ['item_id' => $this->owner->primaryKey()[0]])->where(['model' => get_class($this->owner)]);
+    }
+
     public function getSeo_h1()
     {
         return $this->seoText->h1;

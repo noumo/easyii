@@ -10,7 +10,7 @@ use yii\helpers\FileHelper;
 
 class Upload
 {
-    static $UPLOADS_DIR = 'uploads';
+    public static $UPLOADS_DIR = 'uploads';
 
     public static function file(UploadedFile $fileInstance, $dir = '', $namePostfix = true)
     {

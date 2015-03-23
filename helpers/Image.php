@@ -39,6 +39,24 @@ class Image
         return self::copyResizedImage($fileName, $thumbFile, $width, $height, $crop) ? Upload::getLink($thumbFile) : false;
     }
 
+    static function thumb($filename, $width = null, $height = null, $crop = true)
+    {
+        if(file_exists($filename))
+        {
+            $info = pathinfo($filename);
+            $thumbName = $info['filename'] . '-' . md5( filemtime($filename) . (int)$width . (int)$height . (int)$crop ) . '.' . $info['extension'];
+            $thumbFile = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . Upload::$UPLOADS_DIR . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $thumbName;
+            $thumbWebFile = '/' . Upload::$UPLOADS_DIR . '/thumbs/' . $thumbName;
+            if(file_exists($thumbFile)){
+                return $thumbWebFile;
+            }
+            elseif(FileHelper::createDirectory(dirname($thumbFile), 0777) && self::copyResizedImage($filename, $thumbFile, $width, $height, $crop)){
+                return $thumbWebFile;
+            }
+        }
+        return '';
+    }
+
     static function copyResizedImage($inputFile, $outputFile, $width, $height = null, $crop = true)
     {
         if (extension_loaded('gd'))
@@ -46,7 +64,7 @@ class Image
             $image = new GD($inputFile);
 
             if($height) {
-                if($crop){
+                if($width && $crop){
                     $image->cropThumbnail($width, $height);
                 } else {
                     $image->resize($width, $height);
@@ -54,7 +72,6 @@ class Image
             } else {
                 $image->resize($width);
             }
-
             return $image->save($outputFile);
         }
         elseif(extension_loaded('imagick'))
