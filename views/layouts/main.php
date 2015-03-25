@@ -38,7 +38,7 @@ $moduleName = $this->context->module->id;
                             <?php if($module->icon != '') : ?>
                                 <i class="glyphicon glyphicon-<?= $module->icon ?>"></i>
                             <?php endif; ?>
-                            <?= Yii::t('app', $module->title) ?>
+                            <?= $module->title ?>
                             <?php if($module->notice > 0) : ?>
                                 <span class="badge"><?= $module->notice ?></span>
                             <?php endif; ?>
