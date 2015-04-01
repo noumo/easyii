@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\easyii\assets\AdminAsset;
 
 $asset = AdminAsset::register($this);
@@ -28,13 +29,13 @@ $moduleName = $this->context->module->id;
                 </div>
                 <div class="nav">
                     <a href="/" class="pull-left"><i class="glyphicon glyphicon-home"></i> <?= Yii::t('easyii', 'Open site') ?></a>
-                    <a href="/admin/sign/out" class="pull-right"><i class="glyphicon glyphicon-log-out"></i> <?= Yii::t('easyii', 'Logout') ?></a>
+                    <a href="<?= Url::to(['/admin/sign/out']) ?>" class="pull-right"><i class="glyphicon glyphicon-log-out"></i> <?= Yii::t('easyii', 'Logout') ?></a>
                 </div>
             </div>
             <div class="main">
                 <div class="box sidebar">
                     <?php foreach(Yii::$app->getModule('admin')->activeModules as $module) : ?>
-                        <a href="/admin/<?= $module->name ?>" class="menu-item <?= ($moduleName == $module->name ? 'active' : '') ?>">
+                        <a href="<?= Url::to(["/admin/$module->name"]) ?>" class="menu-item <?= ($moduleName == $module->name ? 'active' : '') ?>">
                             <?php if($module->icon != '') : ?>
                                 <i class="glyphicon glyphicon-<?= $module->icon ?>"></i>
                             <?php endif; ?>
@@ -44,24 +45,24 @@ $moduleName = $this->context->module->id;
                             <?php endif; ?>
                         </a>
                     <?php endforeach; ?>
-                    <a href="/admin/settings" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'settings') ? 'active' :'' ?>">
+                    <a href="<?= Url::to(['/admin/settings']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'settings') ? 'active' :'' ?>">
                         <i class="glyphicon glyphicon-cog"></i>
                         <?= Yii::t('easyii', 'Settings') ?>
                     </a>
                     <?php if(IS_ROOT) : ?>
-                        <a href="/admin/modules" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'modules') ? 'active' :'' ?>">
+                        <a href="<?= Url::to(['/admin/modules']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'modules') ? 'active' :'' ?>">
                             <i class="glyphicon glyphicon-folder-close"></i>
                             <?= Yii::t('easyii', 'Modules') ?>
                         </a>
-                        <a href="/admin/admins" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'admins') ? 'active' :'' ?>">
+                        <a href="<?= Url::to(['/admin/admins']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'admins') ? 'active' :'' ?>">
                             <i class="glyphicon glyphicon-user"></i>
                             <?= Yii::t('easyii', 'Admins') ?>
                         </a>
-                        <a href="/admin/system" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'system') ? 'active' :'' ?>">
+                        <a href="<?= Url::to(['/admin/system']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'system') ? 'active' :'' ?>">
                             <i class="glyphicon glyphicon-hdd"></i>
                             <?= Yii::t('easyii', 'System') ?>
                         </a>
-                        <a href="/admin/logs" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>">
+                        <a href="<?= Url::to(['/admin/logs']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>">
                             <i class="glyphicon glyphicon-align-justify"></i>
                             <?= Yii::t('easyii', 'Logs') ?>
                         </a>
