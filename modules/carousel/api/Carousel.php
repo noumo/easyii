@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\carousel\api;
 
 use Yii;
+use yii\helpers\Url;
 use yii\easyii\helpers\Data;
 use yii\easyii\modules\carousel\models\Carousel as CarouselModel;
 
@@ -37,7 +38,7 @@ class Carousel extends \yii\easyii\components\API
     public function api_widget()
     {
         if(!count($this->_items)){
-            return '<a href="/admin/carousel/a/create" target="_blank">'.Yii::t('easyii/carousel/api', 'Create carousel').'</a>';
+            return '<a href="' . Url::to(['/admin/carousel/a/create']) . '" target="_blank">'.Yii::t('easyii/carousel/api', 'Create carousel').'</a>';
         }
 
         $widget = \yii\bootstrap\Carousel::widget([
