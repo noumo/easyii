@@ -33,7 +33,7 @@ $this->title = Yii::t('easyii/article', 'Articles');
                     <?= Html::checkbox('', $item->status == Category::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/article/a/']),
+                        'data-link' => Url::to(['/admin/article/a/']) . '/',
                     ]) ?>
                 </td>
                 <td class="control">
