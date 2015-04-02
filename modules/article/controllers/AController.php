@@ -62,7 +62,7 @@ class AController extends Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/article', 'Category created'));
-                    return $this->redirect('/admin/article/items/'.$model->primaryKey);
+                    return $this->redirect(['/admin/article/items/index', 'id' => $model->primaryKey]);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -82,7 +82,7 @@ class AController extends Controller
     public function actionEdit($id)
     {
         if(!($model = Category::findOne($id))){
-            return $this->redirect('/admin/article');
+            return $this->redirect(['/admin/article/']);
         }
 
         if ($model->load(Yii::$app->request->post())) {

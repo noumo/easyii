@@ -3,6 +3,7 @@ namespace yii\easyii\modules\article\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
 use yii\easyii\widgets\Colorbox;
@@ -207,7 +208,7 @@ class Article extends \yii\easyii\components\API
             return $this->createCatObject('');
         }
         elseif(preg_match(Category::$slugPattern, $id_slug)){
-            return $this->createCatObject('<a href="/admin/article/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/article/api', 'Create category').'</a>');
+            return $this->createCatObject('<a href="' . Url::to(['/admin/article/a/create', 'slug' => $id_slug] . '" target="_blank">'.Yii::t('easyii/article/api', 'Create category').'</a>');
         }
         else{
             return $this->createCatObject($this->errorText('WRONG CATEGORY IDENTIFIER'));
