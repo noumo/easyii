@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
@@ -12,7 +13,7 @@ use yii\easyii\widgets\SeoForm;
 <?php if($this->context->module->settings['articleThumb']) : ?>
     <?php if($model->thumb) : ?>
         <img src="<?= Yii::$app->request->baseUrl.$model->thumb ?>">
-        <a href="/admin/article/items/clear-image/<?= $model->primaryKey ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>
+        <a href="<?= Url::to(['/admin/article/items/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'thumb')->fileInput() ?>
 <?php endif; ?>
@@ -22,8 +23,8 @@ use yii\easyii\widgets\SeoForm;
 <?= $form->field($model, 'text')->widget(Redactor::className(),[
     'options' => [
         'minHeight' => 400,
-        'imageUpload' => '/admin/redactor/upload?dir=article',
-        'fileUpload' => '/admin/redactor/upload?dir=article',
+        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'article'], true),
+        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'article'], true),
         'plugins' => ['fullscreen']
     ]
 ]) ?>

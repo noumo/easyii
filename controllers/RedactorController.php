@@ -4,6 +4,7 @@ namespace yii\easyii\controllers;
 use Yii;
 use yii\web\HttpException;
 use yii\helpers\FileHelper;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii\web\Response;
 
@@ -116,7 +117,7 @@ class RedactorController extends \yii\easyii\components\Controller
     private function getResponse($fileName)
     {
         return [
-            'filelink' => 'http://'.Yii::$app->request->serverName.$fileName,
+            'filelink' => Url::base(true) . $filename,
             'filename' => basename($fileName)
         ];
     }
