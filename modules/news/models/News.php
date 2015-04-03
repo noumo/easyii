@@ -25,8 +25,9 @@ class News extends \yii\easyii\components\ActiveRecord
             ['thumb', 'image'],
             ['time', 'default', 'value' => time()],
             ['views', 'number', 'integerOnly' => true],
-            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
-            ['slug', 'default', 'value' => null]
+            ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+            ['slug', 'default', 'value' => null],
+            ['slug', 'unique']
         ];
     }
 
@@ -45,10 +46,9 @@ class News extends \yii\easyii\components\ActiveRecord
     {
         return [
             'seo' => SeoBehavior::className(),
-            [
+            'sluggable' => [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
+                'attribute' => 'title'
             ]
         ];
     }

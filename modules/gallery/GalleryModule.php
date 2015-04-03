@@ -13,8 +13,6 @@ class GalleryModule extends \yii\easyii\components\Module
         'albumThumbWidth' => 100,
         'albumThumbHeight' => 100,
         'albumThumbCrop' => true,
-
-        'autoSlug' => true
     ];
 
     public static $installConfig = [

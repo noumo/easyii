@@ -10,7 +10,7 @@ class NewsModule extends \yii\easyii\components\Module
         'thumbCrop' => false,
 
         'enableShort' => true,
-        'shortMaxLength' => 256
+        'shortMaxLength' => 256,
     ];
 
     public static $installConfig = [

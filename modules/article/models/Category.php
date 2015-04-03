@@ -21,9 +21,9 @@ class Category extends \yii\easyii\components\ActiveRecord
     public static function findWithItemCount()
     {
         return self::find()
-               ->select([self::tableName().'.*', 'COUNT('.Item::tableName().'.item_id) as item_count'])
-               ->joinWith('items')
-               ->groupBy(self::tableName().'.category_id');
+            ->select([self::tableName() . '.*', 'COUNT(' . Item::tableName() . '.item_id) as item_count'])
+            ->joinWith('items')
+            ->groupBy(self::tableName() . '.category_id');
     }
 
     public function rules()
@@ -34,11 +34,9 @@ class Category extends \yii\easyii\components\ActiveRecord
             ['title', 'string', 'max' => 128],
             ['thumb', 'image'],
             ['item_count', 'integer'],
-            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+            ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['slug', 'unique', 'when' => function($model){
-                return $model->slug && !self::autoSlug();
-            }],
+            ['slug', 'unique'],
         ];
     }
 
@@ -57,19 +55,11 @@ class Category extends \yii\easyii\components\ActiveRecord
         return [
             SortableModel::className(),
             'seo' => SeoBehavior::className(),
-        ];
-    }
-
-    public function beforeValidate()
-    {
-        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
-            $this->attachBehavior('sluggable', [
+            'sluggable' => [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
-            ]);
-        }
-        return parent::beforeValidate();
+                'attribute' => 'title'
+            ]
+        ];
     }
 
     public function getItems()
@@ -80,8 +70,8 @@ class Category extends \yii\easyii\components\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if(!$this->isNewRecord && $this->thumb != $this->oldAttributes['thumb']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['thumb']);
+            if (!$this->isNewRecord && $this->thumb != $this->oldAttributes['thumb']) {
+                @unlink(Yii::getAlias('@webroot') . $this->oldAttributes['thumb']);
             }
             return true;
         } else {
@@ -93,17 +83,12 @@ class Category extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        foreach($this->getItems()->all() as $item){
+        foreach ($this->getItems()->all() as $item) {
             $item->delete();
         }
 
-        if($this->thumb) {
+        if ($this->thumb) {
             @unlink(Yii::getAlias('@webroot') . $this->thumb);
         }
-    }
-
-    public static function autoSlug()
-    {
-        return Yii::$app->getModule('admin')->activeModules['article']->settings['categoryAutoSlug'];
     }
 }

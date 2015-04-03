@@ -62,7 +62,7 @@ class Page extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return $this->createObject('');
         }
-        elseif(preg_match(PageModel::$slugPattern, $id_slug)){
+        elseif(preg_match(PageModel::$SLUG_PATTERN, $id_slug)){
             return $this->createObject('<a href="/admin/page/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/page/api', 'Create page').'</a>');
         }
         else{

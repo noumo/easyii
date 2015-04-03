@@ -21,9 +21,6 @@ class CatalogModule extends \yii\easyii\components\Module
         'photoThumbCrop' => true,
         'photoThumbWidth' => 100,
         'photoThumbHeight' => 100,
-
-        'categoryAutoSlug' => true,
-        'itemAutoSlug' => true,
     ];
 
     public static $installConfig = [

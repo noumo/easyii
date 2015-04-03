@@ -195,7 +195,7 @@ class Gallery extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return $this->createObject('');
         }
-        elseif(preg_match(Album::$slugPattern, $id_slug)){
+        elseif(preg_match(Album::$SLUG_PATTERN, $id_slug)){
             return $this->createObject('<a href="/admin/gallery/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/gallery/api', 'Create album').'</a>');
         }
         else{

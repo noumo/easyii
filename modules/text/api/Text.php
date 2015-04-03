@@ -56,7 +56,7 @@ class Text extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return '';
         }
-        elseif(preg_match(TextModel::$slugPattern, $id_slug)){
+        elseif(preg_match(TextModel::$SLUG_PATTERN, $id_slug)){
             return '<a href="/admin/text/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/text/api', 'Create text').'</a>';
         }
         else{
