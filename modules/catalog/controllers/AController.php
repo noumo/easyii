@@ -64,7 +64,7 @@ class AController extends Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/catalog', 'Category created'));
-                    return $this->redirect('/admin/catalog/a/fields/'.$model->primaryKey);
+                    return $this->redirect(['/admin/catalog/a/fields', 'id' => $model->primaryKey]);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -84,7 +84,7 @@ class AController extends Controller
     public function actionEdit($id)
     {
         if(!($model = Category::findOne($id))){
-            return $this->redirect('/admin/catalog');
+            return $this->redirect(['/admin/catalog']);
         }
 
         if ($model->load(Yii::$app->request->post())) {
@@ -120,7 +120,7 @@ class AController extends Controller
     public function actionFields($id)
     {
         if(!($model = Category::findOne($id))){
-            return $this->redirect('/admin/catalog');
+            return $this->redirect(['/admin/catalog']);
         }
 
         if (Yii::$app->request->post('save'))

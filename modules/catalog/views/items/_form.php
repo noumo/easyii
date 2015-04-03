@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
@@ -14,7 +15,7 @@ $settings = $this->context->module->settings;
 <?php if($settings['itemThumb']) : ?>
     <?php if($model->thumb) : ?>
         <img src="<?= Yii::$app->request->baseUrl.$model->thumb ?>">
-        <a href="/admin/catalog/items/clear-image/<?= $model->primaryKey ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/catalog', 'Clear image')?>"><?= Yii::t('easyii/catalog', 'Clear image')?></a>
+        <a href="<?= Url::to(['/admin/catalog/items/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/catalog', 'Clear image')?>"><?= Yii::t('easyii/catalog', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'thumb')->fileInput() ?>
 <?php endif; ?>
@@ -23,8 +24,8 @@ $settings = $this->context->module->settings;
     <?= $form->field($model, 'description')->widget(Redactor::className(),[
         'options' => [
             'minHeight' => 400,
-            'imageUpload' => '/admin/redactor/upload?dir=catalog',
-            'fileUpload' => '/admin/redactor/upload?dir=catalog',
+            'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'catalog'], true),
+            'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'catalog'], true),
             'plugins' => ['fullscreen']
         ]
     ]) ?>
