@@ -3,6 +3,7 @@ namespace yii\easyii\modules\file\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\easyii\modules\file\models\File as FileModel;
 use yii\widgets\LinkPager;
 
@@ -48,7 +49,7 @@ class File extends \yii\easyii\components\API
             $result[] = $this->parseFile($file);
         }
         if(!count($result)) {
-            $result[] = $this->createObject('<a href="/admin/file/a/create" target="_blank">'.Yii::t('easyii/file/api', 'Create file').'</a>');
+            $result[] = $this->createObject('<a href="' . Url::to(['/admin/file/a/create']) . '" target="_blank">'.Yii::t('easyii/file/api', 'Create file').'</a>');
             return $limit > 1 ? $result : $result[0];
         }
 
@@ -125,8 +126,8 @@ class File extends \yii\easyii\components\API
             'slug' => $is_string ? '' : $data['slug'],
             'bytes' => $is_string ? '' : $data['size'],
             'size' => $is_string ? '' : Yii::$app->formatter->asShortSize($data['size'], 2),
-            'file' => $is_string ? '' : '/admin/file/download/'.$data['file_id'],
-            'link' => $is_string ? $data : '<a href="/admin/file/download/'.$data['file_id'].'" class="easyiicms-file" target="_blank">'.$data['title'].'</a>',
+            'file' => $is_string ? '' : Url::to(['/admin/file/download', 'id' => $data['file_id']),
+            'link' => $is_string ? $data : '<a href="' . Url::to(['/admin/file/download', 'id' => $data['file_id']]) . '" class="easyiicms-file" target="_blank">'.$data['title'].'</a>',
             'downloads' => $is_string ? '' : $data['downloads'],
             'time' => $is_string ? '' : $data['time'],
             'date' => $is_string ? '' : Yii::$app->formatter->asDatetime($data['time'], 'medium'),
@@ -140,7 +141,7 @@ class File extends \yii\easyii\components\API
             return $this->createObject('');
         }
         elseif(preg_match(FileModel::$slugPattern, $id_slug)){
-            return $this->createObject('<a href="/admin/file/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/file/api', 'Create file').'</a>');
+            return $this->createObject('<a href="' . Url::to(['/admin/file/a/create', 'slug' => $id_slug]) . '" target="_blank">'.Yii::t('easyii/file/api', 'Create file').'</a>');
         }
         else{
             return $this->createObject($this->errorText('WRONG FILE IDENTIFIER'));
