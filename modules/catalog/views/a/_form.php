@@ -13,7 +13,7 @@ $settings = $this->context->module->settings;
 <?= $form->field($model, 'title') ?>
 <?php if($settings['categoryThumb']) : ?>
     <?php if($model->thumb) : ?>
-        <img src="<?= Yii::$app->request->baseUrl.$model->thumb ?>">
+        <img src="<?= $model->thumb ?>">
         <a href="<?= Url::to(['/admin/catalog/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/catalog', 'Clear image')?>"><?= Yii::t('easyii/catalog', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'thumb')->fileInput() ?>
