@@ -1,10 +1,12 @@
 <?php
+use yii\helpers\Url;
+
 $action = $this->context->action->id;
 
 $backTo = null;
-$indexUrl = '/admin/feedback';
-$noanswerUrl = '/admin/feedback/a/noanswer';
-$allUrl = '/admin/feedback/a/all';
+$indexUrl = Url::to(['/admin/feedback/']);
+$noanswerUrl = Url::to(['/admin/feedback/a/noanswer']);
+$allUrl = Url::to(['/admin/feedback/a/all']);
 
 if($action === 'view')
 {
@@ -55,7 +57,7 @@ if($action === 'view')
     </li>
     <?php if($action === 'view' && isset($noanswer) && !$noanswer) : ?>
         <li class="pull-right">
-            <a href="/admin/feedback/a/set-answer/<?= Yii::$app->request->get('id') ?>" class="text-warning"><span class="glyphicon glyphicon-ok"></span> <?= Yii::t('easyii/feedback', 'Mark as answered') ?></a>
+            <a href="<?= Url::to(['/admin/feedback/a/set-answer', 'id' => Yii::$app->request->get('id')]) ?>" class="text-warning"><span class="glyphicon glyphicon-ok"></span> <?= Yii::t('easyii/feedback', 'Mark as answered') ?></a>
         </li>
     <?php endif; ?>    
 </ul>

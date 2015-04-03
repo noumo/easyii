@@ -5,6 +5,7 @@ use Yii;
 use yii\easyii\modules\feedback\models\Feedback as FeedbackModel;
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Alert;
 use yii\easyii\widgets\ReCaptcha;
@@ -19,7 +20,7 @@ class Feedback extends \yii\easyii\components\API
         ob_start();
         $form = ActiveForm::begin([
             'enableClientValidation' => true,
-            'action' => '/admin/feedback/send'
+            'action' => Url::to(['/admin/feedback/send'])
         ]);
 
         switch(Yii::$app->session->getFlash(FeedbackModel::FLASH_KEY))
