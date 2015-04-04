@@ -22,7 +22,6 @@ class File extends \yii\easyii\components\ActiveRecord
             ['title', 'trim'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['slug', 'unique'],
             [['downloads', 'size'], 'integer'],
             ['time', 'default', 'value' => time()]
         ];
@@ -33,7 +32,7 @@ class File extends \yii\easyii\components\ActiveRecord
         return [
             'title' => Yii::t('easyii', 'Title'),
             'file' => Yii::t('easyii', 'File'),
-            'slug' => Yii::t('easyii', 'Slug'),
+            'slug' => Yii::t('easyii', 'Slug')
         ];
     }
 
@@ -44,7 +43,8 @@ class File extends \yii\easyii\components\ActiveRecord
             'seo' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'title'
+                'attribute' => 'title',
+                'ensureUnique' => true
             ]
         ];
     }

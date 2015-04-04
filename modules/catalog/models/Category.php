@@ -43,8 +43,7 @@ class Category extends \yii\easyii\components\ActiveRecord
             ['thumb', 'image'],
             ['item_count', 'integer'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
-            ['slug', 'default', 'value' => null],
-            ['slug', 'unique'],
+            ['slug', 'default', 'value' => null]
         ];
     }
 
@@ -65,7 +64,8 @@ class Category extends \yii\easyii\components\ActiveRecord
             'seo' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'title'
+                'attribute' => 'title',
+                'ensureUnique' => true
             ]
         ];
     }

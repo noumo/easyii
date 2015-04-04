@@ -27,7 +27,6 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['views', 'number', 'integerOnly' => true],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['slug', 'unique']
         ];
     }
 
@@ -49,7 +48,8 @@ class Item extends \yii\easyii\components\ActiveRecord
             'seo' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'title'
+                'attribute' => 'title',
+                'ensureUnique' => true
             ]
         ];
     }
