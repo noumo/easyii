@@ -93,7 +93,7 @@ class AController extends Controller
                 "--------------------------------------------------------------------------------";
 
         foreach(Subscriber::find()->all() as $subscriber){
-            $unsubscribeLink = '<br><a href="http://'.Yii::$app->request->serverName.'/admin/subscribe/send/unsubscribe?email='.$subscriber->email.'" target="_blank">'.Yii::t('easyii/unsubscribe', 'Unsubscribe').'</a>';
+            $unsubscribeLink = '<br><a href="http://'.Yii::$app->request->serverName.'/admin/subscribe/send/unsubscribe?email='.$subscriber->email.'" target="_blank">'.Yii::t('easyii/subscribe', 'Unsubscribe').'</a>';
 
             if(Yii::$app->mailer->compose()
                 ->setFrom(Setting::get('robot_email'))
