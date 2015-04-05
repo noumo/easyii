@@ -5,6 +5,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Alert;
 
@@ -29,7 +30,7 @@ class Guestbook extends \yii\easyii\components\API
         ob_start();
         $form = ActiveForm::begin([
             'enableClientValidation' => true,
-            'action' => '/admin/guestbook/send'
+            'action' => Url::to(['/admin/guestbook/send']),
         ]);
 
         switch(Yii::$app->session->getFlash(GuestbookModel::FLASH_KEY)){
