@@ -3,10 +3,11 @@ namespace yii\easyii\modules\subscribe\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\models\Setting;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 use yii\easyii\components\Controller;
+use yii\easyii\models\Setting;
 use yii\easyii\modules\subscribe\models\Subscriber;
 use yii\easyii\modules\subscribe\models\History;
 
@@ -40,7 +41,7 @@ class AController extends Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect('/admin/subscribe/history');
+            return $this->redirect(['/admin/subscribe/history']);
         }
 
         return $this->render('view', [
@@ -61,7 +62,7 @@ class AController extends Controller
             {
                 if($model->validate() && $this->send($model)){
                     $this->flash('success', Yii::t('easyii/subscribe', 'Subscribe successfully created and sent'));
-                    return $this->redirect('/admin/subscribe/a/history');
+                    return $this->redirect(['/admin/subscribe/a/history']);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -93,7 +94,7 @@ class AController extends Controller
                 "--------------------------------------------------------------------------------";
 
         foreach(Subscriber::find()->all() as $subscriber){
-            $unsubscribeLink = '<br><a href="http://'.Yii::$app->request->serverName.'/admin/subscribe/send/unsubscribe?email='.$subscriber->email.'" target="_blank">'.Yii::t('easyii/unsubscribe', 'Unsubscribe').'</a>';
+            $unsubscribeLink = '<br><a href="' . Url::to(['/admin/subscribe/send/unsubscribe', 'email' => $subscriber->email], true) . '" target="_blank">'.Yii::t('easyii/unsubscribe', 'Unsubscribe').'</a>';
 
             if(Yii::$app->mailer->compose()
                 ->setFrom(Setting::get('robot_email'))
