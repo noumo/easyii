@@ -3,6 +3,7 @@ namespace yii\easyii\modules\text\api;
 
 use Yii;
 use yii\easyii\helpers\Data;
+use yii\easyii\helpers\Url;
 use yii\easyii\modules\text\models\Text as TextModel;
 
 class Text extends \yii\easyii\components\API
@@ -57,7 +58,7 @@ class Text extends \yii\easyii\components\API
             return '';
         }
         elseif(preg_match(TextModel::$slugPattern, $id_slug)){
-            return '<a href="/admin/text/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/text/api', 'Create text').'</a>';
+            return '<a href="' . Url::to(['/admin/text/a/create', 'slug' => $id_slug]) . '" target="_blank">'.Yii::t('easyii/text/api', 'Create text').'</a>';
         }
         else{
             return $this->errorText('WRONG TEXT IDENTIFIER');
