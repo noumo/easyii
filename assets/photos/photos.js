@@ -72,12 +72,13 @@ $(function(){
     photosBody.on('input propertychange', '.photo-description', function(){
         var saveBtn = $(this).siblings('.save-photo-description');
         if(saveBtn.hasClass('disabled')){
-            saveBtn.removeClass('disabled').on('click', function(){
+            saveBtn.removeClass('disabled').on('click', function(e){
+                e.preventDefault();
                 var $this = $(this).unbind('click').addClass('disabled');
                 var tr = $this.closest('tr');
                 var text = $this.siblings('.photo-description').val();
                 $.post(
-                    '/admin/photos/description/'+ tr.data('id'),
+                    $this.attr('href'),
                     {description: text},
                     function(response){
                         if(response.result === 'success'){
