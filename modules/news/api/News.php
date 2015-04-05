@@ -3,6 +3,7 @@ namespace yii\easyii\modules\news\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
 use yii\easyii\modules\news\models\News as NewsModel;
@@ -40,7 +41,7 @@ class News extends \yii\easyii\components\API
             $result[] = $this->parseNews($news);
         }
         if(!count($result)) {
-            $result[] = $this->createObject('<a href="/admin/news/a/create" target="_blank">'.Yii::t('easyii/news/api', 'Create news').'</a>');
+            $result[] = $this->createObject('<a href="' . Url::to(['/admin/news/a/create']) . '" target="_blank">'.Yii::t('easyii/news/api', 'Create news').'</a>');
             return $limit > 1 ? $result : $result[0];
         }
 
