@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\page\api;
 
 use Yii;
+use yii\helpers\Url;
 use yii\easyii\modules\page\models\Page as PageModel;
 
 class Page extends \yii\easyii\components\API
@@ -63,7 +64,7 @@ class Page extends \yii\easyii\components\API
             return $this->createObject('');
         }
         elseif(preg_match(PageModel::$slugPattern, $id_slug)){
-            return $this->createObject('<a href="/admin/page/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/page/api', 'Create page').'</a>');
+            return $this->createObject('<a href="' . Url::to(['/admin/page/a/create', 'slug' => $id_slug]) . '" target="_blank">'.Yii::t('easyii/page/api', 'Create page').'</a>');
         }
         else{
             return $this->createObject($this->errorText('WRONG PAGE IDENTIFIER'));
