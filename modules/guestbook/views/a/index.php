@@ -49,7 +49,7 @@ $this->title = Yii::t('easyii/guestbook', 'Guestbook');
                     <?= Html::checkbox('', $item->status == Guestbook::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/guestbook/a/']) . '/',
+                        'data-link' => Url::to(['/admin/guestbook/a/']),
                     ]) ?>
                 </td>
                 <td class="control"><a href="<?= Url::to(['/admin/guestbook/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>

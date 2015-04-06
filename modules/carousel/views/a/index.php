@@ -31,7 +31,7 @@ $this->title = Yii::t('easyii/carousel', 'Carousel');
                     <?= Html::checkbox('', $item->status == Carousel::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/carousel/a/']) . '/',
+                        'data-link' => Url::to(['/admin/carousel/a/']),
                     ]) ?>
                 </td>
                 <td>

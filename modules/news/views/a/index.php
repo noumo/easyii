@@ -33,7 +33,7 @@ $this->title = Yii::t('easyii/news', 'News');
                     <?= Html::checkbox('', $item->status == News::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/news/a/']) . '/',
+                        'data-link' => Url::to(['/admin/news/a/']),
                     ]) ?>
                 </td>
                 <td class="control"><a href="<?= Url::to(['/admin/news/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>

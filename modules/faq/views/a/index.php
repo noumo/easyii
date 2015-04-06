@@ -32,7 +32,7 @@ $this->title = Yii::t('easyii/faq', 'FAQ');
                     <?= Html::checkbox('', $item->status == Faq::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/faq/a/']) . '/',
+                        'data-link' => Url::to(['/admin/faq/a/']),
                     ]) ?>
                 </td>
                 <td>
