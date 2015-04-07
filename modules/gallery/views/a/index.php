@@ -1,6 +1,7 @@
 <?php
 use yii\easyii\modules\gallery\models\Album;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = Yii::t('easyii/gallery', 'Gallery');
 ?>
@@ -26,7 +27,7 @@ $this->title = Yii::t('easyii/gallery', 'Gallery');
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
-                <td><a href="/admin/gallery/a/photos/<?= $item->primaryKey ?>"><?= $item->title ?></a></td>
+                <td><a href="<?= Url::to(['/admin/gallery/a/photos', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
                 <td><?= $item->photo_count ?></td>
                 <td class="status">
                     <?= Html::checkbox('', $item->status == Album::STATUS_ON, [
@@ -37,10 +38,10 @@ $this->title = Yii::t('easyii/gallery', 'Gallery');
                 </td>
                 <td class="control">
                     <div class="btn-group btn-group-sm" role="group">
-                        <a href="/admin/gallery/a/up/<?= $item->primaryKey ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
-                        <a href="/admin/gallery/a/down/<?= $item->primaryKey ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
-                        <a href="/admin/gallery/a/edit/<?= $item->primaryKey ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'Edit category') ?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="/admin/gallery/a/delete/<?= $item->primaryKey ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a href="<?= Url::to(['/admin/gallery/a/up', 'id' => $item->primaryKey]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
+                        <a href="<?= Url::to(['/admin/gallery/a/down', 'id' => $item->primaryKey]) ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
+                        <a href="<?= Url::to(['/admin/gallery/a/edit', 'id' => $item->primaryKey]) ?>" class="btn btn-default" title="<?= Yii::t('easyii', 'Edit category') ?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="<?= Url::to(['/admin/gallery/a/delete', 'id' => $item->primaryKey]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
                     </div>
                 </td>
             </tr>

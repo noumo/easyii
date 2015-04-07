@@ -57,7 +57,7 @@ class AController extends Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/news', 'News created'));
-                    return $this->redirect('/admin/news');
+                    return $this->redirect(['/admin/news']);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -78,7 +78,7 @@ class AController extends Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect('/admin/news');
+            return $this->redirect(['/admin/news']);
         }
 
         if ($model->load(Yii::$app->request->post())) {

@@ -3,6 +3,7 @@ namespace yii\easyii\modules\gallery\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
 use yii\easyii\models\Photo;
@@ -195,8 +196,10 @@ class Gallery extends \yii\easyii\components\API
         if(Yii::$app->user->isGuest) {
             return $this->createObject('');
         }
+
         elseif(preg_match(Album::$SLUG_PATTERN, $id_slug)){
-            return $this->createObject('<a href="/admin/gallery/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/gallery/api', 'Create album').'</a>');
+
+            return $this->createObject('<a href="' . Url::to(['/admin/gallery/a/create', 'slug' => $id_slug]) . '" target="_blank">'.Yii::t('easyii/gallery/api', 'Create album').'</a>');
         }
         else{
             return $this->createObject($this->errorText('WRONG ALBUM IDENTIFIER'));

@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
@@ -11,8 +12,8 @@ use yii\easyii\widgets\SeoForm;
 <?= $form->field($model, 'text')->widget(Redactor::className(),[
     'options' => [
         'minHeight' => 400,
-        'imageUpload' => '/admin/redactor/upload?dir=pages',
-        'fileUpload' => '/admin/redactor/upload?dir=pages',
+        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'pages']),
+        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'pages']),
         'plugins' => ['fullscreen']
     ]
 ]) ?>

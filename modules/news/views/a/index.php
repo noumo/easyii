@@ -1,6 +1,7 @@
 <?php
 use yii\easyii\modules\news\models\News;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = Yii::t('easyii/news', 'News');
 ?>
@@ -26,16 +27,16 @@ $this->title = Yii::t('easyii/news', 'News');
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
-                <td><a href="/admin/news/a/edit/<?= $item->primaryKey ?>"><?= $item->title ?></a></td>
+                <td><a href="<?= Url::to(['/admin/news/a/edit/', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
                 <td><?= $item->views ?></td>
                 <td class="status">
                     <?= Html::checkbox('', $item->status == News::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => '/admin/news/a/'
+                        'data-link' => Url::to(['/admin/news/a/']),
                     ]) ?>
                 </td>
-                <td class="control"><a href="/admin/news/a/delete/<?= $item->primaryKey ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
+                <td class="control"><a href="<?= Url::to(['/admin/news/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
             </tr>
     <?php endforeach; ?>
         </tbody>

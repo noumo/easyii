@@ -51,7 +51,7 @@ class ModulesController extends \yii\easyii\components\Controller
             else{
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Module created'));
-                    return $this->redirect('/admin/modules');
+                    return $this->redirect(['/admin/modules']);
                 }
                 else{
                     $this->flash('error', Yii::t('Create error. {0}', $model->formatErrors()));
@@ -72,7 +72,7 @@ class ModulesController extends \yii\easyii\components\Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect('/admin/modules');
+            return $this->redirect(['/admin/modules']);
         }
 
         if ($model->load(Yii::$app->request->post())) {
@@ -103,7 +103,7 @@ class ModulesController extends \yii\easyii\components\Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect('/admin/modules');
+            return $this->redirect(['/admin/modules']);
         }
 
         if (Yii::$app->request->post('Settings')) {

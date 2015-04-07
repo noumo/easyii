@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $asset = \yii\easyii\assets\EmptyAsset::register($this);;
 
 $this->title = Yii::t('easyii/install', 'Installation completed');
@@ -11,7 +13,7 @@ $this->title = Yii::t('easyii/install', 'Installation completed');
                     <?= Yii::t('easyii/install', 'Installation completed') ?>
                 </div>
                 <div class="panel-body text-center">
-                    <a href="/admin">Go to control panel</a>
+                    <a href="<?= Url::to(['/admin']) ?>">Go to control panel</a>
                 </div>
             </div>
             <div class="text-center">

@@ -27,7 +27,7 @@ class API extends \yii\base\Object
 
     public function wrapLiveEdit($text, $path, $tag = 'span')
     {
-        return '<'.$tag.' class="easyiicms-edit" data-edit="/admin/'.$this->module.'/'.$path.'">'.$text.'</'.$tag.'>';
+        return '<'.$tag.' class="easyiicms-edit" data-edit="'. Yii::$app->urlManager->createAbsoluteUrl(["/admin/$this->module/$path"]) . '">'.$text.'</'.$tag.'>';
     }
 
     public function  errorText($text)

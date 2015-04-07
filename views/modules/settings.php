@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 $this->title = $model->title;
 ?>
 <?= $this->render('_menu') ?>
@@ -26,4 +28,4 @@ $this->title = $model->title;
 <?php else : ?>
     <?= $model->title ?> <?= Yii::t('easyii', 'module doesn`t have any settings.') ?>
 <?php endif; ?>
-<a href="/admin/modules/restoresettings/<?= $model->module_id ?>" class="pull-right text-warning"><i class="glyphicon glyphicon-flash"></i> <?= Yii::t('easyii', 'Restore default settings') ?></a>
+<a href="<?= Url::to(['/admin/modules/restoresettings', 'id' => $model->module_id]) ?>" class="pull-right text-warning"><i class="glyphicon glyphicon-flash"></i> <?= Yii::t('easyii', 'Restore default settings') ?></a>

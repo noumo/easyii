@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $this->title = Yii::t('easyii/page', 'Pages');
 ?>
 
@@ -24,10 +26,10 @@ $this->title = Yii::t('easyii/page', 'Pages');
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
-                <td><a href="/admin/page/a/edit/<?= $item->primaryKey ?>"><?= $item->title ?></a></td>
+                <td><a href="<?= Url::to(['/admin/page/a/edit', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->slug ?></td>
-                    <td><a href="/admin/page/a/delete/<?= $item->primaryKey ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item')?>"></a></td>
+                    <td><a href="<?= Url::to(['/admin/page/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item')?>"></a></td>
                 <?php endif; ?>
             </tr>
     <?php endforeach; ?>

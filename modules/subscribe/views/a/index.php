@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $this->title = Yii::t('easyii/subscribe', 'Subscribe');
 ?>
 
@@ -26,7 +28,7 @@ $this->title = Yii::t('easyii/subscribe', 'Subscribe');
                 <td><?= $item->email ?></td>
                 <td><a href="//freegeoip.net/?q=<?= $item->ip ?>" target="_blank"><?= $item->ip ?></a></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
-                <td class="control"><a href="/admin/subscribe/a/delete/<?= $item->primaryKey ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
+                <td class="control"><a href="<?= Url::to(['/admin/subscribe/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
             </tr>
     <?php endforeach; ?>
         </tbody>
