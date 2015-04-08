@@ -6,6 +6,7 @@ use yii\easyii\modules\subscribe\models\Subscriber;
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 class Subscribe extends \yii\easyii\components\API
 {
@@ -23,7 +24,7 @@ class Subscribe extends \yii\easyii\components\API
         ob_start();
         $form = ActiveForm::begin([
             'enableAjaxValidation' => true,
-            'action' => '/admin/subscribe/send',
+            'action' => Url::to(['/admin/subscribe/send']),
             'layout' => 'inline'
         ]);
 

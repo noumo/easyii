@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
     <img src="<?= Yii::$app->request->baseUrl.$model->image ?>" style="width: 848px">
 <?php endif; ?>
 <?= $form->field($model, 'image')->fileInput() ?>
+<?= $form->field($model, 'link') ?>
 <?php if($this->context->module->settings['enableTitle']) : ?>
     <?= $form->field($model, 'title')->textarea() ?>
 <?php endif; ?>

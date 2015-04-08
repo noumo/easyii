@@ -124,19 +124,43 @@ class ModulesController extends \yii\easyii\components\Controller
         }
     }
 
-    public function actionRestoresettings($id)
+    public function actionRestoreSettings($id)
+    {
+        if(($model = Module::findOne($id))){
+            $model->settings = '';
+            $model->save();
+            $this->flash('success', Yii::t('easyii', 'Module default settings was restored'));
+        } else {
+            $this->flash('error', Yii::t('easyii', 'Not found'));
+        }
+        return $this->back();
+    }
+
+    public function actionCopy($id)
     {
         $model = Module::findOne($id);
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
+            return $this->redirect('/admin/modules');
         }
-        else{
-            $model->settings = '';
-            $model->save();
-            $this->flash('success', Yii::t('easyii', 'Module default settings was restored'));
+        if (Yii::$app->request->post('Copy')) {
+            $model->setSettings(Yii::$app->request->post('Settings'));
+            if($model->save()){
+                $this->flash('success', Yii::t('easyii', 'Module settings updated'));
+            }
+            else{
+                $this->flash('error', Yii::t('easyii', Yii::t('easyii', 'Update error. {0}', $model->formatErrors())));
+            }
+            return $this->refresh();
         }
-        return $this->back();
+        else {
+
+            return $this->render('copy', [
+                'model' => $model
+            ]);
+        }
+
     }
 
     public function actionDelete($id)

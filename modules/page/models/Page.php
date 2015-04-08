@@ -18,7 +18,7 @@ class Page extends \yii\easyii\components\ActiveRecord
             [['title','text'], 'required'],
             [['title', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
-            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+            ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['slug', 'unique', 'when' => function($model){
                 return $model->slug && !self::autoSlug();

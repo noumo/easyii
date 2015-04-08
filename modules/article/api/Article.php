@@ -48,7 +48,7 @@ class Article extends \yii\easyii\components\API
         }
     }
 
-    public function api_item($id_slug)
+    public function api_get($id_slug)
     {
         if(!isset($this->_items[$id_slug])) {
             $this->_items[$id_slug] = $this->findItem($id_slug);

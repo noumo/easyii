@@ -7,18 +7,15 @@ use yii\easyii\modules\faq\models\Faq as FaqModel;
 
 class Faq extends \yii\easyii\components\API
 {
-    public function api_all()
+    public function api_items()
     {
-        $data = Data::cache(FaqModel::CACHE_KEY, 3600, function(){
-            return FaqModel::find()->select(['faq_id', 'question', 'answer'])->status(FaqModel::STATUS_ON)->sort()->asArray()->all();
+        return Data::cache(FaqModel::CACHE_KEY, 3600, function(){
+            $items = [];
+            foreach(FaqModel::find()->select(['faq_id', 'question', 'answer'])->status(FaqModel::STATUS_ON)->sort()->all() as $item){
+                $items[] = new FaqObject($item);
+            }
+            return $items;
         });
-
-        $result = [];
-        foreach($data as $entry){
-            $result[] = $this->parseEntry($entry);
-        }
-
-        return $result;
     }
 
     private function parseEntry($entry)

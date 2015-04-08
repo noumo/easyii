@@ -37,6 +37,7 @@ class AController extends Controller
     public function actionCreate()
     {
         $model = new News;
+        $model->time = time();
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -45,12 +46,12 @@ class AController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['enableThumb']){
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if($model->thumb && $model->validate(['thumb'])){
-                        $model->thumb = Image::upload($model->thumb, 'news', $this->module->settings['thumbWidth'], $this->module->settings['thumbHeight'], $this->module->settings['thumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if($model->image && $model->validate(['image'])){
+                        $model->image = Image::upload($model->image, 'news');
                     }
                     else{
-                        $model->thumb = '';
+                        $model->image = '';
                     }
                 }
                 $model->status = News::STATUS_ON;
@@ -88,12 +89,12 @@ class AController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['enableThumb']){
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if($model->thumb && $model->validate(['thumb'])){
-                        $model->thumb = Image::upload($model->thumb, 'news', $this->module->settings['thumbWidth'], $this->module->settings['thumbHeight'], $this->module->settings['thumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if($model->image && $model->validate(['image'])){
+                        $model->image = Image::upload($model->image, 'news');
                     }
                     else{
-                        $model->thumb = $model->oldAttributes['thumb'];
+                        $model->image = $model->oldAttributes['image'];
                     }
                 }
 
@@ -131,9 +132,9 @@ class AController extends Controller
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
         else{
-            $model->thumb = '';
+            $model->image = '';
             if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->thumb);
+                @unlink(Yii::getAlias('@webroot').$model->image);
                 $this->flash('success', Yii::t('easyii/news', 'News image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));

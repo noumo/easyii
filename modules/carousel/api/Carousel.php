@@ -2,10 +2,13 @@
 namespace yii\easyii\modules\carousel\api;
 
 use Yii;
+use yii\easyii\components\API;
 use yii\easyii\helpers\Data;
 use yii\easyii\modules\carousel\models\Carousel as CarouselModel;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
-class Carousel extends \yii\easyii\components\API
+class Carousel extends API
 {
     public $clientOptions = ['interval' => 5000];
 
@@ -15,37 +18,53 @@ class Carousel extends \yii\easyii\components\API
     {
         parent::init();
 
-        $data = Data::cache(CarouselModel::CACHE_KEY, 3600, function(){
-            return CarouselModel::find()->status(CarouselModel::STATUS_ON)->sort()->asArray()->all();
+        $this->_items = Data::cache(CarouselModel::CACHE_KEY, 3600, function(){
+            $items = [];
+            foreach(CarouselModel::find()->status(CarouselModel::STATUS_ON)->sort()->all() as $item){
+                $items[] = new CarouselObject($item);
+            }
+            return $items;
         });
-
-        foreach($data as $item){
-            $temp = [
-                'content' => '<img src="'.$item['image'].'"/>',
-                'caption' => ''
-            ];
-            if($item['title']){
-                $temp['caption'] .= '<h3>'.$item['title'].'</h3>';
-            }
-            if($item['text']){
-                $temp['caption'] .= '<p>'.$item['text'].'</p>';
-            }
-            $this->_items[] = $temp;
-        }
     }
 
-    public function api_widget()
+    public function api_widget($width, $height, $clientOptions = [])
     {
         if(!count($this->_items)){
-            return '<a href="/admin/carousel/a/create" target="_blank">'.Yii::t('easyii/carousel/api', 'Create carousel').'</a>';
+            return LIVE_EDIT ? Html::a(Yii::t('easyii/carousel/api', 'Create carousel'), ['/admin/carousel/a/create'], ['target' => '_blank']) : '';
+        }
+        if(count($clientOptions)){
+            $this->clientOptions = array_merge($this->clientOptions, $clientOptions);
+        }
+
+        $items = [];
+        foreach($this->_items as $item){
+            $temp = [
+                'content' => Html::img($item->thumb($width, $height)),
+                'caption' => ''
+            ];
+            if($item->link) {
+                $temp['content'] = Html::a($temp['content'], $item->link);
+            }
+            if($item->title){
+                $temp['caption'] .= '<h3>' . $item->title . '</h3>';
+            }
+            if($item->text){
+                $temp['caption'] .= '<p>'.$item->text.'</p>';
+            }
+            $items[] = $temp;
         }
 
         $widget = \yii\bootstrap\Carousel::widget([
-            'options' => ['class' => 'slide', 'style' => 'width: '.Yii::$app->getModule('admin')->activeModules['carousel']->settings['imageWidth'].'px'],
+            'options' => ['class' => 'slide', 'style' => 'width: ' . $width . 'px'],
             'clientOptions' => $this->clientOptions,
-            'items' => $this->_items
+            'items' => $items
         ]);
 
-        return LIVE_EDIT ? $this->wrapLiveEdit($widget, '', 'div') : $widget;
+        return LIVE_EDIT ? API::liveEdit($widget, Url::to(['/admin/carousel']), 'div') : $widget;
+    }
+
+    public function api_items()
+    {
+        return $this->_items;
     }
 }

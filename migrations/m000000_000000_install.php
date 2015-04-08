@@ -95,6 +95,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(Carousel::tableName(), [
             'carousel_id' => 'pk',
             'image' => Schema::TYPE_STRING . '(128) NOT NULL',
+            'link' => Schema::TYPE_STRING . '(255) NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
@@ -180,7 +181,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(News::tableName(), [
             'news_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
@@ -194,9 +195,13 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(article\models\Category::tableName(), [
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'tree' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'lft' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', article\models\Category::tableName(), 'slug', true);
@@ -205,7 +210,7 @@ class m000000_000000_install extends \yii\db\Migration
             'item_id' => 'pk',
             'category_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',

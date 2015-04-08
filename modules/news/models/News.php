@@ -22,10 +22,10 @@ class News extends \yii\easyii\components\ActiveRecord
             [['text', 'title'], 'required'],
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
-            ['thumb', 'image'],
+            ['image', 'image'],
             ['time', 'default', 'value' => time()],
             ['views', 'number', 'integerOnly' => true],
-            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+            ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null]
         ];
     }
@@ -36,7 +36,8 @@ class News extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
             'short' => Yii::t('easyii/news', 'Short'),
-            'thumb' => Yii::t('easyii', 'Image'),
+            'image' => Yii::t('easyii', 'Image'),
+            'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
@@ -60,6 +61,11 @@ class News extends \yii\easyii\components\ActiveRecord
             if($this->short && $settings['enableShort']){
                 $this->short = StringHelper::truncate($this->short, $settings['shortMaxLength']);
             }
+            if(is_string($this->time)){
+                if(!($this->time = strtotime($this->time))){
+                    $this->time = time();
+                }
+            }
 
             return true;
         } else {
@@ -71,8 +77,8 @@ class News extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        if($this->thumb){
-            @unlink(Yii::getAlias('@webroot').$this->thumb);
+        if($this->image){
+            @unlink(Yii::getAlias('@webroot').$this->image);
         }
     }
 }

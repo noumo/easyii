@@ -30,6 +30,12 @@ class API extends \yii\base\Object
         return '<'.$tag.' class="easyiicms-edit" data-edit="/admin/'.$this->module.'/'.$path.'">'.$text.'</'.$tag.'>';
     }
 
+
+    public static  function liveEdit($text, $path, $tag = 'span')
+    {
+        return '<'.$tag.' class="easyiicms-edit" data-edit="'.$path.'">'.$text.'</'.$tag.'>';
+    }
+
     public function  errorText($text)
     {
         return '<span style="background: #ff0000; color: #ffffff">'.$text.'</span>';

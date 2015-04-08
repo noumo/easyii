@@ -25,7 +25,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
             ['views', 'number', 'integerOnly' => true],
-            ['slug', 'match', 'pattern' => self::$slugPattern, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+            ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['slug', 'unique', 'when' => function($model){
                 return $model->slug && !self::autoSlug();

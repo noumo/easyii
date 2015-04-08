@@ -20,7 +20,7 @@ class Carousel extends \yii\easyii\components\ActiveRecord
     {
         return [
             ['image', 'image'],
-            [['title', 'text'], 'trim'],
+            [['title', 'text', 'link'], 'trim'],
         ];
     }
 
@@ -28,6 +28,7 @@ class Carousel extends \yii\easyii\components\ActiveRecord
     {
         return [
             'image' => Yii::t('easyii', 'Image'),
+            'link' =>  Yii::t('easyii', 'Link'),
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
         ];
