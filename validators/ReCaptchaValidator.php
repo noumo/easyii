@@ -20,9 +20,7 @@ class ReCaptchaValidator extends Validator
     public function init()
     {
         parent::init();
-        if (!Setting::get('recaptcha_secret')) {
-            throw new InvalidConfigException('Required `recatpcha_secret` setting isn\'t set.');
-        }
+
 
         if ($this->message === null) {
             $this->message = Yii::t('yii', 'The verification code is incorrect.');
@@ -52,6 +50,10 @@ class ReCaptchaValidator extends Validator
      */
     protected function validateValue($value)
     {
+        if (!Setting::get('recaptcha_secret')) {
+            throw new InvalidConfigException('Required `recatpcha_secret` setting isn\'t set.');
+        }
+
         if (empty($value)) {
             if (!($value = Yii::$app->request->post(self::CAPTCHA_RESPONSE_FIELD))) {
                 return [$this->message, []];

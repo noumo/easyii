@@ -53,7 +53,7 @@ class AController extends Controller
                 {
                     $model->image = $fileInstanse;
                     if($model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'carousel', $this->module->settings['imageWidth'], $this->module->settings['imageHeight'], $this->module->settings['imageCrop']);
+                        $model->image = Image::upload($model->image, 'carousel');
                         $model->status = Carousel::STATUS_ON;
 
                         if($model->save()){
@@ -100,7 +100,7 @@ class AController extends Controller
                 {
                     $model->image = $fileInstanse;
                     if($model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'carousel', $this->module->settings['imageWidth'], $this->module->settings['imageHeight'], $this->module->settings['imageCrop']);
+                        $model->image = Image::upload($model->image, 'carousel');
                     }
                     else {
                         $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));

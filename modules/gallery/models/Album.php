@@ -33,7 +33,7 @@ class Album extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['thumb', 'image'],
+            ['image', 'image'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['slug', 'unique', 'when' => function($model){
@@ -46,7 +46,7 @@ class Album extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
-            'thumb' => Yii::t('easyii', 'Image'),
+            'image' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
@@ -84,8 +84,8 @@ class Album extends \yii\easyii\components\ActiveRecord
             $photo->delete();
         }
 
-        if($this->thumb){
-            @unlink(Yii::getAlias('@webroot').$this->thumb);
+        if($this->image){
+            @unlink(Yii::getAlias('@webroot').$this->image);
         }
     }
 

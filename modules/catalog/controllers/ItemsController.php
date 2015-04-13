@@ -54,11 +54,11 @@ class ItemsController extends Controller
                 $model->data = Yii::$app->request->post('Data');
 
                 if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if ($model->thumb && $model->validate(['thumb'])) {
-                        $model->thumb = Image::upload($model->thumb, 'catalog', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if ($model->image && $model->validate(['image'])) {
+                        $model->image = Image::upload($model->image, 'catalog');
                     } else {
-                        $model->thumb = '';
+                        $model->image = '';
                     }
                 }
 
@@ -95,11 +95,11 @@ class ItemsController extends Controller
                 $model->data = Yii::$app->request->post('Data');
 
                 if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if ($model->thumb && $model->validate(['thumb'])) {
-                        $model->thumb = Image::upload($model->thumb, 'catalog', $this->module->settings['itemThumbWidth'], $this->module->settings['itemThumbHeight'], $this->module->settings['itemThumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if ($model->image && $model->validate(['image'])) {
+                        $model->image = Image::upload($model->image, 'catalog');
                     } else {
-                        $model->thumb = $model->oldAttributes['thumb'];
+                        $model->image = $model->oldAttributes['image'];
                     }
                 }
 
@@ -138,10 +138,10 @@ class ItemsController extends Controller
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
-        elseif($model->thumb){
-            $model->thumb = '';
+        elseif($model->image){
+            $model->image = '';
             if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->thumb);
+                @unlink(Yii::getAlias('@webroot').$model->image);
                 $this->flash('success', Yii::t('easyii/catalog', 'Image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));

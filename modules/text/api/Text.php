@@ -23,24 +23,20 @@ class Text extends API
 
     public function api_get($id_slug)
     {
-        return $this->findText($id_slug);
+        if(($text = $this->findText($id_slug)) === null){
+            return $this->notFound($id_slug);
+        }
+        return LIVE_EDIT ? API::liveEdit($text['text'], Url::to(['/admin/text/a/edit/', 'id' => $text['text_id']])) : $text['text'];
     }
 
     private function findText($id_slug)
     {
-        $text = null;
         foreach ($this->_texts as $item) {
             if($item['slug'] == $id_slug || $item['text_id'] == $id_slug){
-                $text = nl2br($item['text']);
-                break;
+                return $item;
             }
         }
-
-        if($text === null){
-            return $this->notFound($id_slug);
-        }
-
-        return LIVE_EDIT ? API::liveEdit($text, $this->editLink) : $text;
+        return null;
     }
 
     private function notFound($id_slug)
@@ -52,9 +48,5 @@ class Text extends API
         }
 
         return $text;
-    }
-
-    public function getEditLink(){
-        return Url::to(['/admin/text/a/edit/', 'id' => $this->id]);
     }
 }

@@ -9,11 +9,11 @@ use yii\easyii\widgets\SeoForm;
 ]); ?>
 <?= $form->field($model, 'title') ?>
 <?php if($this->context->module->settings['albumThumb']) : ?>
-    <?php if($model->thumb) : ?>
-        <img src="<?= Yii::$app->request->baseUrl.$model->thumb ?>">
+    <?php if($model->image) : ?>
+        <img src="<?= Yii::$app->request->baseUrl.$model->image ?>">
         <a href="/admin/gallery/a/clear-image/<?= $model->primaryKey ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/gallery', 'Clear image')?>"><?= Yii::t('easyii/gallery', 'Clear image')?></a>
     <?php endif; ?>
-    <?= $form->field($model, 'thumb')->fileInput() ?>
+    <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>
 
 <?php if(IS_ROOT) : ?>

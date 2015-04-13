@@ -6,7 +6,7 @@ use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
 
-class Category extends \yii\easyii\components\ActiveRecord
+class Category extends \yii\easyii\components\NSActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
@@ -40,7 +40,7 @@ class Category extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['thumb', 'image'],
+            ['image', 'image'],
             ['item_count', 'integer'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
@@ -54,7 +54,7 @@ class Category extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
-            'thumb' => Yii::t('easyii', 'Image'),
+            'image' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
             'item_count' => Yii::t('easyii/catalog', 'Items')
         ];
@@ -65,6 +65,10 @@ class Category extends \yii\easyii\components\ActiveRecord
         return [
             SortableModel::className(),
             'seo' => SeoBehavior::className(),
+            'tree' => [
+                'class' => NestedSetsBehavior::className(),
+                'treeAttribute' => 'tree'
+            ]
         ];
     }
 
@@ -113,8 +117,8 @@ class Category extends \yii\easyii\components\ActiveRecord
             $item->delete();
         }
 
-        if($this->thumb) {
-            @unlink(Yii::getAlias('@webroot') . $this->thumb);
+        if($this->image) {
+            @unlink(Yii::getAlias('@webroot') . $this->image);
         }
     }
 

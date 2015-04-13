@@ -1,4 +1,6 @@
 <?php
+use yii\easyii\helpers\Image;
+use yii\easyii\models\Photo;
 use yii\easyii\widgets\Fancybox;
 use yii\helpers\Html;
 use yii\easyii\assets\PhotosAsset;
@@ -12,10 +14,6 @@ $item_id = $this->context->model->primaryKey;
 $linkParams = http_build_query([
     'model' => $model,
     'item_id' => $item_id,
-    'maxWidth' => $this->context->maxWidth,
-    'thumbWidth' => $this->context->thumbWidth,
-    'thumbHeight' => $this->context->thumbHeight,
-    'thumbCrop' => $this->context->thumbCrop,
 ]);
 
 $photoTemplate = '<tr data-id="{{photo_id}}">'.(IS_ROOT ? '<td>{{photo_id}}</td>' : '').'\
@@ -57,7 +55,7 @@ $photoTemplate = str_replace('>\\', '>', $photoTemplate);
     <?php foreach($photos as $photo) : ?>
         <?= str_replace(
             ['{{photo_id}}', '{{photo_thumb}}', '{{photo_image}}', '{{photo_description}}'],
-            [$photo->primaryKey, $photo->thumb, $photo->image, $photo->description],
+            [$photo->primaryKey, Image::thumb(Yii::getAlias('@webroot') . $photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT), $photo->image, $photo->description],
             $photoTemplate)
         ?>
     <?php endforeach; ?>

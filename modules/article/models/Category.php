@@ -19,21 +19,13 @@ class Category extends \yii\easyii\components\NSActiveRecord
         return 'easyii_article_categories';
     }
 
-    public static function findWithItemCount()
-    {
-        return self::find()
-               ->select([self::tableName().'.*', 'COUNT('.Item::tableName().'.item_id) as item_count'])
-               ->joinWith('items')
-               ->groupBy(self::tableName().'.category_id');
-    }
-
     public function rules()
     {
         return [
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['thumb', 'image'],
+            ['image', 'image'],
             ['item_count', 'integer'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
@@ -47,7 +39,7 @@ class Category extends \yii\easyii\components\NSActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
-            'thumb' => Yii::t('easyii', 'Image'),
+            'image' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
             'item_count' => Yii::t('easyii/article', 'Items')
         ];
@@ -129,8 +121,8 @@ class Category extends \yii\easyii\components\NSActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if(!$this->isNewRecord && $this->thumb != $this->oldAttributes['thumb']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['thumb']);
+            if(!$this->isNewRecord && $this->image != $this->oldAttributes['image']){
+                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
             }
             return true;
         } else {
@@ -146,8 +138,8 @@ class Category extends \yii\easyii\components\NSActiveRecord
             $item->delete();
         }
 
-        if($this->thumb) {
-            @unlink(Yii::getAlias('@webroot') . $this->thumb);
+        if($this->image) {
+            @unlink(Yii::getAlias('@webroot') . $this->image);
         }
     }
 

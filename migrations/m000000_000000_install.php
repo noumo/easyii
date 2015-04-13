@@ -62,7 +62,6 @@ class m000000_000000_install extends \yii\db\Migration
             'photo_id' => 'pk',
             'model' => Schema::TYPE_STRING . '(128) NOT NULL',
             'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
-            'thumb' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) NOT NULL',
             'description' => Schema::TYPE_STRING . '(1024) NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . " NOT NULL",
@@ -107,7 +106,7 @@ class m000000_000000_install extends \yii\db\Migration
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
-            'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
@@ -120,7 +119,7 @@ class m000000_000000_install extends \yii\db\Migration
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'description' => Schema::TYPE_TEXT . ' DEFAULT NULL',
             'data' => Schema::TYPE_TEXT . ' NOT NULL',
-            'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
@@ -157,7 +156,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(Album::tableName(), [
             'album_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'thumb' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"

@@ -6,6 +6,10 @@ use yii\easyii\behaviors\SortableModel;
 
 class Photo extends \yii\easyii\components\ActiveRecord
 {
+    const PHOTO_MAX_WIDTH = 1900;
+    const PHOTO_THUMB_WIDTH = 120;
+    const PHOTO_THUMB_HEIGHT = 90;
+
     public static function tableName()
     {
         return 'easyii_photos';

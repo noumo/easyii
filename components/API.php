@@ -25,15 +25,9 @@ class API extends \yii\base\Object
         return call_user_func_array([self::$classes[$name], 'api_' . $method], $params);
     }
 
-    public function wrapLiveEdit($text, $path, $tag = 'span')
-    {
-        return '<'.$tag.' class="easyiicms-edit" data-edit="/admin/'.$this->module.'/'.$path.'">'.$text.'</'.$tag.'>';
-    }
-
-
     public static  function liveEdit($text, $path, $tag = 'span')
     {
-        return '<'.$tag.' class="easyiicms-edit" data-edit="'.$path.'">'.$text.'</'.$tag.'>';
+        return $text ? '<'.$tag.' class="easyiicms-edit" data-edit="'.$path.'">'.$text.'</'.$tag.'>' : '';
     }
 
     public function  errorText($text)

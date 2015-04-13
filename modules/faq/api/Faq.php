@@ -17,13 +17,4 @@ class Faq extends \yii\easyii\components\API
             return $items;
         });
     }
-
-    private function parseEntry($entry)
-    {
-        if(LIVE_EDIT){
-            $entry['question'] = $this->wrapLiveEdit($entry['question'], 'a/edit/'.$entry['faq_id'], 'div');
-            $entry['answer'] = $this->wrapLiveEdit($entry['answer'], 'a/edit/'.$entry['faq_id'], 'div');
-        }
-        return (object)$entry;
-    }
 }

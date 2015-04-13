@@ -175,7 +175,6 @@ class Catalog extends \yii\easyii\components\API
             $temp = new \stdClass();
             $temp->id = $photo->primaryKey;
             $temp->image = $photo->image;
-            $temp->thumb = $photo->thumb;
             $temp->box = '<a class="easyii-box" href="'.$photo->image.'" rel="album-'.$photo->item_id.'" title="'.$photo->description.'"><img src="'.$photo->thumb.'"></a>';
 
             if(LIVE_EDIT){

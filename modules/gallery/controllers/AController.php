@@ -49,11 +49,11 @@ class AController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['albumThumb']){
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if($model->thumb && $model->validate(['thumb'])){
-                        $model->thumb = Image::upload($model->thumb, 'gallery', $this->module->settings['albumThumbWidth'], $this->module->settings['albumThumbHeight'], $this->module->settings['albumThumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if($model->image && $model->validate(['image'])){
+                        $model->image = Image::upload($model->image, 'gallery');
                     }else{
-                        $model->thumb = '';
+                        $model->image = '';
                     }
                 }
                 $model->status = Album::STATUS_ON;
@@ -94,11 +94,11 @@ class AController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['albumThumb']){
-                    $model->thumb = UploadedFile::getInstance($model, 'thumb');
-                    if($model->thumb && $model->validate(['thumb'])){
-                        $model->thumb = Image::upload($model->thumb, 'catalog', $this->module->settings['albumThumbWidth'], $this->module->settings['albumThumbHeight'], $this->module->settings['albumThumbCrop']);
+                    $model->image = UploadedFile::getInstance($model, 'image');
+                    if($model->image && $model->validate(['image'])){
+                        $model->image = Image::upload($model->image, 'catalog');
                     }else{
-                        $model->thumb = $model->oldAttributes['thumb'];
+                        $model->image = $model->oldAttributes['image'];
                     }
                 }
 
@@ -136,10 +136,10 @@ class AController extends Controller
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
-        elseif($model->thumb){
-            $model->thumb = '';
+        elseif($model->image){
+            $model->image = '';
             if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->thumb);
+                @unlink(Yii::getAlias('@webroot').$model->image);
                 $this->flash('success', Yii::t('easyii/gallery', 'Album image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
