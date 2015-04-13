@@ -49,6 +49,6 @@ span.easyiicms-edit{
 }
 .easyiicms-goedit:hover{
     border: 1px solid #337ab7;
-    box-shadow: 0px 0px 10px #337ab7;
+    box-shadow: 0 0 10px #337ab7;
     background-color: rgba(51, 122, 183, 0.2);
 }

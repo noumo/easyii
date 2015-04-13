@@ -2,14 +2,12 @@
 namespace yii\easyii\modules\catalog\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\SortableController;
+use yii\easyii\behaviors\SortableControllerNS;
 use yii\easyii\behaviors\StatusController;
 
 
@@ -21,11 +19,11 @@ class AController extends Controller
     {
         return [
             [
-                'class' => SortableController::className(),
+                'class' => StatusController::className(),
                 'model' => Category::className()
             ],
             [
-                'class' => StatusController::className(),
+                'class' => SortableControllerNS::className(),
                 'model' => Category::className()
             ]
         ];
@@ -33,15 +31,13 @@ class AController extends Controller
 
     public function actionIndex()
     {
-        $data = new ActiveDataProvider([
-            'query' => Category::findWithItemCount()->sort(),
-        ]);
+        $tree = Category::getTree();
         return $this->render('index', [
-            'data' => $data
+            'tree' => $tree
         ]);
     }
 
-    public function actionCreate($slug = null)
+    public function actionCreate($parent = null)
     {
         $model = new Category;
 
@@ -62,9 +58,19 @@ class AController extends Controller
 
                 $model->status = Category::STATUS_ON;
 
+                $parent = Yii::$app->request->post('parent', null);
+                if($parent && ($parentCategory = Category::findOne((int)$parent))){
+                    $model->appendTo($parentCategory);
+                    $model->order_num = $parentCategory->order_num;
+                    $model->fields = $parentCategory->fields;
+                } else {
+                    $model->makeRoot();
+                }
+
                 if($model->save()){
+                    $action = $model->depth === 0 ? 'a/fields' : '';
                     $this->flash('success', Yii::t('easyii/catalog', 'Category created'));
-                    return $this->redirect(['/admin/catalog/a/fields', 'id' => $model->primaryKey]);
+                    return $this->redirect(['/admin/catalog/'.$action, 'id' => $model->primaryKey]);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -73,10 +79,9 @@ class AController extends Controller
             }
         }
         else {
-            if($slug) $model->slug = $slug;
-
             return $this->render('create', [
-                'model' => $model
+                'model' => $model,
+                'parent' => $parent
             ]);
         }
     }
@@ -163,6 +168,10 @@ class AController extends Controller
             $model->fields = $result;
 
             if($model->save()){
+                if($model->depth == 0) {
+                    Category::updateAll(['fields' => $model->fields], ['tree' => $model->primaryKey]);
+                }
+
                 $this->flash('success', Yii::t('easyii/catalog', 'Category updated'));
             }
             else{
@@ -199,7 +208,7 @@ class AController extends Controller
     public function actionDelete($id)
     {
         if(($model = Category::findOne($id))){
-            $model->delete();
+            $model->deleteWithChildren();
         } else{
             $this->error = Yii::t('easyii', 'Not found');
         }

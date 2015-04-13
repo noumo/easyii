@@ -37,10 +37,9 @@ class RedactorController extends \yii\easyii\components\Controller
             $file = Image::upload($fileInstance, $dir);
             if($file) {
                 return $this->getResponse($file);
-            } else {
-                return ['error' => 'Unable to save image file'];
             }
         }
+        return ['error' => 'Unable to save image file'];
     }
 
 //    public function actionClipboard()

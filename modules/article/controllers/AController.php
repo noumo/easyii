@@ -3,6 +3,7 @@ namespace yii\easyii\modules\article\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\SortableControllerNS;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 
@@ -20,6 +21,10 @@ class AController extends Controller
         return [
             [
                 'class' => StatusController::className(),
+                'model' => Category::className()
+            ],
+            [
+                'class' => SortableControllerNS::className(),
                 'model' => Category::className()
             ]
         ];
@@ -138,7 +143,7 @@ class AController extends Controller
     public function actionDelete($id)
     {
         if(($model = Category::findOne($id))){
-            $model->delete();
+            $model->deleteWithChildren();
         } else{
             $this->error = Yii::t('easyii', 'Not found');
         }
@@ -147,54 +152,12 @@ class AController extends Controller
 
     public function actionUp($id)
     {
-        return $this->move($id, true);
+        return $this->move($id, 'up');
     }
 
     public function actionDown($id)
     {
-        return $this->move($id, false);
-    }
-
-    private function move($id, $up)
-    {
-        if(($model = Category::findOne($id)))
-        {
-            $orderDir = $up ? 'ASC' : 'DESC';
-
-            if($model->primaryKey == $model->tree){
-                $swapCat = Category::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy('order_num '.$orderDir)->one();
-                if($swapCat)
-                {
-                    Category::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
-                    Category::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
-                    Category::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
-                }
-            } else {
-                $where = [
-                    'and',
-                    ['tree' => $model->tree],
-                    ['depth' => $model->depth],
-                    [($up ? '<' : '>'), 'lft', $model->lft]
-                ];
-
-                $swapCat = Category::find()->where($where)->orderBy(['lft' => ($up ? SORT_DESC : SORT_ASC)])->one();
-                if($swapCat)
-                {
-                    if($up) {
-                        $model->insertBefore($swapCat);
-                    } else {
-                        $model->insertAfter($swapCat);
-                    }
-
-                    $swapCat->update();
-                    $model->update();
-                }
-            }
-        }
-        else {
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        return $this->back();
+        return $this->move($id, 'down');
     }
 
     public function actionOn($id)

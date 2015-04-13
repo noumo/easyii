@@ -7,12 +7,10 @@ use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
 use creocoder\nestedsets\NestedSetsBehavior;
 
-class Category extends \yii\easyii\components\NSActiveRecord
+class Category extends \yii\easyii\components\ActiveRecordNS
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
-
-    public $item_count;
 
     public static function tableName()
     {
@@ -26,7 +24,6 @@ class Category extends \yii\easyii\components\NSActiveRecord
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
-            ['item_count', 'integer'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null]
         ];
@@ -38,7 +35,6 @@ class Category extends \yii\easyii\components\NSActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'image' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
-            'item_count' => Yii::t('easyii/article', 'Items')
         ];
     }
 
@@ -57,50 +53,6 @@ class Category extends \yii\easyii\components\NSActiveRecord
                 'treeAttribute' => 'tree'
             ]
         ];
-    }
-
-    public static function getTree()
-    {
-        $collection = self::find()->sort()->asArray()->all();
-        $trees = array();
-        $l = 0;
-
-        if (count($collection) > 0) {
-            // Node Stack. Used to help building the hierarchy
-            $stack = array();
-
-            foreach ($collection as $node) {
-                $item = $node;
-                unset($item['lft'], $item['rgt'], $item['status'], $item['order_num']);
-                $item['children'] = array();
-
-                // Number of stack items
-                $l = count($stack);
-
-                // Check if we're dealing with different levels
-                while($l > 0 && $stack[$l - 1]['depth'] >= $item['depth']) {
-                    array_pop($stack);
-                    $l--;
-                }
-
-                // Stack is empty (we are inspecting the root)
-                if ($l == 0) {
-                    // Assigning the root node
-                    $i = count($trees);
-                    $trees[$i] = $item;
-                    $stack[] = & $trees[$i];
-
-                } else {
-                    // Add node to parent
-                    $item['parent'] = $stack[$l - 1]['category_id'];
-                    $i = count($stack[$l - 1]['children']);
-                    $stack[$l - 1]['children'][$i] = $item;
-                    $stack[] = & $stack[$l - 1]['children'][$i];
-                }
-            }
-        }
-
-        return $trees;
     }
 
     public function getItems()

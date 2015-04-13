@@ -1,58 +1,55 @@
 <?php
-use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\easyii\modules\catalog\models\Category;
+
+\yii\bootstrap\BootstrapPluginAsset::register($this);
 
 $this->title = Yii::t('easyii/catalog', 'Catalog');
+
+function renderNode($node)
+{
+    $html = '<tr>';
+    $html .= '<td width="50">'.$node['category_id'].'</td>';
+    $html .= '
+        <td style="padding-left: '.($node['depth']*20).'px;">
+            '.(sizeof($node['children']) ? '<i class="caret"></i>' : '').' <a href="' . Url::to(['/admin/catalog/items', 'id' => $node['category_id']]) . '">'.$node['title'].'</a>
+        </td>';
+    $html .= '
+        <td width="120" class="text-right">
+            <div class="dropdown actions">
+                <i id="dropdownMenu'.$node['category_id'].'" data-toggle="dropdown" aria-expanded="true" title="'.Yii::t('easyii', 'Actions').'" class="glyphicon glyphicon-menu-hamburger"></i>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu'.$node['category_id'].'">
+                    <li><a href="' . Url::to(['/admin/catalog/a/edit', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-pencil font-12"></i> '.Yii::t('easyii', 'Edit').'</a></li>
+                    <li><a href="' . Url::to(['/admin/catalog/a/create', 'parent' => $node['category_id']]) . '"><i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii', 'Add subcategory').'</a></li>
+                    <li role="presentation" class="divider"></li>
+                    <li><a href="' . Url::to(['/admin/catalog/a/up', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-up font-12"></i> '.Yii::t('easyii', 'Move up').'</a></li>
+                    <li><a href="' . Url::to(['/admin/catalog/a/down', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-down font-12"></i> '.Yii::t('easyii', 'Move down').'</a></li>
+                    <li role="presentation" class="divider"></li>
+                    <li><a href="' . Url::to(['/admin/catalog/a/delete', 'id' => $node['category_id']]) . '" class="confirm-delete" title="'.Yii::t('easyii', 'Delete item').'"><i class="glyphicon glyphicon-remove font-12"></i> '.Yii::t('easyii', 'Delete').'</a></li>
+                </ul>
+            </div>
+        </td>
+    ';
+    $html .= '</tr>';
+
+    if(sizeof($node['children'])){
+        foreach($node['children'] as $child){
+            $html .= renderNode($child);
+        }
+    }
+
+    return $html;
+}
+
 ?>
 
 <?= $this->render('_menu') ?>
 
-<?php if($data->count > 0) : ?>
+<?php if(sizeof($tree) > 0) : ?>
     <table class="table table-hover">
-        <thead>
-        <tr>
-            <?php if(IS_ROOT) : ?>
-                <th width="30">#</th>
-            <?php endif; ?>
-            <th><?= Yii::t('easyii', 'Name') ?></th>
-            <th width="100"><?= Yii::t('easyii/catalog', 'Items') ?></th>
-            <th width="100"><?= Yii::t('easyii', 'Status') ?></th>
-            <th width="<?= IS_ROOT ? 160 : 120 ?>"></th>
-        </tr>
-        </thead>
         <tbody>
-        <?php foreach($data->models as $item) : ?>
-            <tr data-id="<?= $item->primaryKey ?>">
-                <?php if(IS_ROOT) : ?>
-                    <td><?= $item->primaryKey ?></td>
-                <?php endif; ?>
-                <td><a href="<?= Url::to(['/admin/catalog/items', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
-                <td><?= $item->item_count ?></td>
-                <td class="status">
-                    <?= Html::checkbox('', $item->status == Category::STATUS_ON, [
-                        'class' => 'switch',
-                        'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/catalog/a/']),
-                    ]) ?>
-                </td>
-                <td class="control">
-                    <div class="btn-group btn-group-sm" role="group">
-                        <a href="<?= Url::to(['/admin/catalog/a/up', 'id' => $item->primaryKey]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
-                        <a href="<?= Url::to(['/admin/catalog/a/down', 'id' => $item->primaryKey]) ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
-                        <a href="<?= Url::to(['/admin/catalog/a/edit', 'id' => $item->primaryKey]) ?>" class="btn btn-default" title="<?= Yii::t('easyii/catalog', 'Edit category') ?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                        <?php if(IS_ROOT) : ?>
-                        <a href="<?= Url::to(['/admin/catalog/a/delete', 'id' => $item->primaryKey]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
-                        <?php endif; ?>
-                    </div>
-                </td>
-            </tr>
-        <?php endforeach; ?>
+        <?php foreach($tree as $node) echo renderNode($node); ?>
         </tbody>
     </table>
-    <?= yii\widgets\LinkPager::widget([
-        'pagination' => $data->pagination
-    ]) ?>
 <?php else : ?>
     <p><?= Yii::t('easyii', 'No records found') ?></p>
 <?php endif; ?>

@@ -3,7 +3,7 @@ namespace yii\easyii\components;
 
 use creocoder\nestedsets\NestedSetsQueryBehavior;
 
-class NSActiveQuery extends ActiveQuery
+class ActiveQueryNS extends ActiveQuery
 {
     public function behaviors() {
         return [

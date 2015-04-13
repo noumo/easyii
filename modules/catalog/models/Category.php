@@ -5,13 +5,12 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
+use creocoder\nestedsets\NestedSetsBehavior;
 
-class Category extends \yii\easyii\components\NSActiveRecord
+class Category extends \yii\easyii\components\ActiveRecordNS
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
-
-    public $item_count;
 
     static $fieldTypes = [
         'string' => 'String',
@@ -26,14 +25,6 @@ class Category extends \yii\easyii\components\NSActiveRecord
         return 'easyii_catalog_categories';
     }
 
-    public static function findWithItemCount()
-    {
-        return self::find()
-               ->select([self::tableName().'.*', 'COUNT('.Item::tableName().'.item_id) as item_count'])
-               ->joinWith('items')
-               ->groupBy(self::tableName().'.category_id');
-    }
-
     public function rules()
     {
         return [
@@ -41,7 +32,6 @@ class Category extends \yii\easyii\components\NSActiveRecord
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
-            ['item_count', 'integer'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
         ];
@@ -80,8 +70,12 @@ class Category extends \yii\easyii\components\NSActiveRecord
             if(!$this->fields || !is_array($this->fields)){
                 $this->fields = [];
             }
-
             $this->fields = json_encode($this->fields);
+
+            if(!$this->isNewRecord && $this->image != $this->oldAttributes['image']){
+                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            }
+
             return true;
         } else {
             return false;

@@ -7,7 +7,6 @@ return [
     'Create category' => 'Создать категорию',
     'Edit category' => 'Редактировать категорию',
 
-    'Items' => 'Кол-во',
     'Short' => 'Короткий текст',
 
     'Category created' => 'Категория успешно создана',

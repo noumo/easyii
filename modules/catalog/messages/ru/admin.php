@@ -10,7 +10,7 @@ return [
     'Add field' => 'Добавить поле',
     'Save fields' => 'Сохранить поля',
     'Type options with `comma` as delimiter' => 'Элементы списка через запятую',
-    'Items' => 'Кол-во',
+    'Fields' => 'Поля',
 
     'Category created' => 'Категория успешно создана',
     'Category updated' => 'Категория обновлена',

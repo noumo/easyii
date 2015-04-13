@@ -16,7 +16,7 @@ $settings = $this->context->module->settings;
 
 <?php if(!empty($parent)) : ?>
     <div class="form-group field-category-title required">
-        <label for="category-parent" class="control-label"><?= Yii::t('easyii/article', 'Parent category') ?></label>
+        <label for="category-parent" class="control-label"><?= Yii::t('easyii', 'Parent category') ?></label>
         <select class="form-control" id="category-parent" name="parent">
             <option value="" class="smooth"><?= Yii::t('easyii', 'No') ?></option>
             <?php foreach(Category::find()->sort()->asArray()->all() as $node) : ?>

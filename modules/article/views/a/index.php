@@ -1,7 +1,5 @@
 <?php
-use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\easyii\modules\article\models\Category;
 
 \yii\bootstrap\BootstrapPluginAsset::register($this);
 
