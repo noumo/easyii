@@ -3,6 +3,7 @@ namespace yii\easyii\modules\news\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
 use yii\easyii\modules\news\models\News as NewsModel;

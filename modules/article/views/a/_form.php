@@ -2,6 +2,7 @@
 use yii\easyii\helpers\Image;
 use yii\easyii\modules\article\models\Category;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\SeoForm;
 
@@ -31,8 +32,8 @@ $settings = $this->context->module->settings;
 
 <?php if($settings['categoryThumb']) : ?>
     <?php if($model->image) : ?>
-        <img src="<?= Image::thumb(Yii::getAlias('@webroot') . $model->image, 240, 180) ?>">
-        <a href="/admin/article/a/clear-image/<?= $model->primaryKey ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>
+        <img src="<?= $model->image ?>">
+        <a href="<?= Url::to(['/admin/article/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>

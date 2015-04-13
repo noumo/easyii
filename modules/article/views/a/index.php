@@ -1,4 +1,8 @@
 <?php
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\easyii\modules\article\models\Category;
+
 \yii\bootstrap\BootstrapPluginAsset::register($this);
 
 $this->title = Yii::t('easyii/article', 'Articles');
@@ -9,20 +13,20 @@ function renderNode($node)
     $html .= '<td width="30">'.$node['category_id'].'</td>';
     $html .= '
         <td style="padding-left: '.($node['depth']*20).'px;">
-            '.(sizeof($node['children']) ? '<i class="caret"></i>' : '').' <a href="/admin/article/items/'.$node['category_id'].'">'.$node['title'].'</a>
+            '.(sizeof($node['children']) ? '<i class="caret"></i>' : '').' <a href="' . Url::to(['/admin/article/a/items', 'id' => $node['category_id']]) . '">'.$node['title'].'</a>
         </td>';
     $html .= '
         <td width="120" class="text-right">
             <div class="dropdown actions">
                 <i id="dropdownMenu'.$node['category_id'].'" data-toggle="dropdown" aria-expanded="true" title="'.Yii::t('easyii', 'Actions').'" class="glyphicon glyphicon-menu-hamburger"></i>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu'.$node['category_id'].'">
-                    <li><a href="/admin/article/a/edit/'.$node['category_id'].'"><i class="glyphicon glyphicon-pencil font-12"></i> '.Yii::t('easyii', 'Edit').'</a></li>
-                    <li><a href="/admin/article/a/create/?parent='.$node['category_id'].'"><i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii', 'Add subcategory').'</a></li>
+                    <li><a href="' . Url::to(['/admin/article/a/edit', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-pencil font-12"></i> '.Yii::t('easyii', 'Edit').'</a></li>
+                    <li><a href="' . Url::to(['/admin/article/a/create', 'parent' => $node['category_id']]) . '"><i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii', 'Add subcategory').'</a></li>
                     <li role="presentation" class="divider"></li>
-                    <li><a href="/admin/article/a/up/'.$node['category_id'].'"><i class="glyphicon glyphicon-arrow-up font-12"></i> '.Yii::t('easyii', 'Move up').'</a></li>
-                    <li><a href="/admin/article/a/down/'.$node['category_id'].'"><i class="glyphicon glyphicon-arrow-down font-12"></i> '.Yii::t('easyii', 'Move down').'</a></li>
+                    <li><a href="' . Url::to(['/admin/article/a/up', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-up font-12"></i> '.Yii::t('easyii', 'Move up').'</a></li>
+                    <li><a href="' . Url::to(['/admin/article/a/down', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-down font-12"></i> '.Yii::t('easyii', 'Move down').'</a></li>
                     <li role="presentation" class="divider"></li>
-                    <li><a href="/admin/article/a/delete/'.$node['category_id'].'" class="confirm-delete" title="'.Yii::t('easyii', 'Delete item').'"><i class="glyphicon glyphicon-remove font-12"></i> '.Yii::t('easyii', 'Delete').'</a></li>
+                    <li><a href="' . Url::to(['/admin/article/a/delete', 'id' => $node['category_id']]) . '" class="confirm-delete" title="'.Yii::t('easyii', 'Delete item').'"><i class="glyphicon glyphicon-remove font-12"></i> '.Yii::t('easyii', 'Delete').'</a></li>
                 </ul>
             </div>
         </td>

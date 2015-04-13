@@ -25,9 +25,6 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['description', 'safe'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['slug', 'unique', 'when' => function($model){
-                return $model->slug && !self::autoSlug();
-            }]
         ];
     }
 
@@ -46,6 +43,11 @@ class Item extends \yii\easyii\components\ActiveRecord
         return [
             SortableModel::className(),
             'seo' => SeoBehavior::className(),
+            'sluggable' => [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'ensureUnique' => true
+            ]
         ];
     }
 
@@ -60,18 +62,6 @@ class Item extends \yii\easyii\components\ActiveRecord
         } else {
             return false;
         }
-    }
-
-    public function beforeValidate()
-    {
-        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
-            $this->attachBehavior('sluggable', [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
-            ]);
-        }
-        return parent::beforeValidate();
     }
 
     public function afterFind()
@@ -101,10 +91,5 @@ class Item extends \yii\easyii\components\ActiveRecord
         if($this->image) {
             @unlink(Yii::getAlias('@webroot') . $this->image);
         }
-    }
-
-    public static function autoSlug()
-    {
-        return Yii::$app->getModule('admin')->activeModules['catalog']->settings['itemAutoSlug'];
     }
 }

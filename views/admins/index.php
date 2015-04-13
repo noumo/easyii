@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $this->title = Yii::t('easyii', 'Admins');
 ?>
 
@@ -17,8 +19,8 @@ $this->title = Yii::t('easyii', 'Admins');
         <?php foreach($data->models as $admin) : ?>
             <tr>
                 <td><?= $admin->admin_id ?></td>
-                <td><a href="/admin/admins/edit/<?= $admin->admin_id ?>"><?= $admin->username ?></a></td>
-                <td><a href="/admin/admins/delete/<?= $admin->admin_id ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
+                <td><a href="<?= Url::to(['/admin/admins/edit', 'id' => $admin->admin_id]) ?>"><?= $admin->username ?></a></td>
+                <td><a href="<?= Url::to(['/admin/admins/delete', 'id' => $admin->admin_id]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

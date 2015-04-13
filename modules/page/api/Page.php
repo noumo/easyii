@@ -32,6 +32,7 @@ class Page extends \yii\easyii\components\API
             $a = Html::a(Yii::t('easyii/page/api', 'Create page'), ['/admin/page/a/create', 'slug' => $id_slug], ['target' => '_blank']);
             $page->title = $a;
             $page->text = $a;
+
         }
 
         return new PageObject($page);

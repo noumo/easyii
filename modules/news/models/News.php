@@ -46,7 +46,7 @@ class News extends \yii\easyii\components\ActiveRecord
     {
         return [
             'seo' => SeoBehavior::className(),
-            [
+            'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
                 'ensureUnique' => true

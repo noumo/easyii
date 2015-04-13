@@ -2,6 +2,7 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii\web\Response;
 
@@ -31,7 +32,7 @@ class PhotosController extends Controller
     public function actionUpload($model, $item_id)
     {
         $success = null;
-        
+
         $photo = new Photo;
         $photo->model = $model;
         $photo->item_id = $item_id;
@@ -52,7 +53,7 @@ class PhotosController extends Controller
                     ];
                 }
                 else{
-                    @unlink(Yii::getAlias('@webroot').$photo->image);
+                    @unlink(Yii::getAlias('@webroot') . str_replace(Url::base(true), '', $photo->image));
                     $this->error = Yii::t('easyii', 'Create error. {0}', $photo->formatErrors());
                 }
             }

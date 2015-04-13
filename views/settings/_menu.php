@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $action = $this->context->action->id;
 ?>
 <?php if(IS_ROOT) : ?>
@@ -11,7 +13,7 @@ $action = $this->context->action->id;
                 <?= Yii::t('easyii', 'List') ?>
             </a>
         </li>
-        <li <?= ($action === 'create') ? 'class="active"' : '' ?>><a href="/admin/settings/create"><?= Yii::t('easyii', 'Create') ?></a></li>
+        <li <?= ($action === 'create') ? 'class="active"' : '' ?>><a href="<?= Url::to(['/admin/settings/create']) ?>"><?= Yii::t('easyii', 'Create') ?></a></li>
     </ul>
     <br/>
 <?php elseif($action === 'edit') : ?>

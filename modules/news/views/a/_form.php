@@ -2,6 +2,7 @@
 use dosamigos\datepicker\DatePicker;
 use yii\easyii\helpers\Image;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
@@ -15,8 +16,8 @@ $model->time = date('Y-m-d', $model->time);
 <?= $form->field($model, 'title') ?>
 <?php if($this->context->module->settings['enableThumb']) : ?>
     <?php if($model->image) : ?>
-        <img src="<?= Image::thumb(Yii::getAlias('@webroot') . $model->image, 240, 180) ?>">
-        <a href="/admin/news/a/clear-image/<?= $model->news_id ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/news', 'Clear image')?>"><?= Yii::t('easyii/news', 'Clear image')?></a>
+        <img src="<?= Yii::$app->request->baseUrl . $model->image ?>">
+        <a href="'<?= Url::to(['/admin/news/a/clear-image', 'id' => $model->news_id]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/news', 'Clear image')?>"><?= Yii::t('easyii/news', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>
@@ -26,8 +27,8 @@ $model->time = date('Y-m-d', $model->time);
 <?= $form->field($model, 'text')->widget(Redactor::className(),[
     'options' => [
         'minHeight' => 400,
-        'imageUpload' => '/admin/redactor/upload?dir=news',
-        'fileUpload' => '/admin/redactor/upload?dir=news',
+        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
+        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
         'plugins' => ['fullscreen']
     ]
 ]) ?>

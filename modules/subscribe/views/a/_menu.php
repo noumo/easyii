@@ -1,7 +1,9 @@
 <?php
+use yii\helpers\Url;
+
 $action = $this->context->action->id;
 
-$historyUrl = '/admin/subscribe/a/history';
+$historyUrl = Url::to(['/admin/subscribe/a/history']);
 if($action === 'view'){
     $returnUrl = $this->context->getReturnUrl();
     if(strpos($returnUrl, 'history') !== false){
@@ -11,10 +13,10 @@ if($action === 'view'){
 ?>
 <ul class="nav nav-pills">
     <li <?= ($action === 'index') ? 'class="active"' : '' ?>>
-        <a href="/admin/subscribe"><?= Yii::t('easyii/subscribe', 'Subscribers') ?></a>
+        <a href="<?= Url::to(['/admin/subscribe']) ?>"><?= Yii::t('easyii/subscribe', 'Subscribers') ?></a>
     </li>
     <li <?= ($action === 'create') ? 'class="active"' : '' ?>>
-        <a href="/admin/subscribe/a/create">
+        <a href="<?= Url::to(['/admin/subscribe/a/create']) ?>">
         <?= Yii::t('easyii/subscribe', 'Create subscribe') ?>
         </a>
     </li>

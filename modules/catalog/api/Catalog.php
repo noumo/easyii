@@ -3,6 +3,7 @@ namespace yii\easyii\modules\catalog\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
 use yii\easyii\widgets\Fancybox;
@@ -214,18 +215,5 @@ class Catalog extends \yii\easyii\components\API
             $temp->{$key} = $value;
         }
         return $temp;
-    }
-
-    private function notFound($id_slug)
-    {
-        if(Yii::$app->user->isGuest) {
-            return $this->createCatObject('');
-        }
-        elseif(preg_match(Category::$SLUG_PATTERN, $id_slug)){
-            return $this->createCatObject('<a href="/admin/catalog/a/create/?slug='.$id_slug.'" target="_blank">'.Yii::t('easyii/catalog/api', 'Create category').'</a>');
-        }
-        else{
-            return $this->createCatObject($this->errorText('WRONG CATEGORY IDENTIFIER'));
-        }
     }
 }

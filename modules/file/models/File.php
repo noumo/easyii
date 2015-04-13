@@ -22,9 +22,6 @@ class File extends \yii\easyii\components\ActiveRecord
             ['title', 'trim'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['slug', 'unique', 'when' => function($model){
-                return $model->slug && !self::autoSlug();
-            }],
             [['downloads', 'size'], 'integer'],
             ['time', 'default', 'value' => time()]
         ];
@@ -35,7 +32,7 @@ class File extends \yii\easyii\components\ActiveRecord
         return [
             'title' => Yii::t('easyii', 'Title'),
             'file' => Yii::t('easyii', 'File'),
-            'slug' => Yii::t('easyii', 'Slug'),
+            'slug' => Yii::t('easyii', 'Slug')
         ];
     }
 
@@ -43,7 +40,12 @@ class File extends \yii\easyii\components\ActiveRecord
     {
         return [
             SortableModel::className(),
-            'seo' => SeoBehavior::className()
+            'seo' => SeoBehavior::className(),
+            'sluggable' => [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'ensureUnique' => true
+            ]
         ];
     }
 
@@ -59,27 +61,10 @@ class File extends \yii\easyii\components\ActiveRecord
         }
     }
 
-    public function beforeValidate()
-    {
-        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
-            $this->attachBehavior('sluggable', [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
-            ]);
-        }
-        return parent::beforeValidate();
-    }
-
     public function afterDelete()
     {
         parent::afterDelete();
 
         @unlink(Yii::getAlias('@webroot').$this->file);
-    }
-
-    public static function autoSlug()
-    {
-        return Yii::$app->getModule('admin')->activeModules['file']->settings['autoSlug'];
     }
 }

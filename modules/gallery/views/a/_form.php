@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\SeoForm;
 ?>
@@ -10,8 +11,8 @@ use yii\easyii\widgets\SeoForm;
 <?= $form->field($model, 'title') ?>
 <?php if($this->context->module->settings['albumThumb']) : ?>
     <?php if($model->image) : ?>
-        <img src="<?= Yii::$app->request->baseUrl.$model->image ?>">
-        <a href="/admin/gallery/a/clear-image/<?= $model->primaryKey ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/gallery', 'Clear image')?>"><?= Yii::t('easyii/gallery', 'Clear image')?></a>
+        <img src="<?= $model->image ?>">
+        <a href="<?= Url::to(['/admin/gallery/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/gallery', 'Clear image')?>"><?= Yii::t('easyii/gallery', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>

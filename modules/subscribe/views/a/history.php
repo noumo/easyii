@@ -1,4 +1,6 @@
 <?php
+use yii\helpers\Url;
+
 $this->title = Yii::t('easyii/subscribe', 'History');
 ?>
 
@@ -22,7 +24,7 @@ $this->title = Yii::t('easyii/subscribe', 'History');
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
-                <td><a href="/admin/subscribe/a/view/<?= $item->primaryKey ?>"><?= $item->subject ?></a></td>
+                <td><a href="<?= Url::to(['/admin/subscribe/a/view', 'id' => $item->primaryKey]) ?>"><?= $item->subject ?></a></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
                 <td><?= $item->sent ?></td>
             </tr>

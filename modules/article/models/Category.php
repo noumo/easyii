@@ -28,10 +28,7 @@ class Category extends \yii\easyii\components\NSActiveRecord
             ['image', 'image'],
             ['item_count', 'integer'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
-            ['slug', 'default', 'value' => null],
-            ['slug', 'unique', 'when' => function($model){
-                return $model->slug && !self::autoSlug();
-            }],
+            ['slug', 'default', 'value' => null]
         ];
     }
 
@@ -50,23 +47,16 @@ class Category extends \yii\easyii\components\NSActiveRecord
         return [
             SortableModel::className(),
             'seoBehavior' => SeoBehavior::className(),
+            'sluggable' => [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'ensureUnique' => true
+            ],
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
             ]
         ];
-    }
-
-    public function beforeValidate()
-    {
-        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
-            $this->attachBehavior('sluggable', [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
-            ]);
-        }
-        return parent::beforeValidate();
     }
 
     public static function getTree()
@@ -134,17 +124,11 @@ class Category extends \yii\easyii\components\NSActiveRecord
     {
         parent::afterDelete();
 
-        foreach($this->getItems()->all() as $item){
+        foreach ($this->getItems()->all() as $item) {
             $item->delete();
         }
-
         if($this->image) {
             @unlink(Yii::getAlias('@webroot') . $this->image);
         }
-    }
-
-    public static function autoSlug()
-    {
-        return Yii::$app->getModule('admin')->activeModules['article']->settings['categoryAutoSlug'];
     }
 }

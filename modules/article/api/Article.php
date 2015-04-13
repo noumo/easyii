@@ -3,6 +3,7 @@ namespace yii\easyii\modules\article\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
 use yii\easyii\widgets\Colorbox;
@@ -70,7 +71,6 @@ class Article extends \yii\easyii\components\API
         }
 
         $item->updateCounters(['views' => 1]);
-
         return new ArticleObject($item);
     }
 }

@@ -7,6 +7,7 @@ use \yii\web\HttpException;
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 use yii\helpers\FileHelper;
+use yii\helpers\Url;
 
 class Upload
 {
@@ -33,7 +34,7 @@ class Upload
 
     static function getLink($fileName)
     {
-        return str_replace('\\', '/', str_replace(Yii::getAlias('@webroot'), '', $fileName));
+        return Url::base(true) . str_replace('\\', '/', str_replace(Yii::getAlias('@webroot'), '', $fileName));
     }
 
     static function getFileName($fileInstanse, $namePostfix = true)

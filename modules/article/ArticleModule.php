@@ -9,9 +9,6 @@ class ArticleModule extends \yii\easyii\components\Module
 
         'enableShort' => true,
         'shortMaxLength' => 255,
-
-        'categoryAutoSlug' => true,
-        'itemAutoSlug' => true,
     ];
 
     public static $installConfig = [

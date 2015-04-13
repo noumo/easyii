@@ -33,7 +33,7 @@ class File extends \yii\easyii\components\API
     public function api_get($id_slug)
     {
         if(!isset($this->_files[$id_slug])) {
-            $this->_files[$id_slug] = $this->findFiles($id_slug);
+            $this->_files[$id_slug] = $this->findFile($id_slug);
         }
         return $this->_files[$id_slug];
     }
@@ -67,10 +67,10 @@ class File extends \yii\easyii\components\API
         return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
     }
 
-    private function findFiles($id_slug)
+    private function findFile($id_slug)
     {
-        $files = FileModel::find()->where(['or', 'file_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
+        $file = FileModel::find()->where(['or', 'file_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
 
-        return $files ? new FileObject($files) : null;
+        return $file ? new FileObject($file) : null;
     }
 }

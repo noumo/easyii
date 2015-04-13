@@ -4,9 +4,9 @@ namespace yii\easyii\modules\text\api;
 use Yii;
 use yii\easyii\components\API;
 use yii\easyii\helpers\Data;
+use yii\helpers\Url;
 use yii\easyii\modules\text\models\Text as TextModel;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 class Text extends API
 {

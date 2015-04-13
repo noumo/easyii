@@ -15,7 +15,7 @@ class AdminsController extends \yii\easyii\components\Controller
         $data = new ActiveDataProvider([
             'query' => Admin::find()->desc(),
         ]);
-        Yii::$app->user->setReturnUrl('/admin/admins');
+        Yii::$app->user->setReturnUrl(['/admin/admins']);
 
         return $this->render('index', [
             'data' => $data
@@ -35,7 +35,7 @@ class AdminsController extends \yii\easyii\components\Controller
             else{
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Admin created'));
-                    return $this->redirect('/admin/admins');
+                    return $this->redirect(['/admin/admins']);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -56,7 +56,7 @@ class AdminsController extends \yii\easyii\components\Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect('/admin/admins');
+            return $this->redirect(['/admin/admins']);
         }
 
         if ($model->load(Yii::$app->request->post())) {

@@ -47,7 +47,7 @@ class InstallController extends \yii\web\Controller
             Yii::$app->cache->flush();
             Yii::$app->session->setFlash('root_password', $installForm->root_password);
 
-            return $this->redirect('/admin/install/finish');
+            return $this->redirect(['/admin/install/finish']);
         }
         else {
             $installForm->robot_email = 'noreply@'.Yii::$app->request->serverName;
@@ -68,7 +68,7 @@ class InstallController extends \yii\web\Controller
                 'password' => $root_password,
             ]);
             if($loginForm->login()){
-                return $this->redirect('/admin/');
+                return $this->redirect(['/admin/']);
             }
         }
 

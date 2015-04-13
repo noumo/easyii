@@ -6,7 +6,7 @@ class NewsModule extends \yii\easyii\components\Module
     public $settings = [
         'enableThumb' => true,
         'enableShort' => true,
-        'shortMaxLength' => 256
+        'shortMaxLength' => 256,
     ];
 
     public static $installConfig = [

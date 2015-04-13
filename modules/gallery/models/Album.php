@@ -36,9 +36,6 @@ class Album extends \yii\easyii\components\ActiveRecord
             ['image', 'image'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['slug', 'unique', 'when' => function($model){
-                return $model->slug && !self::autoSlug();
-            }],
         ];
     }
 
@@ -56,19 +53,12 @@ class Album extends \yii\easyii\components\ActiveRecord
         return [
             SortableModel::className(),
             'seo' => SeoBehavior::className(),
-        ];
-    }
-
-    public function beforeValidate()
-    {
-        if(self::autoSlug() && (!$this->isNewRecord || ($this->isNewRecord && $this->slug == ''))){
-            $this->attachBehavior('sluggable', [
+            'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
                 'ensureUnique' => true
-            ]);
-        }
-        return parent::beforeValidate();
+            ]
+        ];
     }
 
     public function getPhotos()
@@ -87,10 +77,5 @@ class Album extends \yii\easyii\components\ActiveRecord
         if($this->image){
             @unlink(Yii::getAlias('@webroot').$this->image);
         }
-    }
-
-    public static function autoSlug()
-    {
-        return Yii::$app->getModule('admin')->activeModules['gallery']->settings['autoSlug'];
     }
 }

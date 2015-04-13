@@ -1,13 +1,15 @@
 <?php
+use yii\helpers\Url;
+
 $action = $this->context->action->id;
 
 $backTo = null;
-$indexUrl = '/admin/guestbook';
-$noanswerUrl = '/admin/guestbook/a/noanswer';
+$indexUrl = Url::to(['/admin/guestbook']);
+$noanswerUrl = Url::to(['/admin/guestbook/a/noanswer']);
 
 if($action === 'view')
 {
-    $returnUrl = $this->context->getReturnUrl('/admin/guestbook');
+    $returnUrl = $this->context->getReturnUrl(['/admin/guestbook']);
 
     if(strpos($returnUrl, 'noanswer') !== false){
         $backTo = 'noanswer';
@@ -40,9 +42,9 @@ if($action === 'view')
     </li>
     <li class="pull-right">
         <?php if($action === 'view') : ?>
-            <a href="/admin/guestbook/a/setnew/<?= Yii::$app->request->get('id') ?>" class="text-warning"><span class="glyphicon glyphicon-eye-close"></span> <?= Yii::t('easyii/guestbook', 'Mark as new') ?></a>
+            <a href="<?= Url::to(['/admin/guestbook/a/setnew', 'id' => Yii::$app->request->get('id')]) ?>" class="text-warning"><span class="glyphicon glyphicon-eye-close"></span> <?= Yii::t('easyii/guestbook', 'Mark as new') ?></a>
         <?php else : ?>
-            <a href="/admin/guestbook/a/viewall" class="text-warning"><span class="glyphicon glyphicon-eye-open"></span> <?= Yii::t('easyii/guestbook', 'Mark all as viewed') ?></a>
+            <a href="<?= Url::to(['/admin/guestbook/a/viewall']) ?>" class="text-warning"><span class="glyphicon glyphicon-eye-open"></span> <?= Yii::t('easyii/guestbook', 'Mark all as viewed') ?></a>
         <?php endif; ?>
     </li>
 </ul>

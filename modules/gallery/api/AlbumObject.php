@@ -8,7 +8,7 @@ use yii\easyii\modules\gallery\models\Album;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
-class CategoryObject extends \yii\easyii\components\ApiObject
+class AlbumObject extends \yii\easyii\components\ApiObject
 {
     public $slug;
     public $image;

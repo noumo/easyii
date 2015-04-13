@@ -5,6 +5,7 @@ use Yii;
 use yii\web\UploadedFile;
 use yii\web\HttpException;
 use yii\helpers\FileHelper;
+use yii\helpers\Url;
 use yii\easyii\helpers\GD;
 
 class Image
@@ -26,6 +27,8 @@ class Image
 
     static function createThumbnail($fileName, $width, $height = null, $crop = true)
     {
+        $fileName = str_replace(Url::base(true), '', $fileName);
+        
         $webRoot = Yii::getAlias('@webroot');
         if(!strstr($fileName, $webRoot)){
             $fileName = $webRoot . $fileName;
