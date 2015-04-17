@@ -25,19 +25,25 @@ class Article extends \yii\easyii\components\API
         return $this->_cats[$id_slug];
     }
 
-    public function api_cats()
+    public function api_tree()
     {
-        return Category::getTree();
+        return Category::tree();
     }
 
-    public function api_last($limit = 1)
+    public function api_last($limit = 1, $where = null)
     {
         if($limit === 1 && $this->_last){
             return $this->_last;
         }
 
         $result = [];
-        foreach(Item::find()->status(Item::STATUS_ON)->sort()->limit($limit)->all() as $item){
+
+        $query = Item::find()->with('seo')->status(Item::STATUS_ON)->sort()->limit($limit);
+        if($where){
+            $query->where($where);
+        }
+
+        foreach($query->all() as $item){
             $result[] = new ArticleObject($item);
         }
 

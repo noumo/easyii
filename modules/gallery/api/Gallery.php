@@ -22,9 +22,15 @@ class Gallery extends \yii\easyii\components\API
         if (!$this->_items) {
             $this->_items = [];
 
+            $query = Album::find()->with('seo')->status(Album::STATUS_ON)->sort();
+
+            if(!empty($options['where'])){
+                $query->where($options['where']);
+            }
+
             $this->_adp = new ActiveDataProvider([
-                'query' => Album::find()->with('seo')->orderBy('time DESC'),
-                'pagination' => $options
+                'query' => $query,
+                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
             ]);
 
             foreach ($this->_adp->models as $model) {
@@ -42,14 +48,19 @@ class Gallery extends \yii\easyii\components\API
         return $this->_albums[$id_slug];
     }
 
-    public function api_last($limit = 1)
+    public function api_last($limit = 1, $where = null)
     {
         if ($limit === 1 && $this->_last) {
             return $this->_last;
         }
 
         $result = [];
-        foreach (Album::find()->with('seo')->sort()->limit($limit)->all() as $item) {
+
+        $query = Album::find()->with('seo')->sort()->limit($limit);
+        if($where){
+            $query->where($where);
+        }
+        foreach($query->all() as $item) {
             $result[] = new AlbumObject($item);
         }
 

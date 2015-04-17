@@ -35,9 +35,15 @@ class AlbumObject extends \yii\easyii\components\ApiObject
         if(!$this->_photos){
             $this->_photos = [];
 
+            $query = Photo::find()->where(['model' => Album::className(), 'item_id' => $this->id])->sort();
+
+            if(!empty($options['where'])){
+                $query->where($options['where']);
+            }
+
             $this->_adp = new ActiveDataProvider([
-                'query' => Photo::find()->where(['model' => Album::className(), 'item_id' => $this->id])->sort(),
-                'pagination' => $options
+                'query' => $query,
+                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
             ]);
 
             foreach($this->_adp->models as $model){
