@@ -31,7 +31,7 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'title' => Yii::t('easyii/catalog', 'Title'),
+            'title' => Yii::t('easyii', 'Title'),
             'image' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
             'slug' => Yii::t('easyii', 'Slug'),
