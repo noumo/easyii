@@ -25,7 +25,7 @@ class Guestbook extends \yii\easyii\components\API
             $this->_items = [];
 
             $this->_adp = new ActiveDataProvider([
-                'query' => GuestbookModel::find()->orderBy('time DESC'),
+                'query' => GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->orderBy('time DESC'),
                 'pagination' => $options
             ]);
 
@@ -91,7 +91,7 @@ class Guestbook extends \yii\easyii\components\API
         return ob_get_clean();
     }
 
-    public function api_create($data)
+    public function api_save($data)
     {
         $model = new GuestbookModel($data);
         if ($model->save()) {

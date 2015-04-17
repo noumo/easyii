@@ -1,4 +1,5 @@
 <?php
+use yii\easyii\helpers\Image;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -14,7 +15,7 @@ $settings = $this->context->module->settings;
 <?= $form->field($model, 'title') ?>
 <?php if($settings['itemThumb']) : ?>
     <?php if($model->image) : ?>
-        <img src="<?= $model->image ?>">
+        <img src="<?= Image::thumb(Yii::getAlias('@webroot') . $model->image, 240) ?>">
         <a href="<?= Url::to(['/admin/catalog/items/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/catalog', 'Clear image')?>"><?= Yii::t('easyii/catalog', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>

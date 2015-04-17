@@ -32,7 +32,7 @@ $settings = $this->context->module->settings;
 
 <?php if($settings['categoryThumb']) : ?>
     <?php if($model->image) : ?>
-        <img src="<?= $model->image ?>">
+        <img src="<?= Image::thumb(Yii::getAlias('@webroot') . $model->image, 240) ?>">
         <a href="<?= Url::to(['/admin/article/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>

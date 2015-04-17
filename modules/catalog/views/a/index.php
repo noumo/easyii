@@ -11,7 +11,7 @@ function renderNode($node)
     $html .= '<td width="50">'.$node['category_id'].'</td>';
     $html .= '
         <td style="padding-left: '.($node['depth']*20).'px;">
-            '.(sizeof($node['children']) ? '<i class="caret"></i>' : '').' <a href="' . Url::to(['/admin/catalog/items', 'id' => $node['category_id']]) . '">'.$node['title'].'</a>
+            '.(sizeof($node['children']) ? '<i class="caret"></i> <span>'.$node['title'].'</span>' : '<a href="' . Url::to(['/admin/catalog/items', 'id' => $node['category_id']]) . '">'.$node['title'].'</a>').'
         </td>';
     $html .= '
         <td width="120" class="text-right">
@@ -24,7 +24,7 @@ function renderNode($node)
                     <li><a href="' . Url::to(['/admin/catalog/a/up', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-up font-12"></i> '.Yii::t('easyii', 'Move up').'</a></li>
                     <li><a href="' . Url::to(['/admin/catalog/a/down', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-down font-12"></i> '.Yii::t('easyii', 'Move down').'</a></li>
                     <li role="presentation" class="divider"></li>
-                    <li><a href="' . Url::to(['/admin/catalog/a/delete', 'id' => $node['category_id']]) . '" class="confirm-delete" title="'.Yii::t('easyii', 'Delete item').'"><i class="glyphicon glyphicon-remove font-12"></i> '.Yii::t('easyii', 'Delete').'</a></li>
+                    <li><a href="' . Url::to(['/admin/catalog/a/delete', 'id' => $node['category_id']]) . '" class="confirm-delete" data-reload="1" title="'.Yii::t('easyii', 'Delete item').'"><i class="glyphicon glyphicon-remove font-12"></i> '.Yii::t('easyii', 'Delete').'</a></li>
                 </ul>
             </div>
         </td>

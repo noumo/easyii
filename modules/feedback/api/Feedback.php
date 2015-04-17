@@ -47,7 +47,7 @@ class Feedback extends \yii\easyii\components\API
         return ob_get_clean();
     }
 
-    public function api_create($data)
+    public function api_save($data)
     {
         $model = new FeedbackModel($data);
         if($model->save()){

@@ -5,6 +5,9 @@ $(function(){
         var title = button.attr('title');
 
         if(confirm(title ? title+'?' : 'Confirm the deletion')){
+            if(button.data('reload')){
+                return true;
+            }
             $.getJSON(button.attr('href'), function(response){
                 button.removeClass('disabled');
                 if(response.result === 'success'){

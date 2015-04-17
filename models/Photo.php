@@ -37,6 +37,5 @@ class Photo extends \yii\easyii\components\ActiveRecord
         parent::afterDelete();
 
         @unlink(Yii::getAlias('@webroot').$this->image);
-        @unlink(Yii::getAlias('@webroot').$this->thumb);
     }
 }

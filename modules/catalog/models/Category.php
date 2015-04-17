@@ -3,14 +3,18 @@ namespace yii\easyii\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\easyii\helpers\Data;
 
 class Category extends \yii\easyii\components\ActiveRecordNS
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
+    const TREE_CACHE_KEY = 'easyii_catalog_tree';
+    const FLAT_CACHE_KEY = 'easyii_catalog_flat';
 
     static $fieldTypes = [
         'string' => 'String',
@@ -51,6 +55,10 @@ class Category extends \yii\easyii\components\ActiveRecordNS
     {
         return [
             SortableModel::className(),
+            'cacheflush' => [
+                'class' => CacheFlush::className(),
+                'key' => [self::TREE_CACHE_KEY, self::FLAT_CACHE_KEY]
+            ],
             'seo' => SeoBehavior::className(),
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
@@ -104,5 +112,19 @@ class Category extends \yii\easyii\components\ActiveRecordNS
         if($this->image) {
             @unlink(Yii::getAlias('@webroot') . $this->image);
         }
+    }
+
+    public static function tree()
+    {
+        return Data::cache(self::TREE_CACHE_KEY, 3600, function(){
+            return self::getTree();
+        });
+    }
+
+    public static function flat()
+    {
+        return Data::cache(self::FLAT_CACHE_KEY, 3600, function(){
+            return self::getFlat();
+        });
     }
 }

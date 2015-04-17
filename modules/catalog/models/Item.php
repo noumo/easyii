@@ -57,7 +57,14 @@ class Item extends \yii\easyii\components\ActiveRecord
             if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
                 $this->data = new \stdClass();
             }
+
+            $this->search = '';
+            foreach($this->data as $key => $value){
+                $this->search .= $key . '#' . (is_array($value) ? implode(',', $value) : $value) . "\n";
+            }
+
             $this->data = json_encode($this->data);
+
             return true;
         } else {
             return false;

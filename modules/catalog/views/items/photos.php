@@ -2,7 +2,6 @@
 use yii\easyii\widgets\Photos;
 
 $this->title = Yii::t('easyii', 'Photos') . ' ' . $model->title;
-$moduleSettings = $this->context->module->settings;
 ?>
 
 <?= $this->render('_menu', ['category' => $model->category]) ?>

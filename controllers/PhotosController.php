@@ -40,6 +40,7 @@ class PhotosController extends Controller
 
         if($photo->image && $photo->validate(['image'])){
             $photo->image = Image::upload($photo->image, 'photos', Photo::PHOTO_MAX_WIDTH);
+
             if($photo->image){
                 if($photo->save()){
                     $success = [

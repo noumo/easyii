@@ -87,7 +87,7 @@ class Gallery extends \yii\easyii\components\API
 
     private function findAlbum($id_slug)
     {
-        $album = Album::find()->where(['or', 'file_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
+        $album = Album::find()->where(['or', 'album_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
 
         return $album ? new AlbumObject($album) : null;
     }

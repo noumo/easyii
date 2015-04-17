@@ -27,7 +27,13 @@ class CacheFlush extends \yii\base\Behavior
     public function flush()
     {
         if($this->key) {
-            Yii::$app->cache->delete($this->key);
+            if(is_array($this->key)){
+                foreach($this->key as $key){
+                    Yii::$app->cache->delete($key);
+                }
+            } else {
+                Yii::$app->cache->delete($this->key);
+            }
         }
         else{
             Yii::$app->cache->flush();

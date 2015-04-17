@@ -16,7 +16,7 @@ $model->time = date('Y-m-d', $model->time);
 <?= $form->field($model, 'title') ?>
 <?php if($this->context->module->settings['enableThumb']) : ?>
     <?php if($model->image) : ?>
-        <img src="<?= Yii::$app->request->baseUrl . $model->image ?>">
+        <img src="<?= Image::thumb(Yii::getAlias('@webroot') . $model->image, 240) ?>">
         <a href="'<?= Url::to(['/admin/news/a/clear-image', 'id' => $model->news_id]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/news', 'Clear image')?>"><?= Yii::t('easyii/news', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
