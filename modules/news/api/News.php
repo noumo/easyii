@@ -19,10 +19,16 @@ class News extends \yii\easyii\components\API
     {
         if(!$this->_items){
             $this->_items = [];
+            
+            $query = NewsModel::find()->with('seo')->status(NewsModel::STATUS_ON)->orderBy('time DESC');
+            
+            if(!empty($options['where'])){
+                $query->where($options['where']);
+            }
 
             $this->_adp = new ActiveDataProvider([
-                'query' => NewsModel::find()->with('seo')->orderBy('time DESC'),
-                'pagination' => $options
+                'query' => $query,
+                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
             ]);
 
             foreach($this->_adp->models as $model){

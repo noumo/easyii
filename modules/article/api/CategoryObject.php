@@ -34,9 +34,15 @@ class CategoryObject extends \yii\easyii\components\ApiObject
         if(!$this->_items){
             $this->_items = [];
 
+            $query = Item::find()->with('seo')->where(['category_id' => $this->id])->sort();
+
+            if(!empty($options['where'])){
+                $query->andWhere($options['where']);
+            }
+
             $this->_adp = new ActiveDataProvider([
-                'query' => Item::find()->with('seo')->where(['category_id' => $this->id])->sort(),
-                'pagination' => $options
+                'query' => $query,
+                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
             ]);
 
             foreach($this->_adp->models as $model){
