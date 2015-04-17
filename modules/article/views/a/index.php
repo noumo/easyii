@@ -11,7 +11,7 @@ function renderNode($node)
     $html .= '<td width="30">'.$node['category_id'].'</td>';
     $html .= '
         <td style="padding-left: '.($node['depth']*20).'px;">
-            '.(sizeof($node['children']) ? '<i class="caret"></i>' : '').' <a href="' . Url::to(['/admin/article/a/items', 'id' => $node['category_id']]) . '">'.$node['title'].'</a>
+            '.(sizeof($node['children']) ? '<i class="caret"></i>' : '').' <a href="' . Url::to(['/admin/article/items', 'id' => $node['category_id']]) . '">'.$node['title'].'</a>
         </td>';
     $html .= '
         <td width="120" class="text-right">
