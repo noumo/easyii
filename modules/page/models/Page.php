@@ -14,7 +14,7 @@ class Page extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['title','text'], 'required'],
+            ['title', 'required'],
             [['title', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
