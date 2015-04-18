@@ -78,6 +78,7 @@ class News extends \yii\easyii\components\API
     private function findNews($id_slug)
     {
         $news = NewsModel::find()->where(['or', 'news_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
+        $news->updateCounters(['views' => 1]);
 
         return $news ? new NewsObject($news) : null;
     }
