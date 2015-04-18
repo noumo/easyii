@@ -196,7 +196,11 @@ class ModulesController extends \yii\easyii\components\Controller
                 //Replacing namespace
                 foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($newModuleFolder)) as $file => $object){
                     if(!$object->isDir()){
-                        file_put_contents($file, str_replace($oldNameSpace, $newNameSpace, file_get_contents($file)));
+                        $fileContent = file_get_contents($file);
+                        $fileContent = str_replace($oldNameSpace, $newNameSpace, $fileContent);
+                        $fileContent = str_replace("Yii::t('easyii/".$module->name."'", "Yii::t('easyii/".$formModel->name."'", $fileContent);
+
+                        file_put_contents($file, $fileContent);
                     }
                 }
 
@@ -224,17 +228,12 @@ class ModulesController extends \yii\easyii\components\Controller
                     file_put_contents($modelFile, str_replace($oldTableName, $newTableName, file_get_contents($modelFile)));
                 }
 
-                $language = substr(Yii::$app->language, 0, 2);
-                $newFullClass = $newNameSpace . '\\' . $newModuleClass;
-                $moduleConfig = $newFullClass::$installConfig;
-
                 $newModule = new Module([
                     'name' => $formModel->name,
-                    'class' => $newFullClass,
-                    'title' => !empty($moduleConfig['title'][$language]) ? $moduleConfig['title'][$language] : $moduleConfig['title']['en'],
-                    'icon' => $moduleConfig['icon'],
-                    'settings' => Yii::createObject($newFullClass, [$newFullClass])->settings,
-                    'order_num' => $moduleConfig['order_num'],
+                    'class' => $newNameSpace . '\\' . $newModuleClass,
+                    'title' => $formModel->title,
+                    'icon' => $module->icon,
+                    'settings' => $module->settings,
                     'status' => Module::STATUS_ON,
                 ]);
 
@@ -251,6 +250,7 @@ class ModulesController extends \yii\easyii\components\Controller
 
 
         return $this->render('copy', [
+            'model' => $module,
             'formModel' => $formModel
         ]);
     }
