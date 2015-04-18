@@ -104,6 +104,7 @@ return [
     'Current version' => 'Текущая версия',
     'Flush cache' => 'Сбросить кэш',
     'Clear assets' => 'Очистить assets',
+    'Assets cleared' => 'Assets очищены',
     'Cache flushed' => 'Кэш успешно сброшен',
     'Logs' => 'Логи',
     'Seo texts' => 'Seo тексты',
