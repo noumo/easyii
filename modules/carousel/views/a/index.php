@@ -13,7 +13,7 @@ $this->title = Yii::t('easyii/carousel', 'Carousel');
         <thead>
             <tr>
                 <?php if(IS_ROOT) : ?>
-                    <th width="30">#</th>
+                    <th width="50">#</th>
                 <?php endif; ?>
                 <th><?= Yii::t('easyii', 'Image') ?></th>
                 <th width="100"><?= Yii::t('easyii', 'Status') ?></th>

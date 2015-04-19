@@ -11,7 +11,7 @@ $this->title = Yii::t('easyii/subscribe', 'Subscribe');
         <thead>
             <tr>
                 <?php if(IS_ROOT) : ?>
-                    <th width="30">#</th>
+                    <th width="50">#</th>
                 <?php endif; ?>
                 <th>E-mail</th>
                 <th width="150">IP</th>

@@ -14,7 +14,7 @@ $this->title = Yii::t('easyii/faq', 'FAQ');
         <thead>
             <tr>
                 <?php if(IS_ROOT) : ?>
-                    <th width="30">#</th>
+                    <th width="50">#</th>
                 <?php endif; ?>
                 <th><?= Yii::t('easyii/faq', 'Question')?></th>
                 <th width="100"><?= Yii::t('easyii', 'Status') ?></th>

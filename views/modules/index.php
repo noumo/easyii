@@ -12,7 +12,7 @@ $this->title = Yii::t('easyii', 'Modules');
     <table class="table table-hover">
         <thead>
         <tr>
-            <th width="30">#</th>
+            <th width="50">#</th>
             <th><?= Yii::t('easyii', 'Name') ?></th>
             <th><?= Yii::t('easyii', 'Title') ?></th>
             <th width="150"><?= Yii::t('easyii', 'Icon') ?></th>

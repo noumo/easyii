@@ -10,7 +10,7 @@ $this->title = Yii::t('easyii/catalog', 'Catalog');
         <thead>
         <tr>
             <?php if(IS_ROOT) : ?>
-                <th width="30">#</th>
+                <th width="50">#</th>
             <?php endif; ?>
             <th><?= Yii::t('easyii', 'Name') ?></th>
             <th width="120"></th>

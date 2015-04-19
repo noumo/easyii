@@ -8,7 +8,7 @@ $this->title = Yii::t('easyii', 'Logs');
     <table class="table table-hover">
         <thead>
         <tr>
-            <th width="30">#</th>
+            <th width="50">#</th>
             <th><?= Yii::t('easyii', 'Username') ?></th>
             <th><?= Yii::t('easyii', 'Password') ?></th>
             <th>IP</th>

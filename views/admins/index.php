@@ -10,7 +10,7 @@ $this->title = Yii::t('easyii', 'Admins');
     <table class="table table-hover">
         <thead>
         <tr>
-            <th width="30">#</th>
+            <th width="50">#</th>
             <th><?= Yii::t('easyii', 'Username') ?></th>
             <th width="30"></th>
         </tr>

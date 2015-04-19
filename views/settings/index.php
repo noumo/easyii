@@ -12,7 +12,7 @@ $this->title = Yii::t('easyii', 'Settings');
         <thead>
         <tr>
             <?php if(IS_ROOT) : ?>
-                <th width="30">#</th>
+                <th width="50">#</th>
                 <th><?= Yii::t('easyii', 'Name') ?></th>
             <?php endif; ?>
             <th><?= Yii::t('easyii', 'Title') ?></th>

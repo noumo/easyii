@@ -13,7 +13,7 @@ $this->title = Yii::t('easyii/feedback', 'Feedback');
         <thead>
             <tr>
                 <?php if(IS_ROOT) : ?>
-                    <th width="30">#</th>
+                    <th width="50">#</th>
                 <?php endif; ?>
                 <th><?= Yii::t('easyii', $this->context->module->settings['enableTitle'] ? 'Title' : 'Text') ?></th>
                 <th width="150"><?= Yii::t('easyii', 'Date') ?></th>

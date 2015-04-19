@@ -45,7 +45,7 @@ $photoTemplate = str_replace('>\\', '>', $photoTemplate);
     <thead>
     <tr>
         <?php if(IS_ROOT) : ?>
-        <th width="30">#</th>
+        <th width="50">#</th>
         <?php endif; ?>
         <th width="150"><?= Yii::t('easyii', 'Image') ?></th>
         <th><?= Yii::t('easyii', 'Description') ?></th>

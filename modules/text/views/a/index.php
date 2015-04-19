@@ -11,7 +11,7 @@ $this->title = Yii::t('easyii/text', 'Texts');
         <thead>
             <tr>
                 <?php if(IS_ROOT) : ?>
-                    <th width="30">#</th>
+                    <th width="50">#</th>
                 <?php endif; ?>
                 <th><?= Yii::t('easyii', 'Text') ?></th>
                 <?php if(IS_ROOT) : ?>
