@@ -2,125 +2,16 @@
 namespace yii\easyii\modules\catalog\controllers;
 
 use Yii;
-use yii\widgets\ActiveForm;
-use yii\web\UploadedFile;
-use yii\easyii\components\Controller;
+use yii\easyii\components\CategoryController;
 use yii\easyii\modules\catalog\models\Category;
-use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\SortableControllerNS;
-use yii\easyii\behaviors\StatusController;
 
 
-class AController extends Controller
+class AController extends CategoryController
 {
-    public $rootActions = ['create', 'delete', 'fields'];
+    public $categoryClass = 'yii\easyii\modules\catalog\models\Category';
+    public $moduleName = 'catalog';
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => StatusController::className(),
-                'model' => Category::className()
-            ],
-            [
-                'class' => SortableControllerNS::className(),
-                'model' => Category::className()
-            ]
-        ];
-    }
-
-    public function actionIndex()
-    {
-        $tree = Category::getTree();
-        return $this->render('index', [
-            'tree' => $tree
-        ]);
-    }
-
-    public function actionCreate($parent = null)
-    {
-        $model = new Category;
-
-        if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
-            else{
-                if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'catalog');
-                    }else{
-                        $model->image = '';
-                    }
-                }
-
-                $model->status = Category::STATUS_ON;
-
-                $parent = Yii::$app->request->post('parent', null);
-                if($parent && ($parentCategory = Category::findOne((int)$parent))){
-                    $model->appendTo($parentCategory);
-                    $model->order_num = $parentCategory->order_num;
-                    $model->fields = $parentCategory->fields;
-                } else {
-                    $model->makeRoot();
-                }
-
-                if($model->save()){
-                    $action = $model->depth === 0 ? 'a/fields' : '';
-                    $this->flash('success', Yii::t('easyii/catalog', 'Category created'));
-                    return $this->redirect(['/admin/catalog/'.$action, 'id' => $model->primaryKey]);
-                }
-                else{
-                    $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                    return $this->refresh();
-                }
-            }
-        }
-        else {
-            return $this->render('create', [
-                'model' => $model,
-                'parent' => $parent
-            ]);
-        }
-    }
-
-    public function actionEdit($id)
-    {
-        if(!($model = Category::findOne($id))){
-            return $this->redirect(['/admin/catalog']);
-        }
-
-        if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
-            else{
-                if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'catalog');
-                    }else{
-                        $model->image = $model->oldAttributes['image'];
-                    }
-                }
-                if($model->save()){
-                    $this->flash('success', Yii::t('easyii/catalog', 'Category updated'));
-                }
-                else{
-                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-                }
-                return $this->refresh();
-            }
-        }
-        else {
-            return $this->render('edit', [
-                'model' => $model
-            ]);
-        }
-    }
+    public $rootActions = ['fields'];
 
     public function actionFields($id)
     {
@@ -186,52 +77,10 @@ class AController extends Controller
         }
     }
 
-    public function actionClearImage($id)
+    public function actionEdit($id)
     {
-        $model = Category::findOne($id);
+        $this->view->params['submenu'] = '@easyii/modules/catalog/views/'.$this->id.'/_submenu';
 
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image){
-            $model->image = '';
-            if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->image);
-                $this->flash('success', Yii::t('easyii/catalog', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Category::findOne($id))){
-            $model->deleteWithChildren();
-        } else{
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/catalog', 'Category deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Category::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Category::STATUS_OFF);
+        return parent::actionEdit($id);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 use yii\easyii\helpers\Image;
-use yii\easyii\modules\article\models\Category;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\SeoForm;
 
+$class = $this->context->categoryClass;
 $settings = $this->context->module->settings;
 ?>
 <?php $form = ActiveForm::begin([
@@ -19,7 +19,7 @@ $settings = $this->context->module->settings;
         <label for="category-parent" class="control-label"><?= Yii::t('easyii', 'Parent category') ?></label>
         <select class="form-control" id="category-parent" name="parent">
             <option value="" class="smooth"><?= Yii::t('easyii', 'No') ?></option>
-            <?php foreach(Category::find()->sort()->asArray()->all() as $node) : ?>
+            <?php foreach($class::find()->sort()->asArray()->all() as $node) : ?>
                 <option
                     value="<?= $node['category_id'] ?>"
                     <?php if($parent == $node['category_id']) echo 'SELECTED' ?>
@@ -33,7 +33,7 @@ $settings = $this->context->module->settings;
 <?php if($settings['categoryThumb']) : ?>
     <?php if($model->image) : ?>
         <img src="<?= Image::thumb(Yii::getAlias('@webroot') . $model->image, 240) ?>">
-        <a href="<?= Url::to(['/admin/article/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>
+        <a href="<?= Url::to(['/admin/'.$this->context->moduleName.'/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>

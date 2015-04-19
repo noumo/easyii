@@ -27,7 +27,7 @@ var fieldTemplate = \'\
 ', \yii\web\View::POS_HEAD);
 
 ?>
-<?= $this->render('_menu') ?>
+<?= $this->render('@easyii/views/category/_menu') ?>
 <?= $this->render('_submenu', ['model' => $model]) ?>
 <br>
 
