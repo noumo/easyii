@@ -40,7 +40,7 @@ class Gallery extends \yii\easyii\components\API
         return $this->_items;
     }
 
-    public function api_get($id_slug)
+    public function api_cat($id_slug)
     {
         if (!isset($this->_albums[$id_slug])) {
             $this->_albums[$id_slug] = $this->findAlbum($id_slug);
