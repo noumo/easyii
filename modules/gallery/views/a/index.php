@@ -33,7 +33,7 @@ $this->title = Yii::t('easyii/gallery', 'Gallery');
                     <?= Html::checkbox('', $item->status == Album::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => '/admin/gallery/a/'
+                        'data-link' => '/admin/gallery/a'
                     ]) ?>
                 </td>
                 <td class="control">
