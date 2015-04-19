@@ -53,6 +53,7 @@ return [
     'Delete' => 'Удалить',
     'Turn On' => 'Включить',
     'Turn Off' => 'Выключить',
+    'Status successfully changed' => 'Статус успешно изменен',
     'Add subcategory' => 'Добавить подкатегорию',
     'Anti-spam check' => 'Проверка на спам',
     'Actions' => 'Действия',
@@ -109,4 +110,17 @@ return [
     'Cache flushed' => 'Кэш успешно сброшен',
     'Logs' => 'Логи',
     'Seo texts' => 'Seo тексты',
+
+    'Categories' => 'Категории',
+    'Create category' => 'Создать категорию',
+    'Edit category' => 'Редактировать категорию',
+    'Category created' => 'Категория успешно создана',
+    'Category updated' => 'Категория обновлена',
+    'Category deleted' => 'Категория удалена',
+    'Category image cleared' => 'Изображение очищено',
+
+    'Clear image' => 'Очистить изображение',
+    'Image cleared' => 'Изображение очищено',
+
+
 ];

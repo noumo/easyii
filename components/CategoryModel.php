@@ -41,7 +41,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             SortableModel::className(),
             'cacheflush' => [
                 'class' => CacheFlush::className(),
-                'key' => [self::tableName().'_tree', self::tableName().'_flat']
+                'key' => [static::tableName().'_tree', static::tableName().'_flat']
             ],
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
@@ -84,14 +84,14 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
     public static function tree()
     {
-        return Data::cache(self::tableName().'_tree', 3600, function(){
+        return Data::cache(static::tableName().'_tree', 3600, function(){
             return self::generateTree();
         });
     }
 
     public static function flat()
     {
-        return Data::cache(self::tableName().'_flat', 3600, function(){
+        return Data::cache(static::tableName().'_flat', 3600, function(){
             return self::generateFlat();
         });
     }
@@ -108,7 +108,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
             foreach ($collection as $node) {
                 $item = $node;
-                unset($item['lft'], $item['rgt'], $item['status'], $item['order_num']);
+                unset($item['lft'], $item['rgt'], $item['order_num']);
                 $item['children'] = array();
 
                 // Number of stack items

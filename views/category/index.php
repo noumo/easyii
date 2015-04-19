@@ -1,4 +1,5 @@
 <?php
+use yii\easyii\components\CategoryModel;
 use yii\helpers\Url;
 
 \yii\bootstrap\BootstrapPluginAsset::register($this);
@@ -11,10 +12,19 @@ function renderNode($node, $baseUrl)
 {
     $html = '<tr>';
     $html .= '<td width="50">'.$node['category_id'].'</td>';
-    $html .= '
-        <td style="padding-left: '.($node['depth']*20).'px;">
-            '.(sizeof($node['children']) ? '<i class="caret"></i>' : '').' <a href="' . Url::to([$baseUrl.'/items', 'id' => $node['category_id']]) . '">'.$node['title'].'</a>
-        </td>';
+    $html .= '<td style="padding-left: '.($node['depth']*20).'px;">';
+    if(sizeof($node['children'])){
+        $html .= '<i class="caret"></i> ';
+    }
+    $html .= '<a href="' . Url::to([$baseUrl.'/items', 'id' => $node['category_id']]) . '" ' . (($node['status'] == CategoryModel::STATUS_OFF) ? 'class="text-muted"' : '') . '>'.$node['title'].'</a>';
+    $html .= '</td>';
+
+    if($node['status'] == CategoryModel::STATUS_ON){
+        $switchButton = '<li><a href="' . Url::to([$baseUrl.'/a/off', 'id' => $node['category_id']]) . '" title="'.Yii::t('easyii', 'Turn Off').'"><i class="glyphicon glyphicon-eye-close font-12"></i> '.Yii::t('easyii', 'Turn Off').'</a></li>';
+    } else {
+        $switchButton = '<li><a href="' . Url::to([$baseUrl.'/a/on', 'id' => $node['category_id']]) . '" title="'.Yii::t('easyii', 'Turn On').'"><i class="glyphicon glyphicon-eye-open font-12"></i> '.Yii::t('easyii', 'Turn On').'</a></li>';
+    }
+
     $html .= '
         <td width="120" class="text-right">
             <div class="dropdown actions">
@@ -26,6 +36,7 @@ function renderNode($node, $baseUrl)
                     <li><a href="' . Url::to([$baseUrl.'/a/up', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-up font-12"></i> '.Yii::t('easyii', 'Move up').'</a></li>
                     <li><a href="' . Url::to([$baseUrl.'/a/down', 'id' => $node['category_id']]) . '"><i class="glyphicon glyphicon-arrow-down font-12"></i> '.Yii::t('easyii', 'Move down').'</a></li>
                     <li role="presentation" class="divider"></li>
+                    '.$switchButton.'
                     <li><a href="' . Url::to([$baseUrl.'/a/delete', 'id' => $node['category_id']]) . '" class="confirm-delete" data-reload="1" title="'.Yii::t('easyii', 'Delete item').'"><i class="glyphicon glyphicon-remove font-12"></i> '.Yii::t('easyii', 'Delete').'</a></li>
                 </ul>
             </div>

@@ -207,16 +207,21 @@ class CategoryController extends Controller
 
     public function changeStatus($id, $status)
     {
-        $modelClass = $this->model;
+        $modelClass = $this->categoryClass;
+        $ids = [];
 
         if(($model = $modelClass::findOne($id))){
-            $model->status = $status;
-            $model->update();
+            $ids[] = $model->primaryKey;
+            foreach($model->children()->all() as $child){
+                $ids[] = $child->primaryKey;
+            }
+            $modelClass::updateAll(['status' => $status], ['in', 'category_id', $ids]);
+            $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
         }
         else{
             $this->error = Yii::t('easyii', 'Not found');
         }
 
-        return $this->formatResponse();
+        return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));
     }
 }
