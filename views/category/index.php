@@ -16,7 +16,7 @@ function renderNode($node, $baseUrl)
     if(sizeof($node['children'])){
         $html .= '<i class="caret"></i> ';
     }
-    $html .= '<a href="' . Url::to([$baseUrl.'/items', 'id' => $node['category_id']]) . '" ' . (($node['status'] == CategoryModel::STATUS_OFF) ? 'class="text-muted"' : '') . '>'.$node['title'].'</a>';
+    $html .= '<a href="' . Url::to([$baseUrl.'/items', 'id' => $node['category_id']]) . '" ' . (($node['status'] == CategoryModel::STATUS_OFF) ? 'class="smooth"' : '') . '>'.$node['title'].'</a>';
     $html .= '</td>';
 
     if($node['status'] == CategoryModel::STATUS_ON){
