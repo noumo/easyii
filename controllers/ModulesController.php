@@ -198,7 +198,7 @@ class ModulesController extends \yii\easyii\components\Controller
                     if(!$object->isDir()){
                         $fileContent = file_get_contents($file);
                         $fileContent = str_replace($oldNameSpace, $newNameSpace, $fileContent);
-                        $fileContent = str_replace("Yii::t('easyii/".$module->name."'", "Yii::t('easyii/".$formModel->name."'", $fileContent);
+                        $fileContent = str_replace("Yii::t('easyii/".$module->name, "Yii::t('easyii/".$formModel->name, $fileContent);
 
                         file_put_contents($file, $fileContent);
                     }
