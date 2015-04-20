@@ -2,14 +2,9 @@
 namespace yii\easyii\modules\article\api;
 
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\helpers\Url;
-use yii\widgets\LinkPager;
 
-use yii\easyii\widgets\Colorbox;
-use yii\easyii\models\Photo;
-use yii\easyii\modules\article\models\Category;
-use yii\easyii\modules\article\models\Item;
+use yii\easyii\modules\catalog\models\Category;
+use yii\easyii\modules\catalog\models\Item;
 
 class Article extends \yii\easyii\components\API
 {
@@ -75,8 +70,6 @@ class Article extends \yii\easyii\components\API
         if(!($item = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one())){
             return null;
         }
-
-        $item->updateCounters(['views' => 1]);
         return new ArticleObject($item);
     }
 }
