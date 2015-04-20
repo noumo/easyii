@@ -142,7 +142,7 @@ class ItemsController extends Controller
             $model->image = '';
             if($model->update()){
                 @unlink(Yii::getAlias('@webroot').$model->image);
-                $this->flash('success', Yii::t('easyii/catalog', 'Image cleared'));
+                $this->flash('success', Yii::t('easyii', 'Image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
             }

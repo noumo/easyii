@@ -124,7 +124,7 @@ class ItemsController extends Controller
         elseif($model->image){
             $model->image = '';
             if($model->update()){
-                $this->flash('success', Yii::t('easyii/article', 'Image cleared'));
+                $this->flash('success', Yii::t('easyii', 'Image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
             }
