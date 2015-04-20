@@ -50,7 +50,7 @@ class Article extends \yii\easyii\components\API
         if($limit > 1){
             return $result;
         }else{
-            $this->_last = $result[0];
+            $this->_last = count($result) ? $result[0] : null;
             return $this->_last;
         }
     }
