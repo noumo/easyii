@@ -79,7 +79,7 @@ class AController extends CategoryController
 
     public function actionEdit($id)
     {
-        $this->view->params['submenu'] = '@easyii/modules/'.$this->module->id.'/views/'.$this->id.'/_submenu';
+        $this->view->params['submenu'] = true;
 
         return parent::actionEdit($id);
     }
