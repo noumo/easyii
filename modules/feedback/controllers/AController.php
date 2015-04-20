@@ -61,7 +61,7 @@ class AController extends Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/feedback']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         if($model->status == Feedback::STATUS_NEW){

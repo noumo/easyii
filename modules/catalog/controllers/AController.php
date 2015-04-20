@@ -16,7 +16,7 @@ class AController extends CategoryController
     public function actionFields($id)
     {
         if(!($model = Category::findOne($id))){
-            return $this->redirect(['/admin/catalog']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         if (Yii::$app->request->post('save'))
@@ -79,7 +79,7 @@ class AController extends CategoryController
 
     public function actionEdit($id)
     {
-        $this->view->params['submenu'] = '@easyii/modules/catalog/views/'.$this->id.'/_submenu';
+        $this->view->params['submenu'] = '@easyii/modules/'.$this->module->id.'/views/'.$this->id.'/_submenu';
 
         return parent::actionEdit($id);
     }

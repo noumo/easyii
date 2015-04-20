@@ -5,6 +5,8 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
+
+$module = $this->context->module->id;
 ?>
 <?php $form = ActiveForm::begin([
     'enableAjaxValidation' => true,
@@ -15,7 +17,7 @@ use yii\easyii\widgets\SeoForm;
 <?php if($this->context->module->settings['articleThumb']) : ?>
     <?php if($model->image) : ?>
         <img src="<?= Image::thumb(Yii::getAlias('@webroot') . $model->image, 240) ?>">
-        <a href="<?= Url::to(['/admin/article/items/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii/article', 'Clear image')?>"><?= Yii::t('easyii/article', 'Clear image')?></a>
+        <a href="<?= Url::to(['/admin/'.$module.'/items/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>

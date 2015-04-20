@@ -60,7 +60,7 @@ class AController extends Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/guestbook']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         if($model->new > 0){
@@ -123,7 +123,7 @@ class AController extends Controller
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
             }
         }
-        return $this->redirect($this->getReturnUrl(['/admin/guestbook']));
+        return $this->redirect($this->getReturnUrl(['/admin/'.$this->module->id]));
     }
 
     public function actionOn($id)

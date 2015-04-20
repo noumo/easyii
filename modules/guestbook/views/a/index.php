@@ -5,6 +5,8 @@ use yii\helpers\Url;
 use yii\easyii\modules\guestbook\models\Guestbook;
 
 $this->title = Yii::t('easyii/guestbook', 'Guestbook');
+
+$module = $this->context->module->id;
 ?>
 
 <?= $this->render('_menu') ?>
@@ -33,7 +35,7 @@ $this->title = Yii::t('easyii/guestbook', 'Guestbook');
                     <?php if($item->new) : ?>
                         <span class="label label-warning">NEW</span>
                     <?php endif; ?>
-                    <a href="<?= Url::to(['/admin/guestbook/a/view', 'id' => $item->primaryKey]) ?>">
+                    <a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>">
                         <?= ($item->title != '') ? $item->title : StringHelper::truncate($item->text, 120, '...') ?>
                     </a>
                 </td>
@@ -49,10 +51,10 @@ $this->title = Yii::t('easyii/guestbook', 'Guestbook');
                     <?= Html::checkbox('', $item->status == Guestbook::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/guestbook/a/']),
+                        'data-link' => Url::to(['/admin/'.$module.'/a']),
                     ]) ?>
                 </td>
-                <td class="control"><a href="<?= Url::to(['/admin/guestbook/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
+                <td class="control"><a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
             </tr>
     <?php endforeach; ?>
         </tbody>

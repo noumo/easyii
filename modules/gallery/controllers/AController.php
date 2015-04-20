@@ -60,7 +60,7 @@ class AController extends Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/gallery', 'Album created'));
-                    return $this->redirect(['/admin/gallery/a/photos', 'id' => $model->primaryKey]);
+                    return $this->redirect(['/admin/'.$this->module->id.'/a/photos', 'id' => $model->primaryKey]);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -84,7 +84,7 @@ class AController extends Controller
 
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/gallery']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         if ($model->load(Yii::$app->request->post())) {
@@ -121,7 +121,7 @@ class AController extends Controller
     public function actionPhotos($id)
     {
         if(!($model = Album::findOne($id))){
-            return $this->redirect(['/admin/gallery']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         return $this->render('photos', [

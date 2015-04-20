@@ -7,7 +7,6 @@ use yii\easyii\modules\subscribe\models\Subscriber;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-use yii\helpers\Url;
 
 class Subscribe extends \yii\easyii\components\API
 {

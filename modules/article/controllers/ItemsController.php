@@ -26,7 +26,7 @@ class ItemsController extends Controller
     public function actionIndex($id)
     {
         if(!($model = Category::findOne($id))){
-            return $this->redirect(['/admin/article']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         return $this->render('index', [
@@ -38,7 +38,7 @@ class ItemsController extends Controller
     public function actionCreate($id)
     {
         if(!($category = Category::findOne($id))){
-            return $this->redirect(['/admin/article']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         $model = new Item;
@@ -62,7 +62,7 @@ class ItemsController extends Controller
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article created'));
-                    return $this->redirect(['/admin/article/items/edit', 'id' => $model->primaryKey]);
+                    return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
                 } else {
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
                     return $this->refresh();
@@ -80,7 +80,7 @@ class ItemsController extends Controller
     public function actionEdit($id)
     {
         if(!($model = Item::findOne($id))){
-            return $this->redirect(['/admin/article']);
+            return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         if ($model->load(Yii::$app->request->post())) {
@@ -100,7 +100,7 @@ class ItemsController extends Controller
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article updated'));
-                    return $this->redirect(['/admin/article/items/edit', 'id' => $model->primaryKey]);
+                    return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
                 } else {
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                     return $this->refresh();

@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\easyii\modules\feedback\models\Feedback;
 
 $this->title = Yii::t('easyii/feedback', 'Feedback');
+$module = $this->context->module->id;
 ?>
 
 <?= $this->render('_menu') ?>
@@ -27,7 +28,7 @@ $this->title = Yii::t('easyii/feedback', 'Feedback');
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
-                <td><a href="<?= Url::to(['/admin/feedback/a/view', 'id' => $item->primaryKey]) ?>"><?= ($this->context->module->settings['enableTitle'] && $item->title != '') ? $item->title : StringHelper::truncate($item->text, 64, '...')?></a></td>
+                <td><a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>"><?= ($this->context->module->settings['enableTitle'] && $item->title != '') ? $item->title : StringHelper::truncate($item->text, 64, '...')?></a></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
                 <td>
                     <?php if($item->status == Feedback::STATUS_ANSWER) : ?>
@@ -36,7 +37,7 @@ $this->title = Yii::t('easyii/feedback', 'Feedback');
                         <span class="text-danger"><?= Yii::t('easyii', 'No') ?></span>
                     <?php endif; ?>
                 </td>
-                <td><a href="<?= Url::to(['/admin/feedback/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
+                <td><a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
             </tr>
     <?php endforeach; ?>
         </tbody>

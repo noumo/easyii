@@ -2,11 +2,12 @@
 use yii\helpers\Url;
 
 $action = $this->context->action->id;
+$module = $this->context->module->id;
 
 $backTo = null;
-$indexUrl = Url::to(['/admin/feedback/']);
-$noanswerUrl = Url::to(['/admin/feedback/a/noanswer']);
-$allUrl = Url::to(['/admin/feedback/a/all']);
+$indexUrl = Url::to(['/admin/'.$module]);
+$noanswerUrl = Url::to(['/admin/'.$module.'/a/noanswer']);
+$allUrl = Url::to(['/admin/'.$module.'/a/all']);
 
 if($action === 'view')
 {
@@ -57,7 +58,7 @@ if($action === 'view')
     </li>
     <?php if($action === 'view' && isset($noanswer) && !$noanswer) : ?>
         <li class="pull-right">
-            <a href="<?= Url::to(['/admin/feedback/a/set-answer', 'id' => Yii::$app->request->get('id')]) ?>" class="text-warning"><span class="glyphicon glyphicon-ok"></span> <?= Yii::t('easyii/feedback', 'Mark as answered') ?></a>
+            <a href="<?= Url::to(['/admin/'.$module.'/a/set-answer', 'id' => Yii::$app->request->get('id')]) ?>" class="text-warning"><span class="glyphicon glyphicon-ok"></span> <?= Yii::t('easyii/feedback', 'Mark as answered') ?></a>
         </li>
     <?php endif; ?>    
 </ul>
