@@ -67,9 +67,12 @@ class Article extends \yii\easyii\components\API
 
     private function findItem($id_slug)
     {
-        if(!($item = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one())){
+        $article = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
+        if($article) {
+            $article->updateCounters(['views' => 1]);
+            return new ArticleObject($article);
+        } else {
             return null;
         }
-        return new ArticleObject($item);
     }
 }
