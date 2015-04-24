@@ -10,7 +10,7 @@ class Controller extends \yii\web\Controller
     public $rootActions = [];
     public $error = null;
     
-    pubclic function init()
+    public function init()
     {
         parent::init();
         $this->layout = Yii::$app->getModule('admin')->controllerLayout;
