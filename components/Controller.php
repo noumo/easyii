@@ -7,9 +7,14 @@ use \yii\easyii\models;
 class Controller extends \yii\web\Controller
 {
     public $enableCsrfValidation = false;
-    public $layout = '@easyii/views/layouts/main';
     public $rootActions = [];
     public $error = null;
+    
+    pubclic function init()
+    {
+        parent::init();
+        $this->layout = Yii::$app->getModule('admin')->controllerLayout;
+    }
 
     public function beforeAction($action)
     {
