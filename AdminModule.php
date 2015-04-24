@@ -16,6 +16,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
 
     public $settings;
     public $activeModules;
+    public $controllerLayout = '@easyii/views/layouts/main';
 
     private $_installed;
 
