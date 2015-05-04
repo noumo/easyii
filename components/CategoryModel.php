@@ -5,7 +5,6 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
-use yii\easyii\behaviors\SortableModel;
 use yii\easyii\helpers\Data;
 use creocoder\nestedsets\NestedSetsBehavior;
 
@@ -38,7 +37,6 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
-            SortableModel::className(),
             'cacheflush' => [
                 'class' => CacheFlush::className(),
                 'key' => [static::tableName().'_tree', static::tableName().'_flat']
@@ -98,7 +96,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
     public static function generateTree()
     {
-        $collection = self::find()->sort()->asArray()->all();
+        $collection = self::find()->with('seo')->sort()->asArray()->all();
         $trees = array();
         $l = 0;
 
@@ -142,7 +140,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
     public static function generateFlat()
     {
-        $collection = self::find()->sort()->asArray()->all();
+        $collection = self::find()->with('seo')->sort()->asArray()->all();
         $flat = [];
 
         if (count($collection) > 0) {

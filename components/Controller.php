@@ -21,8 +21,6 @@ class Controller extends \yii\web\Controller
             return $this->redirect(['/admin/sign/in']);
         }
         else{
-
-
             if(!IS_ROOT && ($this->rootActions == 'all' || in_array($action->id, $this->rootActions))){
                 throw new \yii\web\ForbiddenHttpException('You cannot access this action');
             }

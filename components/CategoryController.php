@@ -2,6 +2,7 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 
@@ -48,6 +49,7 @@ class CategoryController extends Controller
                     $model->appendTo($parentCategory);
                     $model->order_num = $parentCategory->order_num;
                 } else {
+                    $model->attachBehavior(SortableModel::className());
                     $model->makeRoot();
                 }
 
@@ -162,7 +164,7 @@ class CategoryController extends Controller
 
     private function move($id, $direction)
     {
-        $modelClass = $this->model;
+        $modelClass = $this->categoryClass;
 
         if(($model = $modelClass::findOne($id)))
         {
