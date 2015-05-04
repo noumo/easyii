@@ -8,6 +8,8 @@ $this->title = Yii::$app->getModule('admin')->activeModules[$this->context->modu
 
 $module = $this->context->module->id;
 
+
+
 function renderNode($node, $baseUrl)
 {
     $html = '<tr>';
@@ -16,7 +18,11 @@ function renderNode($node, $baseUrl)
     if(sizeof($node['children'])){
         $html .= '<i class="caret"></i> ';
     }
-    $html .= '<a href="' . Url::to([$baseUrl.'/items', 'id' => $node['category_id']]) . '" ' . (($node['status'] == CategoryModel::STATUS_OFF) ? 'class="smooth"' : '') . '>'.$node['title'].'</a>';
+    if(!count($node['children']) || !empty(Yii::$app->controller->module->settings['itemsInFolder'])) {
+        $html .= '<a href="' . Url::to([$baseUrl . '/items', 'id' => $node['category_id']]) . '" ' . (($node['status'] == CategoryModel::STATUS_OFF) ? 'class="smooth"' : '') . '>' . $node['title'] . '</a>';
+    } else {
+        $html .= '<span ' . (($node['status'] == CategoryModel::STATUS_OFF) ? 'class="smooth"' : '') . '>' . $node['title'] . '</span>';
+    }
     $html .= '</td>';
 
     if($node['status'] == CategoryModel::STATUS_ON){
