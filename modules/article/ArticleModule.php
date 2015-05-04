@@ -9,6 +9,8 @@ class ArticleModule extends \yii\easyii\components\Module
 
         'enableShort' => true,
         'shortMaxLength' => 255,
+
+        'itemsInFolder' => false,
     ];
 
     public static $installConfig = [

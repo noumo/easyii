@@ -10,6 +10,7 @@ class CatalogModule extends \yii\easyii\components\Module
         'itemPhotos' => true,
         'categoryAutoSlug' => true,
         'itemAutoSlug' => true,
+        'itemsInFolder' => false,
     ];
 
     public static $installConfig = [
