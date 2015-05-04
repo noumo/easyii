@@ -71,6 +71,9 @@ class AController extends Controller
         if (Yii::$app->request->post('Guestbook')) {
             $model->answer = trim(Yii::$app->request->post('Guestbook')['answer']);
             if($model->save($model)){
+                if(Yii::$app->request->post('mailUser')){
+                    $model->notifyUser();
+                }
                 $this->flash('success', Yii::t('easyii/guestbook', 'Answer successfully saved'));
             }
             else{

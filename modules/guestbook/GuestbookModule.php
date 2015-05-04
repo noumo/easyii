@@ -5,8 +5,14 @@ class GuestbookModule extends \yii\easyii\components\Module
 {
     public $settings = [
         'enableTitle' => false,
+        'enableEmail' => true,
         'preModerate' => false,
         'enableCaptcha' => true,
+        'mailAdminOnNewPost' => true,
+        'subjectOnNewPost' => 'Guestbook new post',
+        'templateOnNewPost' => '@easyii/modules/guestbook/mail/new_post',
+        'subjectNotifyUser' => 'Guestbook post answered',
+        'templateNotifyUser' => '@easyii/modules/guestbook/mail/notify_user'
     ];
 
     public static $installConfig = [

@@ -16,6 +16,11 @@ $this->registerCss('.guestbook-view dt{margin-bottom: 10px;}');
     <dd><?= $model->title ?></dd>
     <?php endif; ?>
 
+    <?php if($this->context->module->settings['enableEmail']) : ?>
+        <dt><?= Yii::t('easyii', 'E-mail') ?></dt>
+        <dd><?= $model->email ?></dd>
+    <?php endif; ?>
+
     <dt>IP</dt>
     <dd><?= $model->ip ?> <a href="//freegeoip.net/?q=<?= $model->ip ?>" class="label label-info" target="_blank">info</a></dd>
 
@@ -33,5 +38,12 @@ $this->registerCss('.guestbook-view dt{margin-bottom: 10px;}');
     <div class="form-group">
         <?= Html::textarea('Guestbook[answer]', $model->answer, ['class' => 'form-control', 'style' => 'height: 250px']) ?>
     </div>
+    <?php if($model->answer == '' && $model->email) : ?>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" name="mailUser" value="1" checked> <?= Yii::t('easyii/guestbook', 'Notify user about answer') ?>
+        </label>
+    </div>
+    <?php endif; ?>
     <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-success send-answer']) ?>
 <?= Html::endForm() ?>

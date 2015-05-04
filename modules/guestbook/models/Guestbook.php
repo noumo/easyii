@@ -3,8 +3,10 @@ namespace yii\easyii\modules\guestbook\models;
 
 use Yii;
 use yii\easyii\behaviors\CalculateNotice;
+use yii\easyii\models\Setting;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
+use yii\helpers\Url;
 
 class Guestbook extends \yii\easyii\components\ActiveRecord
 {
@@ -48,6 +50,15 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
         }
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if($insert){
+            $this->mailAdmin();
+        }
+    }
+
     public function attributeLabels()
     {
         return [
@@ -70,5 +81,43 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
                 }
             ]
         ];
+    }
+
+    /**
+     *
+     */
+    public function mailAdmin()
+    {
+        $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
+        $notify = $settings['mailAdminOnNewPost'];
+        $template = $settings['templateOnNewPost'];
+        $subject = $settings['subjectOnNewPost'];
+
+        if($notify && $template && $subject)
+        {
+            $data = array_merge($this->attributes, ['link' => Url::to(['/admin/guestbook/a/view', 'id' => $this->primaryKey])]);
+            Yii::$app->mailer->compose($template, $data)
+                ->setFrom(Setting::get('robot_email'))
+                ->setTo(Setting::get('admin_email'))
+                ->setSubject($subject)
+                ->send();
+        }
+    }
+
+    public function notifyUser()
+    {
+        $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
+        $template = $settings['templateNotifyUser'];
+        $subject = $settings['subjectNotifyUser'];
+
+        if($template && $subject)
+        {
+            $data = array_merge($this->attributes, ['link' => Url::to(['/guestbook'])]);
+            Yii::$app->mailer->compose($template, $data)
+                ->setFrom(Setting::get('robot_email'))
+                ->setTo(Setting::get('admin_email'))
+                ->setSubject($subject)
+                ->send();
+        }
     }
 }
