@@ -16,7 +16,11 @@ class ApiObject extends \yii\base\Object
                 $this->{$attribute} = $value;
             }
         }
+
+        $this->init();
     }
+
+    public function init(){}
 
     public function getId(){
         return $this->model->primaryKey;
