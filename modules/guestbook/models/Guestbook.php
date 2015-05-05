@@ -83,41 +83,41 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
         ];
     }
 
-    /**
-     *
-     */
     public function mailAdmin()
     {
         $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
-        $notify = $settings['mailAdminOnNewPost'];
-        $template = $settings['templateOnNewPost'];
-        $subject = $settings['subjectOnNewPost'];
 
-        if($notify && $template && $subject)
-        {
-            $data = array_merge($this->attributes, ['link' => Url::to(['/admin/guestbook/a/view', 'id' => $this->primaryKey])]);
-            Yii::$app->mailer->compose($template, $data)
-                ->setFrom(Setting::get('robot_email'))
-                ->setTo(Setting::get('admin_email'))
-                ->setSubject($subject)
-                ->send();
+        if(!$settings['mailAdminOnNewPost'] || !$settings['templateOnNewPost'] || !$settings['subjectOnNewPost']) {
+            return false;
         }
+
+        return $this->mail($settings['templateOnNewPost'], $settings['subjectOnNewPost'], Url::to(['/admin/guestbook/a/view', 'id' => $this->primaryKey], true));
+
     }
 
     public function notifyUser()
     {
         $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
-        $template = $settings['templateNotifyUser'];
-        $subject = $settings['subjectNotifyUser'];
 
-        if($template && $subject)
-        {
-            $data = array_merge($this->attributes, ['link' => Url::to(['/guestbook'])]);
-            Yii::$app->mailer->compose($template, $data)
-                ->setFrom(Setting::get('robot_email'))
-                ->setTo(Setting::get('admin_email'))
-                ->setSubject($subject)
-                ->send();
+        if(!$settings['templateNotifyUser'] || !$settings['subjectNotifyUser'] || !$settings['frontendGuestbookRoute']) {
+            return false;
         }
+
+        return $this->mail($settings['templateNotifyUser'], $settings['subjectNotifyUser'], Url::to([$settings['frontendGuestbookRoute']], true));
+    }
+
+    private function mail($template, $subject, $link)
+    {
+        $robotEmail = Setting::get('robot_email');
+        $adminEmail = Setting::get('admin_email');
+        if(!$robotEmail || !$adminEmail){
+            return false;
+        }
+
+        return Yii::$app->mailer->compose($template, ['post' => $this, 'subject' => $subject, 'link' => $link])
+            ->setFrom($robotEmail)
+            ->setTo($adminEmail)
+            ->setSubject($subject)
+            ->send();
     }
 }
