@@ -15,9 +15,15 @@ use yii\easyii\widgets\ReCaptcha;
 
 class Guestbook extends \yii\easyii\components\API
 {
+    const SENT_VAR = 'guestbook_sent';
+
     private $_adp;
     private $_last;
     private $_items;
+
+    private $_defaultFormOptions = [
+        'showAlert' => true
+    ];
 
     public function api_items($options = [])
     {
@@ -61,10 +67,11 @@ class Guestbook extends \yii\easyii\components\API
         }
     }
     
-    public function api_form()
+    public function api_form($options = [])
     {
         $model = new GuestbookModel;
         $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
+        $options = array_merge($this->_defaultFormOptions, $options);
 
         ob_start();
         $form = ActiveForm::begin([
@@ -72,22 +79,26 @@ class Guestbook extends \yii\easyii\components\API
             'action' => Url::to(['/admin/guestbook/send'])
         ]);
 
-        switch(Yii::$app->session->getFlash(GuestbookModel::FLASH_KEY)){
-            case 'success' :
+        echo Html::hiddenInput('returnUrl', Yii::$app->controller->route);
+
+        if($options['showAlert']) {
+            $sent = Yii::$app->request->get(self::SENT_VAR);
+            if ($sent == "1") {
                 $message = Yii::$app->getModule('admin')->activeModules['guestbook']->settings['preModerate'] ?
                     Yii::t('easyii/guestbook/api', 'Message successfully sent and will be published after moderation') :
                     Yii::t('easyii/guestbook/api', 'Message successfully added');
 
-                echo Alert::widget(['options' => ['class' => 'alert-success'],'body' => $message]);
-                break;
-            case 'error' :
-                echo Alert::widget(['options' => ['class' => 'alert-danger'],'body' => Yii::t('easyii/guestbook/api', 'An error has occurred')]);
-                break;
+                echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => $message]);
+            } elseif ($sent == "0") {
+                echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => Yii::t('easyii/guestbook/api', 'An error has occurred')]);
+            }
         }
         echo $form->field($model, 'name');
         if($settings['enableTitle']) echo $form->field($model, 'title');
+        if($settings['enableEmail']) echo $form->field($model, 'email');
 
         echo $form->field($model, 'text')->textarea();
+
 
         if($settings['enableCaptcha']) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 

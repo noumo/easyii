@@ -2,24 +2,19 @@
 namespace yii\easyii\modules\guestbook\controllers;
 
 use Yii;
-use yii\widgets\ActiveForm;
-
-use yii\easyii\modules\guestbook\models\Guestbook;
+use yii\easyii\modules\guestbook\api\Guestbook;
+use yii\easyii\modules\guestbook\models\Guestbook as GuestbookModel;
 
 class SendController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $model = new Guestbook;
+        $model = new GuestbookModel;
+        $request = Yii::$app->request;
 
-        if ($model->load(Yii::$app->request->post())) {
-            if($model->save()){
-                Yii::$app->session->setFlash(Guestbook::FLASH_KEY, 'success');
-            }
-            else{
-                Yii::$app->session->setFlash(Guestbook::FLASH_KEY, 'error');
-            }
-            return $this->redirect(Yii::$app->request->referrer);
+        if ($model->load($request->post())) {
+            $sent = $model->save() ? 1 : 0;
+            return $this->redirect(['/' . $request->post('returnUrl'), Guestbook::SENT_VAR => $sent]);
         }
         else {
             return $this->redirect(Yii::$app->request->baseUrl);
