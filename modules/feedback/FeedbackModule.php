@@ -4,7 +4,7 @@ namespace yii\easyii\modules\feedback;
 class FeedbackModule extends \yii\easyii\components\Module
 {
     public $settings = [
-        'enableTitle' => true,
+        'enableTitle' => false,
         'enablePhone' => true,
         'answerHello' => 'Hello,',
         'answerFooter' => 'Best regards.',
