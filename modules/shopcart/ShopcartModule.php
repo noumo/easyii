@@ -11,8 +11,8 @@ class ShopcartModule extends \yii\easyii\components\Module
 
     public static $installConfig = [
         'title' => [
-            'en' => 'Shopping cart',
-            'ru' => 'Корзина',
+            'en' => 'Orders',
+            'ru' => 'Заказы',
         ],
         'icon' => 'shopping-cart',
         'order_num' => 120,

@@ -4,13 +4,13 @@ namespace yii\easyii\modules\catalog;
 class CatalogModule extends \yii\easyii\components\Module
 {
     public $settings = [
-        'itemDescription' => true,
         'categoryThumb' => true,
+        'itemsInFolder' => false,
+
         'itemThumb' => true,
         'itemPhotos' => true,
-        'categoryAutoSlug' => true,
-        'itemAutoSlug' => true,
-        'itemsInFolder' => false,
+        'itemDescription' => true,
+        'itemSale' => true,
     ];
 
     public static $installConfig = [
