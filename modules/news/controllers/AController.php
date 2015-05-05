@@ -26,7 +26,7 @@ class AController extends Controller
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => News::find()->desc(),
+            'query' => News::find()->orderBy(['time' => SORT_DESC]),
         ]);
 
         return $this->render('index', [
