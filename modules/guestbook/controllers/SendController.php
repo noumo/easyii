@@ -15,8 +15,7 @@ class SendController extends \yii\web\Controller
         if ($model->load($request->post())) {
             $sent = $model->save() ? 1 : 0;
             return $this->redirect(['/' . $request->post('returnUrl'), Guestbook::SENT_VAR => $sent]);
-        }
-        else {
+        } else {
             return $this->redirect(Yii::$app->request->baseUrl);
         }
     }

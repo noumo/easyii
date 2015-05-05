@@ -205,7 +205,7 @@ class m000000_000000_install extends \yii\db\Migration
             'name' => Schema::TYPE_STRING . '(128) NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
-            'answer' => Schema::TYPE_TEXT . ' DEFAULT NULL',
+            'answer' => Schema::TYPE_TEXT . ' NOT NULL',
             'email' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'ip' => Schema::TYPE_STRING . '(16) NOT NULL',

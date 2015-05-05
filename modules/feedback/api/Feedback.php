@@ -12,10 +12,17 @@ use yii\easyii\widgets\ReCaptcha;
 
 class Feedback extends \yii\easyii\components\API
 {
-    public function api_form()
+    const SENT_VAR = 'feedback_sent';
+
+    private $_defaultFormOptions = [
+        'showAlert' => true
+    ];
+
+    public function api_form($options = [])
     {
         $model = new FeedbackModel;
         $settings = Yii::$app->getModule('admin')->activeModules['feedback']->settings;
+        $options = array_merge($this->_defaultFormOptions, $options);
 
         ob_start();
         $form = ActiveForm::begin([
@@ -23,15 +30,17 @@ class Feedback extends \yii\easyii\components\API
             'action' => Url::to(['/admin/feedback/send'])
         ]);
 
-        switch(Yii::$app->session->getFlash(FeedbackModel::FLASH_KEY))
-        {
-            case 'success' :
-                echo Alert::widget(['options' => ['class' => 'alert-success'],'body' => Yii::t('easyii/feedback/api', 'Feedback send. We will answer you soon')]);
-                break;
-            case 'error' :
-                echo Alert::widget(['options' => ['class' => 'alert-danger'],'body' => Yii::t('easyii/feedback/api', 'An error has occurred')]);
-                break;
+        echo Html::hiddenInput('returnUrl', Yii::$app->controller->route);
+
+        if($options['showAlert']) {
+            $sent = Yii::$app->request->get(self::SENT_VAR);
+            if ($sent == "1") {
+                echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => Yii::t('easyii/feedback/api', 'Feedback sent. We will answer you soon')]);
+            } elseif ($sent == "0") {
+                echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => Yii::t('easyii/guestbook/api', 'An error has occurred')]);
+            }
         }
+
         echo $form->field($model, 'name');
         echo $form->field($model, 'email')->input('email');
         if($settings['enablePhone']) echo $form->field($model, 'phone');

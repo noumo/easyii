@@ -2,26 +2,22 @@
 namespace yii\easyii\modules\feedback\controllers;
 
 use Yii;
-use yii\widgets\ActiveForm;
 
-use yii\easyii\modules\feedback\models\Feedback;
+use yii\easyii\modules\feedback\api\Feedback;
+use yii\easyii\modules\feedback\models\Feedback as FeedbackModel;
 
 class SendController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $model = new Feedback;
+        $model = new FeedbackModel;
 
-        if ($model->load(Yii::$app->request->post())) {
-            if($model->save()){
-                Yii::$app->session->setFlash(Feedback::FLASH_KEY, 'success');
-            }
-            else{
-                Yii::$app->session->setFlash(Feedback::FLASH_KEY, 'error');
-            }
-            return $this->redirect(Yii::$app->request->referrer);
-        }
-        else {
+        $request = Yii::$app->request;
+
+        if ($model->load($request->post())) {
+            $sent = $model->save() ? 1 : 0;
+            return $this->redirect(['/' . $request->post('returnUrl'), Feedback::SENT_VAR => $sent]);
+        } else {
             return $this->redirect(Yii::$app->request->baseUrl);
         }
     }
