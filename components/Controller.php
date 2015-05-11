@@ -2,7 +2,8 @@
 namespace yii\easyii\components;
 
 use Yii;
-use \yii\easyii\models;
+use yii\easyii\models;
+use yii\helpers\Url;
 
 class Controller extends \yii\web\Controller
 {
@@ -47,14 +48,12 @@ class Controller extends \yii\web\Controller
 
     public function setReturnUrl($url = null)
     {
-        Yii::$app->getSession()->set($this->module->id.'_return', $url ? $url : Yii::$app->request->url);
+        Yii::$app->getSession()->set($this->module->id.'_return', $url ? Url::to($url) : Url::current());
     }
 
     public function getReturnUrl($defaultUrl = null)
     {
-        $url = Yii::$app->getSession()->get($this->module->id.'_return', $defaultUrl);
-
-        return $url === null ? Yii::$app->getHomeUrl() : $url;
+        return Yii::$app->getSession()->get($this->module->id.'_return', $defaultUrl ? Url::to($defaultUrl) : Url::to('/admin/'.$this->module->id));
     }
 
     public function formatResponse($success = '', $back = true)
