@@ -181,6 +181,13 @@ class InstallController extends \yii\web\Controller
             'title' => Yii::t('easyii/install', 'Frontend toolbar position').' ("top" or "bottom")',
             'visibility' => Setting::VISIBLE_ROOT
         ])->execute();
+
+        $db->createCommand()->insert(Setting::tableName(), [
+            'name' => 'rewrite_all_slug',
+            'value' => '0',
+            'title' => Yii::t('easyii/install', 'Frontend toolbar position').' ("top" or "bottom")',
+            'visibility' => Setting::VISIBLE_ROOT
+        ])->execute();
     }
 
     private function installModules()
