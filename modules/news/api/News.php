@@ -55,7 +55,7 @@ class News extends \yii\easyii\components\API
 
     public function api_get($id)
     {
-        if(!($news = NewsModel::findOne(['news_id' => $id, 'status' => NewsModel::STATUS_ON]))){
+        if(!($news = NewsModel::find()->where(['or', 'news_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id])->andWhere(['and', 'status=:st'], [':st' => NewsModel::STATUS_ON])->one())){
             return $this->notFound();
         }
 
