@@ -5,6 +5,7 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\helpers\StringHelper;
+use yii\easyii\models\Setting;
 
 class News extends \yii\easyii\components\ActiveRecord
 {
@@ -48,7 +49,8 @@ class News extends \yii\easyii\components\ActiveRecord
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
-                'ensureUnique' => true
+                'ensureUnique' => true,
+                'immutable' => Setting::get('rewrite_all_slug') === '1' ? false : true,
             ]
         ];
     }

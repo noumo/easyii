@@ -5,6 +5,7 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\models\Setting;
 
 class Category extends \yii\easyii\components\ActiveRecord
 {
