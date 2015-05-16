@@ -28,4 +28,10 @@ class ActiveQuery extends \yii\db\ActiveQuery
         $this->orderBy('order_num DESC');
         return $this;
     }
+
+    public function sortDate()
+    {
+        $this->orderBy('time DESC');
+        return $this;
+    }
 }
