@@ -1,5 +1,6 @@
 <?php
 use yii\easyii\helpers\Image;
+use yii\easyii\widgets\DateTimePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -11,7 +12,7 @@ $module = $this->context->module->id;
 ?>
 
 <?php $form = ActiveForm::begin([
-    'options' => ['enctype' => 'multipart/form-data']
+    'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
 <?php if($settings['itemThumb']) : ?>
@@ -32,6 +33,12 @@ $module = $this->context->module->id;
         ]
     ]) ?>
 <?php endif; ?>
+
+<?= $form->field($model, 'available') ?>
+<?= $form->field($model, 'price') ?>
+<?= $form->field($model, 'discount') ?>
+
+<?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>

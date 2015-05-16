@@ -3,6 +3,7 @@ namespace yii\easyii\modules\news\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\widgets\Fancybox;
 use yii\widgets\LinkPager;
 
 use yii\easyii\modules\news\models\News as NewsModel;
@@ -12,17 +13,22 @@ class News extends \yii\easyii\components\API
     private $_adp;
     private $_last;
     private $_items;
-    private $_news = [];
+    private $_item = [];
 
     public function api_items($options = [])
     {
         if(!$this->_items){
             $this->_items = [];
             
-            $query = NewsModel::find()->with('seo')->status(NewsModel::STATUS_ON)->orderBy('time DESC');
+            $query = NewsModel::find()->with('seo')->status(NewsModel::STATUS_ON);
             
             if(!empty($options['where'])){
-                $query->where($options['where']);
+                $query->andFilterWhere($options['where']);
+            }
+            if(!empty($options['orderBy'])){
+                $query->orderBy($options['orderBy']);
+            } else {
+                $query->sortDate();
             }
 
             $this->_adp = new ActiveDataProvider([
@@ -39,10 +45,10 @@ class News extends \yii\easyii\components\API
 
     public function api_get($id_slug)
     {
-        if(!isset($this->_news[$id_slug])) {
-            $this->_news[$id_slug] = $this->findNews($id_slug);
+        if(!isset($this->_item[$id_slug])) {
+            $this->_item[$id_slug] = $this->findNews($id_slug);
         }
-        return $this->_news[$id_slug];
+        return $this->_item[$id_slug];
     }
 
     public function api_last($limit = 1)
@@ -52,7 +58,7 @@ class News extends \yii\easyii\components\API
         }
 
         $result = [];
-        foreach(NewsModel::find()->with('seo')->orderBy('time DESC')->limit($limit)->all() as $item){
+        foreach(NewsModel::find()->with('seo')->status(NewsModel::STATUS_ON)->sortDate()->limit($limit)->all() as $item){
             $result[] = new NewsObject($item);
         }
 
@@ -62,6 +68,14 @@ class News extends \yii\easyii\components\API
             $this->_last = count($result) ? $result[0] : null;
             return $this->_last;
         }
+    }
+
+    public function api_plugin($options = [])
+    {
+        Fancybox::widget([
+            'selector' => '.easyii-box',
+            'options' => $options
+        ]);
     }
 
     public function api_pagination()
@@ -76,7 +90,7 @@ class News extends \yii\easyii\components\API
 
     private function findNews($id_slug)
     {
-        $news = NewsModel::find()->where(['or', 'news_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
+        $news = NewsModel::find()->where(['or', 'news_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(NewsModel::STATUS_ON)->one();
         if($news) {
             $news->updateCounters(['views' => 1]);
             return new NewsObject($news);

@@ -4,7 +4,7 @@ use yii\widgets\ActiveForm;
 ?>
 <?php $form = ActiveForm::begin([
     'enableClientValidation' => true,
-    'options' => ['enctype' => 'multipart/form-data']
+    'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?php if($model->image) : ?>
     <img src="<?= $model->image ?>" style="width: 848px">

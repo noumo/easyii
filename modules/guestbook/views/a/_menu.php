@@ -15,7 +15,7 @@ if($action === 'view')
     if(strpos($returnUrl, 'noanswer') !== false){
         $backTo = 'noanswer';
         $noanswerUrl = $returnUrl;
-    } else{
+    } else {
         $backTo = 'index';
         $indexUrl = $returnUrl;
     }

@@ -4,7 +4,7 @@ namespace yii\easyii\modules\gallery\api;
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\gallery\models\Album;
+use yii\easyii\modules\gallery\models\Category;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
@@ -22,8 +22,8 @@ class AlbumObject extends \yii\easyii\components\ApiObject
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
     }
 
-    public function getPages(){
-        return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
+    public function pages($options = []){
+        return $this->_adp ? LinkPager::widget(array_merge($options, ['pagination' => $this->_adp->pagination])) : '';
     }
 
     public function getPagination(){
@@ -35,10 +35,10 @@ class AlbumObject extends \yii\easyii\components\ApiObject
         if(!$this->_photos){
             $this->_photos = [];
 
-            $query = Photo::find()->where(['model' => Album::className(), 'item_id' => $this->id])->sort();
+            $query = Photo::find()->where(['class' => Category::className(), 'item_id' => $this->id])->sort();
 
             if(!empty($options['where'])){
-                $query->where($options['where']);
+                $query->andFilterWhere($options['where']);
             }
 
             $this->_adp = new ActiveDataProvider([

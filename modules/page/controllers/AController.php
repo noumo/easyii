@@ -15,7 +15,7 @@ class AController extends Controller
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => Page::find()->desc(),
+            'query' => Page::find()->desc()
         ]);
         return $this->render('index', [
             'data' => $data
@@ -86,7 +86,7 @@ class AController extends Controller
     {
         if(($model = Page::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/page', 'Page deleted'));

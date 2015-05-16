@@ -3,6 +3,8 @@ namespace yii\easyii\modules\feedback\models;
 
 use Yii;
 use yii\easyii\behaviors\CalculateNotice;
+use yii\easyii\helpers\Mail;
+use yii\easyii\models\Setting;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
 
@@ -10,7 +12,7 @@ class Feedback extends \yii\easyii\components\ActiveRecord
 {
     const STATUS_NEW = 0;
     const STATUS_VIEW = 1;
-    const STATUS_ANSWER = 2;
+    const STATUS_ANSWERED = 2;
 
     const FLASH_KEY = 'eaysiicms_feedback_send_result';
 
@@ -57,7 +59,8 @@ class Feedback extends \yii\easyii\components\ActiveRecord
             'name' => Yii::t('easyii', 'Name'),
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
-            'answer' => Yii::t('easyii/feedback', 'Answer'),
+            'answer_subject' => Yii::t('easyii/feedback', 'Subject'),
+            'answer_text' => Yii::t('easyii', 'Text'),
             'phone' => Yii::t('easyii/feedback', 'Phone'),
             'reCaptcha' => Yii::t('easyii', 'Anti-spam check')
         ];
@@ -73,5 +76,33 @@ class Feedback extends \yii\easyii\components\ActiveRecord
                 }
             ]
         ];
+    }
+
+    public function mailAdmin()
+    {
+        $settings = Yii::$app->getModule('admin')->activeModules['feedback']->settings;
+
+        if(!$settings['mailAdminOnNewFeedback']){
+            return false;
+        }
+        return Mail::send(
+            Setting::get('admin_email'),
+            $settings['subjectOnNewFeedback'],
+            $settings['templateOnNewFeedback'],
+            ['feedback' => $this]
+        );
+    }
+
+    public function sendAnswer()
+    {
+        $settings = Yii::$app->getModule('admin')->activeModules['feedback']->settings;
+
+        return Mail::send(
+            $this->email,
+            $this->answer_subject,
+            $settings['answerTemplate'],
+            ['feedback' => $this],
+            ['replyTo' => Setting::get('admin_email')]
+        );
     }
 }

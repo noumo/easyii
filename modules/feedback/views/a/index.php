@@ -31,7 +31,7 @@ $module = $this->context->module->id;
                 <td><a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>"><?= ($this->context->module->settings['enableTitle'] && $item->title != '') ? $item->title : StringHelper::truncate($item->text, 64, '...')?></a></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
                 <td>
-                    <?php if($item->status == Feedback::STATUS_ANSWER) : ?>
+                    <?php if($item->status == Feedback::STATUS_ANSWERED) : ?>
                         <span class="text-success"><?= Yii::t('easyii', 'Yes') ?></span>
                     <?php else : ?>
                         <span class="text-danger"><?= Yii::t('easyii', 'No') ?></span>

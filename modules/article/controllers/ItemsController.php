@@ -2,13 +2,14 @@
 namespace yii\easyii\modules\article\controllers;
 
 use Yii;
+use yii\easyii\behaviors\SortableDateController;
+use yii\easyii\behaviors\StatusController;
 use yii\web\UploadedFile;
 
 use yii\easyii\components\Controller;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
 use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\SortableController;
 use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
@@ -17,8 +18,12 @@ class ItemsController extends Controller
     {
         return [
             [
-                'class' => SortableController::className(),
+                'class' => SortableDateController::className(),
                 'model' => Item::className(),
+            ],
+            [
+            'class' => StatusController::className(),
+            'model' => Item::className()
             ]
         ];
     }
@@ -59,6 +64,7 @@ class ItemsController extends Controller
                         $model->image = '';
                     }
                 }
+                $model->status = Item::STATUS_ON;
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article created'));
@@ -114,6 +120,17 @@ class ItemsController extends Controller
         }
     }
 
+    public function actionPhotos($id)
+    {
+        if(!($model = Item::findOne($id))){
+            return $this->redirect(['/admin/'.$this->module->id]);
+        }
+
+        return $this->render('photos', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionClearImage($id)
     {
         $model = Item::findOne($id);
@@ -136,7 +153,7 @@ class ItemsController extends Controller
     {
         if(($model = Item::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/article', 'Article deleted'));
@@ -150,5 +167,15 @@ class ItemsController extends Controller
     public function actionDown($id, $category_id)
     {
         return $this->move($id, 'down', ['category_id' => $category_id]);
+    }
+
+    public function actionOn($id)
+    {
+        return $this->changeStatus($id, Item::STATUS_ON);
+    }
+
+    public function actionOff($id)
+    {
+        return $this->changeStatus($id, Item::STATUS_OFF);
     }
 }

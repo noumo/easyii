@@ -29,12 +29,12 @@ class ApiObject extends \yii\base\Object
     public function thumb($width = null, $height = null, $crop = true)
     {
         if($this->image && ($width || $height)){
-            return Image::thumb(Yii::getAlias('@webroot') . $this->image, $width, $height, $crop);
+            return Image::thumb($this->image, $width, $height, $crop);
         }
         return '';
     }
 
-    public function seo($attribute){
-        return !empty($this->model->seo->{$attribute}) ? $this->model->seo->{$attribute} : '';
+    public function seo($attribute, $default = ''){
+        return !empty($this->model->seo->{$attribute}) ? $this->model->seo->{$attribute} : $default;
     }
 }

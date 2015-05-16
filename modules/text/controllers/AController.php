@@ -87,7 +87,7 @@ class AController extends Controller
     {
         if(($model = Text::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/text', 'Text deleted'));

@@ -35,7 +35,7 @@ class Page extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
-            'seo' => SeoBehavior::className(),
+            'seoBehavior' => SeoBehavior::className(),
         ];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace yii\easyii\modules\shopcart\models;
 
-use app\modules\shop\models\Item;
+use yii\easyii\modules\catalog\models\Item;
 use Yii;
 use yii\easyii\validators\EscapeValidator;
 

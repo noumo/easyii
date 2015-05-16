@@ -3,7 +3,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin([
+    'options' => ['class' => 'model-form']
+]); ?>
 <?= $form->field($model, 'question')->widget(Redactor::className(),[
     'options' => [
         'minHeight' => 300,

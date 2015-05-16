@@ -7,7 +7,6 @@ use yii\easyii\modules\feedback\models\Feedback as FeedbackModel;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Alert;
 use yii\easyii\widgets\ReCaptcha;
 
 class Feedback extends \yii\easyii\components\API
@@ -15,7 +14,8 @@ class Feedback extends \yii\easyii\components\API
     const SENT_VAR = 'feedback_sent';
 
     private $_defaultFormOptions = [
-        'showAlert' => true
+        'errorUrl' => '',
+        'successUrl' => ''
     ];
 
     public function api_form($options = [])
@@ -30,19 +30,12 @@ class Feedback extends \yii\easyii\components\API
             'action' => Url::to(['/admin/feedback/send'])
         ]);
 
-        echo Html::hiddenInput('returnUrl', Yii::$app->controller->route);
-
-        if($options['showAlert']) {
-            $sent = Yii::$app->request->get(self::SENT_VAR);
-            if ($sent == "1") {
-                echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => Yii::t('easyii/feedback/api', 'Feedback sent. We will answer you soon')]);
-            } elseif ($sent == "0") {
-                echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => Yii::t('easyii/guestbook/api', 'An error has occurred')]);
-            }
-        }
+        echo Html::hiddenInput('errorUrl', $options['errorUrl'] ? $options['errorUrl'] : Url::current([self::SENT_VAR => 0]));
+        echo Html::hiddenInput('successUrl', $options['successUrl'] ? $options['successUrl'] : Url::current([self::SENT_VAR => 1]));
 
         echo $form->field($model, 'name');
         echo $form->field($model, 'email')->input('email');
+
         if($settings['enablePhone']) echo $form->field($model, 'phone');
         if($settings['enableTitle']) echo $form->field($model, 'title');
 
@@ -61,7 +54,7 @@ class Feedback extends \yii\easyii\components\API
         $model = new FeedbackModel($data);
         if($model->save()){
             return ['result' => 'success'];
-        } else{
+        } else {
             return ['result' => 'error', 'error' => $model->getErrors()];
         }
     }

@@ -26,15 +26,9 @@ class Page extends \yii\easyii\components\API
 
     private function notFound($id_slug)
     {
-        $page = new PageModel();
-
-        if(!Yii::$app->user->isGuest && preg_match(PageModel::$SLUG_PATTERN, $id_slug)){
-            $a = Html::a(Yii::t('easyii/page/api', 'Create page'), ['/admin/page/a/create', 'slug' => $id_slug], ['target' => '_blank']);
-            $page->title = $a;
-            $page->text = $a;
-
-        }
-
+        $page = new PageModel([
+            'slug' => $id_slug
+        ]);
         return new PageObject($page);
     }
 }

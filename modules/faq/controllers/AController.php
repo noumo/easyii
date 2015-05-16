@@ -102,7 +102,7 @@ class AController extends Controller
     {
         if(($model = Faq::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/faq', 'Entry deleted'));

@@ -101,7 +101,7 @@ html{
 #admin-body .main .container-fluid{
     padding: 20px;
 }
-#admin-body .main a, #admin-body .main .btn, #admin-body .main .form-control{
+#admin-body .main a, #admin-body .main .btn, #admin-body .main .form-control, .input-group-addon{
     border-radius: 0 !important;
 }
 

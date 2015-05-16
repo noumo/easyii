@@ -23,8 +23,8 @@ class News extends \yii\easyii\components\ActiveRecord
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
+            [['views', 'time'], 'integer'],
             ['time', 'default', 'value' => time()],
-            ['views', 'number', 'integerOnly' => true],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null]
         ];
@@ -45,7 +45,7 @@ class News extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
-            'seo' => SeoBehavior::className(),
+            'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -58,15 +58,11 @@ class News extends \yii\easyii\components\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             $settings = Yii::$app->getModule('admin')->activeModules['news']->settings;
-            if($this->short && $settings['enableShort']){
-                $this->short = StringHelper::truncate($this->short, $settings['shortMaxLength']);
-            }
-            if(is_string($this->time)){
-                if(!($this->time = strtotime($this->time))){
-                    $this->time = time();
-                }
-            }
+            $this->short = StringHelper::truncate($settings['enableShort'] ? $this->short : strip_tags($this->text), $settings['shortMaxLength']);
 
+            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
+                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            }
             return true;
         } else {
             return false;

@@ -11,36 +11,39 @@ class ItemObject extends \yii\easyii\components\ApiObject
 {
     public $slug;
     public $image;
-    public $views;
+    public $data;
+    public $category_id;
+    public $available;
+    public $discount;
 
-    private $_adp;
     private $_photos;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
     }
 
-    public function getText(){
-        return LIVE_EDIT ? API::liveEdit($this->model->text, $this->editLink, 'div') : $this->model->text;
+    public function getDescription(){
+        return LIVE_EDIT ? API::liveEdit($this->model->description, $this->editLink, 'div') : $this->model->description;
     }
 
-    public function photos($options = [])
+    public function getCat(){
+        return Catalog::cats()[$this->category_id];
+    }
+
+    public function getPrice(){
+        return $this->discount ? round($this->model->price * (1 - $this->discount / 100) ) : $this->model->price;
+    }
+
+    public function getOldPrice(){
+        return $this->model->price;
+    }
+
+    public function getPhotos()
     {
         if(!$this->_photos){
             $this->_photos = [];
 
-            $query = Photo::find()->where(['model' => Item::className(), 'item_id' => $this->id])->sort();
-
-            if(!empty($options['where'])){
-                $query->where($options['where']);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
+            foreach(Photo::find()->where(['class' => Item::className(), 'item_id' => $this->id])->sort()->all() as $model){
                 $this->_photos[] = new PhotoObject($model);
             }
         }

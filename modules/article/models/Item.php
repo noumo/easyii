@@ -24,7 +24,8 @@ class Item extends \yii\easyii\components\ActiveRecord
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
-            ['views', 'number', 'integerOnly' => true],
+            [['views', 'time'], 'integer'],
+            ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
         ];
@@ -37,6 +38,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             'text' => Yii::t('easyii', 'Text'),
             'short' => Yii::t('easyii/article', 'Short'),
             'image' => Yii::t('easyii', 'Image'),
+            'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
@@ -44,9 +46,7 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
-            SortableModel::className(),
             'seoBehavior' => SeoBehavior::className(),
-            'seo' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -64,11 +64,9 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             $settings = Yii::$app->getModule('admin')->activeModules['article']->settings;
-            if($this->short && $settings['enableShort']){
-                $this->short = StringHelper::truncate($this->short, $settings['shortMaxLength']);
-            }
+            $this->short = StringHelper::truncate($settings['enableShort'] ? $this->short : strip_tags($this->text), $settings['shortMaxLength']);
 
-            if(!$this->isNewRecord && $this->image != $this->oldAttributes['image']){
+            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
                 @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
             }
 

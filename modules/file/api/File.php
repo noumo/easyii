@@ -11,7 +11,7 @@ class File extends \yii\easyii\components\API
     private $_adp;
     private $_last;
     private $_items;
-    private $_files;
+    private $_item = [];
 
     public function api_items($options = [])
     {
@@ -38,10 +38,10 @@ class File extends \yii\easyii\components\API
 
     public function api_get($id_slug)
     {
-        if(!isset($this->_files[$id_slug])) {
-            $this->_files[$id_slug] = $this->findFile($id_slug);
+        if(!isset($this->_item[$id_slug])) {
+            $this->_item[$id_slug] = $this->findFile($id_slug);
         }
-        return $this->_files[$id_slug];
+        return $this->_item[$id_slug];
     }
 
     public function api_last($limit = 1, $where = null)

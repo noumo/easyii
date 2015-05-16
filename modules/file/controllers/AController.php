@@ -129,7 +129,7 @@ class AController extends Controller
     {
         if(($model = File::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/file', 'File deleted'));

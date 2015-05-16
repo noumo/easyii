@@ -1,15 +1,16 @@
 <?php
 use yii\helpers\Html;
 use yii\easyii\modules\feedback\models\Feedback;
+use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('easyii/feedback', 'View feedback');
 $this->registerCss('.feedback-view dt{margin-bottom: 10px;}');
 
-if($model->status == Feedback::STATUS_ANSWER) {
+if($model->status == Feedback::STATUS_ANSWERED) {
     $this->registerJs('$(".send-answer").click(function(){return confirm("'.Yii::t('easyii/feedback', 'Are you sure you want to resend the answer?').'");})');
 }
 ?>
-<?= $this->render('_menu', ['noanswer' => $model->status == Feedback::STATUS_ANSWER]) ?>
+<?= $this->render('_menu', ['noanswer' => $model->status == Feedback::STATUS_ANSWERED]) ?>
 
 <dl class="dl-horizontal feedback-view">
     <dt><?= Yii::t('easyii', 'Name') ?></dt>
@@ -41,9 +42,8 @@ if($model->status == Feedback::STATUS_ANSWER) {
 <hr>
 <h2><small><?= Yii::t('easyii/feedback', 'Answer') ?></small></h2>
 
-<?= Html::beginForm() ?>
-    <div class="form-group">
-        <?= Html::textarea('Feedback[answer]', $model->answer, ['class' => 'form-control', 'style' => 'height: 250px']) ?>
-    </div>
+<?php $form = ActiveForm::begin() ?>
+    <?= $form->field($model, 'answer_subject') ?>
+    <?= $form->field($model, 'answer_text')->textarea(['style' => 'height: 250px']) ?>
     <?= Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-success send-answer']) ?>
-<?= Html::endForm() ?>
+<?php ActiveForm::end() ?>

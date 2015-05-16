@@ -69,15 +69,19 @@ class AController extends Controller
             $model->update();
         }
 
-        if (Yii::$app->request->post('Feedback')) {
+        $postData = Yii::$app->request->post('Feedback');
+        if($postData) {
             if(filter_var(Setting::get('admin_email'), FILTER_VALIDATE_EMAIL))
             {
-                $model->answer = trim(Yii::$app->request->post('Feedback')['answer']);
-                if($this->sendAnswer($model)){
+                $model->answer_subject = filter_var($postData['answer_subject'], FILTER_SANITIZE_STRING);
+                $model->answer_text = filter_var($postData['answer_text'], FILTER_SANITIZE_STRING);
+                if($model->sendAnswer()){
+                    $model->status = Feedback::STATUS_ANSWERED;
+                    $model->save();
                     $this->flash('success', Yii::t('easyii/feedback', 'Answer successfully sent'));
                 }
                 else{
-                    $this->flash('error', Yii::t('easyii/feedback/api', 'An error has occurred'));
+                    $this->flash('error', Yii::t('easyii/feedback', 'An error has occurred while sending mail'));
                 }
             }
             else {
@@ -87,9 +91,10 @@ class AController extends Controller
             return $this->refresh();
         }
         else {
-            if(!$model->answer) {
-                if ($this->module->settings['answerHello']) $model->answer = Yii::t('easyii/feedback', $this->module->settings['answerHello']) . " " . $model->name . ".\n";
-                if ($this->module->settings['answerFooter']) $model->answer .= "\n\n" . Yii::t('easyii/feedback', $this->module->settings['answerFooter']);
+            if(!$model->answer_text) {
+                $model->answer_subject = Yii::t('easyii/feedback', $this->module->settings['answerSubject']);
+                if ($this->module->settings['answerHeader']) $model->answer_text = Yii::t('easyii/feedback', $this->module->settings['answerHeader']) . " " . $model->name . ".\n";
+                if ($this->module->settings['answerFooter']) $model->answer_text .= "\n\n" . Yii::t('easyii/feedback', $this->module->settings['answerFooter']);
             }
 
             return $this->render('view', [
@@ -106,7 +111,7 @@ class AController extends Controller
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
         else{
-            $model->status = Feedback::STATUS_ANSWER;
+            $model->status = Feedback::STATUS_ANSWERED;
             if($model->update()) {
                 $this->flash('success', Yii::t('easyii/feedback', 'Feedback updated'));
             }
@@ -121,36 +126,9 @@ class AController extends Controller
     {
         if(($model = Feedback::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/feedback', 'Feedback deleted'));
-    }
-
-    public function sendAnswer($model)
-    {
-        $text = $model->answer;
-        $text .= "\n\n\n";
-        $text .= "-------------------------------------------------------------------------------- \n";
-        $text .= Yii::$app->formatter->asDatetime($model->time, 'medium') . " you wrote: \n";
-
-        foreach(explode("\n", $model->text) as $line){
-            $text .= '> '.$line;
-        }
-        $sent = Yii::$app->mailer->compose()
-            ->setFrom(Setting::get('robot_email'))
-            ->setTo($model->email)
-            ->setSubject(strtoupper(Yii::$app->request->serverName).' '.Yii::t('easyii/feedback', 'feedback answer'))
-            ->setTextBody($text)
-            ->setReplyTo(Setting::get('admin_email'))
-            ->send();
-
-        if($sent) {
-            $model->status = Feedback::STATUS_ANSWER;
-            $model->update();
-            return true;
-        }
-
-        return false;
     }
 }

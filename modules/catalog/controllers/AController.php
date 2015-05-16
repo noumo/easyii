@@ -64,7 +64,7 @@ class AController extends CategoryController
                     $ids[] = $child->primaryKey;
                 }
                 if(count($ids)){
-                    Category::updateAll(['fields' => $model->fields], ['in', 'category_id', $ids]);
+                    Category::updateAll(['fields' => json_encode($model->fields)], ['in', 'category_id', $ids]);
                 }
 
                 $this->flash('success', Yii::t('easyii/catalog', 'Category updated'));

@@ -2,7 +2,8 @@
 namespace yii\easyii\components;
 
 use Yii;
-use \yii\easyii\models;
+use yii\easyii\models;
+use yii\helpers\Url;
 
 class Controller extends \yii\web\Controller
 {
@@ -45,14 +46,12 @@ class Controller extends \yii\web\Controller
 
     public function setReturnUrl($url = null)
     {
-        Yii::$app->getSession()->set($this->module->id.'_return', $url ? $url : Yii::$app->request->url);
+        Yii::$app->getSession()->set($this->module->id.'_return', $url ? Url::to($url) : Url::current());
     }
 
     public function getReturnUrl($defaultUrl = null)
     {
-        $url = Yii::$app->getSession()->get($this->module->id.'_return', $defaultUrl);
-
-        return $url === null ? Yii::$app->getHomeUrl() : $url;
+        return Yii::$app->getSession()->get($this->module->id.'_return', $defaultUrl ? Url::to($defaultUrl) : Url::to('/admin/'.$this->module->id));
     }
 
     public function formatResponse($success = '', $back = true)
@@ -61,12 +60,12 @@ class Controller extends \yii\web\Controller
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if($this->error){
                 return ['result' => 'error', 'error' => $this->error];
-            } else{
+            } else {
                 $response = ['result' => 'success'];
                 if($success) {
                     if(is_array($success)){
                         $response = array_merge(['result' => 'success'], $success);
-                    } else{
+                    } else {
                         $response = array_merge(['result' => 'success'], ['message' => $success]);
                     }
                 }
@@ -76,7 +75,7 @@ class Controller extends \yii\web\Controller
         else{
             if($this->error){
                 $this->flash('error', $this->error);
-            } else{
+            } else {
                 if(is_array($success) && isset($success['message'])){
                     $this->flash('success', $success['message']);
                 }

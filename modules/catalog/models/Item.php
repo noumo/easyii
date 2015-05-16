@@ -9,6 +9,8 @@ use yii\easyii\models\Photo;
 
 class Item extends \yii\easyii\components\ActiveRecord
 {
+    const STATUS_OFF = 0;
+    const STATUS_ON = 1;
 
     public static function tableName()
     {
@@ -23,6 +25,10 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
             ['description', 'safe'],
+            ['price', 'number'],
+            ['discount', 'integer', 'max' => 99],
+            [['available', 'time'], 'integer'],
+            ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
         ];
@@ -34,6 +40,10 @@ class Item extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'image' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
+            'available' => Yii::t('easyii/catalog', 'Available'),
+            'price' => Yii::t('easyii/catalog', 'Price'),
+            'discount' => Yii::t('easyii/catalog', 'Discount'),
+            'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
@@ -41,8 +51,7 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         return [
-            SortableModel::className(),
-            'seo' => SeoBehavior::className(),
+            'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -58,12 +67,11 @@ class Item extends \yii\easyii\components\ActiveRecord
                 $this->data = new \stdClass();
             }
 
-            $this->search = '';
-            foreach($this->data as $key => $value){
-                $this->search .= $key . '#' . (is_array($value) ? implode(',', $value) : $value) . "\n";
-            }
-
             $this->data = json_encode($this->data);
+
+            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
+                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            }
 
             return true;
         } else {
@@ -71,15 +79,41 @@ class Item extends \yii\easyii\components\ActiveRecord
         }
     }
 
+    public function afterSave($insert, $attributes){
+        parent::afterSave($insert, $attributes);
+
+        $this->parseData();
+
+        ItemData::deleteAll(['item_id' => $this->primaryKey]);
+
+        foreach($this->data as $name => $value){
+            if(!is_array($value)){
+                $this->insertDataValue($name, $value);
+            } else {
+                foreach($value as $arrayItem){
+                    $this->insertDataValue($name, $arrayItem);
+                }
+            }
+        }
+    }
+
+    private function insertDataValue($name, $value){
+        Yii::$app->db->createCommand()->insert(ItemData::tableName(), [
+            'item_id' => $this->primaryKey,
+            'name' => $name,
+            'value' => $value
+        ])->execute();
+    }
+
     public function afterFind()
     {
         parent::afterFind();
-        $this->data = $this->data !== '' ? json_decode($this->data) : [];
+        $this->parseData();
     }
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['model' => Item::className()])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => Item::className()])->sort();
     }
 
     public function getCategory()
@@ -98,5 +132,11 @@ class Item extends \yii\easyii\components\ActiveRecord
         if($this->image) {
             @unlink(Yii::getAlias('@webroot') . $this->image);
         }
+
+        ItemData::deleteAll(['item_id' => $this->primaryKey]);
+    }
+
+    private function parseData(){
+        $this->data = $this->data !== '' ? json_decode($this->data) : [];
     }
 }

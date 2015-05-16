@@ -2,12 +2,12 @@
 namespace yii\easyii\widgets;
 
 use Yii;
+use yii\easyii\helpers\Data;
 use yii\widgets\InputWidget;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\web\AssetBundle;
-use yii\helpers\ArrayHelper;
 
 use yii\easyii\assets\RedactorAsset;
 
@@ -44,7 +44,7 @@ class Redactor extends InputWidget
 
     public function registerRegional()
     {
-        list($lang,) = explode('-', \Yii::$app->language);
+        $lang = Data::getLocale();
         if ($lang != 'en') {
             $langAsset = 'lang/' . $lang . '.js';
             if (file_exists(Yii::getAlias($this->assetBundle->sourcePath . '/' . $langAsset))) {

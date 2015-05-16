@@ -3,6 +3,7 @@ namespace yii\easyii\modules\news\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\SortableDateController;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 
@@ -17,6 +18,10 @@ class AController extends Controller
     {
         return [
             [
+                'class' => SortableDateController::className(),
+                'model' => News::className(),
+            ],
+            [
                 'class' => StatusController::className(),
                 'model' => News::className()
             ]
@@ -26,7 +31,7 @@ class AController extends Controller
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => News::find()->orderBy(['time' => SORT_DESC]),
+            'query' => News::find()->sortDate(),
         ]);
 
         return $this->render('index', [
@@ -114,11 +119,22 @@ class AController extends Controller
         }
     }
 
+    public function actionPhotos($id)
+    {
+        if(!($model = News::findOne($id))){
+            return $this->redirect(['/admin/'.$this->module->id]);
+        }
+
+        return $this->render('photos', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionDelete($id)
     {
         if(($model = News::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/news', 'News deleted'));
@@ -141,6 +157,16 @@ class AController extends Controller
             }
         }
         return $this->back();
+    }
+
+    public function actionUp($id)
+    {
+        return $this->move($id, 'up');
+    }
+
+    public function actionDown($id)
+    {
+        return $this->move($id, 'down');
     }
 
     public function actionOn($id)

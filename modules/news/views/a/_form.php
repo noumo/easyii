@@ -1,5 +1,5 @@
 <?php
-use dosamigos\datepicker\DatePicker;
+use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\helpers\Image;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -7,12 +7,11 @@ use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
 
-$model->time = date('Y-m-d', $model->time);
 $module = $this->context->module->id;
 ?>
 <?php $form = ActiveForm::begin([
     'enableAjaxValidation' => true,
-    'options' => ['enctype' => 'multipart/form-data']
+    'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
 <?php if($this->context->module->settings['enableThumb']) : ?>
@@ -34,14 +33,7 @@ $module = $this->context->module->id;
     ]
 ]) ?>
 
-<?= $form->field($model, 'time')->widget(
-    DatePicker::className(), [
-        'language' => strtolower(substr(Yii::$app->language, 0, 2)),
-        'clientOptions' => [
-            'autoclose' => true,
-            'format' => 'yyyy-mm-dd'
-        ]
-    ]); ?>
+<?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>

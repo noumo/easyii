@@ -7,6 +7,7 @@ use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\helpers\Data;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\easyii\helpers\Image;
 
 class CategoryModel extends \yii\easyii\components\ActiveRecord
 {
@@ -57,7 +58,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if(!$this->isNewRecord && $this->image != $this->oldAttributes['image']){
+            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
                 @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
             }
             return true;
@@ -87,7 +88,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         });
     }
 
-    public static function flat()
+    public static function cats()
     {
         return Data::cache(static::tableName().'_flat', 3600, function(){
             return self::generateFlat();
@@ -113,7 +114,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 $l = count($stack);
 
                 // Check if we're dealing with different levels
-                while($l > 0 && $stack[$l - 1]['depth'] >= $item['depth']) {
+                while($l > 0 && $stack[$l - 1]->depth >= $item['depth']) {
                     array_pop($stack);
                     $l--;
                 }
@@ -122,15 +123,15 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 if ($l == 0) {
                     // Assigning the root node
                     $i = count($trees);
-                    $trees[$i] = $item;
+                    $trees[$i] = (object)$item;
                     $stack[] = & $trees[$i];
 
                 } else {
                     // Add node to parent
-                    $item['parent'] = $stack[$l - 1]['category_id'];
-                    $i = count($stack[$l - 1]['children']);
-                    $stack[$l - 1]['children'][$i] = $item;
-                    $stack[] = & $stack[$l - 1]['children'][$i];
+                    $item['parent'] = $stack[$l - 1]->category_id;
+                    $i = count($stack[$l - 1]->children);
+                    $stack[$l - 1]->children[$i] = (object)$item;
+                    $stack[] = & $stack[$l - 1]->children[$i];
                 }
             }
         }
@@ -147,38 +148,39 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             $depth = 0;
             $lastId = 0;
             foreach ($collection as $node) {
-                $id = $node['category_id'];
-                $node['parent'] = '';
+                $node = (object)$node;
+                $id = $node->category_id;
+                $node->parent = '';
 
-                if($node['depth'] > $depth){
-                    $node['parent'] = $flat[$lastId]['category_id'];
-                    $depth = $node['depth'];
-                } elseif($node['depth'] == 0){
+                if($node->depth > $depth){
+                    $node->parent = $flat[$lastId]->category_id;
+                    $depth = $node->depth;
+                } elseif($node->depth == 0){
                     $depth = 0;
                 } else {
-                    if ($node['depth'] == $depth) {
-                        $node['parent'] = $flat[$lastId]['parent'];
+                    if ($node->depth == $depth) {
+                        $node->parent = $flat[$lastId]->parent;
                     } else {
                         foreach($flat as $temp){
-                            if($temp['depth'] == $node['depth']){
-                                $node['parent'] = $temp['parent'];
-                                $depth = $temp['depth'];
+                            if($temp->depth == $node->depth){
+                                $node->parent = $temp->parent;
+                                $depth = $temp->depth;
                                 break;
                             }
                         }
                     }
                 }
                 $lastId = $id;
-                unset($node['lft'], $node['rgt']);
+                unset($node->lft, $node->rgt);
                 $flat[$id] = $node;
             }
         }
 
         foreach($flat as &$node){
-            $node['children'] = [];
+            $node->children = [];
             foreach($flat as $temp){
-                if($temp['parent'] == $node['category_id']){
-                    $node['children'][] = $temp['category_id'];
+                if($temp->parent == $node->category_id){
+                    $node->children[] = $temp->category_id;
                 }
             }
         }

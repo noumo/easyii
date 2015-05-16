@@ -4,7 +4,6 @@ use yii\easyii\widgets\Photos;
 $this->title = $model->title;
 ?>
 
-<?= $this->render('_menu') ?>
-<?= $this->render('_submenu', ['model' => $model]) ?>
+<?= $this->render('@easyii/views/category/_menu') ?>
 
 <?= Photos::widget(['model' => $model])?>

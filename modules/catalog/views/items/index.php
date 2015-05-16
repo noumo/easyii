@@ -1,4 +1,6 @@
 <?php
+use yii\easyii\modules\catalog\models\Item;
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = Yii::t('easyii/catalog', 'Catalog');
@@ -15,6 +17,7 @@ $module = $this->context->module->id;
                 <th width="50">#</th>
             <?php endif; ?>
             <th><?= Yii::t('easyii', 'Name') ?></th>
+            <th width="100"><?= Yii::t('easyii', 'Status') ?></th>
             <th width="120"></th>
         </tr>
         </thead>
@@ -25,6 +28,13 @@ $module = $this->context->module->id;
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
                 <td><a href="<?= Url::to(['/admin/'.$module.'/items/edit', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
+                <td class="status">
+                    <?= Html::checkbox('', $item->status == Item::STATUS_ON, [
+                        'class' => 'switch',
+                        'data-id' => $item->primaryKey,
+                        'data-link' => Url::to(['/admin/'.$module.'/items']),
+                    ]) ?>
+                </td>
                 <td class="text-right">
                     <div class="btn-group btn-group-sm" role="group">
                         <a href="<?= Url::to(['/admin/'.$module.'/items/up', 'id' => $item->primaryKey, 'category_id' => $model->primaryKey]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>

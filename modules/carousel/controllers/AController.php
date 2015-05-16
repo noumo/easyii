@@ -131,7 +131,7 @@ class AController extends Controller
     {
         if(($model = Carousel::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii/carousel', 'Carousel item deleted'));

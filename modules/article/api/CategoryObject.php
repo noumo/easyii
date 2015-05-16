@@ -21,11 +21,11 @@ class CategoryObject extends \yii\easyii\components\ApiObject
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
     }
 
-    public function getPages(){
-        return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
+    public function pages($options = []){
+        return $this->_adp ? LinkPager::widget(array_merge($options, ['pagination' => $this->_adp->pagination])) : '';
     }
 
-    public function getPagination(){
+    public function pagination(){
         return $this->_adp ? $this->_adp->pagination : null;
     }
 
@@ -34,10 +34,10 @@ class CategoryObject extends \yii\easyii\components\ApiObject
         if(!$this->_items){
             $this->_items = [];
 
-            $query = Item::find()->with('seo')->where(['category_id' => $this->id])->sort();
+            $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sort();
 
             if(!empty($options['where'])){
-                $query->andWhere($options['where']);
+                $query->andFilterWhere($options['where']);
             }
 
             $this->_adp = new ActiveDataProvider([

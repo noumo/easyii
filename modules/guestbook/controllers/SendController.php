@@ -2,7 +2,6 @@
 namespace yii\easyii\modules\guestbook\controllers;
 
 use Yii;
-use yii\easyii\modules\guestbook\api\Guestbook;
 use yii\easyii\modules\guestbook\models\Guestbook as GuestbookModel;
 
 class SendController extends \yii\web\Controller
@@ -13,8 +12,8 @@ class SendController extends \yii\web\Controller
         $request = Yii::$app->request;
 
         if ($model->load($request->post())) {
-            $sent = $model->save() ? 1 : 0;
-            return $this->redirect(['/' . $request->post('returnUrl'), Guestbook::SENT_VAR => $sent]);
+            $returnUrl = $model->save() ? $request->post('successUrl') : $request->post('errorUrl');
+            return $this->redirect($returnUrl);
         } else {
             return $this->redirect(Yii::$app->request->baseUrl);
         }

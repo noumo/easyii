@@ -22,4 +22,9 @@ class Data
         }
         return $data;
     }
+
+    public static function getLocale()
+    {
+        return strtolower(substr(Yii::$app->language, 0, 2));
+    }
 }

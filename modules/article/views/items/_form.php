@@ -1,5 +1,6 @@
 <?php
 use yii\easyii\helpers\Image;
+use yii\easyii\widgets\DateTimePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -10,7 +11,7 @@ $module = $this->context->module->id;
 ?>
 <?php $form = ActiveForm::begin([
     'enableAjaxValidation' => true,
-    'options' => ['enctype' => 'multipart/form-data']
+    'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
 
@@ -34,6 +35,10 @@ $module = $this->context->module->id;
         'plugins' => ['fullscreen']
     ]
 ]) ?>
+
+<?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
+
+
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>

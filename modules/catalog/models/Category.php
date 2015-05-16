@@ -19,6 +19,10 @@ class Category extends \yii\easyii\components\CategoryModel
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
+            if($insert && ($parent = $this->parents(1)->one())){
+                $this->fields = $parent->fields;
+            }
+
             if(!$this->fields || !is_array($this->fields)){
                 $this->fields = [];
             }
@@ -30,15 +34,21 @@ class Category extends \yii\easyii\components\CategoryModel
         }
     }
 
+    public function afterSave($insert, $attributes)
+    {
+        parent::afterSave($insert, $attributes);
+        $this->parseFields();
+    }
+
     public function afterFind()
     {
         parent::afterFind();
-        $this->fields = $this->fields !== '' ? json_decode($this->fields) : [];
+        $this->parseFields();
     }
 
     public function getItems()
     {
-        return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sort();
+        return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sortDate();
     }
 
     public function afterDelete()
@@ -48,5 +58,9 @@ class Category extends \yii\easyii\components\CategoryModel
         foreach($this->getItems()->all() as $item){
             $item->delete();
         }
+    }
+
+    private function parseFields(){
+        $this->fields = $this->fields !== '' ? json_decode($this->fields) : [];
     }
 }

@@ -3,6 +3,7 @@ namespace yii\easyii\modules\guestbook\models;
 
 use Yii;
 use yii\easyii\behaviors\CalculateNotice;
+use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
@@ -87,37 +88,32 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
     {
         $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
 
-        if(!$settings['mailAdminOnNewPost'] || !$settings['templateOnNewPost'] || !$settings['subjectOnNewPost']) {
+        if(!$settings['mailAdminOnNewPost']){
             return false;
         }
-
-        return $this->mail($settings['templateOnNewPost'], $settings['subjectOnNewPost'], Url::to(['/admin/guestbook/a/view', 'id' => $this->primaryKey], true));
-
+        return Mail::send(
+            Setting::get('admin_email'),
+            $settings['subjectOnNewPost'],
+            $settings['templateOnNewPost'],
+            [
+                'post' => $this,
+                'link' => Url::to(['/admin/guestbook/a/view', 'id' => $this->primaryKey], true)
+            ]
+        );
     }
 
     public function notifyUser()
     {
         $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
 
-        if(!$settings['templateNotifyUser'] || !$settings['subjectNotifyUser'] || !$settings['frontendGuestbookRoute']) {
-            return false;
-        }
-
-        return $this->mail($settings['templateNotifyUser'], $settings['subjectNotifyUser'], Url::to([$settings['frontendGuestbookRoute']], true));
-    }
-
-    private function mail($template, $subject, $link)
-    {
-        $robotEmail = Setting::get('robot_email');
-        $adminEmail = Setting::get('admin_email');
-        if(!$robotEmail || !$adminEmail){
-            return false;
-        }
-
-        return Yii::$app->mailer->compose($template, ['post' => $this, 'subject' => $subject, 'link' => $link])
-            ->setFrom($robotEmail)
-            ->setTo($adminEmail)
-            ->setSubject($subject)
-            ->send();
+        return Mail::send(
+            $this->email,
+            $settings['subjectNotifyUser'],
+            $settings['templateNotifyUser'],
+            [
+                'post' => $this,
+                'link' => Url::to([$settings['frontendGuestbookRoute']], true)
+            ]
+        );
     }
 }

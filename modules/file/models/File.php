@@ -40,7 +40,7 @@ class File extends \yii\easyii\components\ActiveRecord
     {
         return [
             SortableModel::className(),
-            'seo' => SeoBehavior::className(),
+            'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',

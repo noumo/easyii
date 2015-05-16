@@ -6,18 +6,19 @@ $module = $this->context->module->id;
 
 $backTo = null;
 $indexUrl = Url::to(['/admin/'.$module]);
-$confirmedUrl = Url::to(['/admin/'.$module.'/a/confirmed']);
+$processedUrl = Url::to(['/admin/'.$module.'/a/processed']);
 $sentUrl = Url::to(['/admin/'.$module.'/a/sent']);
 $completedUrl = Url::to(['/admin/'.$module.'/a/completed']);
 $failsUrl = Url::to(['/admin/'.$module.'/a/fails']);
+$blankUrl = Url::to(['/admin/'.$module.'/a/blank']);
 
 if($action === 'view')
 {
     $returnUrl = $this->context->getReturnUrl($indexUrl);
 
-    if(strpos($returnUrl, 'confirmed') !== false){
-        $backTo = 'confirmed';
-        $confirmedUrl = $returnUrl;
+    if(strpos($returnUrl, 'processed') !== false){
+        $backTo = 'processed';
+        $processedUrl = $returnUrl;
     } elseif(strpos($returnUrl, 'sent') !== false) {
         $backTo = 'sent';
         $sentUrl = $returnUrl;
@@ -27,7 +28,10 @@ if($action === 'view')
     } elseif(strpos($returnUrl, 'fails') !== false) {
         $backTo = 'fails';
         $failsUrl = $returnUrl;
-    } else{
+    } elseif(strpos($returnUrl, 'blank') !== false) {
+        $backTo = 'blank';
+        $blankUrl = $returnUrl;
+    } else {
         $backTo = 'index';
         $indexUrl = $returnUrl;
     }
@@ -45,14 +49,14 @@ if($action === 'view')
             <?php endif; ?>
         </a>
     </li>
-    <li <?= ($action === 'confirmed') ? 'class="active"' : '' ?>>
-        <a href="<?= $confirmedUrl ?>">
-            <?php if($backTo === 'confirmed') : ?>
+    <li <?= ($action === 'processed') ? 'class="active"' : '' ?>>
+        <a href="<?= $processedUrl ?>">
+            <?php if($backTo === 'processed') : ?>
                 <i class="glyphicon glyphicon-chevron-left font-12"></i>
             <?php endif; ?>
-            <?= Yii::t('easyii/shopcart', 'Confirmed') ?>
-            <?php if($this->context->confirmed > 0) : ?>
-                <span class="badge"><?= $this->context->confirmed ?></span>
+            <?= Yii::t('easyii/shopcart', 'Processed') ?>
+            <?php if($this->context->processed > 0) : ?>
+                <span class="badge"><?= $this->context->processed ?></span>
             <?php endif; ?>
         </a>
     </li>
@@ -81,6 +85,14 @@ if($action === 'view')
                 <i class="glyphicon glyphicon-chevron-left font-12"></i>
             <?php endif; ?>
             <?= Yii::t('easyii/shopcart', 'Fails') ?>
+        </a>
+    </li>
+    <li <?= ($action === 'blank') ? 'class="active"' : '' ?>>
+        <a href="<?= $blankUrl ?>">
+            <?php if($backTo === 'blank') : ?>
+                <i class="glyphicon glyphicon-chevron-left font-12"></i>
+            <?php endif; ?>
+            <?= Yii::t('easyii/shopcart', 'Blank') ?>
         </a>
     </li>
 </ul>

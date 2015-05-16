@@ -2,8 +2,6 @@
 namespace yii\easyii\modules\feedback\controllers;
 
 use Yii;
-
-use yii\easyii\modules\feedback\api\Feedback;
 use yii\easyii\modules\feedback\models\Feedback as FeedbackModel;
 
 class SendController extends \yii\web\Controller
@@ -15,8 +13,8 @@ class SendController extends \yii\web\Controller
         $request = Yii::$app->request;
 
         if ($model->load($request->post())) {
-            $sent = $model->save() ? 1 : 0;
-            return $this->redirect(['/' . $request->post('returnUrl'), Feedback::SENT_VAR => $sent]);
+            $returnUrl = $model->save() ? $request->post('successUrl') : $request->post('errorUrl');
+            return $this->redirect($returnUrl);
         } else {
             return $this->redirect(Yii::$app->request->baseUrl);
         }

@@ -7,8 +7,6 @@ use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Alert;
-
 use yii\easyii\modules\guestbook\models\Guestbook as GuestbookModel;
 use yii\easyii\widgets\ReCaptcha;
 
@@ -22,7 +20,8 @@ class Guestbook extends \yii\easyii\components\API
     private $_items;
 
     private $_defaultFormOptions = [
-        'showAlert' => true
+        'errorUrl' => '',
+        'successUrl' => ''
     ];
 
     public function api_items($options = [])
@@ -30,10 +29,10 @@ class Guestbook extends \yii\easyii\components\API
         if(!$this->_items){
             $this->_items = [];
 
-            $query = GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->orderBy('time DESC');
+            $query = GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate();
 
             if(!empty($options['where'])){
-                $query->where($options['where']);
+                $query->andFilterWhere($options['where']);
             }
 
             $this->_adp = new ActiveDataProvider([
@@ -55,7 +54,7 @@ class Guestbook extends \yii\easyii\components\API
         }
 
         $result = [];
-        foreach(GuestbookModel::find()->orderBy('time DESC')->limit($limit)->all() as $item){
+        foreach(GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate()->limit($limit)->all() as $item){
             $result[] = new GuestbookObject($item);
         }
 
@@ -79,26 +78,15 @@ class Guestbook extends \yii\easyii\components\API
             'action' => Url::to(['/admin/guestbook/send'])
         ]);
 
-        echo Html::hiddenInput('returnUrl', Yii::$app->controller->route);
+        echo Html::hiddenInput('errorUrl', $options['errorUrl'] ? $options['errorUrl'] : Url::current([self::SENT_VAR => 0]));
+        echo Html::hiddenInput('successUrl', $options['successUrl'] ? $options['successUrl'] : Url::current([self::SENT_VAR => 1]));
 
-        if($options['showAlert']) {
-            $sent = Yii::$app->request->get(self::SENT_VAR);
-            if ($sent == "1") {
-                $message = Yii::$app->getModule('admin')->activeModules['guestbook']->settings['preModerate'] ?
-                    Yii::t('easyii/guestbook/api', 'Message successfully sent and will be published after moderation') :
-                    Yii::t('easyii/guestbook/api', 'Message successfully added');
-
-                echo Alert::widget(['options' => ['class' => 'alert-success'], 'body' => $message]);
-            } elseif ($sent == "0") {
-                echo Alert::widget(['options' => ['class' => 'alert-danger'], 'body' => Yii::t('easyii/guestbook/api', 'An error has occurred')]);
-            }
-        }
         echo $form->field($model, 'name');
+
         if($settings['enableTitle']) echo $form->field($model, 'title');
         if($settings['enableEmail']) echo $form->field($model, 'email');
 
         echo $form->field($model, 'text')->textarea();
-
 
         if($settings['enableCaptcha']) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 

@@ -19,7 +19,7 @@ if($action === 'view')
     } elseif(strpos($returnUrl, 'all') !== false) {
         $backTo = 'all';
         $allUrl = $returnUrl;
-    } else{
+    } else {
         $backTo = 'index';
         $indexUrl = $returnUrl;
     }

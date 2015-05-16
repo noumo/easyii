@@ -5,7 +5,7 @@ use yii\easyii\widgets\SeoForm;
 ?>
 <?php $form = ActiveForm::begin([
     'enableAjaxValidation' => true,
-    'options' => ['enctype' => 'multipart/form-data']
+    'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
 <?= $form->field($model, 'file')->fileInput() ?>

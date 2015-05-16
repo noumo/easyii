@@ -13,12 +13,13 @@ class CategoryController extends Controller
 {
     public $categoryClass;
     public $moduleName;
+    public $viewRoute = '/items';
 
     public function actionIndex()
     {
         $class = $this->categoryClass;
         return $this->render('@easyii/views/category/index', [
-            'tree' => $class::tree()
+            'cats' => $class::cats()
         ]);
     }
 
@@ -37,7 +38,7 @@ class CategoryController extends Controller
                     $model->image = UploadedFile::getInstance($model, 'image');
                     if($model->image && $model->validate(['image'])){
                         $model->image = Image::upload($model->image, $this->moduleName);
-                    }else{
+                    } else {
                         $model->image = '';
                     }
                 }
@@ -46,17 +47,16 @@ class CategoryController extends Controller
 
                 $parent = Yii::$app->request->post('parent', null);
                 if($parent && ($parentCategory = $class::findOne((int)$parent))){
-                    $model->appendTo($parentCategory);
                     $model->order_num = $parentCategory->order_num;
+                    $model->appendTo($parentCategory);
                 } else {
                     $model->attachBehavior(SortableModel::className());
                     $model->makeRoot();
                 }
 
-                if($model->save()){
-
+                if(!$model->hasErrors()){
                     $this->flash('success', Yii::t('easyii', 'Category created'));
-                    return $this->redirect(['/admin/'.$this->moduleName.'/items/index', 'id' => $model->primaryKey]);
+                    return $this->redirect(['/admin/'.$this->moduleName, 'id' => $model->primaryKey]);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -134,7 +134,7 @@ class CategoryController extends Controller
         $class = $this->categoryClass;
         if(($model = $class::findOne($id))){
             $model->deleteWithChildren();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii', 'Category deleted'));
@@ -169,15 +169,17 @@ class CategoryController extends Controller
         if(($model = $modelClass::findOne($id)))
         {
             $up = $direction == 'up';
-            $orderDir = $up ? 'ASC' : 'DESC';
+            $orderDir = $up ? SORT_ASC : SORT_DESC;
 
-            if($model->primaryKey == $model->tree){
-                $swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy('order_num '.$orderDir)->one();
+            if($model->depth == 0){
+
+                $swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
                 if($swapCat)
                 {
                     $modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
                     $modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
                     $modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
+                    $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
                 }
             } else {
                 $where = [

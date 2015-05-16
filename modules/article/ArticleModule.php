@@ -6,6 +6,7 @@ class ArticleModule extends \yii\easyii\components\Module
     public $settings = [
         'categoryThumb' => true,
         'articleThumb' => true,
+        'enablePhotos' => true,
 
         'enableShort' => true,
         'shortMaxLength' => 255,
