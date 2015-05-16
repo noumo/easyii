@@ -1,180 +1,23 @@
 <?php
 namespace yii\easyii\modules\gallery\controllers;
 
-use Yii;
-use yii\data\ActiveDataProvider;
-use yii\easyii\helpers\Image;
-use yii\web\UploadedFile;
-use yii\widgets\ActiveForm;
+use yii\easyii\components\CategoryController;
+use yii\easyii\modules\gallery\models\Category;
 
-use yii\easyii\components\Controller;
-use yii\easyii\modules\gallery\models\Album;
-use yii\easyii\behaviors\SortableController;
-use yii\easyii\behaviors\StatusController;
-
-class AController extends Controller
+class AController extends CategoryController
 {
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => SortableController::className(),
-                'model' => Album::className()
-            ],
-            [
-                'class' => StatusController::className(),
-                'model' => Album::className()
-            ]
-        ];
-    }
-
-    public function actionIndex()
-    {
-        $data = new ActiveDataProvider([
-            'query' => Album::findWithPhotoCount()->sort(),
-        ]);
-        return $this->render('index', [
-            'data' => $data
-        ]);
-    }
-
-    public function actionCreate($slug = null)
-    {
-        $model = new Album;
-
-        if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
-            else{
-                if(isset($_FILES) && $this->module->settings['albumThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'gallery');
-                    }else{
-                        $model->image = '';
-                    }
-                }
-                $model->status = Album::STATUS_ON;
-
-                if($model->save()){
-                    $this->flash('success', Yii::t('easyii/gallery', 'Album created'));
-                    return $this->redirect(['/admin/'.$this->module->id.'/a/photos', 'id' => $model->primaryKey]);
-                }
-                else{
-                    $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                    return $this->refresh();
-                }
-            }
-        }
-        else {
-            if($slug){
-                $model->slug = $slug;
-            }
-            return $this->render('create', [
-                'model' => $model
-            ]);
-        }
-    }
-
-    public function actionEdit($id)
-    {
-        $model = Album::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
-        if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
-            else{
-                if(isset($_FILES) && $this->module->settings['albumThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'catalog');
-                    }else{
-                        $model->image = $model->oldAttributes['image'];
-                    }
-                }
-
-                if($model->save()){
-                    $this->flash('success', Yii::t('easyii/gallery', 'Album updated'));
-                }
-                else{
-                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-                }
-                return $this->refresh();
-            }
-        }
-        else {
-            return $this->render('edit', [
-                'model' => $model
-            ]);
-        }
-    }
+    public $categoryClass = 'yii\easyii\modules\gallery\models\Category';
+    public $moduleName = 'gallery';
+    public $viewRoute = '/a/photos';
 
     public function actionPhotos($id)
     {
-        if(!($model = Album::findOne($id))){
+        if(!($model = Category::findOne($id))){
             return $this->redirect(['/admin/'.$this->module->id]);
         }
 
         return $this->render('photos', [
             'model' => $model,
         ]);
-    }
-
-    public function actionClearImage($id)
-    {
-        $model = Album::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image){
-            $model->image = '';
-            if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->image);
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Album::findOne($id))){
-            $model->delete();
-        } else{
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/gallery', 'Album deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Album::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Album::STATUS_OFF);
     }
 }
