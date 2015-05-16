@@ -66,6 +66,14 @@ $(function(){
         });
     });
 
+    $(document).bind('keydown', function (e) {
+        if(e.ctrlKey && e.which === 83){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
+            $('.model-form').submit();
+            e.preventDefault();
+            return false;
+        }
+    });
+
     window.notify = new Notify();
 });
 

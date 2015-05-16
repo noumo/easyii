@@ -2,12 +2,13 @@
 return [
     'Orders' => 'Заказы',
     'Order' => 'Заказ',
-    'New' => 'Новый',
+    'Order updated' => 'Заказ обновлен',
+    'Blank' => 'Незаполнен',
     'Pending' => 'Ожидает',
-    'Confirmed' => 'Подтверждено',
-    'Sent' => 'Отправлено',
-    'Completed' => 'Завершено',
-    'Declined' => 'Отклонено',
+    'Processed' => 'В обработке',
+    'Sent' => 'Отправлен',
+    'Completed' => 'Завершен',
+    'Declined' => 'Отклонен',
     'Returned' => 'Вовзрат',
     'Error' => 'Ошибка',
     'Fails' => 'Неудачи',
@@ -15,6 +16,7 @@ return [
     'Cost' => 'Стоимость',
     'Phone' => 'Телефон',
     'Comment' => 'Комментарий',
+    'Admin remark' => 'Пометка',
     'Items' => 'Товары',
     'Options' => 'Опции',
     'Count' => 'Кол-во',
@@ -22,4 +24,6 @@ return [
     'Price' => 'Цена',
     'Total' => 'Всего',
     'View' => 'Просмотр',
+    'Order status changed' => 'Статус заказа изменен',
+    'Notify user on E-mail' => 'Отправить уведомление пользователю на E-mail'
 ];

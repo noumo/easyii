@@ -1,29 +1,29 @@
 <?php
 namespace yii\easyii\modules\shopcart\api;
 
-use app\modules\shop\models\Item;
 use Yii;
-use yii\easyii\models\Setting;
+use yii\easyii\modules\catalog\models\Item;
 use yii\easyii\modules\shopcart\models\Good;
 use yii\easyii\modules\shopcart\models\Order;
+use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 class Shopcart extends \yii\easyii\components\API
 {
+    const SENT_VAR = 'shopcart_sent';
+
     private $_order;
     private $_items;
 
+    private $_defaultFormOptions = [
+        'errorUrl' => '',
+        'successUrl' => ''
+    ];
+
     public function api_items()
     {
-        if(!$this->_items){
-            $this->_items = [];
-            if(!$this->order->isNewRecord){
-                foreach(Good::find()->where(['order_id' => $this->order->order_id])->with('item')->all() as $good){
-                    $this->_items[] = new GoodObject($good);
-                }
-            }
-        }
-        return $this->_items;
+        return $this->items;
     }
 
     public function api_order()
@@ -31,7 +31,36 @@ class Shopcart extends \yii\easyii\components\API
         return new OrderObject($this->order);
     }
 
-    public function api_add($item_id, $options = '', $count = 1, $increaseOnDublicate = true)
+    public function api_form($options = [])
+    {
+        $model = new Order;
+        $model->scenario = 'confirm';
+        $settings = Yii::$app->getModule('admin')->activeModules['shopcart']->settings;
+        $options = array_merge($this->_defaultFormOptions, $options);
+
+        ob_start();
+        $form = ActiveForm::begin([
+            'action' => Url::to(['/admin/shopcart/send'])
+        ]);
+
+        echo Html::hiddenInput('errorUrl', $options['errorUrl'] ? $options['errorUrl'] : Url::current([self::SENT_VAR => 0]));
+        echo Html::hiddenInput('successUrl', $options['successUrl'] ? $options['successUrl'] : Url::current([self::SENT_VAR => 1]));
+
+        echo $form->field($model, 'name');
+        echo $form->field($model, 'address');
+
+        if($settings['enableEmail']) echo $form->field($model, 'email');
+        if($settings['enablePhone']) echo $form->field($model, 'phone');
+
+        echo $form->field($model, 'comment')->textarea();
+
+        echo Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-primary']);
+        ActiveForm::end();
+
+        return ob_get_clean();
+    }
+
+    public function api_add($item_id, $count = 1, $options = '', $increaseOnDublicate = true)
     {
         $shopItem = Item::findOne($item_id);
         if(!$shopItem){
@@ -69,14 +98,14 @@ class Shopcart extends \yii\easyii\components\API
         }
 
         if($good->save()){
-           $response = [
-               'result' => 'success',
-               'order_id' => $good->order_id,
-               'good_id' => $good->primaryKey,
-               'item_id' => $shopItem->primaryKey,
-               'options' => $good->options,
-               'discount' => $good->discount,
-           ];
+            $response = [
+                'result' => 'success',
+                'order_id' => $good->order_id,
+                'good_id' => $good->primaryKey,
+                'item_id' => $shopItem->primaryKey,
+                'options' => $good->options,
+                'discount' => $good->discount,
+            ];
             if($response['discount']){
                 $response['price'] = round($good->price * (1 - $good->discount / 100));
                 $response['old_price'] = $good->price;
@@ -95,19 +124,34 @@ class Shopcart extends \yii\easyii\components\API
         if(!$good){
             return ['result' => 'error', 'code' => 1, 'error' => 'Good not found'];
         }
-        $order = $good->order;
-        if($order->access_token != $this->token){
+        if($good->order_id != $this->order->order_id){
             return ['result' => 'error', 'code' => 2, 'error' => 'Access denied'];
         }
 
         $good->delete();
 
-        return ['result' => 'success', 'good_id' => $good_id, 'order_id' => $order->primaryKey];
+        return ['result' => 'success', 'good_id' => $good_id, 'order_id' => $good->order_id];
     }
 
-    public function api_confirm($data)
+    public function api_update($goods)
     {
-        if($this->order->isNewRecord || $this->order->status != Order::STATUS_NEW){
+        if(is_array($goods) && count($this->items)) {
+            foreach($this->items as $good){
+                if(!empty($goods[$good->id]))
+                {
+                    $count = (int)$goods[$good->id];
+                    if($count > 0){
+                        $good->model->count = $count;
+                        $good->model->update();
+                    }
+                }
+            }
+        }
+    }
+
+    public function api_send($data)
+    {
+        if($this->order->isNewRecord || $this->order->status != Order::STATUS_BLANK){
             return ['result' => 'error', 'code' => 1, 'error' => 'Order not found'];
         }
         if(!count($this->order->goods)){
@@ -116,9 +160,6 @@ class Shopcart extends \yii\easyii\components\API
         $this->order->setAttributes($data);
         $this->order->status = Order::STATUS_PENDING;
         if($this->order->save()){
-            if(Yii::$app->getModule('admin')->activeModules['shopcart']->settings['mailAdminOnNewOrder']) {
-                $this->api_mailAdmin($this->order->primaryKey);
-            }
             return [
                 'result' => 'success',
                 'order_id' => $this->order->primaryKey,
@@ -129,21 +170,28 @@ class Shopcart extends \yii\easyii\components\API
         }
     }
 
-    public function api_mailAdmin($order_id)
+    public function api_cost()
     {
-        $settings = Yii::$app->getModule('admin')->activeModules['shopcart']->settings;
-        $template = $settings['templateOnNewOrder'];
-        $subject = $settings['subjectOnNewOrder'];
-
-        if($template && $subject)
-        {
-            Yii::$app->mailer->compose($template, ['order_id' => $order_id, 'link' => Url::to(['/admin/shopcart/a/view', 'id' => $order_id])])
-                ->setFrom(Setting::get('robot_email'))
-                ->setTo(Setting::get('admin_email'))
-                ->setSubject($subject)
-                ->send();
+        $cost = 0;
+        if(count($this->items)){
+            foreach($this->items as $good){
+                $cost += $good->price * $good->count;
+            }
         }
+        return $cost;
+    }
 
+    public function getItems()
+    {
+        if(!$this->_items){
+            $this->_items = [];
+            if(!$this->order->isNewRecord){
+                foreach(Good::find()->where(['order_id' => $this->order->order_id])->with('item')->all() as $good){
+                    $this->_items[] = new GoodObject($good);
+                }
+            }
+        }
+        return $this->_items;
     }
 
     public function getOrder()
@@ -151,7 +199,7 @@ class Shopcart extends \yii\easyii\components\API
         if(!$this->_order){
             $access_token = $this->token;
 
-            if(!$access_token || !($this->_order = Order::find()->where(['access_token' => $access_token])->status(Order::STATUS_NEW)->one())){
+            if(!$access_token || !($this->_order = Order::find()->where(['access_token' => $access_token])->status(Order::STATUS_BLANK)->one())){
                 $this->_order = new Order();
             }
         }

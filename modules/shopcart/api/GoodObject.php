@@ -1,7 +1,7 @@
 <?php
 namespace yii\easyii\modules\shopcart\api;
 
-use app\modules\shop\api\ItemObject;
+use yii\easyii\modules\catalog\api\ItemObject;
 
 class GoodObject extends \yii\easyii\components\ApiObject
 {
