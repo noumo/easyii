@@ -2,6 +2,7 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\easyii\helpers\Data;
 use yii\web\ServerErrorHttpException;
 
 use yii\easyii\helpers\WebConsole;
@@ -185,7 +186,7 @@ class InstallController extends \yii\web\Controller
 
     private function installModules()
     {
-        $language = substr(Yii::$app->language, 0, 2);
+        $language = Data::getLocale();
 
         foreach(glob(Yii::getAlias('@easyii'). DIRECTORY_SEPARATOR .'modules/*') as $module)
         {

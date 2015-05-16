@@ -84,7 +84,7 @@ class SettingsController extends \yii\easyii\components\Controller
     {
         if(($model = Setting::findOne($id))){
             $model->delete();
-        } else{
+        } else {
             $this->error = Yii::t('easyii', 'Not found');
         }
         return $this->formatResponse(Yii::t('easyii', 'Setting deleted'));

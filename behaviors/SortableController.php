@@ -15,7 +15,7 @@ class SortableController extends \yii\base\Behavior
             if($direction === 'up'){
                 $eq = '>';
                 $orderDir = 'ASC';
-            } else{
+            } else {
                 $eq = '<';
                 $orderDir = 'DESC';
             }
