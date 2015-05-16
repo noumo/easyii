@@ -21,7 +21,7 @@ class Photos extends Widget
 
     public function run()
     {
-        $photos = Photo::find()->where(['model' => get_class($this->model), 'item_id' => $this->model->primaryKey])->sort()->all();
+        $photos = Photo::find()->where(['class' => get_class($this->model), 'item_id' => $this->model->primaryKey])->sort()->all();
         echo $this->render('photos', [
             'photos' => $photos
         ]);

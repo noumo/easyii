@@ -9,11 +9,11 @@ use yii\easyii\assets\PhotosAsset;
 PhotosAsset::register($this);
 Fancybox::widget(['selector' => '.plugin-box']);
 
-$model = get_class($this->context->model);
+$class = get_class($this->context->model);
 $item_id = $this->context->model->primaryKey;
 
 $linkParams = [
-    'model' => $model,
+    'class' => $class,
     'item_id' => $item_id,
 ];
 
