@@ -55,7 +55,7 @@ class DateTimePicker extends InputWidget
             .data("DateTimePicker")
             .date(moment('.($this->model->{$this->attribute} * 1000).'));
 
-            $("[type=text]").focus(function(e){
+            $("[type=text]", dtpContainer).focus(function(e){
                 dtpContainer.data("DateTimePicker").show();
             });
         ');
