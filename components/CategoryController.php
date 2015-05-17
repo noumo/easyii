@@ -45,8 +45,8 @@ class CategoryController extends Controller
 
                 $model->status = $class::STATUS_ON;
 
-                $parent = Yii::$app->request->post('parent', null);
-                if($parent && ($parentCategory = $class::findOne((int)$parent))){
+                $parent = (int)Yii::$app->request->post('parent', null);
+                if($parent > 0 && ($parentCategory = $class::findOne($parent))){
                     $model->order_num = $parentCategory->order_num;
                     $model->appendTo($parentCategory);
                 } else {
