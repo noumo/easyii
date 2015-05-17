@@ -4,6 +4,7 @@ namespace yii\easyii\modules\news\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\models\Photo;
 use yii\helpers\StringHelper;
 
 class News extends \yii\easyii\components\ActiveRecord
@@ -55,6 +56,11 @@ class News extends \yii\easyii\components\ActiveRecord
         ];
     }
 
+    public function getPhotos()
+    {
+        return $this->hasMany(Photo::className(), ['item_id' => 'news_id'])->where(['class' => self::className()])->sort();
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -76,6 +82,10 @@ class News extends \yii\easyii\components\ActiveRecord
 
         if($this->image){
             @unlink(Yii::getAlias('@webroot').$this->image);
+        }
+
+        foreach($this->getPhotos()->all() as $photo){
+            $photo->delete();
         }
     }
 }

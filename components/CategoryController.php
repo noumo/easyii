@@ -2,6 +2,7 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
@@ -133,7 +134,11 @@ class CategoryController extends Controller
     {
         $class = $this->categoryClass;
         if(($model = $class::findOne($id))){
+            $children = $model->children()->all();
             $model->deleteWithChildren();
+            foreach($children as $child) {
+                $child->trigger(ActiveRecord::EVENT_AFTER_DELETE);
+            }
         } else {
             $this->error = Yii::t('easyii', 'Not found');
         }

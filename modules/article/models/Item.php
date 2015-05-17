@@ -4,6 +4,7 @@ namespace yii\easyii\modules\article\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\models\Photo;
 use yii\helpers\StringHelper;
 
 class Item extends \yii\easyii\components\ActiveRecord
@@ -60,6 +61,11 @@ class Item extends \yii\easyii\components\ActiveRecord
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
     }
 
+    public function getPhotos()
+    {
+        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -82,6 +88,10 @@ class Item extends \yii\easyii\components\ActiveRecord
 
         if($this->image){
             @unlink(Yii::getAlias('@webroot').$this->image);
+        }
+
+        foreach($this->getPhotos()->all() as $photo){
+            $photo->delete();
         }
     }
 }
