@@ -48,7 +48,7 @@ class Article extends \yii\easyii\components\API
             if(!empty($options['orderBy'])){
                 $query->orderBy($options['orderBy']);
             } else {
-                $query->sort();
+                $query->sortDate();
             }
 
             $this->_adp = new ActiveDataProvider([

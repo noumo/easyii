@@ -4,7 +4,6 @@ namespace yii\easyii\modules\article\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
-use yii\easyii\behaviors\SortableModel;
 use yii\helpers\StringHelper;
 
 class Item extends \yii\easyii\components\ActiveRecord
