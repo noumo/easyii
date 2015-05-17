@@ -48,7 +48,7 @@ class PhotosController extends Controller
                         'photo' => [
                             'id' => $photo->primaryKey,
                             'image' => $photo->image,
-                            'thumb' => Image::thumb(Yii::getAlias('@webroot') . $photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT),
+                            'thumb' => Image::thumb($photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT),
                             'description' => ''
                         ]
                     ];
@@ -111,7 +111,7 @@ class PhotosController extends Controller
                             'message' => Yii::t('easyii', 'Photo uploaded'),
                             'photo' => [
                                 'image' => $photo->image,
-                                'thumb' => Image::thumb(Yii::getAlias('@webroot') . $photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT)
+                                'thumb' => Image::thumb($photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT)
                             ]
                         ];
                     }
