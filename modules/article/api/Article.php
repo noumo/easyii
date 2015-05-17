@@ -71,7 +71,7 @@ class Article extends \yii\easyii\components\API
 
         $result = [];
 
-        $query = Item::find()->with('seo')->status(Item::STATUS_ON)->sort()->limit($limit);
+        $query = Item::find()->with('seo')->status(Item::STATUS_ON)->sortDate()->limit($limit);
         if($where){
             $query->andFilterWhere($where);
         }
