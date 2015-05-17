@@ -27,10 +27,11 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['description', 'safe'],
             ['price', 'number'],
             ['discount', 'integer', 'max' => 99],
-            [['available', 'time'], 'integer'],
+            [['status', 'category_id', 'available', 'time'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
+            ['status', 'default', 'value' => self::STATUS_ON],
         ];
     }
 

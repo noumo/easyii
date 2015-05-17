@@ -66,8 +66,6 @@ class ItemsController extends Controller
                         $model->image = '';
                     }
                 }
-                $model->status = Item::STATUS_ON;
-
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit/', 'id' => $model->primaryKey]);

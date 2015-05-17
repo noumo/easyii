@@ -46,8 +46,6 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                $model->status = Faq::STATUS_ON;
-
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/faq', 'Entry created'));
                     return $this->redirect(['/admin/'.$this->module->id]);

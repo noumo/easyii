@@ -21,6 +21,8 @@ class Carousel extends \yii\easyii\components\ActiveRecord
         return [
             ['image', 'image'],
             [['title', 'text', 'link'], 'trim'],
+            ['status', 'integer'],
+            ['status', 'default', 'value' => self::STATUS_ON],
         ];
     }
 

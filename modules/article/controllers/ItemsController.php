@@ -64,7 +64,6 @@ class ItemsController extends Controller
                         $model->image = '';
                     }
                 }
-                $model->status = Item::STATUS_ON;
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article created'));

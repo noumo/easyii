@@ -59,8 +59,6 @@ class AController extends Controller
                         $model->image = '';
                     }
                 }
-                $model->status = News::STATUS_ON;
-
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/news', 'News created'));
                     return $this->redirect(['/admin/'.$this->module->id]);

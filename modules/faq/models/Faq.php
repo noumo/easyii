@@ -22,6 +22,8 @@ class Faq extends \yii\easyii\components\ActiveRecord
         return [
             [['question','answer'], 'required'],
             [['question', 'answer'], 'trim'],
+            ['status', 'integer'],
+            ['status', 'default', 'value' => self::STATUS_ON],
         ];
     }
 
