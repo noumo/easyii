@@ -199,7 +199,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //GALLERY MODULE
         $this->createTable(gallery\models\Category::tableName(), [
-            'album_id' => 'pk',
+            'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
