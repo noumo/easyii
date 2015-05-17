@@ -9,6 +9,7 @@ class SendController extends \yii\web\Controller
     public function actionIndex()
     {
         $model = new GuestbookModel;
+        $model->scenario = 'send';
         $request = Yii::$app->request;
 
         if ($model->load($request->post())) {

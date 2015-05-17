@@ -31,7 +31,7 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
             ['email', 'email'],
             ['title', 'string', 'max' => 128],
             ['reCaptcha', ReCaptchaValidator::className(), 'when' => function($model){
-                return $model->isNewRecord && Yii::$app->getModule('admin')->activeModules['guestbook']->settings['enableCaptcha'];
+                return $model->scenario == 'send' && Yii::$app->getModule('admin')->activeModules['guestbook']->settings['enableCaptcha'];
             }],
         ];
     }

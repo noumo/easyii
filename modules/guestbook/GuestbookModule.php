@@ -7,13 +7,13 @@ class GuestbookModule extends \yii\easyii\components\Module
         'enableTitle' => false,
         'enableEmail' => true,
         'preModerate' => false,
-        'enableCaptcha' => true,
+        'enableCaptcha' => false,
         'mailAdminOnNewPost' => true,
         'subjectOnNewPost' => 'New message in the guestbook.',
-        'templateOnNewPost' => '@easyii/modules/guestbook/en/mail/new_post',
+        'templateOnNewPost' => '@easyii/modules/guestbook/mail/en/new_post',
         'frontendGuestbookRoute' => '/guestbook',
         'subjectNotifyUser' => 'Your post in the guestbook answered',
-        'templateNotifyUser' => '@easyii/modules/guestbook/en/mail/notify_user'
+        'templateNotifyUser' => '@easyii/modules/guestbook/mail/en/notify_user'
     ];
 
     public static $installConfig = [

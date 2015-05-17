@@ -99,6 +99,7 @@ class Guestbook extends \yii\easyii\components\API
     public function api_save($data)
     {
         $model = new GuestbookModel($data);
+        $model->scenario = 'send';
         if ($model->save()) {
             return ['result' => 'success'];
         } else {
