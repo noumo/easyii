@@ -19,7 +19,7 @@ use yii\easyii\modules\text\models\Text;
 
 class m000000_000000_install extends \yii\db\Migration
 {
-    const VERSION = 1.1;
+    const VERSION = 0.9;
 
     public function up()
     {
