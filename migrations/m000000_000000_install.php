@@ -107,16 +107,13 @@ class m000000_000000_install extends \yii\db\Migration
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'available' => Schema::TYPE_INTEGER . " DEFAULT '1'",
-            'price' => Schema::TYPE_FLOAT . " DEFAULT '0'",
-            'discount' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'tree' => Schema::TYPE_INTEGER . ' NOT NULL',
             'lft' => Schema::TYPE_INTEGER . ' NOT NULL',
             'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', catalog\models\Category::tableName(), 'slug', true);
@@ -126,6 +123,9 @@ class m000000_000000_install extends \yii\db\Migration
             'category_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'description' => Schema::TYPE_TEXT . ' DEFAULT NULL',
+            'available' => Schema::TYPE_INTEGER . " DEFAULT '1'",
+            'price' => Schema::TYPE_FLOAT . " DEFAULT '0'",
+            'discount' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'data' => Schema::TYPE_TEXT . ' NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
@@ -202,11 +202,11 @@ class m000000_000000_install extends \yii\db\Migration
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'tree' => Schema::TYPE_INTEGER . ' NOT NULL',
             'lft' => Schema::TYPE_INTEGER . ' NOT NULL',
             'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', gallery\models\Category::tableName(), 'slug', true);
