@@ -50,7 +50,7 @@ class CategoryController extends Controller
                     $model->order_num = $parentCategory->order_num;
                     $model->appendTo($parentCategory);
                 } else {
-                    $model->attachBehavior(SortableModel::className());
+                    $model->attachBehavior('sortable', SortableModel::className());
                     $model->makeRoot();
                 }
 
