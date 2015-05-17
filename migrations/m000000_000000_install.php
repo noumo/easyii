@@ -99,7 +99,7 @@ class m000000_000000_install extends \yii\db\Migration
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
 
         //CATALOG MODULE
@@ -130,6 +130,7 @@ class m000000_000000_install extends \yii\db\Migration
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', catalog\models\Item::tableName(), 'slug', true);
 
@@ -234,7 +235,7 @@ class m000000_000000_install extends \yii\db\Migration
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'views' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', News::tableName(), 'slug', true);
 
@@ -249,7 +250,7 @@ class m000000_000000_install extends \yii\db\Migration
             'lft' => Schema::TYPE_INTEGER . ' NOT NULL',
             'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', article\models\Category::tableName(), 'slug', true);
 
@@ -263,7 +264,7 @@ class m000000_000000_install extends \yii\db\Migration
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'views' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('slug', article\models\Item::tableName(), 'slug', true);
 
@@ -282,7 +283,7 @@ class m000000_000000_install extends \yii\db\Migration
             'question' => Schema::TYPE_TEXT . ' NOT NULL',
             'answer' => Schema::TYPE_TEXT . ' NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
 
         //SUBSCRIBE MODULE
