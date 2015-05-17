@@ -9,7 +9,7 @@ use yii\easyii\modules\carousel\models\Carousel;
 use yii\easyii\modules\faq\models\Faq;
 use yii\easyii\modules\feedback\models\Feedback;
 use yii\easyii\modules\file\models\File;
-use yii\easyii\modules\gallery\models\Album;
+use yii\easyii\modules\gallery;
 use yii\easyii\modules\guestbook\models\Guestbook;
 use yii\easyii\modules\news\models\News;
 use yii\easyii\modules\page\models\Page;
@@ -197,7 +197,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createIndex('slug', File::tableName(), 'slug', true);
 
         //GALLERY MODULE
-        $this->createTable(Album::tableName(), [
+        $this->createTable(gallery\models\Category::tableName(), [
             'album_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
@@ -209,7 +209,7 @@ class m000000_000000_install extends \yii\db\Migration
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
-        $this->createIndex('slug', Album::tableName(), 'slug', true);
+        $this->createIndex('slug', gallery\models\Category::tableName(), 'slug', true);
 
         //GUESTBOOK MODULE
         $this->createTable(Guestbook::tableName(), [
@@ -330,11 +330,13 @@ class m000000_000000_install extends \yii\db\Migration
         $this->dropTable(models\Setting::tableName());
 
         $this->dropTable(Carousel::tableName());
-        $this->dropTable(Category::tableName());
-        $this->dropTable(Item::tableName());
+        $this->dropTable(catalog\models\Category::tableName());
+        $this->dropTable(catalog\models\Item::tableName());
+        $this->dropTable(article\models\Category::tableName());
+        $this->dropTable(article\models\Item::tableName());
         $this->dropTable(Feedback::tableName());
         $this->dropTable(File::tableName());
-        $this->dropTable(Album::tableName());
+        $this->dropTable(gallery\models\Category::tableName());
         $this->dropTable(Guestbook::tableName());
         $this->dropTable(News::tableName());
         $this->dropTable(Page::tableName());
