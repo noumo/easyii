@@ -140,7 +140,8 @@ class m000000_000000_install extends \yii\db\Migration
             'name' => Schema::TYPE_STRING . '(128) NOT NULL',
             'value' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
-        $this->createIndex('item_id', catalog\models\ItemData::tableName(), 'item_id', true);
+        $this->createIndex('item_id_name', catalog\models\ItemData::tableName(), ['item_id', 'name']);
+        $this->createIndex('value', catalog\models\ItemData::tableName(), 'value');
 
         //SHOPCART MODULE
         $this->createTable(shopcart\models\Order::tableName(), [
