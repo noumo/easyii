@@ -18,8 +18,8 @@ $module = $this->context->module->id;
                 <th width="100">#</th>
                 <th><?= Yii::t('easyii', 'Name') ?></th>
                 <th><?= Yii::t('easyii/shopcart', 'Address') ?></th>
-                <th><?= Yii::t('easyii/shopcart', 'Cost') ?></th>
-                <th width="130"><?= Yii::t('easyii', 'Date') ?></th>
+                <th width="100"><?= Yii::t('easyii/shopcart', 'Cost') ?></th>
+                <th width="150"><?= Yii::t('easyii', 'Date') ?></th>
                 <th width="90"><?= Yii::t('easyii', 'Status') ?></th>
                 <th width="90"></th>
             </tr>
