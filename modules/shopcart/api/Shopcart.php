@@ -14,21 +14,21 @@ class Shopcart extends \yii\easyii\components\API
     const SENT_VAR = 'shopcart_sent';
 
     private $_order;
-    private $_items;
 
     private $_defaultFormOptions = [
         'errorUrl' => '',
         'successUrl' => ''
     ];
 
-    public function api_items()
+    public function api_goods()
     {
-        return $this->items;
+        return $this->order->goods;
     }
 
-    public function api_order()
+    public function api_order($id)
     {
-        return new OrderObject($this->order);
+        $order = Order::findOne($id);
+        return $order ? new OrderObject($order) : null;
     }
 
     public function api_form($options = [])
@@ -62,21 +62,21 @@ class Shopcart extends \yii\easyii\components\API
 
     public function api_add($item_id, $count = 1, $options = '', $increaseOnDublicate = true)
     {
-        $shopItem = Item::findOne($item_id);
-        if(!$shopItem){
+        $item = Item::findOne($item_id);
+        if(!$item){
             return ['result' => 'error', 'code' => 1, 'error' => 'Item no found'];
         }
 
-        if($this->order->isNewRecord){
-            if(!$this->order->save()){
+        if(!$this->order->id){
+            if(!$this->order->model->save()){
                 return ['result' => 'error', 'code' => 2, 'error' => 'Cannot create order. '.$this->order->formatErrors()];
             }
-            Yii::$app->session->set(Order::SESSION_KEY, $this->order->access_token);
+            Yii::$app->session->set(Order::SESSION_KEY, $this->order->model->access_token);
         }
 
         $good = Good::findOne([
-            'order_id' => $this->order->primaryKey,
-            'item_id' => $shopItem->primaryKey,
+            'order_id' => $this->order->id,
+            'item_id' => $item->primaryKey,
             'options' => $options
         ]);
 
@@ -88,21 +88,21 @@ class Shopcart extends \yii\easyii\components\API
             $good->count += $count;
         } else {
             $good = new Good([
-                'order_id' => $this->order->primaryKey,
-                'item_id' => $shopItem->primaryKey,
+                'order_id' => $this->order->id,
+                'item_id' => $item->primaryKey,
                 'count' => (int)$count,
                 'options' => $options,
-                'discount' => $shopItem->discount,
-                'price' => $shopItem->price
+                'discount' => $item->discount,
+                'price' => $item->price
             ]);
         }
 
         if($good->save()){
             $response = [
                 'result' => 'success',
-                'order_id' => $good->order_id,
+                'order_id' => $this->order->id,
                 'good_id' => $good->primaryKey,
-                'item_id' => $shopItem->primaryKey,
+                'item_id' => $item->primaryKey,
                 'options' => $good->options,
                 'discount' => $good->discount,
             ];
@@ -135,8 +135,8 @@ class Shopcart extends \yii\easyii\components\API
 
     public function api_update($goods)
     {
-        if(is_array($goods) && count($this->items)) {
-            foreach($this->items as $good){
+        if(is_array($goods) && count($this->order->goods)) {
+            foreach($this->order->goods as $good){
                 if(!empty($goods[$good->id]))
                 {
                     $count = (int)$goods[$good->id];
@@ -151,47 +151,29 @@ class Shopcart extends \yii\easyii\components\API
 
     public function api_send($data)
     {
-        if($this->order->isNewRecord || $this->order->status != Order::STATUS_BLANK){
+        $model = $this->order->model;
+        if(!$this->order->id || $model->status != Order::STATUS_BLANK){
             return ['result' => 'error', 'code' => 1, 'error' => 'Order not found'];
         }
         if(!count($this->order->goods)){
             return ['result' => 'error', 'code' => 2, 'error' => 'Order is empty'];
         }
-        $this->order->setAttributes($data);
-        $this->order->status = Order::STATUS_PENDING;
-        if($this->order->save()){
+        $model->setAttributes($data);
+        $model->status = Order::STATUS_PENDING;
+        if($model->save()){
             return [
                 'result' => 'success',
-                'order_id' => $this->order->primaryKey,
+                'order_id' => $this->order->id,
                 'access_token' => $this->order->access_token
             ];
         } else {
-            return ['result' => 'error', 'code' => 3, 'error' => $this->order->formatErrors()];
+            return ['result' => 'error', 'code' => 3, 'error' => $model->formatErrors()];
         }
     }
 
     public function api_cost()
     {
-        $cost = 0;
-        if(count($this->items)){
-            foreach($this->items as $good){
-                $cost += $good->price * $good->count;
-            }
-        }
-        return $cost;
-    }
-
-    public function getItems()
-    {
-        if(!$this->_items){
-            $this->_items = [];
-            if(!$this->order->isNewRecord){
-                foreach(Good::find()->where(['order_id' => $this->order->order_id])->with('item')->all() as $good){
-                    $this->_items[] = new GoodObject($good);
-                }
-            }
-        }
-        return $this->_items;
+        return $this->order->cost;
     }
 
     public function getOrder()
@@ -199,9 +181,11 @@ class Shopcart extends \yii\easyii\components\API
         if(!$this->_order){
             $access_token = $this->token;
 
-            if(!$access_token || !($this->_order = Order::find()->where(['access_token' => $access_token])->status(Order::STATUS_BLANK)->one())){
-                $this->_order = new Order();
+            if(!$access_token || !($order = Order::find()->where(['access_token' => $access_token])->status(Order::STATUS_BLANK)->one())){
+                $order = new Order();
             }
+
+            $this->_order = new OrderObject($order);
         }
         return $this->_order;
     }
