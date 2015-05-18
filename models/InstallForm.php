@@ -6,6 +6,9 @@ use yii\base\Model;
 
 class InstallForm extends Model
 {
+    const RETURN_URL_KEY = 'easyii_install_root_password';
+    const ROOT_PASSWORD_KEY = 'easyii_install_success_return';
+
     public $root_password;
     public $recaptcha_key;
     public $recaptcha_secret;
