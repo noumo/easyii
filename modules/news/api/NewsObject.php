@@ -4,7 +4,7 @@ namespace yii\easyii\modules\news\api;
 use Yii;
 use yii\easyii\components\API;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\news\models\News;
+use yii\easyii\modules\news\models\News as NewsModel;
 use yii\helpers\Url;
 
 class NewsObject extends \yii\easyii\components\ApiObject
@@ -37,7 +37,7 @@ class NewsObject extends \yii\easyii\components\ApiObject
         if(!$this->_photos){
             $this->_photos = [];
 
-            foreach(Photo::find()->where(['class' => News::className(), 'item_id' => $this->id])->sort()->all() as $model){
+            foreach(Photo::find()->where(['class' => NewsModel::className(), 'item_id' => $this->id])->sort()->all() as $model){
                 $this->_photos[] = new PhotoObject($model);
             }
         }
