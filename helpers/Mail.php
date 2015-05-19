@@ -11,6 +11,7 @@ class Mail
         if(!filter_var($toEmail, FILTER_VALIDATE_EMAIL) || !$subject || !$template){
             return false;
         }
+        $data['subject'] = $subject;
 
         $message = Yii::$app->mailer->compose($template, $data)
             ->setTo(Setting::get('admin_email'))
