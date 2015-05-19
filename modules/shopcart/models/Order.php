@@ -164,7 +164,7 @@ class Order extends \yii\easyii\components\ActiveRecord
             $settings['templateNotifyUser'],
             [
                 'order' => $this,
-                'link' => Url::to([$settings['frontendShopcartRoute'], 'token' => $this->access_token], true)
+                'link' => Url::to([$settings['frontendShopcartRoute'], 'id' => $this->primaryKey, 'token' => $this->access_token], true)
             ]
         );
     }

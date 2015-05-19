@@ -7,6 +7,7 @@ use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
+use yii\helpers\Url;
 
 class Feedback extends \yii\easyii\components\ActiveRecord
 {
@@ -52,6 +53,15 @@ class Feedback extends \yii\easyii\components\ActiveRecord
         }
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if($insert){
+            $this->mailAdmin();
+        }
+    }
+
     public function attributeLabels()
     {
         return [
@@ -89,7 +99,7 @@ class Feedback extends \yii\easyii\components\ActiveRecord
             Setting::get('admin_email'),
             $settings['subjectOnNewFeedback'],
             $settings['templateOnNewFeedback'],
-            ['feedback' => $this]
+            ['feedback' => $this, 'link' => Url::to(['/admin/feedback/a/view', 'id' => $this->primaryKey], true)]
         );
     }
 
