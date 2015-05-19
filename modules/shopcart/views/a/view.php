@@ -55,7 +55,7 @@ $("#order-status").change(function(){
     <dd><?= Yii::$app->formatter->asDatetime($order->time, 'medium') ?></dd>
 
     <dt>IP</dt>
-    <dd><?= $model->ip ?> <a href="//freegeoip.net/?q=<?= $model->ip ?>" class="label label-info" target="_blank">info</a></dd>
+    <dd><?= $order->ip ?> <a href="//freegeoip.net/?q=<?= $order->ip ?>" class="label label-info" target="_blank">info</a></dd>
 
     <dt><?= Yii::t('easyii/shopcart', 'Comment') ?></dt>
     <dd><?= nl2br($order->comment) ?></dd>

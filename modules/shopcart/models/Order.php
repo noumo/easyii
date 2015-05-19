@@ -140,7 +140,7 @@ class Order extends \yii\easyii\components\ActiveRecord
     {
         $settings = Yii::$app->getModule('admin')->activeModules['shopcart']->settings;
 
-        if(!$settings['mailAdminOnNewPost']){
+        if(!$settings['mailAdminOnNewOrder']){
             return false;
         }
         return Mail::send(
