@@ -5,6 +5,12 @@ use Yii;
 use yii\easyii\helpers\Data;
 use yii\easyii\modules\faq\models\Faq as FaqModel;
 
+/**
+ * FAQ API
+ * @package yii\easyii\modules\faq\api
+ *
+ * @method static array all() array of all FAQ as stdClass objects
+ */
 class Faq extends \yii\easyii\components\API
 {
     public function api_all()

@@ -10,6 +10,13 @@ use yii\widgets\ActiveForm;
 use yii\bootstrap\Alert;
 use yii\easyii\widgets\ReCaptcha;
 
+/**
+ * Feedback module API
+ * @package yii\easyii\modules\feedback\api
+ *
+ * @method static string form() Returns fully worked standalone html form.
+ * @method static array create(array $attributes) If you using your own form, this function will be useful for manual saving feedback's.
+ */
 class Feedback extends \yii\easyii\components\API
 {
     public function api_form()

@@ -6,6 +6,11 @@ use yii\helpers\Url;
 use yii\easyii\helpers\Data;
 use yii\easyii\modules\carousel\models\Carousel as CarouselModel;
 
+/**
+ * Carousel API
+ * @package yii\easyii\modules\carousel\api
+ * @method static string widgets(array $options = []) Bootstrap carousel widget
+ */
 class Carousel extends \yii\easyii\components\API
 {
     public $clientOptions = ['interval' => 5000];

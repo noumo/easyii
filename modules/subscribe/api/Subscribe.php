@@ -8,6 +8,13 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
+/**
+ * Class Subscribe
+ * @package yii\easyii\modules\subscribe\api
+ *
+ * @method static string form() Returns fully working standalone html form.
+ * @method static array create(array $attributes) If you are using your own form, this function will be useful for manual saving of subscribers.
+ */
 class Subscribe extends \yii\easyii\components\API
 {
     public $options = [

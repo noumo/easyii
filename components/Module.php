@@ -4,6 +4,10 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\models\Module as ModuleModel;
 
+/**
+ * Base Module class
+ * @package yii\easyii\components
+ */
 class Module extends \yii\base\Module
 {
     public $defaultRoute = 'a';
@@ -49,6 +53,12 @@ class Module extends \yii\base\Module
         }
     }
 
+    /**
+     * Returns a module name based on namespace
+     *
+     * @param $namespace
+     * @return string|bool
+     */
     public static function getModuleName($namespace)
     {
         foreach(ModuleModel::findAllActive() as $module)
