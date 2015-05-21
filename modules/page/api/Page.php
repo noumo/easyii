@@ -5,6 +5,13 @@ use Yii;
 use yii\easyii\modules\page\models\Page as PageModel;
 use yii\helpers\Html;
 
+/**
+ * Page module API
+ * @package yii\easyii\modules\page\api
+ *
+ * @method static PageObject get(mixed $id_slug) Get page object by id or slug
+ */
+
 class Page extends \yii\easyii\components\API
 {
     private $_pages = [];

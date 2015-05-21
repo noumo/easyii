@@ -8,6 +8,13 @@ use yii\helpers\Url;
 use yii\easyii\modules\text\models\Text as TextModel;
 use yii\helpers\Html;
 
+/**
+ * Text module API
+ * @package yii\easyii\modules\text\api
+ *
+ * @method static get(mixed $id_slug) Get text block by id or slug
+ */
+
 class Text extends API
 {
     private $_texts = [];

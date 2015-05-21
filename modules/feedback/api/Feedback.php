@@ -9,6 +9,15 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\ReCaptcha;
 
+
+/**
+ * Feedback module API
+ * @package yii\easyii\modules\feedback\api
+ *
+ * @method static string form(array $options = []) Returns fully worked standalone html form.
+ * @method static array save(array $attributes) If you using your own form, this function will be useful for manual saving feedback's.
+ */
+
 class Feedback extends \yii\easyii\components\API
 {
     const SENT_VAR = 'feedback_sent';
