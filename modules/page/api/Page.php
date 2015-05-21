@@ -5,10 +5,20 @@ use Yii;
 use yii\helpers\Url;
 use yii\easyii\modules\page\models\Page as PageModel;
 
+/**
+ * Page API
+ * @package yii\easyii\modules\page\api
+ *
+ * @method static \stdClass get(mixed $id_slug) Get page object by id or slug
+ */
 class Page extends \yii\easyii\components\API
 {
     private $_pages = [];
 
+    /**
+     * @param $id_slug
+     * @return mixed
+     */
     public function api_get($id_slug)
     {
         if(!isset($this->_pages[$id_slug])){
@@ -17,6 +27,12 @@ class Page extends \yii\easyii\components\API
         return $this->_pages[$id_slug];
     }
 
+    /**
+     * Find page by id or slug
+     *
+     * @param $id_slug
+     * @return object
+     */
     private function findPage($id_slug)
     {
         $page = PageModel::find()->where(['or', 'page_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();

@@ -5,6 +5,10 @@ use Yii;
 use yii\easyii\models;
 use yii\helpers\Url;
 
+/**
+ * Base controller class
+ * @package yii\easyii\components
+ */
 class Controller extends \yii\web\Controller
 {
     public $enableCsrfValidation = false;
@@ -41,6 +45,10 @@ class Controller extends \yii\web\Controller
         Yii::$app->getSession()->setFlash($type=='error'?'danger':$type, $message);
     }
 
+    /**
+     * Redirect user back one step
+     * @return \yii\web\Response
+     */
     public function back()
     {
         return $this->redirect(Yii::$app->request->referrer);

@@ -1,6 +1,10 @@
 <?php
 namespace yii\easyii\components;
 
+/**
+ * Base ActiveQuery class
+ * @package yii\easyii\components
+ */
 class ActiveQuery extends \yii\db\ActiveQuery
 {
     public function status($status)

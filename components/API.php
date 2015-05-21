@@ -3,6 +3,10 @@ namespace yii\easyii\components;
 
 use Yii;
 
+/**
+ * Base API class
+ * @package yii\easyii\components
+ */
 class API extends \yii\base\Object
 {
     static $classes;
