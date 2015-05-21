@@ -3,7 +3,7 @@ namespace yii\easyii\modules\text\api;
 
 use Yii;
 use yii\easyii\helpers\Data;
-use yii\easyii\helpers\Url;
+use yii\helpers\Url;
 use yii\easyii\modules\text\models\Text as TextModel;
 
 class Text extends \yii\easyii\components\API
