@@ -1,6 +1,7 @@
 <?php
 use yii\easyii\helpers\Image;
 use yii\easyii\widgets\DateTimePicker;
+use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -37,7 +38,7 @@ $module = $this->context->module->id;
 ]) ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
-
+<?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
 
 
 <?php if(IS_ROOT) : ?>
