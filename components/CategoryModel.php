@@ -111,7 +111,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      */
     public static function generateTree()
     {
-        $collection = static::find()->with('seo')->sort()->asArray()->all();
+        $collection = self::find()->with('seo')->sort()->asArray()->all();
         $trees = array();
         $l = 0;
 
@@ -159,7 +159,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      */
     public static function generateFlat()
     {
-        $collection = static::find()->with('seo')->sort()->asArray()->all();
+        $collection = self::find()->with('seo')->sort()->asArray()->all();
         $flat = [];
 
         if (count($collection) > 0) {
