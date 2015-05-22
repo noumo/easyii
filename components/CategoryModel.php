@@ -83,6 +83,10 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         return new ActiveQueryNS(get_called_class());
     }
 
+    /**
+     * Get cached tree structure of category objects
+     * @return array
+     */
     public static function tree()
     {
         return Data::cache(static::tableName().'_tree', 3600, function(){
@@ -90,6 +94,10 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         });
     }
 
+    /**
+     * Get cached flat array of category objects
+     * @return array
+     */
     public static function cats()
     {
         return Data::cache(static::tableName().'_flat', 3600, function(){
@@ -97,6 +105,10 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         });
     }
 
+    /**
+     * Generates tree from categories
+     * @return array
+     */
     public static function generateTree()
     {
         $collection = self::find()->with('seo')->sort()->asArray()->all();
@@ -141,6 +153,10 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         return $trees;
     }
 
+    /**
+     * Generates flat array of categories
+     * @return array
+     */
     public static function generateFlat()
     {
         $collection = self::find()->with('seo')->sort()->asArray()->all();

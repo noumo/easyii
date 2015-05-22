@@ -9,9 +9,31 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
+/**
+ * Shopcart module API
+ * @package yii\easyii\modules\shopcart\api
+ *
+ * @method static GoodObject goods() Get list of added to shopcart goods as GoodObject objects.
+ * @method static OrderObject get(mixed $id_slug) Get an order by id as OrderObject
+ * @method static string form(array $options = []) Returns fully worked standalone html form to complete order.
+ * @method static array add(int $item_id, int $count = 1, string $options = '', boolean $increaseOnDuplicate = true) Adds item to shopcart, returns GoodObject attributes
+ * @method static array remove(int $good_id) Removes good to shopcart
+ * @method static void update(array $goods) Update shopcart. Array format [$good_id => $new_count]
+ * @method static array send(array $goods) Completes users shopcart order and send to admin.
+ * @method static array cost() returns total cost of current shopcart.
+ */
+
 class Shopcart extends \yii\easyii\components\API
 {
     const SENT_VAR = 'shopcart_sent';
+
+    const ERROR_ITEM_NOT_FOUND = 1;
+    const ERROR_CREATE_ORDER = 2;
+    const ERROR_GOOD_DUPLICATE = 3;
+    const ERROR_CREATE_GOOD = 4;
+    const ERROR_ORDER_NOT_FOUND = 5;
+    const ERROR_ORDER_EMPTY = 6;
+    const ERROR_ORDER_UPDATE = 7;
 
     private $_order;
 
@@ -60,16 +82,16 @@ class Shopcart extends \yii\easyii\components\API
         return ob_get_clean();
     }
 
-    public function api_add($item_id, $count = 1, $options = '', $increaseOnDublicate = true)
+    public function api_add($item_id, $count = 1, $options = '', $increaseOnDuplicate = true)
     {
         $item = Item::findOne($item_id);
         if(!$item){
-            return ['result' => 'error', 'code' => 1, 'error' => 'Item no found'];
+            return ['result' => 'error', 'code' => self::ERROR_ITEM_NOT_FOUND, 'error' => 'Item no found'];
         }
 
         if(!$this->order->id){
             if(!$this->order->model->save()){
-                return ['result' => 'error', 'code' => 2, 'error' => 'Cannot create order. '.$this->order->formatErrors()];
+                return ['result' => 'error', 'code' => self::ERROR_CREATE_ORDER, 'error' => 'Cannot create order. '.$this->order->formatErrors()];
             }
             Yii::$app->session->set(Order::SESSION_KEY, $this->order->model->access_token);
         }
@@ -80,8 +102,8 @@ class Shopcart extends \yii\easyii\components\API
             'options' => $options
         ]);
 
-        if($good && !$increaseOnDublicate){
-            return ['result' => 'error', 'code' => 3, 'error' => 'Dublicate good in order.'];
+        if($good && !$increaseOnDuplicate){
+            return ['result' => 'error', 'code' => self::ERROR_GOOD_DUPLICATE, 'error' => 'Dublicate good in order.'];
         }
 
         if($good) {
@@ -114,7 +136,7 @@ class Shopcart extends \yii\easyii\components\API
             }
             return $response;
         } else {
-            return ['result' => 'error', 'code' => 4, 'error' => $good->formatErrors()];
+            return ['result' => 'error', 'code' => self::ERROR_CREATE_GOOD, 'error' => $good->formatErrors()];
         }
     }
 
@@ -153,10 +175,10 @@ class Shopcart extends \yii\easyii\components\API
     {
         $model = $this->order->model;
         if(!$this->order->id || $model->status != Order::STATUS_BLANK){
-            return ['result' => 'error', 'code' => 1, 'error' => 'Order not found'];
+            return ['result' => 'error', 'code' => self::ERROR_ORDER_NOT_FOUND, 'error' => 'Order not found'];
         }
         if(!count($this->order->goods)){
-            return ['result' => 'error', 'code' => 2, 'error' => 'Order is empty'];
+            return ['result' => 'error', 'code' => self::ERROR_ORDER_EMPTY, 'error' => 'Order is empty'];
         }
         $model->setAttributes($data);
         $model->status = Order::STATUS_PENDING;
@@ -167,7 +189,7 @@ class Shopcart extends \yii\easyii\components\API
                 'access_token' => $this->order->access_token
             ];
         } else {
-            return ['result' => 'error', 'code' => 3, 'error' => $model->formatErrors()];
+            return ['result' => 'error', 'code' => self::ERROR_ORDER_UPDATE, 'error' => $model->formatErrors()];
         }
     }
 

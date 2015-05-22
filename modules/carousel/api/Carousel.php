@@ -8,6 +8,13 @@ use yii\easyii\modules\carousel\models\Carousel as CarouselModel;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+/**
+ * Carousel module API
+ * @package yii\easyii\modules\carousel\api
+ * @method static string widget(int $width, int $height, array $clientOptions = []) Bootstrap carousel widget
+ * @method static array items() array of all Carousel items as CarouselObject objects. Useful to create carousel on other widgets.
+ */
+
 class Carousel extends API
 {
     public $clientOptions = ['interval' => 5000];

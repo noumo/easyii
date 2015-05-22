@@ -10,6 +10,10 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return new ActiveQuery(get_called_class());
     }
 
+    /**
+     * Formats all model errors into a single string
+     * @return string
+     */
     public function formatErrors()
     {
         $result = '';

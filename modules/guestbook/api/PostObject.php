@@ -5,7 +5,7 @@ use Yii;
 use yii\easyii\components\API;
 use yii\helpers\Url;
 
-class GuestbookObject extends \yii\easyii\components\ApiObject
+class PostObject extends \yii\easyii\components\ApiObject
 {
     public $image;
     public $time;
