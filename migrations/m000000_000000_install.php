@@ -325,8 +325,8 @@ class m000000_000000_install extends \yii\db\Migration
             'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
             'tag_id' => Schema::TYPE_INTEGER . " NOT NULL",
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
-        $this->createIndex('class', models\Tag::tableName(), 'class');
-        $this->createIndex('item_tag', models\Tag::tableName(), ['item_id', 'tag_id']);
+        $this->createIndex('class', models\TagAssign::tableName(), 'class');
+        $this->createIndex('item_tag', models\TagAssign::tableName(), ['item_id', 'tag_id']);
 
         //INSERT VERSION
         $this->delete(models\Setting::tableName(), ['name' => 'easyii_version']);
