@@ -55,7 +55,11 @@ class Article extends \yii\easyii\components\API
         if(!$this->_items){
             $this->_items = [];
 
-            $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
+            $with = ['seo', 'category'];
+            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+                $with[] = 'tags';
+            }
+            $query = Item::find()->with($with)->status(Item::STATUS_ON);
 
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
@@ -86,7 +90,11 @@ class Article extends \yii\easyii\components\API
 
         $result = [];
 
-        $query = Item::find()->with('seo')->status(Item::STATUS_ON)->sortDate()->limit($limit);
+        $with = ['seo'];
+        if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+            $with[] = 'tags';
+        }
+        $query = Item::find()->with($with)->status(Item::STATUS_ON)->sortDate()->limit($limit);
         if($where){
             $query->andFilterWhere($where);
         }

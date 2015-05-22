@@ -38,8 +38,10 @@ $module = $this->context->module->id;
 ]) ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
-<?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
 
+<?php if($this->context->module->settings['enableTags']) : ?>
+    <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
+<?php endif; ?>
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>

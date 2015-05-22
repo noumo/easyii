@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\modules\article\api;
 
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
 use yii\easyii\modules\article\models\Item;
@@ -33,6 +34,11 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     {
         if(!$this->_items){
             $this->_items = [];
+
+            $with = ['seo'];
+            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+                $with[] = 'tags';
+            }
 
             $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sortDate();
 

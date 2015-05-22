@@ -8,7 +8,6 @@ use yii\easyii\models\TagAssign;
 
 class Taggable extends \yii\base\Behavior
 {
-    public $tagValues;
     private $_tags;
 
     public function events()
@@ -30,42 +29,21 @@ class Taggable extends \yii\base\Behavior
         return $this->owner->hasMany(Tag::className(), ['tag_id' => 'tag_id'])->via('tagAssigns');
     }
 
-    public function canGetProperty($name, $checkVars = true)
-    {
-        if ($name === 'tagNames') {
-            return true;
-        }
-        return parent::canGetProperty($name, $checkVars);
-    }
-
-    public function __get($name)
-    {
-        return $name == 'tagNames' ? $this->getTagNames() : $this->getTagsArray();
-    }
-
-    public function canSetProperty($name, $checkVars = true)
-    {
-        if ($name === 'tagNames') {
-            return true;
-        }
-        return parent::canSetProperty($name, $checkVars);
-    }
-
-    public function __set($name, $value)
-    {
-        $this->tagValues = $value;
-    }
-
-    private function getTagNames()
+    public function getTagNames()
     {
         return implode(', ', $this->getTagsArray());
+    }
+
+    public function setTagNames($values)
+    {
+        $this->_tags = $this->filterTagValues($values);
     }
 
     public function getTagsArray()
     {
         if($this->_tags === null){
             $this->_tags = [];
-            foreach($this->getTags()->all() as $tag) {
+            foreach($this->owner->tags as $tag) {
                 $this->_tags[] = $tag->name;
             }
         }
@@ -74,38 +52,37 @@ class Taggable extends \yii\base\Behavior
 
     public function afterSave()
     {
-        $names = $this->filterTagValues($this->tagValues);
-
-        if ($this->tagValues === null) {
-            $this->tagValues = $this->owner->tagNames;
-        }
-        if (!$this->owner->isNewRecord) {
+        if(!$this->owner->isNewRecord) {
             $this->beforeDelete();
         }
 
-        $tagAssigns = [];
-        $modelClass = get_class($this->owner);
-        foreach ($names as $name) {
-            if(!($tag = Tag::findOne(['name' => $name]))) {
-                $tag = new Tag(['name' => $name]);
+        if(count($this->_tags)) {
+            $tagAssigns = [];
+            $modelClass = get_class($this->owner);
+
+            foreach ($this->_tags as $name) {
+                if (!($tag = Tag::findOne(['name' => $name]))) {
+                    $tag = new Tag(['name' => $name]);
+                }
+                $tag->frequency++;
+                if ($tag->save()) {
+                    $updatedTags[] = $tag;
+                    $tagAssigns[] = [$modelClass, $this->owner->primaryKey, $tag->tag_id];
+                }
             }
-            $tag->frequency++;
-            if ($tag->save()) {
-                $updatedTags[] = $tag;
-                $tagAssigns[] = [$modelClass, $this->owner->primaryKey, $tag->tag_id];
+
+            if(count($tagAssigns)) {
+                Yii::$app->db->createCommand()->batchInsert(TagAssign::tableName(), ['class', 'item_id', 'tag_id'], $tagAssigns)->execute();
+                $this->owner->populateRelation('tags', $updatedTags);
             }
         }
-
-        Yii::$app->db->createCommand()->batchInsert(TagAssign::tableName(), ['class', 'item_id', 'tag_id'], $tagAssigns)->execute();
-
-        $this->owner->populateRelation('tags', $updatedTags);
     }
 
     public function beforeDelete()
     {
         $pks = [];
 
-        foreach($this->getTags()->all() as $tag){
+        foreach($this->owner->tags as $tag){
             $pks[] = $tag->primaryKey;
         }
 
