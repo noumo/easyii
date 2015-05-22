@@ -316,14 +316,14 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(models\Tag::tableName(), [
             'tag_id' => 'pk',
             'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'frequency' => Schema::TYPE_INTEGER . "DEFAULT '0'"
+            'frequency' => Schema::TYPE_INTEGER . " DEFAULT '0'"
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('name', models\Tag::tableName(), 'name', true);
 
         $this->createTable(models\TagAssign::tableName(), [
             'class' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'item_id' => Schema::TYPE_INTEGER . "NOT NULL",
-            'tag_id' => Schema::TYPE_INTEGER . "NOT NULL",
+            'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
+            'tag_id' => Schema::TYPE_INTEGER . " NOT NULL",
         ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
         $this->createIndex('class', models\Tag::tableName(), 'class');
         $this->createIndex('item_tag', models\Tag::tableName(), ['item_id', 'tag_id']);
