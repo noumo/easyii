@@ -3,6 +3,7 @@ namespace yii\easyii\modules\news\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\models\Tag;
 use yii\easyii\widgets\Fancybox;
 use yii\widgets\LinkPager;
 
@@ -40,6 +41,12 @@ class News extends \yii\easyii\components\API
             
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
+            }
+            if(!empty($options['tags'])){
+                $query
+                    ->innerJoinWith('tags', false)
+                    ->andWhere([Tag::tableName() . '.name' => (new NewsModel)->filterTagValues($options['tags'])])
+                    ->addGroupBy('news_id');
             }
             if(!empty($options['orderBy'])){
                 $query->orderBy($options['orderBy']);

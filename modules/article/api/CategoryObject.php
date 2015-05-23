@@ -4,6 +4,7 @@ namespace yii\easyii\modules\article\api;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
+use yii\easyii\models\Tag;
 use yii\easyii\modules\article\models\Item;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
@@ -44,6 +45,12 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
+            }
+            if(!empty($options['tags'])){
+                $query
+                    ->innerJoinWith('tags', false)
+                    ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
+                    ->addGroupBy('item_id');
             }
 
             $this->_adp = new ActiveDataProvider([
