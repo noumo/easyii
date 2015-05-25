@@ -7,12 +7,26 @@ use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 use yii\easyii\helpers\Image;
 
+/**
+ * Category controller component
+ * @package yii\easyii\components
+ */
 class CategoryController extends Controller
 {
+    /** @var string */
     public $categoryClass;
+
+    /** @var  string */
     public $moduleName;
+
+    /** @var string  */
     public $viewRoute = '/items';
 
+    /**
+     * Categories list
+     *
+     * @return string
+     */
     public function actionIndex()
     {
         $class = $this->categoryClass;
@@ -21,6 +35,13 @@ class CategoryController extends Controller
         ]);
     }
 
+    /**
+     * Create form
+     *
+     * @param null $parent
+     * @return array|string|\yii\web\Response
+     * @throws \yii\web\HttpException
+     */
     public function actionCreate($parent = null)
     {
         $class = $this->categoryClass;
@@ -70,6 +91,13 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * Edit form
+     *
+     * @param $id
+     * @return array|string|\yii\web\Response
+     * @throws \yii\web\HttpException
+     */
     public function actionEdit($id)
     {
         $class = $this->categoryClass;
@@ -108,6 +136,12 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * Remove category image
+     *
+     * @param $id
+     * @return \yii\web\Response
+     */
     public function actionClearImage($id)
     {
         $class = $this->categoryClass;
@@ -127,6 +161,12 @@ class CategoryController extends Controller
         return $this->back();
     }
 
+    /**
+     * Delete the category by ID
+     *
+     * @param $id
+     * @return mixed
+     */
     public function actionDelete($id)
     {
         $class = $this->categoryClass;
@@ -142,28 +182,60 @@ class CategoryController extends Controller
         return $this->formatResponse(Yii::t('easyii', 'Category deleted'));
     }
 
+    /**
+     * Move category one level up up
+     *
+     * @param $id
+     * @return \yii\web\Response
+     */
     public function actionUp($id)
     {
         return $this->move($id, 'up');
     }
 
+    /**
+     * Move category one level down
+     *
+     * @param $id
+     * @return \yii\web\Response
+     */
     public function actionDown($id)
     {
         return $this->move($id, 'down');
     }
 
+    /**
+     * Activate category action
+     *
+     * @param $id
+     * @return mixed
+     */
     public function actionOn($id)
     {
         $class = $this->categoryClass;
         return $this->changeStatus($id, $class::STATUS_ON);
     }
 
+    /**
+     * Activate category action
+     *
+     * @param $id
+     * @return mixed
+     */
     public function actionOff($id)
     {
         $class = $this->categoryClass;
         return $this->changeStatus($id, $class::STATUS_OFF);
     }
 
+    /**
+     * Move category up/down
+     *
+     * @param $id
+     * @param $direction
+     * @return \yii\web\Response
+     * @throws \Exception
+     */
     private function move($id, $direction)
     {
         $modelClass = $this->categoryClass;
@@ -211,6 +283,13 @@ class CategoryController extends Controller
         return $this->back();
     }
 
+    /**
+     * Change category status
+     *
+     * @param $id
+     * @param $status
+     * @return mixed
+     */
     public function changeStatus($id, $status)
     {
         $modelClass = $this->categoryClass;

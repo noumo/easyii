@@ -7,6 +7,11 @@ use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
 
+/**
+ * Base CategoryModel. Shared by categories
+ * @package yii\easyii\components
+ * @inheritdoc
+ */
 class CategoryModel extends \yii\easyii\components\ActiveRecord
 {
     const STATUS_OFF = 0;
@@ -76,6 +81,9 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         }
     }
 
+    /**
+     * @return ActiveQueryNS
+     */
     public static function find()
     {
         return new ActiveQueryNS(get_called_class());

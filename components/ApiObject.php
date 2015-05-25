@@ -4,13 +4,18 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\helpers\Image;
 
+/**
+ * Class ApiObject
+ * @package yii\easyii\components
+ */
 class ApiObject extends \yii\base\Object
 {
+    /** @var \yii\base\Model  */
     public $model;
 
     /**
      * Generates ApiObject, attaching all settable properties to the child object
-     * @param \stdClass $model yii\base\Model object
+     * @param \yii\base\Model $model
      */
     public function __construct($model){
         $this->model = $model;

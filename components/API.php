@@ -3,9 +3,15 @@ namespace yii\easyii\components;
 
 use Yii;
 
+/**
+ * Base API component. Used by all modules
+ * @package yii\easyii\components
+ */
 class API extends \yii\base\Object
 {
+    /** @var  array */
     static $classes;
+    /** @var  string module name */
     public $module;
 
     public function init()

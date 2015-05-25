@@ -5,6 +5,10 @@ use Yii;
 use yii\easyii\models;
 use yii\helpers\Url;
 
+/**
+ * Base easyii controller component
+ * @package yii\easyii\components
+ */
 class Controller extends \yii\web\Controller
 {
     public $enableCsrfValidation = false;

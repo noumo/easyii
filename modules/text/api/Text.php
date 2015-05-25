@@ -14,7 +14,6 @@ use yii\helpers\Html;
  *
  * @method static get(mixed $id_slug) Get text block by id or slug
  */
-
 class Text extends API
 {
     private $_texts = [];

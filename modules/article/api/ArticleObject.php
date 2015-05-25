@@ -8,9 +8,14 @@ use yii\helpers\Url;
 
 class ArticleObject extends \yii\easyii\components\ApiObject
 {
+    /** @var  string */
     public $slug;
+
     public $image;
+
     public $views;
+
+    /** @var  int */
     public $category_id;
 
     private $_photos;

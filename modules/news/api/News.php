@@ -38,7 +38,7 @@ class News extends \yii\easyii\components\API
                 $with[] = 'tags';
             }
             $query = NewsModel::find()->with($with)->status(NewsModel::STATUS_ON);
-            
+
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
             }

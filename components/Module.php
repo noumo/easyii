@@ -4,12 +4,25 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\models\Module as ModuleModel;
 
+/**
+ * Base module class. Inherit from this if you are creating your own modules manually
+ * @package yii\easyii\components
+ */
 class Module extends \yii\base\Module
 {
+    /** @var string  */
     public $defaultRoute = 'a';
+
+    /** @var array  */
     public $settings = [];
+
+    /** @var  @todo */
     public $i18n;
 
+    /**
+     * Configuration for installation
+     * @var array
+     */
     public static $installConfig = [
         'title' => [
             'en' => 'Custom Module',
@@ -26,6 +39,10 @@ class Module extends \yii\base\Module
         self::registerTranslations($moduleName);
     }
 
+    /**
+     * Registers translations connected to the module
+     * @param $moduleName string
+     */
     public static function registerTranslations($moduleName)
     {
         $moduleClassFile = '';
@@ -49,6 +66,12 @@ class Module extends \yii\base\Module
         }
     }
 
+    /**
+     * Module name getter
+     *
+     * @param $namespace
+     * @return string|bool
+     */
     public static function getModuleName($namespace)
     {
         foreach(ModuleModel::findAllActive() as $module)
