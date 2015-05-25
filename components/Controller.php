@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\components;
 
+use webvimark\behaviors\multilanguage\MultiLanguageHelper;
 use Yii;
 use yii\easyii\models;
 use yii\helpers\Url;
@@ -15,6 +16,12 @@ class Controller extends \yii\web\Controller
     public $layout = '@easyii/views/layouts/main';
     public $rootActions = [];
     public $error = null;
+
+    public function init()
+    {
+        MultiLanguageHelper::catchLanguage();
+        parent::init();
+    }
 
     /**
      * Check authentication, and root rights for actions
