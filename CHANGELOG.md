@@ -1,6 +1,6 @@
 #Changelog
 
-###1.1.0
+###0.8.0
 * Articles module added
 * FAQ module added
 * SEO h1, title, description, keywords fields added
@@ -14,14 +14,14 @@
 * Fancybox and jquery.switcher moved to bower-assets
 * Many core improvements
 
-###1.0.5
+###0.7.4
 * SluggableBehavior integrated
 
-###1.0.4
+###0.7.3
 * Photo multi upload added
 
-###1.0.3
+###0.7.2
 * GD support added (image scale quality improved)
 
-###1.0.2
+###0.7.1
 * Minor fixes
