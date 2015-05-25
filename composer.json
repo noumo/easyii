@@ -19,6 +19,12 @@
             "role" : "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "VCS",
+            "url": "https://github.com/vnenkpet/multilanguage"
+        }
+    ],
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
