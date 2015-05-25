@@ -13,7 +13,7 @@ use yii\easyii\helpers\Image;
  */
 class CategoryController extends Controller
 {
-    /** @var  CategoryModel */
+    /** @var string */
     public $categoryClass;
 
     /** @var  string */
