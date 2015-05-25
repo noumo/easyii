@@ -3,6 +3,10 @@ namespace yii\easyii\behaviors;
 
 use Yii;
 
+/**
+ * Status behavior. Adds statuses to models
+ * @package yii\easyii\behaviors
+ */
 class StatusController extends \yii\base\Behavior
 {
     public $model;

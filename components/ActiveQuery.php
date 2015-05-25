@@ -1,6 +1,10 @@
 <?php
 namespace yii\easyii\components;
 
+/**
+ * Base active query class for models
+ * @package yii\easyii\components
+ */
 class ActiveQuery extends \yii\db\ActiveQuery
 {
     /**

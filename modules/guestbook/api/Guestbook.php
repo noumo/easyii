@@ -76,7 +76,7 @@ class Guestbook extends \yii\easyii\components\API
             return $this->_last;
         }
     }
-    
+
     public function api_form($options = [])
     {
         $model = new GuestbookModel;

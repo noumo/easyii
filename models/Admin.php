@@ -12,6 +12,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
         'auth_key' => '',
         'access_token' => ''
     ];
+
     public static function tableName()
     {
         return 'easyii_admins';
@@ -39,12 +40,11 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if($this->isNewRecord) {
+            if ($this->isNewRecord) {
                 $this->auth_key = $this->generateAuthKey();
                 $this->password = $this->hashPassword($this->password);
-            }
-            else{
-                $this->password = $this->password != '' ?  $this->hashPassword($this->password) : $this->oldAttributes['password'];
+            } else {
+                $this->password = $this->password != '' ? $this->hashPassword($this->password) : $this->oldAttributes['password'];
             }
             return true;
         } else {
@@ -59,8 +59,8 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
             $result = $id == self::$rootUser['admin_id']
                 ? static::createRootUser()
                 : static::findOne($id);
+        } catch (\yii\base\InvalidConfigException $e) {
         }
-        catch(\yii\base\InvalidConfigException $e){}
         return $result;
     }
 
@@ -71,7 +71,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
 
     public static function findByUsername($username)
     {
-        if($username === self::$rootUser['username']){
+        if ($username === self::$rootUser['username']) {
             return static::createRootUser();
         }
         return static::findOne(['username' => $username]);
@@ -99,7 +99,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
 
     private function hashPassword($password)
     {
-        return sha1($password.$this->getAuthKey().Setting::get('password_salt'));
+        return sha1($password . $this->getAuthKey() . Setting::get('password_salt'));
     }
 
     private function generateAuthKey()

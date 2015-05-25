@@ -5,7 +5,8 @@ use creocoder\nestedsets\NestedSetsQueryBehavior;
 
 class ActiveQueryNS extends ActiveQuery
 {
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             NestedSetsQueryBehavior::className(),
         ];

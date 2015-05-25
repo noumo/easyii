@@ -9,6 +9,11 @@ use yii\easyii\helpers\Data;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\easyii\helpers\Image;
 
+/**
+ * Base CategoryModel. Shared by categories
+ * @package yii\easyii\components
+ * @inheritdoc
+ */
 class CategoryModel extends \yii\easyii\components\ActiveRecord
 {
     const STATUS_OFF = 0;
@@ -78,6 +83,9 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         }
     }
 
+    /**
+     * @return ActiveQueryNS
+     */
     public static function find()
     {
         return new ActiveQueryNS(get_called_class());

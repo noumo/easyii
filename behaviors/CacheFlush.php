@@ -4,8 +4,14 @@ namespace yii\easyii\behaviors;
 use Yii;
 use yii\db\ActiveRecord;
 
+/**
+ * CacheFlush behavior
+ * @package yii\easyii\behaviors
+ * @inheritdoc
+ */
 class CacheFlush extends \yii\base\Behavior
 {
+    /** @var  string */
     public $key;
 
     public function attach($owner)
@@ -24,6 +30,9 @@ class CacheFlush extends \yii\base\Behavior
         ];
     }
 
+    /**
+     * Flush cache
+     */
     public function flush()
     {
         if($this->key) {
