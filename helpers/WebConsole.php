@@ -2,7 +2,9 @@
 namespace yii\easyii\helpers;
 
 use Yii;
+use yii\console\Application;
 use yii\helpers\FileHelper;
+use yii\web\ServerErrorHttpException;
 
 /**
  * Class WebConsole
@@ -15,11 +17,11 @@ class WebConsole
     public static $logFileHandler;
 
     /**
+     * Web console init
      *
-     *
-     * @return \yii\console\Application
+     * @return Application
      * @throws \yii\base\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws ServerErrorHttpException
      */
     public static function console()
     {
@@ -27,7 +29,7 @@ class WebConsole
         {
             $logsPath = Yii::getAlias('@runtime/logs');
             if(!FileHelper::createDirectory($logsPath, 0777)){
-                throw new \yii\web\ServerErrorHttpException('Cannot create `'.$logsPath.'`. Please check write permissions.');
+                throw new ServerErrorHttpException('Cannot create `'.$logsPath.'`. Please check write permissions.');
             }
 
             self::$logFile = $logsPath . DIRECTORY_SEPARATOR . 'console.log';
@@ -41,10 +43,10 @@ class WebConsole
             $consoleConfigFile = Yii::getAlias('@app/config/console.php');
 
             if(!file_exists($consoleConfigFile) || !is_array(($consoleConfig = require($consoleConfigFile)))){
-                throw new \yii\web\ServerErrorHttpException('Cannot find `'.Yii::getAlias('@app/config/console.php').'`. Please create and configure console config.');
+                throw new ServerErrorHttpException('Cannot find `'.Yii::getAlias('@app/config/console.php').'`. Please create and configure console config.');
             }
 
-            self::$_console = new \yii\console\Application($consoleConfig);
+            self::$_console = new Application($consoleConfig);
 
             Yii::$app = $oldApp;
         } else {
@@ -60,7 +62,7 @@ class WebConsole
      * @param string $migrationPath
      * @return string
      * @throws \yii\console\Exception
-     * @throws \yii\web\ServerErrorHttpException
+     * @throws ServerErrorHttpException
      */
     public static function migrate($migrationPath = '@easyii/migrations/')
     {
