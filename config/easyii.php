@@ -36,5 +36,14 @@ return [
             'sizeFormatBase' => 1000
         ],
     ],
-    'bootstrap' => ['admin']
+    'bootstrap' => ['admin'],
+    'params' => [
+        'mlConfig'=>[
+            'default_language'=>'ru',
+            'languages'=>[
+                'ru'=>'Русский',
+                'en'=>'English',
+            ],
+        ],
+    ]
 ];
