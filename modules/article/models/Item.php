@@ -6,11 +6,8 @@ use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
-<<<<<<< HEAD
 use yii\easyii\components\ActiveRecord;
-=======
 use yii\easyii\behaviors\Taggable;
->>>>>>> origin/test
 use yii\easyii\models\Photo;
 use yii\helpers\StringHelper;
 
