@@ -38,10 +38,11 @@ class InstallController extends \yii\web\Controller
         $installForm = new InstallForm();
 
         if ($installForm->load(Yii::$app->request->post())) {
+            // perform installation
             $this->createUploadsDir();
 
-            WebConsole::migrate();
-            WebConsole::migrate('@multilanguage/migrations/'); // install multilanguage
+            WebConsole::migrate(); // run easyii migration
+            WebConsole::migrate('@multilanguage/migrations/'); // run multilanguage migrations
 
             $this->insertSettings($installForm);
             $this->installModules();
