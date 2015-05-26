@@ -1,5 +1,7 @@
 <?php
 
+use webvimark\behaviors\multilanguage\MultiLanguageUrlManager;
+
 return [
     'modules' => [
         'admin' => [
@@ -8,6 +10,7 @@ return [
     ],
     'components' => [
         'urlManager' => [
+            'class' => MultiLanguageUrlManager::className(),
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
