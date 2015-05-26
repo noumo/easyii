@@ -7,9 +7,12 @@ use yii\base\Application;
 use yii\base\BootstrapInterface;
 
 use yii\easyii\models\Module;
-use yii\easyii\models\Setting;
 use yii\easyii\assets\LiveAsset;
 
+/**
+ * Class AdminModule
+ * @package yii\easyii
+ */
 class AdminModule extends \yii\base\Module implements BootstrapInterface
 {
     const VERSION = 0.9;
