@@ -10,6 +10,7 @@ class ArticleModule extends \yii\easyii\components\Module
 
         'enableShort' => true,
         'shortMaxLength' => 255,
+        'enableTags' => true,
 
         'itemsInFolder' => false,
     ];

@@ -36,6 +36,10 @@ class ArticleObject extends \yii\easyii\components\ApiObject
         return Article::cats()[$this->category_id];
     }
 
+    public function getTags(){
+        return $this->model->tagsArray;
+    }
+
     public function getPhotos()
     {
         if(!$this->_photos){

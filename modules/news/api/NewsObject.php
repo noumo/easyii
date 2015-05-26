@@ -28,6 +28,10 @@ class NewsObject extends \yii\easyii\components\ApiObject
         return LIVE_EDIT ? API::liveEdit($this->model->text, $this->editLink, 'div') : $this->model->text;
     }
 
+    public function getTags(){
+        return $this->model->tagsArray;
+    }
+
     public function getDate(){
         return Yii::$app->formatter->asDate($this->time);
     }
