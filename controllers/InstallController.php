@@ -41,6 +41,7 @@ class InstallController extends \yii\web\Controller
             $this->createUploadsDir();
 
             WebConsole::migrate();
+            WebConsole::migrate('@multilanguage/migrations/'); // install multilanguage
 
             $this->insertSettings($installForm);
             $this->installModules();
