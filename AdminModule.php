@@ -2,6 +2,7 @@
 namespace yii\easyii;
 
 use Yii;
+use yii\web\ServerErrorHttpException;
 use yii\web\View;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
@@ -27,7 +28,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
         parent::init();
 
         if(Yii::$app->cache === null){
-            throw new \yii\web\ServerErrorHttpException('Please configure Cache component.');
+            throw new ServerErrorHttpException('Please configure Cache component.');
         }
 
         $this->activeModules = Module::findAllActive();

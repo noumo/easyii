@@ -3,10 +3,11 @@ namespace yii\easyii\modules\page\api;
 
 use Yii;
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class PageObject extends \yii\easyii\components\ApiObject
+class PageObject extends ApiObject
 {
     public $slug;
 

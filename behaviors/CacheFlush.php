@@ -2,6 +2,7 @@
 namespace yii\easyii\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -9,7 +10,7 @@ use yii\db\ActiveRecord;
  * @package yii\easyii\behaviors
  * @inheritdoc
  */
-class CacheFlush extends \yii\base\Behavior
+class CacheFlush extends Behavior
 {
     /** @var  string */
     public $key;

@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\assets;
 
-class FancyboxAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class FancyboxAsset extends AssetBundle
 {
     public $sourcePath = '@bower/fancybox/source';
 

@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\catalog;
 
-class CatalogModule extends \yii\easyii\components\Module
+use yii\easyii\components\Module;
+
+class CatalogModule extends Module
 {
     public $settings = [
         'categoryThumb' => true,

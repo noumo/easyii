@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\guestbook;
 
-class GuestbookModule extends \yii\easyii\components\Module
+use yii\easyii\components\Module;
+
+class GuestbookModule extends Module
 {
     public $settings = [
         'enableTitle' => false,

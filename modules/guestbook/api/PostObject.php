@@ -3,9 +3,10 @@ namespace yii\easyii\modules\guestbook\api;
 
 use Yii;
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\helpers\Url;
 
-class PostObject extends \yii\easyii\components\ApiObject
+class PostObject extends ApiObject
 {
     public $image;
     public $time;

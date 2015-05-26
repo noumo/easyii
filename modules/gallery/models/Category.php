@@ -1,9 +1,10 @@
 <?php
 namespace yii\easyii\modules\gallery\models;
 
+use yii\easyii\components\CategoryModel;
 use yii\easyii\models\Photo;
 
-class Category extends \yii\easyii\components\CategoryModel
+class Category extends CategoryModel
 {
     public static function tableName()
     {

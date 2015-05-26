@@ -2,8 +2,11 @@
 namespace yii\easyii\models;
 
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\easyii\components\ActiveRecord;
+use yii\web\IdentityInterface;
 
-class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\IdentityInterface
+class Admin extends ActiveRecord implements IdentityInterface
 {
     static $rootUser = [
         'admin_id' => 0,
@@ -59,7 +62,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
             $result = $id == self::$rootUser['admin_id']
                 ? static::createRootUser()
                 : static::findOne($id);
-        } catch (\yii\base\InvalidConfigException $e) {
+        } catch (InvalidConfigException $e) {
         }
         return $result;
     }

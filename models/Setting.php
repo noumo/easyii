@@ -3,10 +3,12 @@ namespace yii\easyii\models;
 
 use Yii;
 
+use yii\db\Exception;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\helpers\Data;
 use yii\easyii\behaviors\CacheFlush;
 
-class Setting extends \yii\easyii\components\ActiveRecord
+class Setting extends ActiveRecord
 {
     const VISIBLE_NONE = 0;
     const VISIBLE_ROOT = 1;
@@ -58,7 +60,7 @@ class Setting extends \yii\easyii\components\ActiveRecord
                     foreach (parent::find()->all() as $setting) {
                         $result[$setting->name] = $setting->value;
                     }
-                }catch(\yii\db\Exception $e){}
+                }catch(Exception $e){}
                 return $result;
             });
         }

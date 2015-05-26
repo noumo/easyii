@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\subscribe;
 
-class SubscribeModule extends \yii\easyii\components\Module
+use yii\easyii\components\Module;
+
+class SubscribeModule extends Module
 {
     public static $installConfig = [
         'title' => [

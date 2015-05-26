@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\file;
 
-class FileModule extends \yii\easyii\components\Module
+use yii\easyii\components\Module;
+
+class FileModule extends Module
 {
     public static $installConfig = [
         'title' => [

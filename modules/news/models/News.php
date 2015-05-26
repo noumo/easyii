@@ -4,10 +4,11 @@ namespace yii\easyii\modules\news\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\models\Photo;
 use yii\helpers\StringHelper;
 
-class News extends \yii\easyii\components\ActiveRecord
+class News extends ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;

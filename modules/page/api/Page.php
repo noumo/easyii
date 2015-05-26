@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\page\api;
 
 use Yii;
+use yii\easyii\components\API;
 use yii\easyii\modules\page\models\Page as PageModel;
 use yii\helpers\Html;
 
@@ -12,7 +13,7 @@ use yii\helpers\Html;
  * @method static PageObject get(mixed $id_slug) Get page object by id or slug
  */
 
-class Page extends \yii\easyii\components\API
+class Page extends API
 {
     private $_pages = [];
 

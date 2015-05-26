@@ -3,8 +3,9 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\easyii\models;
+use yii\web\Controller;
 
-class SignController extends \yii\web\Controller
+class SignController extends Controller
 {
     public $layout = 'empty';
     public $enableCsrfValidation = false;

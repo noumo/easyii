@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\controllers;
 
-class DefaultController extends \yii\easyii\components\Controller
+use yii\easyii\components\Controller;
+
+class DefaultController extends Controller
 {
     public function actionIndex()
     {

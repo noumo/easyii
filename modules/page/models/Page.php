@@ -3,8 +3,9 @@ namespace yii\easyii\modules\page\models;
 
 use Yii;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\components\ActiveRecord;
 
-class Page extends \yii\easyii\components\ActiveRecord
+class Page extends ActiveRecord
 {
     public static function tableName()
     {

@@ -6,6 +6,7 @@ use yii\data\ActiveDataProvider;
 
 use yii\easyii\behaviors\StatusController;
 use yii\easyii\components\Controller;
+use yii\easyii\models\Module;
 use yii\easyii\modules\guestbook\models\Guestbook;
 
 class AController extends Controller
@@ -101,7 +102,7 @@ class AController extends Controller
     public function actionViewall()
     {
         Guestbook::updateAll(['new' => 0]);
-        $module = \yii\easyii\models\Module::findOne(['name' => 'guestbook']);
+        $module = Module::findOne(['name' => 'guestbook']);
         $module->notice = 0;
         $module->save();
 

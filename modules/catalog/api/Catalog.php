@@ -4,6 +4,7 @@ namespace yii\easyii\modules\catalog\api;
 use Yii;
 
 use yii\data\ActiveDataProvider;
+use yii\easyii\components\API;
 use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
@@ -24,7 +25,7 @@ use yii\widgets\LinkPager;
  * @method static \stdClass pagination() returns yii\data\Pagination object.
  */
 
-class Catalog extends \yii\easyii\components\API
+class Catalog extends API
 {
     private $_cats;
     private $_items;

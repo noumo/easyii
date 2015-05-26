@@ -2,9 +2,10 @@
 namespace yii\easyii\models;
 
 use Yii;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\validators\EscapeValidator;
 
-class SeoText extends \yii\easyii\components\ActiveRecord
+class SeoText extends ActiveRecord
 {
     public static function tableName()
     {

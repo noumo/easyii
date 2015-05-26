@@ -2,8 +2,9 @@
 namespace yii\easyii\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 
-class SortableController extends \yii\base\Behavior
+class SortableController extends Behavior
 {
     public $model;
 

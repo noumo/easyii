@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\feedback\api;
 
 use Yii;
+use yii\easyii\components\API;
 use yii\easyii\modules\feedback\models\Feedback as FeedbackModel;
 
 use yii\helpers\Html;
@@ -18,7 +19,7 @@ use yii\easyii\widgets\ReCaptcha;
  * @method static array save(array $attributes) If you using your own form, this function will be useful for manual saving feedback's.
  */
 
-class Feedback extends \yii\easyii\components\API
+class Feedback extends API
 {
     const SENT_VAR = 'feedback_sent';
 

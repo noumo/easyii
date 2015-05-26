@@ -3,10 +3,12 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\components\Controller;
+use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\Admin;
 
-class AdminsController extends \yii\easyii\components\Controller
+class AdminsController extends Controller
 {
     public $rootActions = 'all';
 
@@ -29,7 +31,7 @@ class AdminsController extends \yii\easyii\components\Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{
@@ -61,7 +63,7 @@ class AdminsController extends \yii\easyii\components\Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{

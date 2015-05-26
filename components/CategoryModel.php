@@ -5,6 +5,7 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\helpers\Data;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\easyii\helpers\Image;
@@ -14,7 +15,7 @@ use yii\easyii\helpers\Image;
  * @package yii\easyii\components
  * @inheritdoc
  */
-class CategoryModel extends \yii\easyii\components\ActiveRecord
+class CategoryModel extends ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;

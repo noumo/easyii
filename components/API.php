@@ -2,12 +2,13 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\base\Object;
 
 /**
  * Base API component. Used by all modules
  * @package yii\easyii\components
  */
-class API extends \yii\base\Object
+class API extends Object
 {
     /** @var  array */
     static $classes;

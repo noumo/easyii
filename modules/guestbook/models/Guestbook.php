@@ -3,13 +3,14 @@ namespace yii\easyii\modules\guestbook\models;
 
 use Yii;
 use yii\easyii\behaviors\CalculateNotice;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
 use yii\helpers\Url;
 
-class Guestbook extends \yii\easyii\components\ActiveRecord
+class Guestbook extends ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;

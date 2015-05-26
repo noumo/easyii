@@ -4,9 +4,10 @@ namespace yii\easyii\modules\catalog\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\models\Photo;
 
-class Item extends \yii\easyii\components\ActiveRecord
+class Item extends ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;

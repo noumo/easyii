@@ -3,8 +3,9 @@ namespace yii\easyii\models;
 
 use Yii;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\ActiveRecord;
 
-class Photo extends \yii\easyii\components\ActiveRecord
+class Photo extends ActiveRecord
 {
     const PHOTO_MAX_WIDTH = 1900;
     const PHOTO_THUMB_WIDTH = 120;

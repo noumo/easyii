@@ -2,8 +2,9 @@
 namespace yii\easyii\modules\subscribe\models;
 
 use Yii;
+use yii\easyii\components\ActiveRecord;
 
-class Subscriber extends \yii\easyii\components\ActiveRecord
+class Subscriber extends ActiveRecord
 {
     const FLASH_KEY = 'eaysiicms_subscribe_send_result';
 

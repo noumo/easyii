@@ -5,13 +5,14 @@ use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
 use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
+use yii\easyii\components\ActiveRecord;
 
 /**
  * Text module model class
  * @package yii\easyii\modules\text\models
  * @inheritdoc
  */
-class Text extends \yii\easyii\components\ActiveRecord
+class Text extends ActiveRecord
 {
     use MultiLanguageTrait;
 

@@ -2,8 +2,9 @@
 namespace yii\easyii\modules\faq;
 
 use Yii;
+use yii\easyii\components\Module;
 
-class FaqModule extends \yii\easyii\components\Module
+class FaqModule extends Module
 {
     public static $installConfig = [
         'title' => [

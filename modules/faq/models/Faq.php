@@ -4,8 +4,9 @@ namespace yii\easyii\modules\faq\models;
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\ActiveRecord;
 
-class Faq extends \yii\easyii\components\ActiveRecord
+class Faq extends ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;

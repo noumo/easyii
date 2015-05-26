@@ -3,12 +3,13 @@ namespace yii\easyii\modules\gallery\api;
 
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\gallery\models\Category;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
-class CategoryObject extends \yii\easyii\components\ApiObject
+class CategoryObject extends ApiObject
 {
     public $slug;
     public $image;

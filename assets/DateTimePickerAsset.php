@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\assets;
 
-class DateTimePickerAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class DateTimePickerAsset extends AssetBundle
 {
     public $sourcePath = '@bower';
     public $depends = [

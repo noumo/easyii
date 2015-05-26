@@ -2,10 +2,12 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\easyii\AdminModule;
+use yii\easyii\components\Controller;
 use yii\easyii\helpers\WebConsole;
 use yii\easyii\models\Setting;
 
-class SystemController extends \yii\easyii\components\Controller
+class SystemController extends Controller
 {
     public $rootActions = ['*'];
 
@@ -18,7 +20,7 @@ class SystemController extends \yii\easyii\components\Controller
     {
         $result = WebConsole::migrate();
 
-        Setting::set('easyii_version', \yii\easyii\AdminModule::VERSION);
+        Setting::set('easyii_version', AdminModule::VERSION);
         Yii::$app->cache->flush();
 
         return $this->render('update', ['result' => $result]);

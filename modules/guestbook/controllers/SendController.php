@@ -3,8 +3,9 @@ namespace yii\easyii\modules\guestbook\controllers;
 
 use Yii;
 use yii\easyii\modules\guestbook\models\Guestbook as GuestbookModel;
+use yii\web\Controller;
 
-class SendController extends \yii\web\Controller
+class SendController extends Controller
 {
     public function actionIndex()
     {

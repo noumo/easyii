@@ -4,8 +4,9 @@ namespace yii\easyii\modules\carousel\models;
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\ActiveRecord;
 
-class Carousel extends \yii\easyii\components\ActiveRecord
+class Carousel extends ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
