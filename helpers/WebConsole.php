@@ -4,12 +4,23 @@ namespace yii\easyii\helpers;
 use Yii;
 use yii\helpers\FileHelper;
 
+/**
+ * Class WebConsole
+ * @package yii\easyii\helpers
+ */
 class WebConsole
 {
     private static $_console;
     public static $logFile;
     public static $logFileHandler;
 
+    /**
+     *
+     *
+     * @return \yii\console\Application
+     * @throws \yii\base\Exception
+     * @throws \yii\web\ServerErrorHttpException
+     */
     public static function console()
     {
         if(!self::$_console)
@@ -43,11 +54,19 @@ class WebConsole
         return self::$_console;
     }
 
-    public static function migrate()
+    /**
+     * Run migrations
+     *
+     * @param string $migrationPath
+     * @return string
+     * @throws \yii\console\Exception
+     * @throws \yii\web\ServerErrorHttpException
+     */
+    public static function migrate($migrationPath = '@easyii/migrations/')
     {
         ob_start();
 
-        self::console()->runAction('migrate', ['migrationPath' => '@easyii/migrations/', 'migrationTable' => 'easyii_migration', 'interactive' => false]);
+        self::console()->runAction('migrate', ['migrationPath' => $migrationPath, 'migrationTable' => 'easyii_migration', 'interactive' => false]);
 
         $result = file_get_contents(self::$logFile) . "\n" . ob_get_clean();
 
