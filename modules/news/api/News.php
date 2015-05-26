@@ -3,7 +3,11 @@ namespace yii\easyii\modules\news\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+<<<<<<< HEAD
 use yii\easyii\components\API;
+=======
+use yii\easyii\models\Tag;
+>>>>>>> origin/test
 use yii\easyii\widgets\Fancybox;
 use yii\widgets\LinkPager;
 
@@ -33,10 +37,24 @@ class News extends API
         if(!$this->_items){
             $this->_items = [];
 
+<<<<<<< HEAD
             $query = NewsModel::find()->with('seo')->status(NewsModel::STATUS_ON);
+=======
+            $with = ['seo'];
+            if(Yii::$app->getModule('admin')->activeModules['news']->settings['enableTags']){
+                $with[] = 'tags';
+            }
+            $query = NewsModel::find()->with($with)->status(NewsModel::STATUS_ON);
+>>>>>>> origin/test
 
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
+            }
+            if(!empty($options['tags'])){
+                $query
+                    ->innerJoinWith('tags', false)
+                    ->andWhere([Tag::tableName() . '.name' => (new NewsModel)->filterTagValues($options['tags'])])
+                    ->addGroupBy('news_id');
             }
             if(!empty($options['orderBy'])){
                 $query->orderBy($options['orderBy']);
@@ -70,8 +88,13 @@ class News extends API
             return $this->_last;
         }
 
+        $with = ['seo'];
+        if(Yii::$app->getModule('admin')->activeModules['news']->settings['enableTags']){
+            $with[] = 'tags';
+        }
+
         $result = [];
-        foreach(NewsModel::find()->with('seo')->status(NewsModel::STATUS_ON)->sortDate()->limit($limit)->all() as $item){
+        foreach(NewsModel::find()->with($with)->status(NewsModel::STATUS_ON)->sortDate()->limit($limit)->all() as $item){
             $result[] = new NewsObject($item);
         }
 

@@ -63,6 +63,7 @@ class Admin extends ActiveRecord implements IdentityInterface
                 ? static::createRootUser()
                 : static::findOne($id);
         } catch (InvalidConfigException $e) {
+            // @todo do something
         }
         return $result;
     }

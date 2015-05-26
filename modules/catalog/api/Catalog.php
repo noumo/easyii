@@ -4,7 +4,9 @@ namespace yii\easyii\modules\catalog\api;
 use Yii;
 
 use yii\data\ActiveDataProvider;
+
 use yii\easyii\components\API;
+use yii\easyii\modules\catalog\models\ItemData;
 use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
@@ -64,6 +66,9 @@ class Catalog extends API
                 $query->orderBy($options['orderBy']);
             } else {
                 $query->sortDate();
+            }
+            if(!empty($options['filters'])){
+                $query = self::applyFilters($options['filters'], $query);
             }
 
             $this->_adp = new ActiveDataProvider([
@@ -128,6 +133,53 @@ class Catalog extends API
             'options' => $options
         ]);
     }
+    
+    public static function applyFilters($filters, $query)
+    {
+        if(is_array($filters)){
+
+            if(!empty($filters['price'])){
+                $price = $filters['price'];
+                if(is_array($price) && count($price) == 2) {
+                    if(!$price[0]){
+                        $query->andFilterWhere(['<=', 'price', (int)$price[1]]);
+                    } elseif(!$price[1]) {
+                        $query->andFilterWhere(['>=', 'price', (int)$price[0]]);
+                    } else {
+                        $query->andFilterWhere(['between', 'price', (int)$price[0], (int)$price[1]]);
+                    }
+                }
+                unset($filters['price']);
+            }
+            if(count($filters)){
+                $filtersApplied = 0;
+                $subQuery = ItemData::find()->select('item_id, COUNT(*) as filter_matched')->groupBy('item_id');
+                foreach($filters as $field => $value){
+                    if(!is_array($value)) {
+                        $subQuery->orFilterWhere(['and', ['name' => $field], ['value' => $value]]);
+                        $filtersApplied++;
+                    } elseif(count($value) == 2){
+                        if(!$value[0]){
+                            $additionalCondition = ['<=', 'value', (int)$value[1]];
+                        } elseif(!$value[1]) {
+                            $additionalCondition = ['>=', 'value', (int)$value[0]];
+                        } else {
+                            $additionalCondition = ['between', 'value', (int)$value[0], (int)$value[1]];
+                        }
+                        $subQuery->orFilterWhere(['and', ['name' => $field], $additionalCondition]);
+
+                        $filtersApplied++;
+                    }
+                }
+                if($filtersApplied) {
+                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '.Item::tableName().'.item_id');
+                    $query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
+                }
+            }
+        }
+        return $query;
+    }
+    
 
     private function findCategory($id_slug)
     {

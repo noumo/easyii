@@ -2,6 +2,7 @@
 use webvimark\behaviors\multilanguage\input_widget\MultiLanguageActiveField;
 use yii\easyii\helpers\Image;
 use yii\easyii\widgets\DateTimePicker;
+use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -39,7 +40,9 @@ $module = $this->context->module->id;
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
-
+<?php if($this->context->module->settings['enableTags']) : ?>
+    <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
+<?php endif; ?>
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>

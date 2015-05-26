@@ -9,7 +9,11 @@ use yii\easyii\helpers\Image;
  * Class ApiObject
  * @package yii\easyii\components
  */
+<<<<<<< HEAD
 class ApiObject extends Object
+=======
+class ApiObject extends \yii\base\Object
+>>>>>>> origin/test
 {
     /** @var \yii\base\Model  */
     public $model;

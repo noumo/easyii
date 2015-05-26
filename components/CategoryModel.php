@@ -8,13 +8,13 @@ use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\components\ActiveRecord;
 use yii\easyii\helpers\Data;
 use creocoder\nestedsets\NestedSetsBehavior;
-use yii\easyii\helpers\Image;
 
 /**
  * Base CategoryModel. Shared by categories
  * @package yii\easyii\components
  * @inheritdoc
  */
+
 class CategoryModel extends ActiveRecord
 {
     const STATUS_OFF = 0;
@@ -98,9 +98,15 @@ class CategoryModel extends ActiveRecord
      */
     public static function tree()
     {
-        return Data::cache(static::tableName().'_tree', 3600, function(){
-            return self::generateTree();
-        });
+        $cache = Yii::$app->cache;
+        $key = static::tableName().'_tree';
+
+        $tree = $cache->get($key);
+        if(!$tree){
+            $tree = static::generateTree();
+            $cache->set($key, $tree, 3600);
+        }
+        return $tree;
     }
 
     /**
@@ -109,9 +115,15 @@ class CategoryModel extends ActiveRecord
      */
     public static function cats()
     {
-        return Data::cache(static::tableName().'_flat', 3600, function(){
-            return self::generateFlat();
-        });
+        $cache = Yii::$app->cache;
+        $key = static::tableName().'_flat';
+
+        $flat = $cache->get($key);
+        if(!$flat){
+            $flat = static::generateFlat();
+            $cache->set($key, $flat, 3600);
+        }
+        return $flat;
     }
 
     /**
@@ -120,7 +132,7 @@ class CategoryModel extends ActiveRecord
      */
     public static function generateTree()
     {
-        $collection = self::find()->with('seo')->sort()->asArray()->all();
+        $collection = static::find()->with('seo')->sort()->asArray()->all();
         $trees = array();
         $l = 0;
 
@@ -168,7 +180,7 @@ class CategoryModel extends ActiveRecord
      */
     public static function generateFlat()
     {
-        $collection = self::find()->with('seo')->sort()->asArray()->all();
+        $collection = static::find()->with('seo')->sort()->asArray()->all();
         $flat = [];
 
         if (count($collection) > 0) {

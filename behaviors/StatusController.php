@@ -8,6 +8,7 @@ use yii\base\Behavior;
  * Status behavior. Adds statuses to models
  * @package yii\easyii\behaviors
  */
+
 class StatusController extends Behavior
 {
     public $model;

@@ -9,6 +9,7 @@ use yii\db\Query;
  * Sortable behavior. Enables model to be sorted manually by admin
  * @package yii\easyii\behaviors
  */
+
 class SortableModel extends Behavior
 {
     public function events()

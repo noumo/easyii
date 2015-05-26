@@ -6,7 +6,11 @@ use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+<<<<<<< HEAD
 use yii\easyii\components\ActiveRecord;
+=======
+use yii\easyii\behaviors\Taggable;
+>>>>>>> origin/test
 use yii\easyii\models\Photo;
 use yii\helpers\StringHelper;
 
@@ -34,6 +38,7 @@ class Item extends ActiveRecord
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['status', 'default', 'value' => self::STATUS_ON],
+            ['tagNames', 'safe']
         ];
     }
 
@@ -46,6 +51,7 @@ class Item extends ActiveRecord
             'image' => Yii::t('easyii', 'Image'),
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
+            'tagNames' => Yii::t('easyii', 'Tags'),
         ];
     }
 
@@ -53,6 +59,7 @@ class Item extends ActiveRecord
     {
         return [
             'seoBehavior' => SeoBehavior::className(),
+            'taggabble' => Taggable::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',

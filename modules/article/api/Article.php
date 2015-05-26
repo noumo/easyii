@@ -5,6 +5,7 @@ use Yii;
 
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
+use yii\easyii\models\Tag;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
 use yii\easyii\widgets\Fancybox;
@@ -56,10 +57,20 @@ class Article extends API
         if(!$this->_items){
             $this->_items = [];
 
-            $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
+            $with = ['seo', 'category'];
+            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+                $with[] = 'tags';
+            }
+            $query = Item::find()->with($with)->status(Item::STATUS_ON);
 
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
+            }
+            if(!empty($options['tags'])){
+                $query
+                    ->innerJoinWith('tags', false)
+                    ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
+                    ->addGroupBy('item_id');
             }
             if(!empty($options['orderBy'])){
                 $query->orderBy($options['orderBy']);
@@ -87,7 +98,11 @@ class Article extends API
 
         $result = [];
 
-        $query = Item::find()->with('seo')->status(Item::STATUS_ON)->sortDate()->limit($limit);
+        $with = ['seo'];
+        if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+            $with[] = 'tags';
+        }
+        $query = Item::find()->with($with)->status(Item::STATUS_ON)->sortDate()->limit($limit);
         if($where){
             $query->andFilterWhere($where);
         }

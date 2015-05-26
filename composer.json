@@ -34,7 +34,8 @@
         "bower-asset/fancybox": "*",
         "bower-asset/jquery.switcher": "*",
         "bower-asset/eonasdan-bootstrap-datetimepicker": "^4.7@dev",
-        "webvimark/multilanguage": "*"
+        "webvimark/multilanguage": "*",
+        "2amigos/yii2-selectize-widget": "~1.0"
     },
     "autoload": {
         "psr-4": {

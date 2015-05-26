@@ -1,9 +1,11 @@
 <?php
 namespace yii\easyii\modules\article\api;
 
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
 use yii\easyii\components\ApiObject;
+use yii\easyii\models\Tag;
 use yii\easyii\modules\article\models\Item;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
@@ -35,10 +37,21 @@ class CategoryObject extends ApiObject
         if(!$this->_items){
             $this->_items = [];
 
+            $with = ['seo'];
+            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+                $with[] = 'tags';
+            }
+
             $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sortDate();
 
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
+            }
+            if(!empty($options['tags'])){
+                $query
+                    ->innerJoinWith('tags', false)
+                    ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
+                    ->addGroupBy('item_id');
             }
 
             $this->_adp = new ActiveDataProvider([
