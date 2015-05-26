@@ -4,8 +4,11 @@ namespace yii\easyii\widgets;
 use Yii;
 use yii\base\Widget;
 use yii\base\InvalidConfigException;
-use yii\helpers\Html;
 
+/**
+ * Form widget for SEO properties
+ * @package yii\easyii\widgets
+ */
 class SeoForm extends Widget
 {
     public $model;
