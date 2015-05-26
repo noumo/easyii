@@ -1,12 +1,32 @@
 <?php
 namespace yii\easyii\models;
 
+use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
+use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\easyii\components\ActiveRecord;
 use yii\easyii\validators\EscapeValidator;
 
 class SeoText extends ActiveRecord
 {
+    use MultiLanguageTrait;
+
+    public function behaviors()
+    {
+        return [
+            'mlBehavior' => [
+                'class' => MultiLanguageBehavior::className(),
+                'mlConfig' => [
+                    'db_table' => 'translations_with_string',
+                    'attributes' => ['h1', 'title', 'keywords', 'description'],
+                    'admin_routes' => [
+                        'admin/'
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public static function tableName()
     {
         return 'easyii_seotext';

@@ -1,6 +1,8 @@
 <?php
+/** @todo input multilanguage widgets */
+use webvimark\behaviors\multilanguage\input_widget\MultiLanguageActiveField;
+use yii\bootstrap\ActiveForm;
 use yii\bootstrap\BootstrapPluginAsset;
-use yii\helpers\Html;
 
 BootstrapPluginAsset::register($this);
 
@@ -11,21 +13,19 @@ $inputOptions = ['class' => 'form-control'];
     <a class="dashed-link collapsed" data-toggle="collapse" href="#seo-form" aria-expanded="false" aria-controls="seo-form"><?= Yii::t('easyii', 'Seo texts')?></a>
 </p>
 
+<?php $form = ActiveForm::begin(); ?>
 <div class="collapse" id="seo-form">
     <div class="form-group">
-        <?= Html::activeLabel($model, 'h1', $labelOptions) ?>
-        <?= Html::activeTextInput($model, 'h1', $inputOptions) ?>
+        <?= $form->field($model, 'h1')->widget(MultiLanguageActiveField::className()); ?>
     </div>
     <div class="form-group">
-        <?= Html::activeLabel($model, 'title', $labelOptions) ?>
-        <?= Html::activeTextInput($model, 'title', $inputOptions) ?>
+        <?= $form->field($model, 'h1')->widget(MultiLanguageActiveField::className()); ?>
     </div>
     <div class="form-group">
-        <?= Html::activeLabel($model, 'keywords', $labelOptions) ?>
-        <?= Html::activeTextInput($model, 'keywords', $inputOptions) ?>
+        <?= $form->field($model, 'h1')->widget(MultiLanguageActiveField::className()); ?>
     </div>
     <div class="form-group">
-        <?= Html::activeLabel($model, 'description', $labelOptions) ?>
-        <?= Html::activeTextarea($model, 'description', $inputOptions) ?>
+        <?= $form->field($model, 'h1')->textarea()->widget(MultiLanguageActiveField::className(), ['inputType' => 'textArea']); ?>
     </div>
 </div>
+<?php $form = ActiveForm::end(); ?>

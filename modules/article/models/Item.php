@@ -1,6 +1,8 @@
 <?php
 namespace yii\easyii\modules\article\models;
 
+use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
+use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
@@ -12,6 +14,8 @@ class Item extends ActiveRecord
 {
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
+
+    use MultiLanguageTrait;
 
     public static function tableName()
     {
@@ -53,7 +57,18 @@ class Item extends ActiveRecord
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
                 'ensureUnique' => true
-            ]
+            ],
+            'mlBehavior' => [
+                'class' => MultiLanguageBehavior::className(),
+                'mlConfig' => [
+                    'db_table' => 'translations_with_string',
+                    'attributes' => ['title', 'short', 'text'],
+                    'admin_routes' => [
+                        'article/items/create/',
+                        'article/items/edit/',
+                    ],
+                ],
+            ],
         ];
     }
 

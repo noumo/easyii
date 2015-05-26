@@ -1,4 +1,5 @@
 <?php
+use webvimark\behaviors\multilanguage\input_widget\MultiLanguageActiveField;
 use yii\easyii\helpers\Image;
 use yii\easyii\widgets\DateTimePicker;
 use yii\helpers\Html;
@@ -13,7 +14,7 @@ $module = $this->context->module->id;
     'enableAjaxValidation' => true,
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
-<?= $form->field($model, 'title') ?>
+<?= $form->field($model, 'title')->widget(MultiLanguageActiveField::className()) ?>
 
 <?php if($this->context->module->settings['articleThumb']) : ?>
     <?php if($model->image) : ?>
@@ -24,7 +25,7 @@ $module = $this->context->module->id;
 <?php endif; ?>
 
 <?php if($this->context->module->settings['enableShort']) : ?>
-    <?= $form->field($model, 'short')->textarea() ?>
+    <?= $form->field($model, 'short')->textarea()->widget(MultiLanguageActiveField::className(), ['inputType' => 'textArea']) ?>
 <?php endif; ?>
 
 <?= $form->field($model, 'text')->widget(Redactor::className(),[
