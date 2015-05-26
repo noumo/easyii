@@ -10,13 +10,6 @@ return [
     ],
     'components' => [
         'urlManager' => [
-//            'class' => MultiLanguageUrlManager::className(),
-//            'enablePrettyUrl' => true,
-//            'showScriptName' => false,
-//            'rules' => [
-//                'admin/<controller:\w+>/<action:[\w-]+>/<id:\d+>' => 'admin/<controller>/<action>',
-//                'admin/<module:\w+>/<controller:\w+>/<action:[\w-]+>/<id:\d+>' => 'admin/<module>/<controller>/<action>'
-//            ],
             'class'=>MultiLanguageUrlManager::className(),
             'enablePrettyUrl' => true,
             'showScriptName'=>false,
