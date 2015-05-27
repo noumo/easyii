@@ -21,7 +21,7 @@
     ],
     "repositories": [
         {
-            "type": "VCS",
+            "type": "vcs",
             "url": "https://github.com/vnenkpet/multilanguage"
         }
     ],

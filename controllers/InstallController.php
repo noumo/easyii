@@ -43,7 +43,6 @@ class InstallController extends Controller
             $this->createUploadsDir();
 
             WebConsole::migrate(); // run easyii migration
-            WebConsole::migrate('@multilanguage/migrations/'); // run multilanguage migrations
 
             $this->insertSettings($installForm);
             $this->installModules();
