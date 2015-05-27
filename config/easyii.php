@@ -50,10 +50,10 @@ return [
     'bootstrap' => ['admin'],
     'params' => [
         'mlConfig'=>[
-            'default_language'=>'ru',
+            'default_language'=>'en',
             'languages'=>[
-                'ru'=>'Русский',
-                'en'=>'English',
+                'en'=>'Eng',
+                'ru'=>'Rus',
             ],
         ],
     ]
