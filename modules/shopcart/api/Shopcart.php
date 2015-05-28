@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
  * @package yii\easyii\modules\shopcart\api
  *
  * @method static GoodObject goods() Get list of added to shopcart goods as GoodObject objects.
- * @method static OrderObject get(mixed $id_slug) Get an order by id as OrderObject
+ * @method static OrderObject order(int $id) Get an order by id as OrderObject
  * @method static string form(array $options = []) Returns fully worked standalone html form to complete order.
  * @method static array add(int $item_id, int $count = 1, string $options = '', boolean $increaseOnDuplicate = true) Adds item to shopcart, returns GoodObject attributes
  * @method static array remove(int $good_id) Removes good to shopcart
