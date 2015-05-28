@@ -10,7 +10,7 @@ return [
     ],
     'components' => [
         'urlManager' => [
-            'class'=>MultiLanguageUrlManager::className(),
+            'class' => MultiLanguageUrlManager::className(),
             'enablePrettyUrl' => true,
             'showScriptName'=>false,
             'rules'=>[
