@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\modules\article\api;
 
+use Yii;
 use yii\easyii\components\API;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\article\models\Item;
@@ -14,6 +15,8 @@ class ArticleObject extends \yii\easyii\components\ApiObject
     public $image;
 
     public $views;
+
+    public $time;
 
     /** @var  int */
     public $category_id;
@@ -38,6 +41,10 @@ class ArticleObject extends \yii\easyii\components\ApiObject
 
     public function getTags(){
         return $this->model->tagsArray;
+    }
+
+    public function getDate(){
+        return Yii::$app->formatter->asDate($this->time);
     }
 
     public function getPhotos()

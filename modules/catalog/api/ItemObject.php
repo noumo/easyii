@@ -1,7 +1,7 @@
 <?php
 namespace yii\easyii\modules\catalog\api;
 
-use yii\data\ActiveDataProvider;
+use Yii;
 use yii\easyii\components\API;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\models\Item;
@@ -15,6 +15,7 @@ class ItemObject extends \yii\easyii\components\ApiObject
     public $category_id;
     public $available;
     public $discount;
+    public $time;
 
     private $_photos;
 
@@ -36,6 +37,10 @@ class ItemObject extends \yii\easyii\components\ApiObject
 
     public function getOldPrice(){
         return $this->model->price;
+    }
+
+    public function getDate(){
+        return Yii::$app->formatter->asDate($this->time);
     }
 
     public function getPhotos()
