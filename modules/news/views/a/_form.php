@@ -1,11 +1,12 @@
 <?php
+use webvimark\behaviors\multilanguage\input_widget\MultiLanguageActiveField;
 use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\helpers\Image;
+use yii\easyii\widgets\RedactorMultiLanguage\RedactorMultiLanguageInput;
 use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
 
 $module = $this->context->module->id;
@@ -14,7 +15,7 @@ $module = $this->context->module->id;
     'enableAjaxValidation' => true,
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
-<?= $form->field($model, 'title') ?>
+<?= $form->field($model, 'title')->widget(MultiLanguageActiveField::className()) ?>
 <?php if($this->context->module->settings['enableThumb']) : ?>
     <?php if($model->image) : ?>
         <img src="<?= Image::thumb($model->image, 240) ?>">
@@ -23,16 +24,15 @@ $module = $this->context->module->id;
     <?= $form->field($model, 'image')->fileInput() ?>
 <?php endif; ?>
 <?php if($this->context->module->settings['enableShort']) : ?>
-    <?= $form->field($model, 'short')->textarea() ?>
+    <?= $form->field($model, 'short')->textarea()->widget(MultiLanguageActiveField::className()) ?>
 <?php endif; ?>
-<?= $form->field($model, 'text')->widget(Redactor::className(),[
-    'options' => [
-        'minHeight' => 400,
-        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
-        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
-        'plugins' => ['fullscreen']
-    ]
-]) ?>
+
+<?= RedactorMultiLanguageInput::widget($model, 'text', ['options' => [
+    'minHeight' => 400,
+    'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
+    'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
+    'plugins' => ['fullscreen']
+]]); ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 

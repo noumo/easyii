@@ -2,6 +2,7 @@
 use webvimark\behaviors\multilanguage\input_widget\MultiLanguageActiveField;
 use yii\easyii\helpers\Image;
 use yii\easyii\widgets\DateTimePicker;
+use yii\easyii\widgets\RedactorMultiLanguage\RedactorMultiLanguageInput;
 use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -29,14 +30,12 @@ $module = $this->context->module->id;
     <?= $form->field($model, 'short')->textarea()->widget(MultiLanguageActiveField::className(), ['inputType' => 'textArea']) ?>
 <?php endif; ?>
 
-<?= $form->field($model, 'text')->widget(Redactor::className(),[
-    'options' => [
+<?= RedactorMultiLanguageInput::widget($model, 'text', ['options' => [
         'minHeight' => 400,
-        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'article'], true),
-        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'article'], true),
+        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'article']),
+        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'article']),
         'plugins' => ['fullscreen']
-    ]
-]) ?>
+]]); ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 

@@ -51,8 +51,8 @@ class Page extends ActiveRecord
                     'db_table' => 'translations_with_string',
                     'attributes' => ['title', 'text'],
                     'admin_routes' => [
-                        'admin/text/a/edit',
-                        'admin/text/a/create',
+                        'admin/page/a/edit',
+                        'admin/page/a/create',
                     ],
                 ],
             ],
