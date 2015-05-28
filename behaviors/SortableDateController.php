@@ -2,8 +2,9 @@
 namespace yii\easyii\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 
-class SortableDateController extends \yii\base\Behavior
+class SortableDateController extends Behavior
 {
     public $model;
 

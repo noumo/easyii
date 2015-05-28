@@ -2,13 +2,14 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\base\Object;
 use yii\easyii\helpers\Image;
 
 /**
  * Class ApiObject
  * @package yii\easyii\components
  */
-class ApiObject extends \yii\base\Object
+class ApiObject extends Object
 {
     /** @var \yii\base\Model  */
     public $model;

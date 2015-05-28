@@ -3,15 +3,18 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\db\Exception;
+use yii\easyii\components\Controller;
 use yii\easyii\models\CopyModuleForm;
 use yii\helpers\FileHelper;
+use yii\web\Response;
 use yii\widgets\ActiveForm;
 
 use yii\easyii\models\Module;
 use yii\easyii\behaviors\SortableController;
 use yii\easyii\behaviors\StatusController;
 
-class ModulesController extends \yii\easyii\components\Controller
+class ModulesController extends Controller
 {
     public $rootActions = 'all';
 
@@ -47,7 +50,7 @@ class ModulesController extends \yii\easyii\components\Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{
@@ -79,7 +82,7 @@ class ModulesController extends \yii\easyii\components\Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{
@@ -149,7 +152,7 @@ class ModulesController extends \yii\easyii\components\Controller
         }
         if ($formModel->load(Yii::$app->request->post())){
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($formModel);
             }
             else{
@@ -220,7 +223,7 @@ class ModulesController extends \yii\easyii\components\Controller
 
                         //Copy new table
                         Yii::$app->db->createCommand("CREATE TABLE `$newTableName` LIKE `$oldTableName`;")->execute();
-                    } catch(\yii\db\Exception $e) {
+                    } catch(Exception $e) {
                         $this->flash('error', 'Copy table error. '.$e);
                         FileHelper::removeDirectory($newModuleFolder);
                         return $this->refresh();

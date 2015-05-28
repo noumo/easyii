@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\assets;
 
-class RedactorAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class RedactorAsset extends AssetBundle
 {
 
     public $sourcePath = '@easyii/assets/redactor';

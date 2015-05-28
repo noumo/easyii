@@ -3,10 +3,11 @@ namespace yii\easyii\modules\catalog\api;
 
 use Yii;
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class PhotoObject extends \yii\easyii\components\ApiObject
+class PhotoObject extends ApiObject
 {
     public $image;
     public $description;

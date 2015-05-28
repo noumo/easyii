@@ -4,12 +4,13 @@ namespace yii\easyii\modules\article\api;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\easyii\models\Tag;
 use yii\easyii\modules\article\models\Item;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
-class CategoryObject extends \yii\easyii\components\ApiObject
+class CategoryObject extends ApiObject
 {
     public $slug;
     public $image;

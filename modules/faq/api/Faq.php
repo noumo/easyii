@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\faq\api;
 
 use Yii;
+use yii\easyii\components\API;
 use yii\easyii\helpers\Data;
 use yii\easyii\modules\faq\models\Faq as FaqModel;
 
@@ -13,7 +14,7 @@ use yii\easyii\modules\faq\models\Faq as FaqModel;
  * @method static array items() list of all FAQ as FaqObject objects
  */
 
-class Faq extends \yii\easyii\components\API
+class Faq extends API
 {
     public function api_items()
     {

@@ -5,9 +5,10 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\models\Photo;
 
-class ItemData extends \yii\easyii\components\ActiveRecord
+class ItemData extends ActiveRecord
 {
 
     public static function tableName()

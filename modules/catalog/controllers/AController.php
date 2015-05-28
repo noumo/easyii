@@ -4,6 +4,7 @@ namespace yii\easyii\modules\catalog\controllers;
 use Yii;
 use yii\easyii\components\CategoryController;
 use yii\easyii\modules\catalog\models\Category;
+use yii\helpers\Inflector;
 
 
 class AController extends CategoryController
@@ -49,7 +50,7 @@ class AController extends CategoryController
                 }
 
                 $result[] = [
-                    'name' => \yii\helpers\Inflector::slug($temp->name),
+                    'name' => Inflector::slug($temp->name),
                     'title' => $temp->title,
                     'type' => $temp->type,
                     'options' => $options

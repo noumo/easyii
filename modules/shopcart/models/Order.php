@@ -3,12 +3,13 @@ namespace yii\easyii\modules\shopcart\models;
 
 use Yii;
 use yii\easyii\behaviors\CalculateNotice;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
 use yii\easyii\validators\EscapeValidator;
 use yii\helpers\Url;
 
-class Order extends \yii\easyii\components\ActiveRecord
+class Order extends ActiveRecord
 {
     const STATUS_BLANK = 0;
     const STATUS_PENDING = 1;

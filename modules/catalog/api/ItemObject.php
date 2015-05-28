@@ -3,11 +3,12 @@ namespace yii\easyii\modules\catalog\api;
 
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\models\Item;
 use yii\helpers\Url;
 
-class ItemObject extends \yii\easyii\components\ApiObject
+class ItemObject extends ApiObject
 {
     public $slug;
     public $image;

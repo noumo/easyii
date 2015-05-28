@@ -3,6 +3,7 @@ namespace yii\easyii\modules\guestbook\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\components\API;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
@@ -22,7 +23,7 @@ use yii\easyii\widgets\ReCaptcha;
  * @method static \stdClass pagination() returns yii\data\Pagination object.
  */
 
-class Guestbook extends \yii\easyii\components\API
+class Guestbook extends API
 {
     const SENT_VAR = 'guestbook_sent';
 

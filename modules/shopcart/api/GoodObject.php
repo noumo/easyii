@@ -1,9 +1,10 @@
 <?php
 namespace yii\easyii\modules\shopcart\api;
 
+use yii\easyii\components\ApiObject;
 use yii\easyii\modules\catalog\api\ItemObject;
 
-class GoodObject extends \yii\easyii\components\ApiObject
+class GoodObject extends ApiObject
 {
     public $order_id;
     public $item_id;

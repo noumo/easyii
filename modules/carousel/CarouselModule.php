@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\carousel;
 
-class CarouselModule extends \yii\easyii\components\Module
+use yii\easyii\components\Module;
+
+class CarouselModule extends Module
 {
     public $settings = [
         'enableTitle' => true,

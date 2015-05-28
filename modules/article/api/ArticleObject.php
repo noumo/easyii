@@ -2,11 +2,12 @@
 namespace yii\easyii\modules\article\api;
 
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\article\models\Item;
 use yii\helpers\Url;
 
-class ArticleObject extends \yii\easyii\components\ApiObject
+class ArticleObject extends ApiObject
 {
     /** @var  string */
     public $slug;

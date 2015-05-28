@@ -4,8 +4,9 @@ namespace yii\easyii\modules\shopcart\controllers;
 use Yii;
 use yii\easyii\modules\shopcart\api\Shopcart;
 use yii\easyii\modules\shopcart\models\Order;
+use yii\web\Controller;
 
-class SendController extends \yii\web\Controller
+class SendController extends Controller
 {
     public function actionIndex()
     {

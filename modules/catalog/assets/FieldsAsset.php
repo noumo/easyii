@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\catalog\assets;
 
-class FieldsAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class FieldsAsset extends AssetBundle
 {
     public $sourcePath = '@easyii/modules/catalog/media';
     public $css = [

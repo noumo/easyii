@@ -1,11 +1,12 @@
 <?php
 namespace yii\easyii\modules\shopcart\models;
 
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\modules\catalog\models\Item;
 use Yii;
 use yii\easyii\validators\EscapeValidator;
 
-class Good extends \yii\easyii\components\ActiveRecord
+class Good extends ActiveRecord
 {
     public static function tableName()
     {

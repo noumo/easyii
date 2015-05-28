@@ -5,8 +5,9 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\ActiveRecord;
 
-class File extends \yii\easyii\components\ActiveRecord
+class File extends ActiveRecord
 {
     public static function tableName()
     {

@@ -2,12 +2,14 @@
 namespace yii\easyii\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 
 /**
  * Status behavior. Adds statuses to models
  * @package yii\easyii\behaviors
  */
-class StatusController extends \yii\base\Behavior
+
+class StatusController extends Behavior
 {
     public $model;
 

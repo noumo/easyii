@@ -3,8 +3,9 @@ namespace yii\easyii\modules\feedback\controllers;
 
 use Yii;
 use yii\easyii\modules\feedback\models\Feedback as FeedbackModel;
+use yii\web\Controller;
 
-class SendController extends \yii\web\Controller
+class SendController extends Controller
 {
     public function actionIndex()
     {

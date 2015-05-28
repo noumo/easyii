@@ -1,4 +1,5 @@
 <?php
+use webvimark\behaviors\multilanguage\input_widget\MultiLanguageActiveField;
 use yii\easyii\helpers\Image;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -12,7 +13,7 @@ $settings = $this->context->module->settings;
     'enableAjaxValidation' => true,
     'options' => ['enctype' => 'multipart/form-data']
 ]); ?>
-<?= $form->field($model, 'title') ?>
+<?= $form->field($model, 'title')->widget(MultiLanguageActiveField::className()) ?>
 
 <?php if(!empty($parent)) : ?>
     <div class="form-group field-category-title required">

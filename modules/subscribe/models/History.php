@@ -2,8 +2,9 @@
 namespace yii\easyii\modules\subscribe\models;
 
 use Yii;
+use yii\easyii\components\ActiveRecord;
 
-class History extends \yii\easyii\components\ActiveRecord
+class History extends ActiveRecord
 {
     public static function tableName()
     {

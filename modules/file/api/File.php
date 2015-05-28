@@ -3,6 +3,7 @@ namespace yii\easyii\modules\file\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\components\API;
 use yii\easyii\modules\file\models\File as FileModel;
 use yii\widgets\LinkPager;
 
@@ -17,7 +18,7 @@ use yii\widgets\LinkPager;
  * @method static \stdClass pagination() returns yii\data\Pagination object.
  */
 
-class File extends \yii\easyii\components\API
+class File extends API
 {
     private $_adp;
     private $_last;

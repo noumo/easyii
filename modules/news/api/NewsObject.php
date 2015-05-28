@@ -3,11 +3,12 @@ namespace yii\easyii\modules\news\api;
 
 use Yii;
 use yii\easyii\components\API;
+use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\news\models\News as NewsModel;
 use yii\helpers\Url;
 
-class NewsObject extends \yii\easyii\components\ApiObject
+class NewsObject extends ApiObject
 {
     public $slug;
     public $image;

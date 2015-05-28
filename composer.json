@@ -19,6 +19,12 @@
             "role" : "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/vnenkpet/multilanguage"
+        }
+    ],
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "*",
@@ -28,6 +34,7 @@
         "bower-asset/fancybox": "*",
         "bower-asset/jquery.switcher": "*",
         "bower-asset/eonasdan-bootstrap-datetimepicker": "^4.7@dev",
+        "webvimark/multilanguage": "*",
         "2amigos/yii2-selectize-widget": "~1.0"
     },
     "autoload": {

@@ -3,6 +3,7 @@ namespace yii\easyii\modules\carousel\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 
@@ -45,7 +46,7 @@ class AController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{
@@ -92,7 +93,7 @@ class AController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{
