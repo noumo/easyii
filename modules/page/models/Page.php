@@ -1,12 +1,20 @@
 <?php
 namespace yii\easyii\modules\page\models;
 
+use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
+use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\components\ActiveRecord;
 
+/**
+ * Class Page
+ * @package yii\easyii\modules\page\models
+ */
 class Page extends ActiveRecord
 {
+    use MultiLanguageTrait;
+
     public static function tableName()
     {
         return 'easyii_pages';
@@ -37,6 +45,17 @@ class Page extends ActiveRecord
     {
         return [
             'seoBehavior' => SeoBehavior::className(),
+            'mlBehavior' => [
+                'class' => MultiLanguageBehavior::className(),
+                'mlConfig' => [
+                    'db_table' => 'translations_with_string',
+                    'attributes' => ['title', 'text'],
+                    'admin_routes' => [
+                        'admin/text/a/edit',
+                        'admin/text/a/create',
+                    ],
+                ],
+            ],
         ];
     }
 }
