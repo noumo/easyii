@@ -9,6 +9,8 @@ use yii\web\View;
 ?>
 <?php $sid = uniqid() ?>
 
+<?= \yii\helpers\Html::activeLabel($this->context->model, $this->context->attribute); ?>
+
 <ul class="nav nav-tabs" role="tablist">
     <?php foreach ($this->context->model->mlConfig['languages'] as $languageCode => $languageName): ?>
 

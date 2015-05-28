@@ -1,13 +1,14 @@
 <?php
 namespace yii\easyii\widgets\RedactorMultiLanguage;
 
+use yii\base\Model;
 use yii\easyii\components\ActiveRecord;
 use yii\widgets\InputWidget;
 
 /**
  * Multi language input for Redactor textarea widget.
  * Uses bootstrap 3 tabs, based on webvimark/multilanguage input widget
- * @package app\easyii\widget\RedactorMultiLanguage
+ * @package yii\easyii\widgets\RedactorMultiLanguage
  */
 class RedactorMultiLanguageInput extends InputWidget
 {
@@ -33,5 +34,20 @@ class RedactorMultiLanguageInput extends InputWidget
         } else {
             return $this->render('single');
         }
+    }
+
+    /**
+     * Initiate the widget
+     *
+     * @param $model \yii\db\ActiveRecord Model object
+     * @param $attribute string attribute
+     * @param $config
+     * @return string|void
+     * @throws \Exception
+     */
+    public static function widget($model, $attribute, $config = [])
+    {
+        $config = array_merge_recursive(['model' => $model, 'attribute' => $attribute], $config);
+        return parent::widget($config);
     }
 }
