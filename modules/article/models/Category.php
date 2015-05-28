@@ -3,7 +3,6 @@ namespace yii\easyii\modules\article\models;
 
 use yii\easyii\components\CategoryModel;
 
-/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 class Category extends CategoryModel
 {
     public static function tableName()
