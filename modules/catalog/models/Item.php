@@ -1,6 +1,8 @@
 <?php
 namespace yii\easyii\modules\catalog\models;
 
+use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
+use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
@@ -9,6 +11,8 @@ use yii\easyii\models\Photo;
 
 class Item extends ActiveRecord
 {
+    use MultiLanguageTrait;
+
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
 
@@ -57,7 +61,17 @@ class Item extends ActiveRecord
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
                 'ensureUnique' => true
-            ]
+            ],
+            'mlBehavior' => [
+                'class' => MultiLanguageBehavior::className(),
+                'mlConfig' => [
+                    'db_table' => 'translations_with_string',
+                    'attributes' => ['title', 'description'],
+                    'admin_routes' => [
+                        'admin/*',
+                    ],
+                ],
+            ],
         ];
     }
 
