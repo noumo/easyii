@@ -97,11 +97,7 @@ class CategoryController extends Controller
      * Edit form
      *
      * @param $id
-<<<<<<< HEAD
      * @return array|string|Response
-=======
-     * @return array|string|\yii\web\Response
->>>>>>> origin/test
      * @throws \yii\web\HttpException
      */
     public function actionEdit($id)
@@ -146,11 +142,7 @@ class CategoryController extends Controller
      * Remove category image
      *
      * @param $id
-<<<<<<< HEAD
      * @return Response
-=======
-     * @return \yii\web\Response
->>>>>>> origin/test
      */
     public function actionClearImage($id)
     {
@@ -196,11 +188,7 @@ class CategoryController extends Controller
      * Move category one level up up
      *
      * @param $id
-<<<<<<< HEAD
      * @return Response
-=======
-     * @return \yii\web\Response
->>>>>>> origin/test
      */
     public function actionUp($id)
     {
@@ -211,11 +199,7 @@ class CategoryController extends Controller
      * Move category one level down
      *
      * @param $id
-<<<<<<< HEAD
      * @return Response
-=======
-     * @return \yii\web\Response
->>>>>>> origin/test
      */
     public function actionDown($id)
     {
@@ -251,11 +235,7 @@ class CategoryController extends Controller
      *
      * @param $id
      * @param $direction
-<<<<<<< HEAD
      * @return Response
-=======
-     * @return \yii\web\Response
->>>>>>> origin/test
      * @throws \Exception
      */
     private function move($id, $direction)
