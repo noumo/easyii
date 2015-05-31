@@ -26,8 +26,8 @@ class LangUrlManager extends UrlManager
             }
         }
         if (!$this->currentLanguage) {
-            $session_lang = $session->get('language');
-            $this->currLang = isset($session_lang) ? $session_lang : substr(\Yii::$app->language,0,2) ;
+            $sessionLanguage = $session->get('language');
+            $this->currentLanguage = isset($sessionLanguage) ? $sessionLanguage : substr(\Yii::$app->language,0,2) ;
         }
         if ( $session->get('language') != $this->currentLanguage )
             $session->set('language',$this->currentLanguage);
