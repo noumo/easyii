@@ -7,7 +7,7 @@ class LangUrlManager extends UrlManager
 {
     private $currentLanguage;
 
-    public $languages = [ 'ru' => 'ru-RU', 'en' => 'en-US'];
+    public $languages = ['ru' => 'ru-RU', 'en' => 'en-US'];
 
     /**
      * Parses the user request.
@@ -29,10 +29,11 @@ class LangUrlManager extends UrlManager
             $sessionLanguage = $session->get('language');
             $this->currentLanguage = isset($sessionLanguage) ? $sessionLanguage : substr(\Yii::$app->language,0,2) ;
         }
-        if ( $session->get('language') != $this->currentLanguage )
+        if ( $session->get('language') != $this->currentLanguage ) {
             $session->set('language',$this->currentLanguage);
+        }
         \Yii::$app->language = $this->languages[$this->currentLanguage];
-        return parent::parseRequest($modifyRequest ? $modifyRequest : $request);
+        return parent::parseRequest(isset($modifyRequest) ? $modifyRequest : $request);
     }
     /**
      * Creates a URL using the given route and query parameters.
