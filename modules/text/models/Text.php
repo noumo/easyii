@@ -53,8 +53,7 @@ class Text extends ActiveRecord
                     'db_table' => 'translations_with_string',
                     'attributes' => ['text'],
                     'admin_routes' => [
-                        'admin/text/a/edit',
-                        'admin/text/a/create',
+                        'admin/*'
                     ],
                 ],
             ],
