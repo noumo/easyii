@@ -7,7 +7,7 @@ return [
     'Admin E-mail' => 'E-mail администратора',
     'Robot E-mail' => 'E-mail рассыльщика',
     'Auth time' => 'Время авторизации',
-    'Frontend toolbar position' => 'Позизия панели на сайте',
+    'Frontend toolbar position' => 'Позиция панели на сайте',
     'Password to login as root' => 'Пароль для входа как root',
     'Used as "ReplyTo" in mail messages' => 'Адрес "ReplyTo", при отправке писем',
     'Used as "From" in mail messages' => 'Адрес "From", при отправке писем',
