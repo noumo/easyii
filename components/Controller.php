@@ -23,7 +23,8 @@ class Controller extends \yii\web\Controller
 
         if(Yii::$app->user->isGuest){
             Yii::$app->user->setReturnUrl(Yii::$app->request->url);
-            return $this->redirect(['/admin/sign/in']);
+            Yii::$app->getResponse()->redirect(['/admin/sign/in'])->send();
+            return false;
         }
         else{
 
