@@ -9,6 +9,7 @@ class AdminAsset extends AssetBundle
     public $sourcePath = '@easyii/media';
     public $css = [
         'css/admin.css',
+        'css/tree-view.css'
     ];
     public $js = [
         'js/admin.js'

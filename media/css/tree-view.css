@@ -1,0 +1,26 @@
+.menu-tree-view ul {
+    padding-left: 0;
+    margin-top: 20px;
+}
+
+.menu-tree-view ul ul{
+    padding-left: 15px;
+}
+
+.menu-tree-view li {
+    list-style: none;
+}
+
+.menu-tree-view li > a {
+    margin: 0 5px;
+}
+
+.menu-tree-view .btn-group {
+    float: right;
+    margin-top: -2px;
+}
+
+.menu-tree-view .switcher {
+    float: right;
+    margin-right: 10px;
+}
