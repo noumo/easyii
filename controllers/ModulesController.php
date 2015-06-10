@@ -191,7 +191,11 @@ class ModulesController extends \yii\easyii\components\Controller
                 }
 
                 //Renaming module class name
-                file_put_contents($newModuleFile, str_replace($oldModuleClass, $newModuleClass, file_get_contents($newModuleFile)));
+                $moduleFileContent = file_get_contents($newModuleFile);
+                $moduleFileContent = str_replace($oldModuleClass, $newModuleClass, $moduleFileContent);
+                $moduleFileContent = str_replace('@easyii', '@app', $moduleFileContent);
+                $moduleFileContent = str_replace('/'.$module->name, '/'.$formModel->name, $moduleFileContent);
+                file_put_contents($newModuleFile, $moduleFileContent);
 
                 //Replacing namespace
                 foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($newModuleFolder)) as $file => $object){
