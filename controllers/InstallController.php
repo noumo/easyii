@@ -61,8 +61,8 @@ class InstallController extends \yii\web\Controller
 
     public function actionFinish()
     {
-        $root_password = Yii::$app->session->getFlash(InstallForm::ROOT_PASSWORD_KEY, null, true);
-        $returnRoute = Yii::$app->session->getFlash(InstallForm::RETURN_URL_KEY, null, '/admin');
+        $root_password = Yii::$app->session->getFlash(InstallForm::ROOT_PASSWORD_KEY, true);
+        $returnRoute = Yii::$app->session->getFlash(InstallForm::RETURN_URL_KEY, '/admin');
 
         if($root_password)
         {
