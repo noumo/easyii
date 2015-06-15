@@ -146,7 +146,7 @@ class Shopcart extends \yii\easyii\components\API
         if(!$good){
             return ['result' => 'error', 'code' => 1, 'error' => 'Good not found'];
         }
-        if($good->order_id != $this->order->order_id){
+        if($good->order_id != $this->order->id){
             return ['result' => 'error', 'code' => 2, 'error' => 'Access denied'];
         }
 
