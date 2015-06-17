@@ -14,13 +14,11 @@ class DateTimePickerAsset extends \yii\web\AssetBundle
     {
         if (YII_DEBUG) {
             $this->js[] = 'moment/min/moment-with-locales.js';
-            $this->js[] = 'bootstrap-datepicker/dist/js/bootstrap-datepicker.js';
             $this->js[] = 'eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js';
             $this->css[] = 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';
         } else {
             $this->js[] = 'moment/min/moment-with-locales.min.js';
-            $this->js[] = 'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js';
-            $this->js[] = 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.jsredactor.min.js';
+            $this->js[] = 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js';
             $this->css[] = 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css';
         }
     }
