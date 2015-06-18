@@ -7,7 +7,7 @@ This repository is development package (yii2 extension).
 #### You can find full information in links bellow ####
 * [Homepage](http://easyiicms.com)
 * [Installation](http://easyiicms.com/docs/install)
-* [Demo](http://demo.easyiicms.com/)
+* [Demo](http://easyiicms.com/demo)
 
 #### Contacts ####
 
