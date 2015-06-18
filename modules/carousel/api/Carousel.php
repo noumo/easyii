@@ -62,7 +62,7 @@ class Carousel extends API
         }
 
         $widget = \yii\bootstrap\Carousel::widget([
-            'options' => ['class' => 'slide', 'style' => 'width: ' . $width . 'px'],
+            'options' => ['class' => 'slide'],
             'clientOptions' => $this->clientOptions,
             'items' => $items
         ]);
