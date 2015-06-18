@@ -29,8 +29,8 @@ $baseUrl = '/admin/'.$this->context->moduleName;
                     </td>
                     <td width="120" class="text-right">
                         <div class="dropdown actions">
-                            <i id="dropdownMenu'.$node->category_id.'" data-toggle="dropdown" aria-expanded="true" title="'.Yii::t('easyii', 'Actions').'" class="glyphicon glyphicon-menu-hamburger"></i>
-                            <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu'.$node->category_id.'">
+                            <i id="dropdownMenu<?=$cat->category_id;?>" data-toggle="dropdown" aria-expanded="true" title="<?= Yii::t('easyii', 'Actions'); ?>" class="glyphicon glyphicon-menu-hamburger"></i>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu<?=$cat->category_id;?>">
                                 <li><a href="<?= Url::to([$baseUrl.'/a/edit', 'id' => $cat->category_id]) ?>"><i class="glyphicon glyphicon-pencil font-12"></i> <?= Yii::t('easyii', 'Edit') ?></a></li>
                                 <li><a href="<?= Url::to([$baseUrl.'/a/create', 'parent' => $cat->category_id]) ?>"><i class="glyphicon glyphicon-plus font-12"></i> <?= Yii::t('easyii', 'Add subcategory') ?></a></li>
                                 <li role="presentation" class="divider"></li>

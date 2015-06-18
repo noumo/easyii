@@ -1,0 +1,20 @@
+<?php
+return [
+    'Feedback' => 'تماس',
+    'View feedback' => 'مشاهده تماس',
+    'Feedback deleted' => 'تماس حذف شد',
+    'Feedback updated' => 'تماس ویرایش شد',
+    'Answer' => 'پاسخ',
+    'Subject' => 'موضوع',
+    'Phone' => 'تلفن',
+    'No answer' => 'بدون پاسخ',
+    'Hello,' => 'سلام',
+    'Answer on your feedback message' => 'پاسخ برای تماس شما',
+    'Best regards.' => 'با آرزوی بهترین ها',
+    'Answer successfully sent' => 'پاسخ با موفقیت ارسال شد',
+    'Mark as answered' => 'زدن علامت پاسخ داده شده',
+    'feedback answer' => 'پاسخ تماس',
+    'Please fill correct `Admin E-mail` in Settings' => 'لطفا ایمیل ادمین را در تنظیمات درست کنید',
+    'Are you sure you want to resend the answer?' => 'آیا مطمئنید می خواهید پاسخ را مجدد ارسال کنید؟',
+    'An error has occurred while sending mail' => 'مشکلی در ارسال ایمیل رخ داده است',
+];

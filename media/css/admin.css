@@ -103,6 +103,7 @@ html{
 }
 #admin-body .main a, #admin-body .main .btn, #admin-body .main .form-control, .input-group-addon{
     border-radius: 0 !important;
+    text-align: left;
 }
 
 #admin-body .table {
@@ -212,4 +213,7 @@ h4 b{
 .dashed-link:hover, .dashed-link:focus{
     text-decoration: none;
     color: #333;
+}
+.glyphicon-menu-hamburger:before {
+  content: "\e055";
 }
