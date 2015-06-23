@@ -47,18 +47,20 @@ class DateTimePicker extends InputWidget
         $clientOptions = (count($this->options)) ? Json::encode($this->options) : '';
         $time = $this->model->{$this->attribute} ? $this->model->{$this->attribute} : time();
         $this->getView()->registerJs('
-            var dtpContainer = $("#'.$this->widgetId.'");
-
-            dtpContainer.datetimepicker('.$clientOptions.')
-            .on("dp.change", function (e) {
-                $("#'.Html::getInputId($this->model, $this->attribute).'").val(e.date.unix());
-            })
-            .data("DateTimePicker")
-            .date(moment('.($time * 1000).'));
-
-            $("[type=text]", dtpContainer).focus(function(e){
-                dtpContainer.data("DateTimePicker").show();
-            });
+            (function(){    
+                var dtpContainer = $("#'.$this->widgetId.'");
+    
+                dtpContainer.datetimepicker('.$clientOptions.')
+                .on("dp.change", function (e) {
+                    $("#'.Html::getInputId($this->model, $this->attribute).'").val(e.date.unix());
+                })
+                .data("DateTimePicker")
+                .date(moment('.($time * 1000).'));
+    
+                $("[type=text]", dtpContainer).focus(function(e){
+                    dtpContainer.data("DateTimePicker").show();
+                });
+            })();
         ');
     }
 
