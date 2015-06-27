@@ -33,7 +33,7 @@ $module = $this->context->module->id;
                     <?= Html::checkbox('', $item->status == Carousel::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/a/']),
+                        'data-link' => Url::to(['/admin/'.$module.'/a/'.($item->status == Carousel::STATUS_ON ? 'off' : 'on'), 'id' => $item->primaryKey]),
                     ]) ?>
                 </td>
                 <td>

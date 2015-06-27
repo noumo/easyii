@@ -32,7 +32,7 @@ $module = $this->context->module->id;
                     <?= Html::checkbox('', $item->status == Item::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/items']),
+                        'data-link' => Url::to(['/admin/'.$module.'/items/'.($item->status == Item::STATUS_ON ? 'off' : 'on'), 'id' => $item->primaryKey]),
                     ]) ?>
                 </td>
                 <td class="text-right">
