@@ -6,6 +6,6 @@ $(function(){
     $('#easyii-navbar input').switcher({copy: {en: {yes: '', no: ''}}}).on('change', function(){
         var checkbox = $(this);
         checkbox.switcher('setDisabled', true);
-        location.href = checkbox.attr('data-link') ;
+        location.href = checkbox.is(':checked') ? checkbox.attr('data-link-on') : checkbox.attr('data-link-off');
     });
 });
