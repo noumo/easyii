@@ -55,7 +55,7 @@ class m000000_000000_install extends \yii\db\Migration
             'icon' => Schema::TYPE_STRING . '(32) NOT NULL',
             'settings' => Schema::TYPE_TEXT . ' NOT NULL',
             'notice' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
         ], $this->engine);
         $this->createIndex('name', models\Module::tableName(), 'name', true);
@@ -100,7 +100,7 @@ class m000000_000000_install extends \yii\db\Migration
             'link' => Schema::TYPE_STRING . '(255) NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);
 
@@ -112,17 +112,17 @@ class m000000_000000_install extends \yii\db\Migration
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'tree' => Schema::TYPE_INTEGER,
-            'lft' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'lft' => Schema::TYPE_INTEGER,
+            'rgt' => Schema::TYPE_INTEGER,
+            'depth' => Schema::TYPE_INTEGER,
+            'order_num' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);
         $this->createIndex('slug', catalog\models\Category::tableName(), 'slug', true);
 
         $this->createTable(catalog\models\Item::tableName(), [
             'item_id' => 'pk',
-            'category_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'category_id' => Schema::TYPE_INTEGER,
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'description' => Schema::TYPE_TEXT . ' DEFAULT NULL',
             'available' => Schema::TYPE_INTEGER . " DEFAULT '1'",
@@ -138,7 +138,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         $this->createTable(catalog\models\ItemData::tableName(), [
             'data_id' => 'pk',
-            'item_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'item_id' => Schema::TYPE_INTEGER,
             'name' => Schema::TYPE_STRING . '(128) NOT NULL',
             'value' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
         ], $this->engine);
@@ -163,9 +163,9 @@ class m000000_000000_install extends \yii\db\Migration
 
         $this->createTable(shopcart\models\Good::tableName(), [
             'good_id' => 'pk',
-            'order_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'item_id' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'count' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_id' => Schema::TYPE_INTEGER,
+            'item_id' => Schema::TYPE_INTEGER,
+            'count' => Schema::TYPE_INTEGER,
             'options' => Schema::TYPE_STRING . '(255) NOT NULL',
             'price' => Schema::TYPE_FLOAT . " DEFAULT '0'",
             'discount' => Schema::TYPE_INTEGER . " DEFAULT '0'",
@@ -195,7 +195,7 @@ class m000000_000000_install extends \yii\db\Migration
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'downloads' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER,
         ], $this->engine);
         $this->createIndex('slug', File::tableName(), 'slug', true);
 
@@ -206,10 +206,10 @@ class m000000_000000_install extends \yii\db\Migration
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'tree' => Schema::TYPE_INTEGER,
-            'lft' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'lft' => Schema::TYPE_INTEGER,
+            'rgt' => Schema::TYPE_INTEGER,
+            'depth' => Schema::TYPE_INTEGER,
+            'order_num' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);
         $this->createIndex('slug', gallery\models\Category::tableName(), 'slug', true);
@@ -247,19 +247,19 @@ class m000000_000000_install extends \yii\db\Migration
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER,
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'tree' => Schema::TYPE_INTEGER,
-            'lft' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'lft' => Schema::TYPE_INTEGER,
+            'rgt' => Schema::TYPE_INTEGER,
+            'depth' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);
         $this->createIndex('slug', article\models\Category::tableName(), 'slug', true);
 
         $this->createTable(article\models\Item::tableName(), [
             'item_id' => 'pk',
-            'category_id' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'category_id' => Schema::TYPE_INTEGER,
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
@@ -285,7 +285,7 @@ class m000000_000000_install extends \yii\db\Migration
             'faq_id' => 'pk',
             'question' => Schema::TYPE_TEXT . ' NOT NULL',
             'answer' => Schema::TYPE_TEXT . ' NOT NULL',
-            'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'order_num' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);
 
