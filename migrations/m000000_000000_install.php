@@ -140,10 +140,10 @@ class m000000_000000_install extends \yii\db\Migration
             'data_id' => 'pk',
             'item_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'value' => Schema::TYPE_STRING . '(1000) DEFAULT NULL',
+            'value' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
         ], $this->engine);
         $this->createIndex('item_id_name', catalog\models\ItemData::tableName(), ['item_id', 'name']);
-        $this->createIndex('value', catalog\models\ItemData::tableName(), 'value');
+        $this->createIndex('value', catalog\models\ItemData::tableName(), 'value(300)');
 
         //SHOPCART MODULE
         $this->createTable(shopcart\models\Order::tableName(), [
