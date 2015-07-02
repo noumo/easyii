@@ -21,6 +21,8 @@ class m000000_000000_install extends \yii\db\Migration
 {
     const VERSION = 0.9;
 
+    public $engine = 'ENGINE=MyISAM DEFAULT CHARSET=utf8';
+    
     public function up()
     {
         //ADMINS
@@ -30,7 +32,7 @@ class m000000_000000_install extends \yii\db\Migration
             'password' => Schema::TYPE_STRING . '(64) NOT NULL',
             'auth_key' => Schema::TYPE_STRING . '(128) NOT NULL',
             'access_token' => Schema::TYPE_STRING . '(128) DEFAULT NULL'
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('access_token', models\Admin::tableName(), 'access_token', true);
 
         //LOGINFORM
@@ -42,7 +44,7 @@ class m000000_000000_install extends \yii\db\Migration
             'user_agent' => Schema::TYPE_STRING . '(1024) NOT NULL',
             'time' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'success' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         //MODULES
         $this->createTable(models\Module::tableName(), [
@@ -55,7 +57,7 @@ class m000000_000000_install extends \yii\db\Migration
             'notice' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('name', models\Module::tableName(), 'name', true);
 
         //PHOTOS
@@ -66,7 +68,7 @@ class m000000_000000_install extends \yii\db\Migration
             'image' => Schema::TYPE_STRING . '(128) NOT NULL',
             'description' => Schema::TYPE_STRING . '(1024) NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . " NOT NULL",
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('model_item', models\Photo::tableName(), ['class', 'item_id']);
 
         //SEOTEXT
@@ -78,7 +80,7 @@ class m000000_000000_install extends \yii\db\Migration
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'keywords' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'description' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('model_item', models\SeoText::tableName(), ['class', 'item_id'], true);
 
         //SETTINGS
@@ -88,7 +90,7 @@ class m000000_000000_install extends \yii\db\Migration
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'value' => Schema::TYPE_STRING . '(1024) NOT NULL',
             'visibility' => Schema::TYPE_BOOLEAN . " DEFAULT '0'",
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('name', models\Setting::tableName(), 'name', true);
 
         //CAROUSEL MODULE
@@ -100,7 +102,7 @@ class m000000_000000_install extends \yii\db\Migration
             'text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         //CATALOG MODULE
         $this->createTable(catalog\models\Category::tableName(), [
@@ -115,7 +117,7 @@ class m000000_000000_install extends \yii\db\Migration
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', catalog\models\Category::tableName(), 'slug', true);
 
         $this->createTable(catalog\models\Item::tableName(), [
@@ -131,15 +133,15 @@ class m000000_000000_install extends \yii\db\Migration
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', catalog\models\Item::tableName(), 'slug', true);
 
         $this->createTable(catalog\models\ItemData::tableName(), [
             'data_id' => 'pk',
             'item_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'value' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+            'value' => Schema::TYPE_STRING . '(1000) DEFAULT NULL',
+        ], $this->engine);
         $this->createIndex('item_id_name', catalog\models\ItemData::tableName(), ['item_id', 'name']);
         $this->createIndex('value', catalog\models\ItemData::tableName(), 'value');
 
@@ -157,7 +159,7 @@ class m000000_000000_install extends \yii\db\Migration
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'new' => Schema::TYPE_BOOLEAN . " DEFAULT '0'",
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         $this->createTable(shopcart\models\Good::tableName(), [
             'good_id' => 'pk',
@@ -167,7 +169,7 @@ class m000000_000000_install extends \yii\db\Migration
             'options' => Schema::TYPE_STRING . '(255) NOT NULL',
             'price' => Schema::TYPE_FLOAT . " DEFAULT '0'",
             'discount' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         //FEEDBACK MODULE
         $this->createTable(Feedback::tableName(), [
@@ -182,7 +184,7 @@ class m000000_000000_install extends \yii\db\Migration
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         //FILE MODULE
         $this->createTable(File::tableName(), [
@@ -194,7 +196,7 @@ class m000000_000000_install extends \yii\db\Migration
             'downloads' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', File::tableName(), 'slug', true);
 
         //GALLERY MODULE
@@ -209,7 +211,7 @@ class m000000_000000_install extends \yii\db\Migration
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', gallery\models\Category::tableName(), 'slug', true);
 
         //GUESTBOOK MODULE
@@ -224,7 +226,7 @@ class m000000_000000_install extends \yii\db\Migration
             'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
             'new' => Schema::TYPE_BOOLEAN . " DEFAULT '0'",
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         //NEWS MODULE
         $this->createTable(News::tableName(), [
@@ -237,7 +239,7 @@ class m000000_000000_install extends \yii\db\Migration
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'views' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', News::tableName(), 'slug', true);
 
         //ARTICLE MODULE
@@ -252,7 +254,7 @@ class m000000_000000_install extends \yii\db\Migration
             'rgt' => Schema::TYPE_INTEGER . ' NOT NULL',
             'depth' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', article\models\Category::tableName(), 'slug', true);
 
         $this->createTable(article\models\Item::tableName(), [
@@ -266,7 +268,7 @@ class m000000_000000_install extends \yii\db\Migration
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'views' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', article\models\Item::tableName(), 'slug', true);
 
         //PAGE MODULE
@@ -275,7 +277,7 @@ class m000000_000000_install extends \yii\db\Migration
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL'
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', Page::tableName(), 'slug', true);
 
         //FAQ MODULE
@@ -285,7 +287,7 @@ class m000000_000000_install extends \yii\db\Migration
             'answer' => Schema::TYPE_TEXT . ' NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . ' NOT NULL',
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         //SUBSCRIBE MODULE
         $this->createTable(Subscriber::tableName(), [
@@ -293,7 +295,7 @@ class m000000_000000_install extends \yii\db\Migration
             'email' => Schema::TYPE_STRING . '(128) NOT NULL',
             'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('email', Subscriber::tableName(), 'email', true);
 
         $this->createTable(History::tableName(), [
@@ -302,14 +304,14 @@ class m000000_000000_install extends \yii\db\Migration
             'body' => Schema::TYPE_TEXT . ' NOT NULL',
             'sent' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
 
         //TEXT MODULE
         $this->createTable(Text::tableName(), [
             'text_id' => 'pk',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL'
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('slug', Text::tableName(), 'slug', true);
 
         //Tags
@@ -317,14 +319,14 @@ class m000000_000000_install extends \yii\db\Migration
             'tag_id' => 'pk',
             'name' => Schema::TYPE_STRING . '(128) NOT NULL',
             'frequency' => Schema::TYPE_INTEGER . " DEFAULT '0'"
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('name', models\Tag::tableName(), 'name', true);
 
         $this->createTable(models\TagAssign::tableName(), [
             'class' => Schema::TYPE_STRING . '(128) NOT NULL',
             'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
             'tag_id' => Schema::TYPE_INTEGER . " NOT NULL",
-        ], 'ENGINE=MyISAM DEFAULT CHARSET=utf8');
+        ], $this->engine);
         $this->createIndex('class', models\TagAssign::tableName(), 'class');
         $this->createIndex('item_tag', models\TagAssign::tableName(), ['item_id', 'tag_id']);
 
