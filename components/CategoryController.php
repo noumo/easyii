@@ -2,7 +2,7 @@
 namespace yii\easyii\components;
 
 use Yii;
-use yii\db\ActiveRecord;
+use yii\db\ActiveRecord as AR;
 use yii\easyii\behaviors\SortableModel;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -255,7 +255,7 @@ class CategoryController extends Controller
                     $modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
                     $modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
                     $modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
-                    $model->trigger(ActiveRecord::EVENT_AFTER_UPDATE);
+                    $model->trigger(AR::EVENT_AFTER_UPDATE);
                 }
             } else {
                 $where = [
@@ -303,7 +303,7 @@ class CategoryController extends Controller
                 $ids[] = $child->primaryKey;
             }
             $modelClass::updateAll(['status' => $status], ['in', 'category_id', $ids]);
-            $model->trigger(ActiveRecord::EVENT_AFTER_UPDATE);
+            $model->trigger(AR::EVENT_AFTER_UPDATE);
         }
         else{
             $this->error = Yii::t('easyii', 'Not found');
