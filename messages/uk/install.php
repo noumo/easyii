@@ -9,7 +9,7 @@
     'Password to login as root' => 'Пароль для входу як розробник',
     'Used as "ReplyTo" in mail messages' => 'Адреса "ReplyTo", при відправленні листів',
     'Used as "From" in mail messages' => 'Адреса "From", при відправленні листів',
-    'Required for using captcha in forms (guestbook, feedback)' => 'Необхідно для використання каптчі у формах (зворотний зв'язок, гостьова книга)',
+    'Required for using captcha in forms (guestbook, feedback)' => 'Необхідно для використання каптчі у формах (зворотний зв\'язок, гостьова книга)',
     'You easily can get keys on' => 'Ви можете легко отримати ключі на',
     'ReCaptcha website' => 'сайті ReCaptcha',
     'Installation completed' => 'Встановлення завершене',
