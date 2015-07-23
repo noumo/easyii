@@ -34,7 +34,7 @@ class Upload
 
     static function getLink($fileName)
     {
-        return str_replace('\\', '/', str_replace(Yii::getAlias('@webroot'), '', $fileName));
+        return Yii::getAlias('@web').str_replace('\\', '/', str_replace(Yii::getAlias('@webroot'), '', $fileName));
     }
 
     static function getFileName($fileInstanse, $namePostfix = true)
