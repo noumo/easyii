@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\helpers;
 
+use Imagick;
 use Yii;
 use yii\web\UploadedFile;
 use yii\web\HttpException;
@@ -20,6 +21,17 @@ class Image
 
         if(!$uploaded){
             throw new HttpException(500, 'Cannot upload file "'.$fileName.'". Please check write permissions.');
+        }
+
+        if(@exif_imagetype($fileName) === IMAGETYPE_GIF) {
+            $frameFileName = $fileName . '.frame.png';
+            $image = new Imagick($fileName);
+            $image = $image->coalesceImages();
+            foreach ($image as $frame) {
+                $frame->setImageFormat('png');
+                $frame->writeImage($frameFileName);
+                return Upload::getLink($frameFileName);
+            }
         }
 
         return Upload::getLink($fileName);
