@@ -68,8 +68,7 @@ class Item extends ActiveRecord
                     'db_table' => 'translations_with_string',
                     'attributes' => ['title', 'short', 'text'],
                     'admin_routes' => [
-                        'article/items/create/',
-                        'article/items/edit/',
+                        'admin/*'
                     ],
                 ],
             ],
