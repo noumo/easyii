@@ -2,10 +2,11 @@
 namespace yii\easyii\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 use yii\db\ActiveRecord;
 use yii\easyii\models\SeoText;
 
-class SeoBehavior extends \yii\base\Behavior
+class SeoBehavior extends Behavior
 {
     private $_model;
 

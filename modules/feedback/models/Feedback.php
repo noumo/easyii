@@ -3,13 +3,14 @@ namespace yii\easyii\modules\feedback\models;
 
 use Yii;
 use yii\easyii\behaviors\CalculateNotice;
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
 use yii\helpers\Url;
 
-class Feedback extends \yii\easyii\components\ActiveRecord
+class Feedback extends ActiveRecord
 {
     const STATUS_NEW = 0;
     const STATUS_VIEW = 1;

@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\subscribe\api;
 
 use Yii;
+use yii\easyii\components\API;
 use yii\easyii\modules\subscribe\models\Subscriber;
 
 use yii\helpers\Html;
@@ -16,7 +17,7 @@ use yii\bootstrap\ActiveForm;
  * @method static array save(array $attributes) If you are using your own form, this function will be useful for manual saving of subscribers.
  */
 
-class Subscribe extends \yii\easyii\components\API
+class Subscribe extends API
 {
     const SENT_VAR = 'subscribe_sent';
 

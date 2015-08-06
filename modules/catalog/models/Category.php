@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\catalog\models;
 
-class Category extends \yii\easyii\components\CategoryModel
+use yii\easyii\components\CategoryModel;
+
+class Category extends CategoryModel
 {
     static $fieldTypes = [
         'string' => 'String',

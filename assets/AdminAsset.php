@@ -1,11 +1,15 @@
 <?php
 namespace yii\easyii\assets;
 
-class AdminAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+use yii\web\View;
+
+class AdminAsset extends AssetBundle
 {
     public $sourcePath = '@easyii/media';
     public $css = [
         'css/admin.css',
+        'css/tree-view.css'
     ];
     public $js = [
         'js/admin.js'
@@ -13,9 +17,10 @@ class AdminAsset extends \yii\web\AssetBundle
     public $depends = [
         'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapPluginAsset',
         'yii\easyii\assets\SwitcherAsset',
     ];
     public $jsOptions = array(
-        'position' => \yii\web\View::POS_HEAD
+        'position' => View::POS_HEAD
     );
 }

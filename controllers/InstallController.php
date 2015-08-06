@@ -3,6 +3,7 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\easyii\helpers\Data;
+use yii\web\Controller;
 use yii\web\ServerErrorHttpException;
 
 use yii\easyii\helpers\WebConsole;
@@ -11,7 +12,7 @@ use yii\easyii\models\LoginForm;
 use yii\easyii\models\Module;
 use yii\easyii\models\Setting;
 
-class InstallController extends \yii\web\Controller
+class InstallController extends Controller
 {
     public $layout = 'empty';
 
@@ -38,9 +39,10 @@ class InstallController extends \yii\web\Controller
         $installForm = new InstallForm();
 
         if ($installForm->load(Yii::$app->request->post())) {
+            // perform installation
             $this->createUploadsDir();
 
-            WebConsole::migrate();
+            WebConsole::migrate(); // run easyii migration
 
             $this->insertSettings($installForm);
             $this->installModules();

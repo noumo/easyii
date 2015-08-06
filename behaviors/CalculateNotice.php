@@ -2,10 +2,12 @@
 namespace yii\easyii\behaviors;
 
 use Yii;
+use yii\base\Behavior;
 use yii\db\ActiveRecord;
-use yii\easyii\models\Module;
+use yii\easyii\components\Module as ModuleComponent;
+use yii\easyii\models\Module as ModuleModel;
 
-class CalculateNotice extends \yii\base\Behavior
+class CalculateNotice extends Behavior
 {
     public $callback;
 
@@ -20,8 +22,8 @@ class CalculateNotice extends \yii\base\Behavior
 
     public function updateNotice()
     {
-        $moduleName = \yii\easyii\components\Module::getModuleName(get_class($this->owner));
-        if(($module = Module::findOne(['name' => $moduleName]))){
+        $moduleName = ModuleComponent::getModuleName(get_class($this->owner));
+        if(($module = ModuleModel::findOne(['name' => $moduleName]))){
             $module->notice = call_user_func($this->callback);
             $module->update();
         }

@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\shopcart\api;
 
 use Yii;
+use yii\easyii\components\API;
 use yii\easyii\modules\catalog\models\Item;
 use yii\easyii\modules\shopcart\models\Good;
 use yii\easyii\modules\shopcart\models\Order;
@@ -23,7 +24,7 @@ use yii\widgets\ActiveForm;
  * @method static array cost() returns total cost of current shopcart.
  */
 
-class Shopcart extends \yii\easyii\components\API
+class Shopcart extends API
 {
     const SENT_VAR = 'shopcart_sent';
 

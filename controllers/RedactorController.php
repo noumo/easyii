@@ -2,6 +2,7 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\easyii\components\Controller;
 use yii\web\HttpException;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
@@ -11,7 +12,7 @@ use yii\web\Response;
 use yii\easyii\helpers\Image;
 use yii\easyii\models;
 
-class RedactorController extends \yii\easyii\components\Controller
+class RedactorController extends Controller
 {
     public $controllerNamespace = 'yii\redactor\controllers';
     public $defaultRoute = 'upload';

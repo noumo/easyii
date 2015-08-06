@@ -6,6 +6,7 @@ use yii\data\ActiveDataProvider;
 use yii\easyii\models\Tag;
 use yii\easyii\widgets\Fancybox;
 use yii\widgets\LinkPager;
+use yii\easyii\components\API;
 
 use yii\easyii\modules\news\models\News as NewsModel;
 
@@ -21,7 +22,7 @@ use yii\easyii\modules\news\models\News as NewsModel;
  * @method static \stdClass pagination() returns yii\data\Pagination object.
  */
 
-class News extends \yii\easyii\components\API
+class News extends API
 {
     private $_adp;
     private $_last;

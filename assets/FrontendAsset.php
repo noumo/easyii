@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\assets;
 
-class FrontendAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class FrontendAsset extends AssetBundle
 {
     public $sourcePath = '@easyii/media';
     public $css = [

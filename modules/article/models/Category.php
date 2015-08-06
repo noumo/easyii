@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\article\models;
 
-class Category extends \yii\easyii\components\CategoryModel
+use yii\easyii\components\CategoryModel;
+
+class Category extends CategoryModel
 {
     public static function tableName()
     {

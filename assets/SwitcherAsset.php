@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\assets;
 
-class SwitcherAsset extends \yii\web\AssetBundle
+use yii\web\AssetBundle;
+
+class SwitcherAsset extends AssetBundle
 {
     public $sourcePath = '@bower/jquery.switcher/dist';
     public $depends = ['yii\web\JqueryAsset'];

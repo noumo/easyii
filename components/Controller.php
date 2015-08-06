@@ -1,9 +1,12 @@
 <?php
 namespace yii\easyii\components;
 
+use webvimark\behaviors\multilanguage\MultiLanguageHelper;
 use Yii;
 use yii\easyii\models;
 use yii\helpers\Url;
+use yii\web\ForbiddenHttpException;
+use yii\web\Response;
 
 /**
  * Base easyii controller component
@@ -16,12 +19,18 @@ class Controller extends \yii\web\Controller
     public $rootActions = [];
     public $error = null;
 
+    public function init()
+    {
+        MultiLanguageHelper::catchLanguage();
+        parent::init();
+    }
+
     /**
      * Check authentication, and root rights for actions
      * @param \yii\base\Action $action
      * @return bool
      * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\web\ForbiddenHttpException
+     * @throws ForbiddenHttpException
      */
     public function beforeAction($action)
     {
@@ -35,7 +44,7 @@ class Controller extends \yii\web\Controller
         }
         else{
             if(!IS_ROOT && ($this->rootActions == 'all' || in_array($action->id, $this->rootActions))){
-                throw new \yii\web\ForbiddenHttpException('You cannot access this action');
+                throw new ForbiddenHttpException('You cannot access this action');
             }
 
             if($action->id === 'index'){
@@ -89,7 +98,7 @@ class Controller extends \yii\web\Controller
     public function formatResponse($success = '', $back = true)
     {
         if(Yii::$app->request->isAjax){
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            Yii::$app->response->format = Response::FORMAT_JSON;
             if($this->error){
                 return ['result' => 'error', 'error' => $this->error];
             } else {

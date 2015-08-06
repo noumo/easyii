@@ -1,7 +1,9 @@
 <?php
 namespace yii\easyii\modules\shopcart;
 
-class ShopcartModule extends \yii\easyii\components\Module
+use yii\easyii\components\Module;
+
+class ShopcartModule extends Module
 {
     public $settings = [
         'mailAdminOnNewOrder' => true,

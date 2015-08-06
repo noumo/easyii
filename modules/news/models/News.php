@@ -1,15 +1,22 @@
 <?php
 namespace yii\easyii\modules\news\models;
 
+use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
+use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+
+use yii\easyii\components\ActiveRecord;
 use yii\easyii\behaviors\Taggable;
+
 use yii\easyii\models\Photo;
 use yii\helpers\StringHelper;
 
-class News extends \yii\easyii\components\ActiveRecord
+class News extends ActiveRecord
 {
+    use MultiLanguageTrait;
+
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
 
@@ -56,6 +63,17 @@ class News extends \yii\easyii\components\ActiveRecord
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
                 'ensureUnique' => true
+            ],
+            'mlBehavior' => [
+                'class' => MultiLanguageBehavior::className(),
+                'mlConfig' => [
+                    'db_table' => 'translations_with_string',
+                    'attributes' => ['title', 'short', 'text'],
+                    'admin_routes' => [
+                        'admin/news/a/create/',
+                        'admin/news/a/edit/',
+                    ],
+                ],
             ],
         ];
     }

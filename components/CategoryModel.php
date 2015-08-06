@@ -1,10 +1,14 @@
 <?php
 namespace yii\easyii\components;
 
+use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
+use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\components\ActiveRecord;
+use yii\easyii\helpers\Data;
 use creocoder\nestedsets\NestedSetsBehavior;
 
 /**
@@ -12,8 +16,10 @@ use creocoder\nestedsets\NestedSetsBehavior;
  * @package yii\easyii\components
  * @inheritdoc
  */
-class CategoryModel extends \yii\easyii\components\ActiveRecord
+class CategoryModel extends ActiveRecord
 {
+    use MultiLanguageTrait;
+
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
 
@@ -56,7 +62,17 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
-            ]
+            ],
+            'mlBehavior' => [
+                'class' => MultiLanguageBehavior::className(),
+                'mlConfig' => [
+                    'db_table' => 'translations_with_string',
+                    'attributes' => ['title'],
+                    'admin_routes' => [
+                        'admin/*'
+                    ],
+                ],
+            ],
         ];
     }
 

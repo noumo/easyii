@@ -1,12 +1,17 @@
 <?php
 namespace yii\easyii\modules\faq\models;
 
+use webvimark\behaviors\multilanguage\MultiLanguageBehavior;
+use webvimark\behaviors\multilanguage\MultiLanguageTrait;
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\ActiveRecord;
 
-class Faq extends \yii\easyii\components\ActiveRecord
+class Faq extends ActiveRecord
 {
+    use MultiLanguageTrait;
+
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
 
@@ -39,7 +44,17 @@ class Faq extends \yii\easyii\components\ActiveRecord
     {
         return [
             CacheFlush::className(),
-            SortableModel::className()
+            SortableModel::className(),
+            'mlBehavior' => [
+                'class' => MultiLanguageBehavior::className(),
+                'mlConfig' => [
+                    'db_table' => 'translations_with_string',
+                    'attributes' => ['question', 'answer'],
+                    'admin_routes' => [
+                        'admin/*',
+                    ],
+                ],
+            ],
         ];
     }
 }

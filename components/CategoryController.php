@@ -2,7 +2,9 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\db\ActiveRecord as AR;
 use yii\easyii\behaviors\SortableModel;
+use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 use yii\easyii\helpers\Image;
@@ -39,7 +41,7 @@ class CategoryController extends Controller
      * Create form
      *
      * @param null $parent
-     * @return array|string|\yii\web\Response
+     * @return array|string|Response
      * @throws \yii\web\HttpException
      */
     public function actionCreate($parent = null)
@@ -49,7 +51,7 @@ class CategoryController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{
@@ -95,7 +97,7 @@ class CategoryController extends Controller
      * Edit form
      *
      * @param $id
-     * @return array|string|\yii\web\Response
+     * @return array|string|Response
      * @throws \yii\web\HttpException
      */
     public function actionEdit($id)
@@ -108,7 +110,7 @@ class CategoryController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else{
@@ -140,7 +142,7 @@ class CategoryController extends Controller
      * Remove category image
      *
      * @param $id
-     * @return \yii\web\Response
+     * @return Response
      */
     public function actionClearImage($id)
     {
@@ -186,7 +188,7 @@ class CategoryController extends Controller
      * Move category one level up up
      *
      * @param $id
-     * @return \yii\web\Response
+     * @return Response
      */
     public function actionUp($id)
     {
@@ -197,7 +199,7 @@ class CategoryController extends Controller
      * Move category one level down
      *
      * @param $id
-     * @return \yii\web\Response
+     * @return Response
      */
     public function actionDown($id)
     {
@@ -233,7 +235,7 @@ class CategoryController extends Controller
      *
      * @param $id
      * @param $direction
-     * @return \yii\web\Response
+     * @return Response
      * @throws \Exception
      */
     private function move($id, $direction)
@@ -253,7 +255,7 @@ class CategoryController extends Controller
                     $modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
                     $modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
                     $modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
-                    $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
+                    $model->trigger(AR::EVENT_AFTER_UPDATE);
                 }
             } else {
                 $where = [
@@ -301,7 +303,7 @@ class CategoryController extends Controller
                 $ids[] = $child->primaryKey;
             }
             $modelClass::updateAll(['status' => $status], ['in', 'category_id', $ids]);
-            $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
+            $model->trigger(AR::EVENT_AFTER_UPDATE);
         }
         else{
             $this->error = Yii::t('easyii', 'Not found');

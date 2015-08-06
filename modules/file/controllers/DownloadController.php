@@ -3,8 +3,10 @@ namespace yii\easyii\modules\file\controllers;
 
 use Yii;
 use yii\easyii\modules\file\models\File;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
-class DownloadController extends \yii\web\Controller
+class DownloadController extends Controller
 {
     public function actionIndex($id)
     {
@@ -14,7 +16,7 @@ class DownloadController extends \yii\web\Controller
             Yii::$app->response->sendFile(Yii::getAlias('@webroot'). DIRECTORY_SEPARATOR .$model->file);
         }
         else{
-            throw new \yii\web\NotFoundHttpException(Yii::t('easyii/file/api', 'File not found'));
+            throw new NotFoundHttpException(Yii::t('easyii/file/api', 'File not found'));
         }
     }
 }

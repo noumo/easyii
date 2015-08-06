@@ -4,6 +4,7 @@ namespace yii\easyii\modules\article\controllers;
 use Yii;
 use yii\easyii\behaviors\SortableDateController;
 use yii\easyii\behaviors\StatusController;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 use yii\easyii\components\Controller;
@@ -50,7 +51,7 @@ class ItemsController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else {
@@ -90,7 +91,7 @@ class ItemsController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                Yii::$app->response->format = Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             }
             else {

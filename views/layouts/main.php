@@ -77,6 +77,7 @@ $moduleName = $this->context->module->id;
                             <div class="alert alert-<?= $key ?>"><?= $message ?></div>
                         <?php endforeach; ?>
                         <?= $content ?>
+
                     </div>
                 </div>
             </div>
