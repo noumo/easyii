@@ -12,9 +12,14 @@ use yii\helpers\Url;
 class Controller extends \yii\web\Controller
 {
     public $enableCsrfValidation = false;
-    public $layout = '@easyii/views/layouts/main';
     public $rootActions = [];
     public $error = null;
+    
+    public function init()
+    {
+        parent::init();
+        $this->layout = Yii::$app->getModule('admin')->controllerLayout;
+    }
 
     /**
      * Check authentication, and root rights for actions
