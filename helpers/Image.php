@@ -27,7 +27,7 @@ class Image
 
     static function thumb($filename, $width = null, $height = null, $crop = true)
     {
-        if($filename && file_exists(($filename = Yii::getAlias('@webroot') . $filename)))
+        if($filename && is_file(($filename = Yii::getAlias('@webroot') . $filename)))
         {
             $info = pathinfo($filename);
             $thumbName = $info['filename'] . '-' . md5( filemtime($filename) . (int)$width . (int)$height . (int)$crop ) . '.' . $info['extension'];
