@@ -4,7 +4,7 @@ use yii\helpers\Url;
 $action = $this->context->action->id;
 $module = $this->context->module->id;
 ?>
-<?php if(IS_ROOT) : ?>
+<?php //if(IS_ROOT) : ?>
 <ul class="nav nav-pills">
     <li <?= ($action === 'index') ? 'class="active"' : '' ?>>
         <a href="<?= $this->context->getReturnUrl(['/admin/'.$module]) ?>">
@@ -16,8 +16,8 @@ $module = $this->context->module->id;
     </li>
     <li <?= ($action === 'create') ? 'class="active"' : '' ?>><a href="<?= Url::to(['/admin/'.$module.'/a/create']) ?>"><?= Yii::t('easyii/faq', 'Create entry') ?></a></li>
 </ul>
-<br/>
-<?php elseif($action === 'edit') : ?>
+<br>
+<?php if($action === 'edit') : ?>
     <ul class="nav nav-pills">
         <li>
             <a href="<?= $this->context->getReturnUrl(['/admin/'.$module])?>">
@@ -26,5 +26,5 @@ $module = $this->context->module->id;
             </a>
         </li>
     </ul>
-    <br/>
+    <br>
 <?php endif; ?>

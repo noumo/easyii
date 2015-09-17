@@ -14,9 +14,9 @@ $module = $this->context->module->id;
     <table class="table table-hover">
         <thead>
             <tr>
-                <?php if(IS_ROOT) : ?>
+                <?php //if(IS_ROOT) : ?>
                     <th width="50">#</th>
-                <?php endif; ?>
+                <?php //endif; ?>
                 <th><?= Yii::t('easyii/faq', 'Question')?></th>
                 <th width="100"><?= Yii::t('easyii', 'Status') ?></th>
                 <th width="120"></th>
@@ -25,9 +25,9 @@ $module = $this->context->module->id;
         <tbody>
     <?php foreach($data->models as $item) : ?>
             <tr data-id="<?= $item->primaryKey ?>">
-                <?php if(IS_ROOT) : ?>
+                <?php //if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
-                <?php endif; ?>
+                <?php //endif; ?>
                 <td><a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->primaryKey]) ?>"><?= StringHelper::truncate(strip_tags($item->question), 128) ?></a></td>
                 <td class="status vtop">
                     <?= Html::checkbox('', $item->status == Faq::STATUS_ON, [

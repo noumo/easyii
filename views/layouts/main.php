@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\easyii\assets\AdminAsset;
 
+frontend\assets\AppAsset::register($this);
 $asset = AdminAsset::register($this);
 $moduleName = $this->context->module->id;
 ?>
@@ -24,12 +25,10 @@ $moduleName = $this->context->module->id;
         <div class="wrapper">
             <div class="header">
                 <div class="logo">
-                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png">
-                    EasyiiCMS
+                    <img src="<?= Yii::$app->request->baseUrl ?>/gfx/byggmann_logo_alphav2.png" class="logo" />
                 </div>
                 <div class="nav">
-                    <a href="<?= Url::to(['/']) ?>" class="pull-left"><i class="glyphicon glyphicon-home"></i> <?= Yii::t('easyii', 'Open site') ?></a>
-                    <a href="<?= Url::to(['/admin/sign/out']) ?>" class="pull-right"><i class="glyphicon glyphicon-log-out"></i> <?= Yii::t('easyii', 'Logout') ?></a>
+                    <a href="<?= Url::to(['/']) ?>" class="pull-left" style="margin-left: 20px;"><i class="glyphicon glyphicon-home"></i> <?= Yii::t('easyii', 'Tilbake til Hovedside') ?></a>
                 </div>
             </div>
             <div class="main">
