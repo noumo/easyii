@@ -1,7 +1,7 @@
 {
-    "name": "noumo/easyii",
+    "name": "xoduz/easyii",
     "version": "dev-master",
-    "description": "Easy CMS based on Yii2 Framework - Development package",
+    "description": "Easy CMS (fork) based on Yii2 Framework - Development package",
     "keywords": ["easyii"],
     "homepage": "http://easyiicms.com",
     "type": "yii2-extension",
@@ -9,13 +9,13 @@
     "minimum-stability": "dev",
     "support": {
         "wiki": "http://easyiicms.com/docs",
-        "source": "https://github.com/noumo/easyii.git",
-        "issues": "https://github.com/noumo/easyii/issues"
+        "source": "https://github.com/xoduz/easyii.git",
+        "issues": "https://github.com/xoduz/easyii/issues"
     },
     "authors": [
         {
-            "name": "Ivan Vasilkov",
-            "email": "noumohope@gmail.com",
+            "name": "Geir Ove Alnes",
+            "email": "xoduz@xoduz.org",
             "role" : "Developer"
         }
     ],

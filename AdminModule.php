@@ -46,13 +46,14 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
 
     public function bootstrap($app)
     {
-        Yii::setAlias('easyii', '@vendor/noumo/easyii');
+        Yii::setAlias('easyii', '@vendor/xoduz/easyii');
 
-        if(!$app->user->isGuest && strpos($app->request->pathInfo, 'admin') === false) {
+        // Disable toolbar
+        /*if(!$app->user->isGuest && strpos($app->request->pathInfo, 'admin') === false) {
             $app->on(Application::EVENT_BEFORE_REQUEST, function () use ($app) {
                 $app->getView()->on(View::EVENT_BEGIN_BODY, [$this, 'renderToolbar']);
             });
-        }
+        }*/
     }
 
     public function renderToolbar()
