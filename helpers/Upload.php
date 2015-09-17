@@ -25,7 +25,8 @@ class Upload
 
     static function getUploadPath($dir)
     {
-        $uploadPath = Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.self::$UPLOADS_DIR.($dir ? DIRECTORY_SEPARATOR.$dir : '');
+        $date = date("Y/m");
+        $uploadPath = Yii::getAlias('@webroot').DIRECTORY_SEPARATOR.self::$UPLOADS_DIR.DIRECTORY_SEPARATOR.$date.($dir ? DIRECTORY_SEPARATOR.$dir : '');
         if(!FileHelper::createDirectory($uploadPath)){
             throw new HttpException(500, 'Cannot create "'.$uploadPath.'". Please check write permissions.');
         }
@@ -40,7 +41,8 @@ class Upload
     static function getFileName($fileInstanse, $namePostfix = true)
     {
         $baseName = str_ireplace('.'.$fileInstanse->extension, '', $fileInstanse->name);
-        $fileName =  StringHelper::truncate(Inflector::slug($baseName), 32, '');
+        $fileName =  StringHelper::truncate($baseName, 128, '');
+        $fileName = Yii::$app->CustomHelperUtils->cleanStringForUrl($fileName);
         if($namePostfix || !$fileName) {
             $fileName .= ($fileName ? '-' : '') . substr(uniqid(md5(rand()), true), 0, 10);
         }

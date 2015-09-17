@@ -50,8 +50,9 @@ $(function(){
         return false;
     });
 
-    $('.switch').switcher({copy: {en: {yes: '', no: ''}}}).on('change', function(){
-        var checkbox = $(this);
+    $('.switch').switcher({copy: {en: {yes: '', no: ''}}});
+    $('.switcher').on('click', function(){
+        var checkbox = $(this).find('.switch');
         checkbox.switcher('setDisabled', true);
 
         $.getJSON(checkbox.data('link') + '/' + (checkbox.is(':checked') ? 'on' : 'off') + '/' + checkbox.data('id'), function(response){
