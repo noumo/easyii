@@ -53,7 +53,7 @@ class Article extends \yii\easyii\components\API
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
+        //if(!$this->_items){
             $this->_items = [];
 
             $with = ['seo', 'category'];
@@ -85,7 +85,7 @@ class Article extends \yii\easyii\components\API
             foreach($this->_adp->models as $model){
                 $this->_items[] = new ArticleObject($model);
             }
-        }
+        //}
         return $this->_items;
     }
 

@@ -10,6 +10,8 @@ use yii\easyii\models\Module;
 use yii\easyii\models\Setting;
 use yii\easyii\assets\LiveAsset;
 
+use common\models\CompaniesUsers;
+
 class AdminModule extends \yii\base\Module implements BootstrapInterface
 {
     const VERSION = 0.9;
@@ -40,6 +42,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
         $this->setModules($modules);
 
         define('IS_ROOT',  !Yii::$app->user->isGuest && Yii::$app->user->identity->isRoot());
+        define('IS_ADMIN', !Yii::$app->user->isGuest && Yii::$app->session['companyAccessRole'] == CompaniesUsers::COMPANY_ROLE_ADMIN );
         define('LIVE_EDIT', !Yii::$app->user->isGuest && Yii::$app->session->get('easyii_live_edit'));
     }
 

@@ -14,6 +14,10 @@ $settings = $this->context->module->settings;
 ]); ?>
 <?= $form->field($model, 'title') ?>
 
+<?= $form->field($model, 'icon')
+    ->hint('<a href="http://fontawesome.io/icons/">Font Awesome Icons</a> eller <a href="http://glyphicons.com/">Glyphicons</a> kan brukes her, i formatet "fa fa-iconname" for Font Awesome, og "glyphicon glyphicon-iconname" for Glyphicon.')
+    ->label('Ikon (standard er "fa fa-circle-o" om ingenting er valgt)') ?>
+
 <?php if(!empty($parent)) : ?>
     <div class="form-group field-category-title required">
         <label for="category-parent" class="control-label"><?= Yii::t('easyii', 'Parent category') ?></label>

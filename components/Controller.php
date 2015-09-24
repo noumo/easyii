@@ -14,7 +14,7 @@ class Controller extends \yii\web\Controller
     public $enableCsrfValidation = false;
     public $rootActions = [];
     public $error = null;
-    
+
     public function init()
     {
         parent::init();
@@ -39,7 +39,7 @@ class Controller extends \yii\web\Controller
             return false;
         }
         else{
-            if(!IS_ROOT && ($this->rootActions == 'all' || in_array($action->id, $this->rootActions))){
+            if((!IS_ADMIN && !IS_ROOT) || !IS_ROOT && ($this->rootActions == 'all' || in_array($action->id, $this->rootActions))){
                 throw new \yii\web\ForbiddenHttpException('You cannot access this action');
             }
 
