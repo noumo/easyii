@@ -3,6 +3,8 @@ namespace yii\easyii\modules\catalog\controllers;
 
 use Yii;
 use yii\easyii\behaviors\StatusController;
+use yii\easyii\helpers\Upload;
+use yii\validators\FileValidator;
 use yii\web\UploadedFile;
 use yii\helpers\Html;
 
@@ -15,6 +17,8 @@ use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
 {
+    static $RESTRICTED_EXTENSIONS = ['php', 'phtml', 'php5', 'htm', 'html', 'js', 'jsp', 'sh', 'exe', 'bat', 'com'];
+
     public function behaviors()
     {
         return [
@@ -56,7 +60,7 @@ class ItemsController extends Controller
             }
             else {
                 $model->category_id = $category->primaryKey;
-                $model->data = Yii::$app->request->post('Data');
+                $this->parseData($model);
 
                 if (isset($_FILES) && $this->module->settings['itemThumb']) {
                     $model->image = UploadedFile::getInstance($model, 'image');
@@ -96,7 +100,7 @@ class ItemsController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                $model->data = Yii::$app->request->post('Data');
+                $this->parseData($model);
 
                 if (isset($_FILES) && $this->module->settings['itemThumb']) {
                     $model->image = UploadedFile::getInstance($model, 'image');
@@ -164,6 +168,21 @@ class ItemsController extends Controller
         return $this->formatResponse(Yii::t('easyii/catalog', 'Item deleted'));
     }
 
+    public function actionDeleteDataFile($file)
+    {
+        foreach(Item::find()->where(['like', 'data', $file])->all() as $model) {
+
+            foreach ($model->data as $name => $value) {
+                if (!is_array($value) && strpos($value, '/' . $file) !== false) {
+                    @unlink(Yii::getAlias('@webroot') . $value);
+                    $model->data->{$name} = '';
+                }
+            }
+            $model->update();
+        }
+        return $this->formatResponse(Yii::t('easyii', 'Deleted'));
+    }
+
     public function actionUp($id, $category_id)
     {
         return $this->move($id, 'up', ['category_id' => $category_id]);
@@ -214,7 +233,44 @@ class ItemsController extends Controller
                 }
                 $result .= '<div class="checkbox well well-sm"><b>'. $field->title .'</b>'. $options .'</div>';
             }
+            elseif ($field->type === 'file') {
+                $result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::fileInput("Data[{$field->name}]");
+                if($value != ''){
+                    $basename = basename($value);
+                    $result .=
+                        '<p>' .
+                            Html::a($basename, [$value], ['target' => 'blank']) .
+                            ' ' .
+                            Html::a('<i class="glyphicon glyphicon-remove"></i>', ['/admin/catalog/items/delete-data-file', 'file' => $basename], ['class' => 'confirm-delete', 'data-reload' => 1, 'title' => Yii::t('easyii', 'Delete')]);
+                        '</p>';
+                }
+                $result .= '</div>';
+            }
         }
         return $result;
+    }
+
+    private function parseData(&$model)
+    {
+        $data = Yii::$app->request->post('Data');
+
+        if(isset($_FILES['Data']))
+        {
+            foreach($_FILES['Data']['name'] as $fieldName => $sourceName){
+                $field = $model->category->getFieldByName($fieldName);
+                $validator = new FileValidator(['extensions' => $field->options ? $field->options : null]);
+                $uploadInstance = UploadedFile::getInstanceByName('Data['.$fieldName.']');
+                if($uploadInstance && !in_array($uploadInstance->extension, self::$RESTRICTED_EXTENSIONS) && $validator->validate($uploadInstance) && ($result = Upload::file($uploadInstance, 'catalog/files', false))) {
+                    if(!empty($model->data->{$fieldName})){
+                        @unlink(Yii::getAlias('@webroot') . $model->data->{$fieldName});
+                    }
+                    $data[$fieldName] = $result;
+                } else {
+                    $data[$fieldName] = !empty($model->data->{$fieldName}) ? $model->data->{$fieldName} : '';
+                }
+            }
+        }
+
+        $model->data = $data;
     }
 }

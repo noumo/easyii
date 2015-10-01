@@ -37,14 +37,14 @@ class Upload
         return str_replace('\\', '/', str_replace(Yii::getAlias('@webroot'), '', $fileName));
     }
 
-    static function getFileName($fileInstanse, $namePostfix = true)
+    static function getFileName($fileInstance, $namePostfix = true)
     {
-        $baseName = str_ireplace('.'.$fileInstanse->extension, '', $fileInstanse->name);
+        $baseName = str_ireplace('.'.$fileInstance->extension, '', $fileInstance->name);
         $fileName =  StringHelper::truncate(Inflector::slug($baseName), 32, '');
         if($namePostfix || !$fileName) {
             $fileName .= ($fileName ? '-' : '') . substr(uniqid(md5(rand()), true), 0, 10);
         }
-        $fileName .= '.' . $fileInstanse->extension;
+        $fileName .= '.' . $fileInstance->extension;
 
         return $fileName;
     }

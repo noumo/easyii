@@ -8,7 +8,8 @@ class Category extends \yii\easyii\components\CategoryModel
         'text' => 'Text',
         'boolean' => 'Boolean',
         'select' => 'Select',
-        'checkbox' => 'Checkbox'
+        'checkbox' => 'Checkbox',
+        'file' => 'File'
     ];
 
     public static function tableName()
@@ -60,7 +61,18 @@ class Category extends \yii\easyii\components\CategoryModel
         }
     }
 
-    private function parseFields(){
+    public function getFieldByName($name)
+    {
+        foreach($this->fields as $field){
+            if($field->name == $name){
+                return $field;
+            }
+        }
+        return null;
+    }
+
+    private function parseFields()
+    {
         $this->fields = $this->fields !== '' ? json_decode($this->fields) : [];
     }
 }

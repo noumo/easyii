@@ -37,15 +37,16 @@ class AController extends CategoryController
                 ){
                     continue;
                 }
-                $options = '';
+                $options = trim($temp->options);
                 if($temp->type == 'select' || $temp->type == 'checkbox'){
-                    if(empty($temp->options) || !($temp->options = trim($temp->options))){
+                    if($options == ''){
                         continue;
                     }
-                    $options = [];
-                    foreach(explode(',', $temp->options) as $option){
-                        $options[] = trim($option);
+                    $optionsArray = [];
+                    foreach(explode(',', $options) as $option){
+                        $optionsArray[] = trim($option);
                     }
+                    $options = $optionsArray;
                 }
 
                 $result[] = [

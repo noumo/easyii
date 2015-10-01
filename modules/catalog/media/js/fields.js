@@ -63,6 +63,6 @@ $(function(){
 
     function optionsIsNeeded(type)
     {
-        return type == 'select' || type == 'checkbox';
+        return type == 'select' || type == 'checkbox' || type == 'file';
     }
 });
