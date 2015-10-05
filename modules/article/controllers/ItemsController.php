@@ -65,6 +65,8 @@ class ItemsController extends Controller
                     }
                 }
 
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
@@ -102,6 +104,7 @@ class ItemsController extends Controller
                         $model->image = $model->oldAttributes['image'];
                     }
                 }
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article updated'));

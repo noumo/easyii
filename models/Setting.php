@@ -27,7 +27,7 @@ class Setting extends \yii\easyii\components\ActiveRecord
             [['name', 'title', 'value'], 'required'],
             [['name', 'title', 'value'], 'trim'],
             ['name',  'match', 'pattern' => '/^[a-zA-Z][\w_-]*$/'],
-            ['name', 'unique'],
+            //['name', 'unique'],
             ['visibility', 'number', 'integerOnly' => true]
         ];
     }
@@ -55,7 +55,7 @@ class Setting extends \yii\easyii\components\ActiveRecord
             self::$_data =  Data::cache(self::CACHE_KEY, 3600, function(){
                 $result = [];
                 try {
-                    foreach (parent::find()->all() as $setting) {
+                    foreach (parent::find()->where(['franchise_id' => Yii::$app->session['dbFranchiseID']])->all() as $setting) {
                         $result[$setting->name] = $setting->value;
                     }
                 }catch(\yii\db\Exception $e){}
@@ -68,14 +68,15 @@ class Setting extends \yii\easyii\components\ActiveRecord
     public static function set($name, $value)
     {
         if(self::get($name)){
-            $setting = Setting::find()->where(['name' => $name])->one();
+            $setting = Setting::find()->where(['franchise_id' => Yii::$app->session['dbFranchiseID'], 'name' => $name])->one();
             $setting->value = $value;
         } else {
             $setting = new Setting([
                 'name' => $name,
                 'value' => $value,
                 'title' => $name,
-                'visibility' => self::VISIBLE_NONE
+                'visibility' => self::VISIBLE_NONE,
+                'franchise_id' => Yii::$app->session['dbFranchiseID']
             ]);
         }
         $setting->save();

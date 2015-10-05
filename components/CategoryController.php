@@ -62,6 +62,8 @@ class CategoryController extends Controller
                     }
                 }
 
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                 $model->status = $class::STATUS_ON;
 
                 $parent = (int)Yii::$app->request->post('parent', null);
@@ -120,6 +122,9 @@ class CategoryController extends Controller
                         $model->image = $model->oldAttributes['image'];
                     }
                 }
+
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Category updated'));
                 }

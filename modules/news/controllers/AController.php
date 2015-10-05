@@ -31,7 +31,7 @@ class AController extends Controller
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => News::find()->sortDate(),
+            'query' => News::find()->where(['franchise_id' => Yii::$app->session['dbFranchiseID']])->sortDate(),
         ]);
 
         return $this->render('index', [
@@ -59,6 +59,9 @@ class AController extends Controller
                         $model->image = '';
                     }
                 }
+
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/news', 'News created'));
                     return $this->redirect(['/admin/'.$this->module->id]);
@@ -100,6 +103,8 @@ class AController extends Controller
                         $model->image = $model->oldAttributes['image'];
                     }
                 }
+
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/news', 'News updated'));

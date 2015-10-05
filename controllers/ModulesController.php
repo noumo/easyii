@@ -32,7 +32,9 @@ class ModulesController extends \yii\easyii\components\Controller
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => Module::find()->sort(),
+            'query' => Module::find()
+                ->where(['franchise_id' => Yii::$app->session['dbFranchiseID']])
+                ->sort(),
         ]);
         Yii::$app->user->setReturnUrl('/admin/modules');
 
@@ -51,6 +53,9 @@ class ModulesController extends \yii\easyii\components\Controller
                 return ActiveForm::validate($model);
             }
             else{
+                // Let's add the franchise ID
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Module created'));
                     return $this->redirect(['/admin/modules']);
@@ -83,6 +88,9 @@ class ModulesController extends \yii\easyii\components\Controller
                 return ActiveForm::validate($model);
             }
             else{
+                // Let's add the franchise ID
+                $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Module updated'));
                 }
@@ -240,6 +248,7 @@ class ModulesController extends \yii\easyii\components\Controller
                     'icon' => $module->icon,
                     'settings' => $module->settings,
                     'status' => Module::STATUS_ON,
+                    'franchise_id' => Yii::$app->session['dbFranchiseID'],
                 ]);
 
                 if($newModule->save()){

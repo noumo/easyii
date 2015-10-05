@@ -26,7 +26,7 @@ class AController extends Controller
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
-            'query' => File::find()->sort(),
+            'query' => File::find()->where(['franchise_id' => Yii::$app->session['dbFranchiseID']])->sort(),
         ]);
         return $this->render('index', [
             'data' => $data
@@ -45,6 +45,8 @@ class AController extends Controller
             else{
                 if(($fileInstanse = UploadedFile::getInstance($model, 'file')))
                 {
+                    $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
                         $model->file = Upload::file($fileInstanse, 'files', false);
@@ -94,6 +96,8 @@ class AController extends Controller
             else{
                 if(($fileInstanse = UploadedFile::getInstance($model, 'file')))
                 {
+                    $model->franchise_id = Yii::$app->session['dbFranchiseID'];
+
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
                         $model->file = Upload::file($fileInstanse, 'files', false);

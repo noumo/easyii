@@ -65,6 +65,9 @@ class Article extends \yii\easyii\components\API
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
             }
+
+            $query->andFilterWhere(['franchise_id' => Yii::$app->session['dbFranchiseID']]);
+
             if(!empty($options['tags'])){
                 $query
                     ->innerJoinWith('tags', false)

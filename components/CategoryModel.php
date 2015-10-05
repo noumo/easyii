@@ -101,7 +101,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         $key = static::tableName().'_tree';
 
         $tree = $cache->get($key);
-        if(!$tree){
+        if( Yii::$app->session['refreshCMSCache'] || !$tree ){
+            Yii::$app->session['refreshCMSCache'] = null;
             $tree = static::generateTree();
             $cache->set($key, $tree, 3600);
         }
@@ -118,7 +119,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         $key = static::tableName().'_flat';
 
         $flat = $cache->get($key);
-        if(!$flat){
+        if( Yii::$app->session['refreshCMSCache'] || !$flat ){
+            Yii::$app->session['refreshCMSCache'] = null;
             $flat = static::generateFlat();
             $cache->set($key, $flat, 3600);
         }
@@ -131,7 +133,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      */
     public static function generateTree()
     {
-        $collection = static::find()->with('seo')->sort()->asArray()->all();
+        $collection = static::find()->where(['franchise_id' => Yii::$app->session['dbFranchiseID']])->with('seo')->sort()->asArray()->all();
         $trees = array();
         $l = 0;
 
@@ -179,7 +181,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      */
     public static function generateFlat()
     {
-        $collection = static::find()->with('seo')->sort()->asArray()->all();
+        $collection = static::find()->where(['franchise_id' => Yii::$app->session['dbFranchiseID']])->with('seo')->sort()->asArray()->all();
         $flat = [];
 
         if (count($collection) > 0) {

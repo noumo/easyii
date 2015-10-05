@@ -35,6 +35,8 @@ class File extends \yii\easyii\components\API
                 $query->where($options['where']);
             }
 
+            $query->andFilterWhere(['franchise_id' => Yii::$app->session['dbFranchiseID']]);
+
             $this->_adp = new ActiveDataProvider([
                 'query' => $query,
                 'pagination' => !empty($options['pagination']) ? $options['pagination'] : []

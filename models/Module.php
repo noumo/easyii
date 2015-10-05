@@ -25,7 +25,7 @@ class Module extends \yii\easyii\components\ActiveRecord
             [['name', 'class', 'title'], 'required'],
             [['name', 'class', 'title', 'icon'], 'trim'],
             ['name',  'match', 'pattern' => '/^[a-z]+$/'],
-            ['name', 'unique'],
+            //['name', 'unique'],
             ['class',  'match', 'pattern' => '/^[\w\\\]+$/'],
             ['class',  'checkExists'],
             ['icon', 'string'],
@@ -78,7 +78,7 @@ class Module extends \yii\easyii\components\ActiveRecord
         return Data::cache(self::CACHE_KEY, 3600, function(){
             $result = [];
             try {
-                foreach (self::find()->where(['status' => self::STATUS_ON])->sort()->all() as $module) {
+                foreach (self::find()->where(['status' => self::STATUS_ON, 'franchise_id' => Yii::$app->session['dbFranchiseID']])->sort()->all() as $module) {
                     $module->trigger(self::EVENT_AFTER_FIND);
                     $result[$module->name] = (object)$module->attributes;
                 }
