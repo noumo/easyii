@@ -6,6 +6,9 @@ use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SeoBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\easyii\behaviors\Taggable;
+use yii\easyii\helpers\Upload;
+use yii\easyii\models\SeoText;
 
 /**
  * Base CategoryModel. Shared by categories
@@ -17,6 +20,12 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
 
+    static $FLAT;
+    static $TREE;
+
+    public $parent;
+    public $children;
+
     public function rules()
     {
         return [
@@ -26,7 +35,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             ['image', 'image'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['status', 'integer'],
+            ['tagNames', 'safe'],
+            [['status', 'depth', 'tree', 'lgt', 'rgt'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON]
         ];
     }
@@ -37,21 +47,25 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'image' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
+            'tagNames' => Yii::t('easyii', 'Tags'),
         ];
     }
 
     public function behaviors()
     {
+        $moduleSettings = Yii::$app->getModule('admin')->activeModules[Module::getModuleName(static::className())]->settings;
         return [
             'cacheflush' => [
                 'class' => CacheFlush::className(),
                 'key' => [static::tableName().'_tree', static::tableName().'_flat']
             ],
             'seoBehavior' => SeoBehavior::className(),
+            'taggabble' => Taggable::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
-                'ensureUnique' => true
+                'ensureUnique' => true,
+                'immutable' => !empty($moduleSettings['categorySlugImmutable']) ? $moduleSettings['categorySlugImmutable'] : false
             ],
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
@@ -79,6 +93,11 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         if($this->image) {
             @unlink(Yii::getAlias('@webroot') . $this->image);
         }
+    }
+
+    public function getImage()
+    {
+        return Upload::getLink($this->image_file);
     }
 
     /**
@@ -115,12 +134,25 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         $cache = Yii::$app->cache;
         $key = static::tableName().'_flat';
 
-        $flat = $cache->get($key);
-        if(!$flat){
-            $flat = static::generateFlat();
-            $cache->set($key, $flat, 3600);
+        if(!static::$FLAT) {
+            $flat = $cache->get($key);
+            if (!$flat) {
+                $flat = static::generateFlat();
+                $cache->set($key, $flat, 3600);
+            }
+            foreach($flat as $id => $cat){
+                $model = new static([
+                    'category_id' => $id,
+                    'parent' => $cat->parent,
+                    'children' => $cat->children
+                ]);
+                $model->load((array)$cat, '');
+                $model->populateRelation('seo', new SeoText($cat->seo));
+                $model->setTagNames($cat->tags);
+                static::$FLAT[] = $model;
+            }
         }
-        return $flat;
+        return static::$FLAT;
     }
 
     /**
@@ -177,7 +209,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      */
     public static function generateFlat()
     {
-        $collection = static::find()->with('seo')->sort()->asArray()->all();
+        $collection = static::find()->with(['seo', 'tags'])->sort()->asArray()->all();
         $flat = [];
 
         if (count($collection) > 0) {
@@ -218,6 +250,13 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 if($temp->parent == $node->category_id){
                     $node->children[] = $temp->category_id;
                 }
+            }
+            if(is_array($node->tags) && count($node->tags)){
+                $tags = [];
+                foreach($node->tags as $tag){
+                    $tags[] = $tag['name'];
+                }
+                $node->tags = $tags;
             }
         }
 
