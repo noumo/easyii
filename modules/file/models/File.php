@@ -5,6 +5,7 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\helpers\Upload;
 
 class File extends \yii\easyii\components\ActiveRecord
 {
@@ -49,11 +50,16 @@ class File extends \yii\easyii\components\ActiveRecord
         ];
     }
 
+    public function getLink()
+    {
+        return Upload::getLink($this->file);
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
             if(!$insert && $this->file !== $this->oldAttributes['file']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['file']);
+                Upload::delete($this->oldAttributes['file']);
             }
             return true;
         } else {
@@ -65,6 +71,6 @@ class File extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        @unlink(Yii::getAlias('@webroot').$this->file);
+        Upload::delete($this->file);
     }
 }

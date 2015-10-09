@@ -15,7 +15,7 @@ class RedactorController extends \yii\easyii\components\Controller
 {
     public $controllerNamespace = 'yii\redactor\controllers';
     public $defaultRoute = 'upload';
-    public $uploadDir = '@webroot/uploads';
+    public $uploadDir = '@uploads';
     public $uploadUrl = '/uploads';
 
     public function behaviors()

@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
     'enableClientValidation' => true,
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
-<?php if($model->image) : ?>
+<?php if($model->image_file) : ?>
     <img src="<?= $model->image ?>" style="max-width: 848px">
 <?php endif; ?>
 <?= $form->field($model, 'image_file')->fileInput() ?>

@@ -45,7 +45,7 @@ class Photo extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        @unlink(Upload::getAbsolutePath($this->image_file));
+        Upload::delete($this->image_file);
     }
 
     public function getImage()

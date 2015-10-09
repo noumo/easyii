@@ -47,7 +47,7 @@ class AController extends Controller
                 {
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
-                        $model->file = Upload::file($fileInstanse, 'files', false);
+                        $model->file = Upload::file($fileInstanse, 'file', false);
                         $model->size = $fileInstanse->size;
 
                         if($model->save()){
@@ -96,7 +96,7 @@ class AController extends Controller
                 {
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
-                        $model->file = Upload::file($fileInstanse, 'files', false);
+                        $model->file = Upload::file($fileInstanse, 'file', false);
                         $model->size = $fileInstanse->size;
                         $model->time = time();
                     }

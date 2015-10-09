@@ -63,11 +63,11 @@ class ItemsController extends Controller
                 $this->parseData($model);
 
                 if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'catalog');
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if ($model->image_file && $model->validate(['image_file'])) {
+                        $model->image_file = Image::upload($model->image_file, 'catalog');
                     } else {
-                        $model->image = '';
+                        $model->image_file = '';
                     }
                 }
                 if ($model->save()) {
@@ -103,11 +103,11 @@ class ItemsController extends Controller
                 $this->parseData($model);
 
                 if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'catalog');
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if ($model->image_file && $model->validate(['image_file'])) {
+                        $model->image_file = Image::upload($model->image_file, 'catalog');
                     } else {
-                        $model->image = $model->oldAttributes['image'];
+                        $model->image_file = $model->oldAttributes['image_file'];
                     }
                 }
 
@@ -146,10 +146,10 @@ class ItemsController extends Controller
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
-        elseif($model->image){
-            $model->image = '';
+        elseif($model->image_file){
+            $model->image_file = '';
             if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->image);
+                Upload::delete($model->image_file);
                 $this->flash('success', Yii::t('easyii', 'Image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
@@ -174,7 +174,7 @@ class ItemsController extends Controller
 
             foreach ($model->data as $name => $value) {
                 if (!is_array($value) && strpos($value, '/' . $file) !== false) {
-                    @unlink(Yii::getAlias('@webroot') . $value);
+                    Upload::delete($value);
                     $model->data->{$name} = '';
                 }
             }
@@ -260,9 +260,9 @@ class ItemsController extends Controller
                 $field = $model->category->getFieldByName($fieldName);
                 $validator = new FileValidator(['extensions' => $field->options ? $field->options : null]);
                 $uploadInstance = UploadedFile::getInstanceByName('Data['.$fieldName.']');
-                if($uploadInstance && !in_array($uploadInstance->extension, self::$RESTRICTED_EXTENSIONS) && $validator->validate($uploadInstance) && ($result = Upload::file($uploadInstance, 'catalog/files', false))) {
+                if($uploadInstance && !in_array($uploadInstance->extension, self::$RESTRICTED_EXTENSIONS) && $validator->validate($uploadInstance) && ($result = Upload::file($uploadInstance, 'catalog', false))) {
                     if(!empty($model->data->{$fieldName})){
-                        @unlink(Yii::getAlias('@webroot') . $model->data->{$fieldName});
+                        Upload::delete($model->data->{$fieldName});
                     }
                     $data[$fieldName] = $result;
                 } else {

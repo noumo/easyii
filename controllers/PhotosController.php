@@ -56,7 +56,7 @@ class PhotosController extends Controller
                     ];
                 }
                 else{
-                    @unlink(Upload::getAbsolutePath($photo->image_file));
+                    Upload::delete($photo->image_file);
                     $this->error = Yii::t('easyii', 'Create error. {0}', $photo->formatErrors());
                 }
             }
@@ -107,7 +107,7 @@ class PhotosController extends Controller
                 $photo->image_file = Image::upload($photo->image_file, 'photos');
                 if($photo->image_file){
                     if($photo->save()){
-                        @unlink(Upload::getAbsolutePath($oldImage));
+                        Upload::delete($oldImage);
 
                         $success = [
                             'message' => Yii::t('easyii', 'Photo uploaded'),
@@ -118,7 +118,7 @@ class PhotosController extends Controller
                         ];
                     }
                     else{
-                        @unlink(Upload::getAbsolutePath($photo->image_file));
+                        Upload::delete($photo->image_file);
 
                         $this->error = Yii::t('easyii', 'Update error. {0}', $photo->formatErrors());
                     }

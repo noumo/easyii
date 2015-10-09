@@ -57,11 +57,11 @@ class ItemsController extends Controller
                 $model->category_id = $category->primaryKey;
 
                 if (isset($_FILES) && $this->module->settings['articleThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'article');
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if ($model->image_file && $model->validate(['image_file'])) {
+                        $model->image_file = Image::upload($model->image_file, 'article');
                     } else {
-                        $model->image = '';
+                        $model->image_file = '';
                     }
                 }
 
@@ -95,11 +95,11 @@ class ItemsController extends Controller
             }
             else {
                 if (isset($_FILES) && $this->module->settings['articleThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'article');
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if ($model->image_file && $model->validate(['image_file'])) {
+                        $model->image_file = Image::upload($model->image_file, 'article');
                     } else {
-                        $model->image = $model->oldAttributes['image'];
+                        $model->image_file = $model->oldAttributes['image_file'];
                     }
                 }
 
@@ -137,8 +137,8 @@ class ItemsController extends Controller
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
-        elseif($model->image){
-            $model->image = '';
+        elseif($model->image_file){
+            $model->image_file = '';
             if($model->update()){
                 $this->flash('success', Yii::t('easyii', 'Image cleared'));
             } else {

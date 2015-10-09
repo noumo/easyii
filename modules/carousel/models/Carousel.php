@@ -53,8 +53,8 @@ class Carousel extends \yii\easyii\components\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
+                Upload::delete($this->oldAttributes['image_file']);
             }
             return true;
         } else {
@@ -66,6 +66,6 @@ class Carousel extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        @unlink(Yii::getAlias('@webroot').$this->image);
+        Upload::delete($this->image_file);
     }
 }

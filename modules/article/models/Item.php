@@ -83,8 +83,8 @@ class Item extends \yii\easyii\components\ActiveRecord
         if (parent::beforeSave($insert)) {
             $this->short = StringHelper::truncate(ArticleModule::setting('enableShort') ? $this->short : strip_tags($this->text), ArticleModule::setting('shortMaxLength'));
 
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
+                Upload::delete($this->oldAttributes['image_file']);
             }
 
             return true;
@@ -97,8 +97,8 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        if($this->image){
-            @unlink(Yii::getAlias('@webroot').$this->image);
+        if($this->image_file){
+            Upload::delete($this->image_file);
         }
 
         foreach($this->getPhotos()->all() as $photo){

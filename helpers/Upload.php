@@ -21,7 +21,7 @@ class Upload
         if(!$fileInstance->saveAs($fileName)){
             throw new HttpException(500, 'Cannot upload file "'.$fileName.'". Please check write permissions.');
         }
-        return Upload::getLink($fileName);
+        return $dir ? $dir . '/' . basename($fileName) : basename($fileName);
     }
 
     static function getUploadPath($dir = null)
@@ -58,6 +58,11 @@ class Upload
         } else {
             return Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . $fileName;
         }
+    }
+
+    static function delete($fileName)
+    {
+        @unlink(self::getAbsolutePath($fileName));
     }
 
     static function getFileName(UploadedFile $fileInstance, $namePostfix = true)

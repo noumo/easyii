@@ -49,12 +49,21 @@ class ApiObject extends \yii\base\Object
      * @param bool $crop if false image will be resize instead of cropping
      * @return string
      */
-    public function thumb($width = null, $height = null, $crop = true)
+    public function thumb($width = null, $height = null)
     {
-        if($this->image && ($width || $height)){
-            return Image::thumb($this->image, $width, $height, $crop);
-        }
-        return '';
+        return !empty($this->model->image_file) ? Image::thumb($this->model->image_file, $width, $height) : '';
+    }
+
+    /**
+     * Returns web path to image.
+     * @param int|null $width
+     * @param int|null $height
+     * @param bool $crop if false image will be resize instead of cropping
+     * @return string
+     */
+    public function getImage()
+    {
+        return !empty($this->model->image_file) ? $this->model->image : '';
     }
 
     /**

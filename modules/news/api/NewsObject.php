@@ -10,7 +10,6 @@ use yii\helpers\Url;
 class NewsObject extends \yii\easyii\components\ApiObject
 {
     public $slug;
-    public $image;
     public $views;
     public $time;
 

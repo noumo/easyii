@@ -10,7 +10,6 @@ use yii\helpers\Url;
 class ItemObject extends \yii\easyii\components\ApiObject
 {
     public $slug;
-    public $image;
     public $data;
     public $category_id;
     public $available;

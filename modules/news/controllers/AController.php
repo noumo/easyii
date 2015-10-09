@@ -4,6 +4,7 @@ namespace yii\easyii\modules\news\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\behaviors\SortableDateController;
+use yii\easyii\helpers\Upload;
 use yii\easyii\modules\news\NewsModule;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
@@ -53,12 +54,12 @@ class AController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['enableThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'news');
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if($model->image_file && $model->validate(['image_file'])){
+                        $model->image_file = Image::upload($model->image_file, 'news');
                     }
                     else{
-                        $model->image = '';
+                        $model->image_file = '';
                     }
                 }
                 if($model->save()){
@@ -94,12 +95,12 @@ class AController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['enableThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'news');
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if($model->image_file && $model->validate(['image_file'])){
+                        $model->image_file = Image::upload($model->image_file, 'news');
                     }
                     else{
-                        $model->image = $model->oldAttributes['image'];
+                        $model->image_file = $model->oldAttributes['image_file'];
                     }
                 }
 
@@ -148,9 +149,9 @@ class AController extends Controller
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
         else{
-            $model->image = '';
+            $model->image_file = '';
             if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->image);
+                Upload::delete($model->image_file);
                 $this->flash('success', Yii::t('easyii', 'Image cleared'));
             } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));

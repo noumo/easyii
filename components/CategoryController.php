@@ -54,11 +54,11 @@ class CategoryController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, $this->moduleName);
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if($model->image_file && $model->validate(['image_file'])){
+                        $model->image_file = Image::upload($model->image_file, $this->moduleName);
                     } else {
-                        $model->image = '';
+                        $model->image_file = '';
                     }
                 }
 
@@ -113,11 +113,11 @@ class CategoryController extends Controller
             }
             else{
                 if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, $this->moduleName);
+                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
+                    if($model->image_file && $model->validate(['image_file'])){
+                        $model->image_file = Image::upload($model->image_file, $this->moduleName);
                     }else{
-                        $model->image = $model->oldAttributes['image'];
+                        $model->image_file = $model->oldAttributes['image_file'];
                     }
                 }
                 if($model->save()){
@@ -150,8 +150,8 @@ class CategoryController extends Controller
         if($model === null){
             $this->flash('error', Yii::t('easyii', 'Not found'));
         }
-        elseif($model->image){
-            $model->image = '';
+        elseif($model->image_file){
+            $model->image_file = '';
             if($model->update()){
                 $this->flash('success', Yii::t('easyii', 'Image cleared'));
             } else {

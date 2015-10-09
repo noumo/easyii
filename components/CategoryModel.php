@@ -32,7 +32,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['image_file', 'image'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['tagNames', 'safe'],
@@ -45,7 +45,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
-            'image' => Yii::t('easyii', 'Image'),
+            'image_file' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
             'tagNames' => Yii::t('easyii', 'Tags'),
         ];
@@ -77,8 +77,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
+                Upload::delete($this->oldAttributes['image_file']);
             }
             return true;
         } else {
@@ -90,8 +90,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        if($this->image) {
-            @unlink(Yii::getAlias('@webroot') . $this->image);
+        if($this->image_file) {
+            Upload::delete($this->image_file);
         }
     }
 

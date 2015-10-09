@@ -92,8 +92,8 @@ class News extends \yii\easyii\components\ActiveRecord
         if (parent::beforeSave($insert)) {
             $this->short = StringHelper::truncate(NewsModule::setting('enableShort') ? $this->short : strip_tags($this->text), NewsModule::setting('shortMaxLength'));
 
-            if(!$insert && $this->image != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
-                @unlink(Upload::getAbsolutePath($this->oldAttributes['image_file']));
+            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
+                Upload::delete($this->oldAttributes['image_file']);
             }
             return true;
         } else {
@@ -105,8 +105,8 @@ class News extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        if($this->image){
-            @unlink(Yii::getAlias('@webroot').$this->image);
+        if($this->image_file){
+            Upload::delete($this->image_file);
         }
 
         foreach($this->getPhotos()->all() as $photo){

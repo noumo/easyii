@@ -72,8 +72,8 @@ class Item extends \yii\easyii\components\ActiveRecord
 
             $this->data = json_encode($this->data);
 
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
+                Upload::delete($this->oldAttributes['image_file']);
             }
 
             return true;
@@ -137,8 +137,8 @@ class Item extends \yii\easyii\components\ActiveRecord
             $photo->delete();
         }
 
-        if($this->image) {
-            @unlink(Yii::getAlias('@webroot') . $this->image);
+        if($this->image_file) {
+            Upload::delete($this->image_file);
         }
 
         ItemData::deleteAll(['item_id' => $this->primaryKey]);
