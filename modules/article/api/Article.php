@@ -5,6 +5,7 @@ use Yii;
 
 use yii\data\ActiveDataProvider;
 use yii\easyii\models\Tag;
+use yii\easyii\modules\article\ArticleModule;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
 use yii\easyii\widgets\Fancybox;
@@ -46,9 +47,21 @@ class Article extends \yii\easyii\components\API
         return Category::tree();
     }
 
-    public function api_cats()
+    public function api_cats($options = [])
     {
-        return Category::cats();
+        $result = [];
+        foreach(Category::cats() as $model){
+            $result[] = new CategoryObject($model);
+        }
+        if(!empty($options['tags'])){
+            foreach($result as $i => $item){
+                if(!in_array($options['tags'], $item->tags)){
+                    unset($result[$i]);
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function api_items($options = [])
@@ -57,7 +70,7 @@ class Article extends \yii\easyii\components\API
             $this->_items = [];
 
             $with = ['seo', 'category'];
-            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+            if(ArticleModule::setting('enableTags')){
                 $with[] = 'tags';
             }
             $query = Item::find()->with($with)->status(Item::STATUS_ON);
@@ -98,7 +111,7 @@ class Article extends \yii\easyii\components\API
         $result = [];
 
         $with = ['seo'];
-        if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+        if(ArticleModule::setting('enableTags')){
             $with[] = 'tags';
         }
         $query = Item::find()->with($with)->status(Item::STATUS_ON)->sortDate()->limit($limit);

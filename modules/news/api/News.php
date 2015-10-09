@@ -4,6 +4,7 @@ namespace yii\easyii\modules\news\api;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\models\Tag;
+use yii\easyii\modules\news\NewsModule;
 use yii\easyii\widgets\Fancybox;
 use yii\widgets\LinkPager;
 
@@ -34,7 +35,7 @@ class News extends \yii\easyii\components\API
             $this->_items = [];
 
             $with = ['seo'];
-            if(Yii::$app->getModule('admin')->activeModules['news']->settings['enableTags']){
+            if(NewsModule::setting('enableTags')){
                 $with[] = 'tags';
             }
             $query = NewsModel::find()->with($with)->status(NewsModel::STATUS_ON);
@@ -81,7 +82,7 @@ class News extends \yii\easyii\components\API
         }
 
         $with = ['seo'];
-        if(Yii::$app->getModule('admin')->activeModules['news']->settings['enableTags']){
+        if(NewsModule::setting('enableTags')){
             $with[] = 'tags';
         }
 

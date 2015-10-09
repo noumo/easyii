@@ -19,6 +19,8 @@ class Module extends \yii\base\Module
     /** @var  @todo */
     public $i18n;
 
+    public static $NAME;
+
     /**
      * Configuration for installation
      * @var array
@@ -35,8 +37,8 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-        $moduleName = self::getModuleName(self::className());
-        self::registerTranslations($moduleName);
+        static::$NAME = static::getModuleName(static::className());
+        static::registerTranslations(static::$NAME);
     }
 
     /**
@@ -82,5 +84,11 @@ class Module extends \yii\base\Module
             }
         }
         return false;
+    }
+
+    public static function setting($name)
+    {
+        $settings = Yii::$app->getModule('admin')->activeModules[static::$NAME]->settings;
+        return $settings[$name] !== null ? $settings[$name] : null;
     }
 }
