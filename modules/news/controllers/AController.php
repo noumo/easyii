@@ -4,6 +4,7 @@ namespace yii\easyii\modules\news\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\behaviors\SortableDateController;
+use yii\easyii\modules\news\NewsModule;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 
@@ -30,6 +31,7 @@ class AController extends Controller
 
     public function actionIndex()
     {
+        var_dump(NewsModule::setting('enableThumb'));
         $data = new ActiveDataProvider([
             'query' => News::find()->sortDate(),
         ]);

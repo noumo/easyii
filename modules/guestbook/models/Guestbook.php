@@ -5,6 +5,7 @@ use Yii;
 use yii\easyii\behaviors\CalculateNotice;
 use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
+use yii\easyii\modules\guestbook\GuestbookModule;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
 use yii\helpers\Url;
@@ -31,7 +32,7 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
             ['email', 'email'],
             ['title', 'string', 'max' => 128],
             ['reCaptcha', ReCaptchaValidator::className(), 'on' => 'send', 'when' => function(){
-                return Yii::$app->getModule('admin')->activeModules['guestbook']->settings['enableCaptcha'];
+                return GuestbookModule::setting('enableCaptcha');
             }],
         ];
     }
@@ -43,7 +44,7 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
                 $this->ip = Yii::$app->request->userIP;
                 $this->time = time();
                 $this->new = 1;
-                $this->status = Yii::$app->getModule('admin')->activeModules['guestbook']->settings['preModerate'] ? self::STATUS_OFF : self::STATUS_ON;
+                $this->status = GuestbookModule::setting('preModerate') ? self::STATUS_OFF : self::STATUS_ON;
             }
             return true;
         } else {
@@ -86,15 +87,13 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
 
     public function mailAdmin()
     {
-        $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
-
-        if(!$settings['mailAdminOnNewPost']){
+        if(!GuestbookModule::setting('mailAdminOnNewPost')){
             return false;
         }
         return Mail::send(
             Setting::get('admin_email'),
-            $settings['subjectOnNewPost'],
-            $settings['templateOnNewPost'],
+            GuestbookModule::setting('subjectOnNewPost'),
+            GuestbookModule::setting('templateOnNewPost'),
             [
                 'post' => $this,
                 'link' => Url::to(['/admin/guestbook/a/view', 'id' => $this->primaryKey], true)
@@ -104,15 +103,13 @@ class Guestbook extends \yii\easyii\components\ActiveRecord
 
     public function notifyUser()
     {
-        $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
-
         return Mail::send(
             $this->email,
-            $settings['subjectNotifyUser'],
-            $settings['templateNotifyUser'],
+            GuestbookModule::setting('subjectNotifyUser'),
+            GuestbookModule::setting('templateNotifyUser'),
             [
                 'post' => $this,
-                'link' => Url::to([$settings['frontendGuestbookRoute']], true)
+                'link' => Url::to([GuestbookModule::setting('frontendGuestbookRoute')], true)
             ]
         );
     }

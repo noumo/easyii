@@ -3,6 +3,7 @@ namespace yii\easyii\modules\guestbook\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\modules\guestbook\GuestbookModule;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
@@ -80,7 +81,6 @@ class Guestbook extends \yii\easyii\components\API
     public function api_form($options = [])
     {
         $model = new GuestbookModel;
-        $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
         $options = array_merge($this->_defaultFormOptions, $options);
 
         ob_start();
@@ -94,12 +94,12 @@ class Guestbook extends \yii\easyii\components\API
 
         echo $form->field($model, 'name');
 
-        if($settings['enableTitle']) echo $form->field($model, 'title');
-        if($settings['enableEmail']) echo $form->field($model, 'email');
+        if(GuestbookModule::setting('enableTitle')) echo $form->field($model, 'title');
+        if(GuestbookModule::setting('enableEmail')) echo $form->field($model, 'email');
 
         echo $form->field($model, 'text')->textarea();
 
-        if($settings['enableCaptcha']) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
+        if(GuestbookModule::setting('enableCaptcha')) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 
         echo Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-primary']);
         ActiveForm::end();
