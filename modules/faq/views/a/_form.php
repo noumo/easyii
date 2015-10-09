@@ -1,4 +1,5 @@
 <?php
+use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\easyii\widgets\Redactor;
@@ -20,6 +21,10 @@ use yii\easyii\widgets\Redactor;
         'linebreaks' => true
     ]
 ]) ?>
+
+<?php if($this->context->module->settings['enableTags']) : ?>
+    <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
+<?php endif; ?>
 
 <?= Html::submitButton(Yii::t('easyii','Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>
