@@ -56,7 +56,7 @@ $photoTemplate = str_replace('>\\', '>', $photoTemplate);
     <?php foreach($photos as $photo) : ?>
         <?= str_replace(
             ['{{photo_id}}', '{{photo_thumb}}', '{{photo_image}}', '{{photo_description}}'],
-            [$photo->primaryKey, Image::thumb($photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT), $photo->image, $photo->description],
+            [$photo->primaryKey, Image::thumb($photo->image_file, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT), $photo->image, $photo->description],
             $photoTemplate)
         ?>
     <?php endforeach; ?>

@@ -5,7 +5,9 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\Taggable;
+use yii\easyii\helpers\Upload;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\article\ArticleModule;
 use yii\helpers\StringHelper;
 
 class Item extends \yii\easyii\components\ActiveRecord
@@ -55,7 +57,8 @@ class Item extends \yii\easyii\components\ActiveRecord
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
-                'ensureUnique' => true
+                'ensureUnique' => true,
+                'immutable' => ArticleModule::setting('itemSlugImmutable')
             ]
         ];
     }
@@ -70,11 +73,15 @@ class Item extends \yii\easyii\components\ActiveRecord
         return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
     }
 
+    public function getImage()
+    {
+        return Upload::getLink($this->image_file);
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            $settings = Yii::$app->getModule('admin')->activeModules['article']->settings;
-            $this->short = StringHelper::truncate($settings['enableShort'] ? $this->short : strip_tags($this->text), $settings['shortMaxLength']);
+            $this->short = StringHelper::truncate(ArticleModule::setting('enableShort') ? $this->short : strip_tags($this->text), ArticleModule::setting('shortMaxLength'));
 
             if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
                 @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);

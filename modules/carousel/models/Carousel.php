@@ -4,6 +4,7 @@ namespace yii\easyii\modules\carousel\models;
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\helpers\Upload;
 
 class Carousel extends \yii\easyii\components\ActiveRecord
 {
@@ -42,6 +43,11 @@ class Carousel extends \yii\easyii\components\ActiveRecord
             CacheFlush::className(),
             SortableModel::className()
         ];
+    }
+
+    public function getImage()
+    {
+        return Upload::getLink($this->image_file);
     }
 
     public function beforeSave($insert)

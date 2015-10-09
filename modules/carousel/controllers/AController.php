@@ -49,11 +49,11 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(($fileInstanse = UploadedFile::getInstance($model, 'image')))
+                if(($fileInstanse = UploadedFile::getInstance($model, 'image_file')))
                 {
-                    $model->image = $fileInstanse;
-                    if($model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'carousel');
+                    $model->image_file = $fileInstanse;
+                    if($model->validate(['image_file'])){
+                        $model->image_file = Image::upload($model->image_file, 'carousel');
                         $model->status = Carousel::STATUS_ON;
 
                         if($model->save()){
@@ -96,11 +96,11 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(($fileInstanse = UploadedFile::getInstance($model, 'image')))
+                if(($fileInstanse = UploadedFile::getInstance($model, 'image_file')))
                 {
-                    $model->image = $fileInstanse;
-                    if($model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'carousel');
+                    $model->image_file = $fileInstanse;
+                    if($model->validate(['image_file'])){
+                        $model->image_file = Image::upload($model->image_file, 'carousel');
                     }
                     else {
                         $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
@@ -108,7 +108,7 @@ class AController extends Controller
                     }
                 }
                 else{
-                    $model->image = $model->oldAttributes['image'];
+                    $model->image_file = $model->oldAttributes['image_file'];
                 }
 
                 if($model->save()){

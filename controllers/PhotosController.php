@@ -2,6 +2,8 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\easyii\components\Module;
+use yii\easyii\helpers\Upload;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii\web\Response;
@@ -36,25 +38,25 @@ class PhotosController extends Controller
         $photo = new Photo;
         $photo->class = $class;
         $photo->item_id = $item_id;
-        $photo->image = UploadedFile::getInstance($photo, 'image');
+        $photo->image_file = UploadedFile::getInstance($photo, 'image_file');
 
-        if($photo->image && $photo->validate(['image'])){
-            $photo->image = Image::upload($photo->image, 'photos', Photo::PHOTO_MAX_WIDTH);
+        if($photo->image_file && $photo->validate(['image_file'])){
+            $photo->image_file = Image::upload($photo->image_file, Module::getModuleName($class));
 
-            if($photo->image){
+            if($photo->image_file){
                 if($photo->save()){
                     $success = [
                         'message' => Yii::t('easyii', 'Photo uploaded'),
                         'photo' => [
                             'id' => $photo->primaryKey,
                             'image' => $photo->image,
-                            'thumb' => Image::thumb($photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT),
+                            'thumb' => Image::thumb($photo->image_file, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT),
                             'description' => ''
                         ]
                     ];
                 }
                 else{
-                    @unlink(Yii::getAlias('@webroot') . str_replace(Url::base(true), '', $photo->image));
+                    @unlink(Upload::getAbsolutePath($photo->image_file));
                     $this->error = Yii::t('easyii', 'Create error. {0}', $photo->formatErrors());
                 }
             }
@@ -97,26 +99,26 @@ class PhotosController extends Controller
 
         if(($photo = Photo::findOne($id)))
         {
-            $oldImage = $photo->image;
+            $oldImage = $photo->image_file;
 
-            $photo->image = UploadedFile::getInstance($photo, 'image');
+            $photo->image_file = UploadedFile::getInstance($photo, 'image_file');
 
-            if($photo->image && $photo->validate(['image'])){
-                $photo->image = Image::upload($photo->image, 'photos', Photo::PHOTO_MAX_WIDTH);
-                if($photo->image){
+            if($photo->image_file && $photo->validate(['image_file'])){
+                $photo->image_file = Image::upload($photo->image_file, 'photos');
+                if($photo->image_file){
                     if($photo->save()){
-                        @unlink(Yii::getAlias('@webroot').$oldImage);
+                        @unlink(Upload::getAbsolutePath($oldImage));
 
                         $success = [
                             'message' => Yii::t('easyii', 'Photo uploaded'),
                             'photo' => [
                                 'image' => $photo->image,
-                                'thumb' => Image::thumb($photo->image, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT)
+                                'thumb' => Image::thumb($photo->image_file, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT)
                             ]
                         ];
                     }
                     else{
-                        @unlink(Yii::getAlias('@webroot').$photo->image);
+                        @unlink(Upload::getAbsolutePath($photo->image_file));
 
                         $this->error = Yii::t('easyii', 'Update error. {0}', $photo->formatErrors());
                     }

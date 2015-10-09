@@ -4,7 +4,9 @@ namespace yii\easyii\modules\catalog\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\helpers\Upload;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\catalog\CatalogModule;
 
 class Item extends \yii\easyii\components\ActiveRecord
 {
@@ -55,7 +57,8 @@ class Item extends \yii\easyii\components\ActiveRecord
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
-                'ensureUnique' => true
+                'ensureUnique' => true,
+                'immutable' => CatalogModule::setting('itemSlugImmutable')
             ]
         ];
     }
@@ -119,6 +122,11 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+    }
+
+    public function getImage()
+    {
+        return Upload::getLink($this->image_file);
     }
 
     public function afterDelete()

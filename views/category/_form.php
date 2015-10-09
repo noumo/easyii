@@ -1,5 +1,6 @@
 <?php
 use yii\easyii\helpers\Image;
+use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -30,12 +31,16 @@ $settings = $this->context->module->settings;
     </div>
 <?php endif; ?>
 
-<?php if($settings['categoryThumb']) : ?>
-    <?php if($model->image) : ?>
-        <img src="<?= Image::thumb($model->image, 240) ?>">
+<?php if(!empty($settings['categoryThumb'])) : ?>
+    <?php if($model->image_file) : ?>
+        <a href="<?= $model->image ?>" class="fancybox"><img src="<?= Image::thumb($model->image_file, 240, 180) ?>"></a>
         <a href="<?= Url::to(['/admin/'.$this->context->moduleName.'/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
     <?php endif; ?>
-    <?= $form->field($model, 'image')->fileInput() ?>
+    <?= $form->field($model, 'image_file')->fileInput() ?>
+<?php endif; ?>
+
+<?php if(!empty($settings['categoryTags'])) : ?>
+    <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
 <?php endif; ?>
 
 <?php if(IS_ROOT) : ?>

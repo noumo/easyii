@@ -5,8 +5,24 @@ use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\Taggable;
+use yii\easyii\helpers\Upload;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\news\NewsModule;
 use yii\helpers\StringHelper;
+
+/**
+ * @property integer $news_id
+ * @property string $title
+ * @property string $short
+ * @property string $text
+ * @property string $image_file
+ * @property string $slug
+ * @property integer $time
+ * @property integer $views
+ * @property integer $status
+ *
+ * @property string $image
+ */
 
 class News extends \yii\easyii\components\ActiveRecord
 {
@@ -24,7 +40,7 @@ class News extends \yii\easyii\components\ActiveRecord
             [['text', 'title'], 'required'],
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['image_file', 'image'],
             [['views', 'time', 'status'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
@@ -55,7 +71,8 @@ class News extends \yii\easyii\components\ActiveRecord
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
-                'ensureUnique' => true
+                'ensureUnique' => true,
+                'immutable' => NewsModule::setting('slugImmutable')
             ],
         ];
     }
@@ -65,16 +82,18 @@ class News extends \yii\easyii\components\ActiveRecord
         return $this->hasMany(Photo::className(), ['item_id' => 'news_id'])->where(['class' => self::className()])->sort();
     }
 
-
+    public function getImage()
+    {
+        return Upload::getLink($this->image_file);
+    }
 
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            $settings = Yii::$app->getModule('admin')->activeModules['news']->settings;
-            $this->short = StringHelper::truncate($settings['enableShort'] ? $this->short : strip_tags($this->text), $settings['shortMaxLength']);
+            $this->short = StringHelper::truncate(NewsModule::setting('enableShort') ? $this->short : strip_tags($this->text), NewsModule::setting('shortMaxLength'));
 
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            if(!$insert && $this->image != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
+                @unlink(Upload::getAbsolutePath($this->oldAttributes['image_file']));
             }
             return true;
         } else {

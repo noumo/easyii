@@ -184,6 +184,13 @@ class InstallController extends \yii\web\Controller
             'title' => Yii::t('easyii/install', 'Frontend toolbar position').' ("top" or "bottom")',
             'visibility' => Setting::VISIBLE_ROOT
         ])->execute();
+
+        $db->createCommand()->insert(Setting::tableName(), [
+            'name' => 'image_max_width',
+            'value' => 'top',
+            'title' => Yii::t('easyii/install', 'Max image width on upload which will not resize'),
+            'visibility' => Setting::VISIBLE_ALL
+        ])->execute();
     }
 
     private function installModules()
