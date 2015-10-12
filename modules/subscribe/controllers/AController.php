@@ -3,6 +3,7 @@ namespace yii\easyii\modules\subscribe\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\CommonActions;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
@@ -13,6 +14,16 @@ use yii\easyii\modules\subscribe\models\History;
 
 class AController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => CommonActions::className(),
+                'model' => Subscriber::className(),
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
@@ -79,12 +90,7 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Subscriber::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/subscribe', 'Subscriber deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/subscribe', 'Subscriber deleted'));
     }
 
     private function send($model)

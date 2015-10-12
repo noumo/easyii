@@ -3,8 +3,8 @@ namespace yii\easyii\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
-use yii\easyii\helpers\Upload;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\CatalogModule;
 
@@ -52,7 +52,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function behaviors()
     {
-        return [
+        $behaviors = [
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
@@ -61,6 +61,10 @@ class Item extends \yii\easyii\components\ActiveRecord
                 'immutable' => CatalogModule::setting('itemSlugImmutable')
             ]
         ];
+        if(CatalogModule::setting('itemThumb')){
+            $behaviors['imageFileBehavior'] = ImageFile::className();
+        }
+        return $behaviors;
     }
 
     public function beforeSave($insert)
@@ -69,13 +73,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
                 $this->data = new \stdClass();
             }
-
             $this->data = json_encode($this->data);
-
-            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
-                Upload::delete($this->oldAttributes['image_file']);
-            }
-
             return true;
         } else {
             return false;
@@ -124,21 +122,12 @@ class Item extends \yii\easyii\components\ActiveRecord
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
     }
 
-    public function getImage()
-    {
-        return Upload::getLink($this->image_file);
-    }
-
     public function afterDelete()
     {
         parent::afterDelete();
 
         foreach($this->getPhotos()->all() as $photo){
             $photo->delete();
-        }
-
-        if($this->image_file) {
-            Upload::delete($this->image_file);
         }
 
         ItemData::deleteAll(['item_id' => $this->primaryKey]);

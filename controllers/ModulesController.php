@@ -3,13 +3,12 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\CommonActions;
 use yii\easyii\models\CopyModuleForm;
 use yii\helpers\FileHelper;
 use yii\widgets\ActiveForm;
 
 use yii\easyii\models\Module;
-use yii\easyii\behaviors\SortableController;
-use yii\easyii\behaviors\StatusController;
 
 class ModulesController extends \yii\easyii\components\Controller
 {
@@ -19,13 +18,9 @@ class ModulesController extends \yii\easyii\components\Controller
     {
         return [
             [
-                'class' => SortableController::className(),
-                'model' => Module::className()
+                'class' => CommonActions::className(),
+                'model' => Module::className(),
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => Module::className()
-            ]
         ];
     }
 
@@ -263,22 +258,17 @@ class ModulesController extends \yii\easyii\components\Controller
 
     public function actionDelete($id)
     {
-        if(($model = Module::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii', 'Module deleted'));
+        return $this->deleteModel($id, Yii::t('easyii', 'Module deleted'));
     }
 
     public function actionUp($id)
     {
-        return $this->move($id, 'up');
+        return $this->moveByNum($id, 'up');
     }
 
     public function actionDown($id)
     {
-        return $this->move($id, 'down');
+        return $this->moveByNum($id, 'down');
     }
 
     public function actionOn($id)

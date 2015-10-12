@@ -4,6 +4,7 @@ namespace yii\easyii\modules\feedback\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 
+use yii\easyii\behaviors\CommonActions;
 use yii\easyii\components\Controller;
 use yii\easyii\models\Setting;
 use yii\easyii\modules\feedback\models\Feedback;
@@ -12,6 +13,16 @@ class AController extends Controller
 {
     public $new = 0;
     public $noAnswer = 0;
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => CommonActions::className(),
+                'model' => Feedback::className(),
+            ],
+        ];
+    }
 
     public function init()
     {
@@ -124,11 +135,6 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Feedback::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/feedback', 'Feedback deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/feedback', 'Feedback deleted'));
     }
 }

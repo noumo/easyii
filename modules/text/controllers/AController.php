@@ -3,6 +3,7 @@ namespace yii\easyii\modules\text\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\CommonActions;
 use yii\widgets\ActiveForm;
 
 use yii\easyii\components\Controller;
@@ -11,6 +12,16 @@ use yii\easyii\modules\text\models\Text;
 class AController extends Controller
 {
     public $rootActions = ['create', 'delete'];
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => CommonActions::className(),
+                'model' => Text::className(),
+            ],
+        ];
+    }
 
     public function actionIndex()
     {
@@ -85,11 +96,6 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Text::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/text', 'Text deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/text', 'Text deleted'));
     }
 }

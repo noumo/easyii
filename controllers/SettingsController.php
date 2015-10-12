@@ -3,12 +3,23 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\CommonActions;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\Setting;
 
 class SettingsController extends \yii\easyii\components\Controller
 {
     public $rootActions = ['create', 'delete'];
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => CommonActions::className(),
+                'model' => Setting::className(),
+            ],
+        ];
+    }
 
     public function actionIndex()
     {
@@ -82,11 +93,6 @@ class SettingsController extends \yii\easyii\components\Controller
 
     public function actionDelete($id)
     {
-        if(($model = Setting::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii', 'Setting deleted'));
+        return $this->deleteModel($id, Yii::t('easyii', 'Setting deleted'));
     }
 }

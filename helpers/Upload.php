@@ -41,6 +41,9 @@ class Upload
 
     static function getLink($fileName)
     {
+        if(!$fileName){
+            return '';
+        }
         return '/' . implode('/', array_filter([
             Yii::getAlias('@web'),
             basename(Yii::getAlias('@uploads')),
@@ -51,7 +54,7 @@ class Upload
     static function getAbsolutePath($fileName)
     {
         if(!$fileName){
-            return null;
+            return '';
         }
         if(strpos($fileName, Yii::getAlias('@uploads')) !== false ){
             return $fileName;
@@ -62,7 +65,12 @@ class Upload
 
     static function delete($fileName)
     {
-        @unlink(self::getAbsolutePath($fileName));
+        if($fileName) {
+            $filePath = self::getAbsolutePath($fileName);
+            if(is_file($filePath)){
+                @unlink($filePath);
+            }
+        }
     }
 
     static function getFileName(UploadedFile $fileInstance, $namePostfix = true)

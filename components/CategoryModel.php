@@ -4,10 +4,10 @@ namespace yii\easyii\components;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
+use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\easyii\behaviors\Taggable;
-use yii\easyii\helpers\Upload;
 use yii\easyii\models\SeoText;
 
 /**
@@ -33,10 +33,10 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
             ['image_file', 'image'],
-            ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+            ['slug', 'match', 'pattern' => static::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['tagNames', 'safe'],
-            [['status', 'depth', 'tree', 'lgt', 'rgt'], 'integer'],
+            [['status', 'depth', 'tree', 'lft', 'rgt'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON]
         ];
     }
@@ -54,7 +54,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         $moduleSettings = Yii::$app->getModule('admin')->activeModules[Module::getModuleName(static::className())]->settings;
-        return [
+        $behaviors = [
             'cacheflush' => [
                 'class' => CacheFlush::className(),
                 'key' => [static::tableName().'_tree', static::tableName().'_flat']
@@ -72,32 +72,12 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 'treeAttribute' => 'tree'
             ]
         ];
-    }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
-                Upload::delete($this->oldAttributes['image_file']);
-            }
-            return true;
-        } else {
-            return false;
+        if($moduleSettings['categoryThumb']){
+            $behaviors['imageFileBehavior'] = ImageFile::className();
         }
-    }
 
-    public function afterDelete()
-    {
-        parent::afterDelete();
-
-        if($this->image_file) {
-            Upload::delete($this->image_file);
-        }
-    }
-
-    public function getImage()
-    {
-        return Upload::getLink($this->image_file);
+        return $behaviors;
     }
 
     /**

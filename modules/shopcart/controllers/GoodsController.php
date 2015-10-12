@@ -3,18 +3,23 @@ namespace yii\easyii\modules\shopcart\controllers;
 
 use Yii;
 
+use yii\easyii\behaviors\CommonActions;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\shopcart\models\Good;
 
 class GoodsController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => CommonActions::className(),
+                'model' => Good::className(),
+            ],
+        ];
+    }
     public function actionDelete($id)
     {
-        if(($model = Good::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/shopcart', 'Order deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/shopcart', 'Item deleted'));
     }
 }

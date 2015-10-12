@@ -2,16 +2,14 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\easyii\behaviors\CommonActions;
 use yii\easyii\components\Module;
 use yii\easyii\helpers\Upload;
-use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii\web\Response;
-
 use yii\easyii\helpers\Image;
 use yii\easyii\components\Controller;
 use yii\easyii\models\Photo;
-use yii\easyii\behaviors\SortableController;
 
 class PhotosController extends Controller
 {
@@ -25,7 +23,7 @@ class PhotosController extends Controller
                 ],
             ],
             [
-                'class' => SortableController::className(),
+                'class' => CommonActions::className(),
                 'model' => Photo::className(),
             ]
         ];
@@ -141,21 +139,16 @@ class PhotosController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Photo::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii', 'Photo deleted'));
+        return $this->deleteModel($id, Yii::t('easyii', 'Photo deleted'));
     }
 
     public function actionUp($id, $class, $item_id)
     {
-        return $this->move($id, 'up', ['class' => $class, 'item_id' => $item_id]);
+        return $this->moveByNum($id, 'up', ['class' => $class, 'item_id' => $item_id]);
     }
 
     public function actionDown($id, $class, $item_id)
     {
-        return $this->move($id, 'down', ['class' => $class, 'item_id' => $item_id]);
+        return $this->moveByNum($id, 'down', ['class' => $class, 'item_id' => $item_id]);
     }
 }

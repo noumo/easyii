@@ -4,7 +4,7 @@ namespace yii\easyii\modules\guestbook\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 
-use yii\easyii\behaviors\StatusController;
+use yii\easyii\behaviors\CommonActions;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\guestbook\models\Guestbook;
 
@@ -17,7 +17,7 @@ class AController extends Controller
     {
         return [
             [
-                'class' => StatusController::className(),
+                'class' => CommonActions::className(),
                 'model' => Guestbook::className()
             ]
         ];
@@ -90,12 +90,7 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Guestbook::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/guestbook', 'Entry deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/guestbook', 'Entry deleted'));
     }
 
     public function actionViewall()

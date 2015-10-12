@@ -3,13 +3,13 @@ namespace yii\easyii\modules\file\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\CommonActions;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 
 use yii\easyii\components\Controller;
 use yii\easyii\modules\file\models\File;
 use yii\easyii\helpers\Upload;
-use yii\easyii\behaviors\SortableController;
 
 class AController extends Controller
 {
@@ -17,7 +17,7 @@ class AController extends Controller
     {
         return [
             [
-                'class' => SortableController::className(),
+                'class' => CommonActions::className(),
                 'model' => File::className()
             ],
         ];
@@ -127,21 +127,16 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = File::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/file', 'File deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/file', 'File deleted'));
     }
 
     public function actionUp($id)
     {
-        return $this->move($id, 'up');
+        return $this->moveByNum($id, 'up');
     }
 
     public function actionDown($id)
     {
-        return $this->move($id, 'down');
+        return $this->moveByNum($id, 'down');
     }
 }

@@ -3,16 +3,10 @@ namespace yii\easyii\modules\news\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\SortableDateController;
-use yii\easyii\helpers\Upload;
-use yii\easyii\modules\news\NewsModule;
+use yii\easyii\behaviors\CommonActions;
 use yii\widgets\ActiveForm;
-use yii\web\UploadedFile;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\news\models\News;
-use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\StatusController;
 
 class AController extends Controller
 {
@@ -20,19 +14,14 @@ class AController extends Controller
     {
         return [
             [
-                'class' => SortableDateController::className(),
+                'class' => CommonActions::className(),
                 'model' => News::className(),
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => News::className()
-            ]
         ];
     }
 
     public function actionIndex()
     {
-        var_dump(NewsModule::setting('enableThumb'));
         $data = new ActiveDataProvider([
             'query' => News::find()->sortDate(),
         ]);
@@ -53,15 +42,6 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['enableThumb']){
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if($model->image_file && $model->validate(['image_file'])){
-                        $model->image_file = Image::upload($model->image_file, 'news');
-                    }
-                    else{
-                        $model->image_file = '';
-                    }
-                }
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/news', 'News created'));
                     return $this->redirect(['/admin/'.$this->module->id]);
@@ -94,16 +74,6 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['enableThumb']){
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if($model->image_file && $model->validate(['image_file'])){
-                        $model->image_file = Image::upload($model->image_file, 'news');
-                    }
-                    else{
-                        $model->image_file = $model->oldAttributes['image_file'];
-                    }
-                }
-
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/news', 'News updated'));
                 }
@@ -133,41 +103,22 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = News::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/news', 'News deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/news', 'News deleted'));
     }
 
     public function actionClearImage($id)
     {
-        $model = News::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        else{
-            $model->image_file = '';
-            if($model->update()){
-                Upload::delete($model->image_file);
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
+        return $this->clearImage($id);
     }
 
     public function actionUp($id)
     {
-        return $this->move($id, 'up');
+        return $this->moveByTime($id, 'up');
     }
 
     public function actionDown($id)
     {
-        return $this->move($id, 'down');
+        return $this->moveByTime($id, 'down');
     }
 
     public function actionOn($id)

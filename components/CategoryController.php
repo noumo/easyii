@@ -2,10 +2,9 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\easyii\behaviors\CommonActions;
 use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
-use yii\web\UploadedFile;
-use yii\easyii\helpers\Image;
 
 /**
  * Category controller component
@@ -21,6 +20,16 @@ class CategoryController extends Controller
 
     /** @var string  */
     public $viewRoute = '/items';
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => CommonActions::className(),
+                'model' => $this->categoryClass,
+            ],
+        ];
+    }
 
     /**
      * Categories list
@@ -53,15 +62,6 @@ class CategoryController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if($model->image_file && $model->validate(['image_file'])){
-                        $model->image_file = Image::upload($model->image_file, $this->moduleName);
-                    } else {
-                        $model->image_file = '';
-                    }
-                }
-
                 $model->status = $class::STATUS_ON;
 
                 $parent = (int)Yii::$app->request->post('parent', null);
@@ -112,14 +112,6 @@ class CategoryController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if($model->image_file && $model->validate(['image_file'])){
-                        $model->image_file = Image::upload($model->image_file, $this->moduleName);
-                    }else{
-                        $model->image_file = $model->oldAttributes['image_file'];
-                    }
-                }
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Category updated'));
                 }
@@ -144,21 +136,7 @@ class CategoryController extends Controller
      */
     public function actionClearImage($id)
     {
-        $class = $this->categoryClass;
-        $model = $class::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image_file){
-            $model->image_file = '';
-            if($model->update()){
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
+        return $this->clearImage($id);
     }
 
     /**

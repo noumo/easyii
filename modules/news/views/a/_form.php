@@ -1,4 +1,5 @@
 <?php
+use vova07\imperavi\Widget;
 use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\helpers\Image;
 use yii\easyii\widgets\TagsInput;
@@ -25,12 +26,15 @@ $module = $this->context->module->id;
 <?php if($this->context->module->settings['enableShort']) : ?>
     <?= $form->field($model, 'short')->textarea() ?>
 <?php endif; ?>
-<?= $form->field($model, 'text')->widget(Redactor::className(),[
-    'options' => [
+
+<?= $form->field($model, 'content')->widget(Widget::className(), [
+    'settings' => [
+        'lang' => 'ru',
         'minHeight' => 400,
-        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
-        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'news']),
-        'plugins' => ['fullscreen']
+        'plugins' => [
+            'clips',
+            'fullscreen'
+        ]
     ]
 ]) ?>
 

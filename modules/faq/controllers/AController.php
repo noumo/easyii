@@ -3,12 +3,10 @@ namespace yii\easyii\modules\faq\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\CommonActions;
 use yii\widgets\ActiveForm;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\faq\models\Faq;
-use yii\easyii\behaviors\SortableController;
-use yii\easyii\behaviors\StatusController;
 
 class AController extends Controller
 {
@@ -16,13 +14,9 @@ class AController extends Controller
     {
         return [
             [
-                'class' => SortableController::className(),
-                'model' => Faq::className()
+                'class' => CommonActions::className(),
+                'model' => Faq::className(),
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => Faq::className()
-            ]
         ];
     }
 
@@ -98,22 +92,17 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Faq::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/faq', 'Entry deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/faq', 'Entry deleted'));
     }
 
     public function actionUp($id)
     {
-        return $this->move($id, 'up');
+        return $this->moveByNum($id, 'up');
     }
 
     public function actionDown($id)
     {
-        return $this->move($id, 'down');
+        return $this->moveByNum($id, 'down');
     }
 
     public function actionOn($id)

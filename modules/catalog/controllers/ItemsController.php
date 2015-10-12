@@ -2,17 +2,14 @@
 namespace yii\easyii\modules\catalog\controllers;
 
 use Yii;
-use yii\easyii\behaviors\StatusController;
+use yii\easyii\behaviors\CommonActions;
 use yii\easyii\helpers\Upload;
 use yii\validators\FileValidator;
 use yii\web\UploadedFile;
 use yii\helpers\Html;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
-use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\SortableDateController;
 use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
@@ -23,13 +20,9 @@ class ItemsController extends Controller
     {
         return [
             [
-                'class' => SortableDateController::className(),
+                'class' => CommonActions::className(),
                 'model' => Item::className(),
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => Item::className()
-            ]
         ];
     }
 
@@ -62,14 +55,6 @@ class ItemsController extends Controller
                 $model->category_id = $category->primaryKey;
                 $this->parseData($model);
 
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if ($model->image_file && $model->validate(['image_file'])) {
-                        $model->image_file = Image::upload($model->image_file, 'catalog');
-                    } else {
-                        $model->image_file = '';
-                    }
-                }
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit/', 'id' => $model->primaryKey]);
@@ -102,15 +87,6 @@ class ItemsController extends Controller
             else {
                 $this->parseData($model);
 
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if ($model->image_file && $model->validate(['image_file'])) {
-                        $model->image_file = Image::upload($model->image_file, 'catalog');
-                    } else {
-                        $model->image_file = $model->oldAttributes['image_file'];
-                    }
-                }
-
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
@@ -141,31 +117,12 @@ class ItemsController extends Controller
 
     public function actionClearImage($id)
     {
-        $model = Item::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image_file){
-            $model->image_file = '';
-            if($model->update()){
-                Upload::delete($model->image_file);
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
+        return $this->clearImage($id);
     }
 
     public function actionDelete($id)
     {
-        if(($model = Item::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/catalog', 'Item deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/catalog', 'Item deleted'));
     }
 
     public function actionDeleteDataFile($file)
@@ -185,12 +142,12 @@ class ItemsController extends Controller
 
     public function actionUp($id, $category_id)
     {
-        return $this->move($id, 'up', ['category_id' => $category_id]);
+        return $this->moveByTime($id, 'up', ['category_id' => $category_id]);
     }
 
     public function actionDown($id, $category_id)
     {
-        return $this->move($id, 'down', ['category_id' => $category_id]);
+        return $this->moveByTime($id, 'down', ['category_id' => $category_id]);
     }
 
     public function actionOn($id)

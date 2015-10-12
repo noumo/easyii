@@ -3,6 +3,7 @@ namespace yii\easyii\modules\page\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\CommonActions;
 use yii\widgets\ActiveForm;
 
 use yii\easyii\components\Controller;
@@ -11,6 +12,16 @@ use yii\easyii\modules\page\models\Page;
 class AController extends Controller
 {
     public $rootActions = ['create', 'delete'];
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => CommonActions::className(),
+                'model' => Page::className(),
+            ],
+        ];
+    }
 
     public function actionIndex()
     {
@@ -84,11 +95,6 @@ class AController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Page::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/page', 'Page deleted'));
+        return $this->deleteModel($id, Yii::t('easyii/page', 'Page deleted'));
     }
 }

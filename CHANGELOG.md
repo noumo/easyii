@@ -1,5 +1,17 @@
 #Changelog
 
+###0.8.1
+* File type in catalog fields added
+* Tags added to FAQ
+* Tags added to gallery albums
+* Added immutable setting to all sluggable behaviors
+
+//todo
+insert new module settings
+insert system setting max_image_width
+rename all image to image_file
+
+
 ###0.8.0
 * Articles module added
 * FAQ module added

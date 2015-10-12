@@ -3,8 +3,8 @@ namespace yii\easyii\modules\carousel\models;
 
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
+use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SortableModel;
-use yii\easyii\helpers\Upload;
 
 class Carousel extends \yii\easyii\components\ActiveRecord
 {
@@ -20,7 +20,8 @@ class Carousel extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            ['image', 'image'],
+            ['image_file', 'required', 'on' => 'create'],
+            ['image_file', 'image'],
             [['title', 'text', 'link'], 'trim'],
             ['status', 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON],
@@ -30,7 +31,7 @@ class Carousel extends \yii\easyii\components\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'image' => Yii::t('easyii', 'Image'),
+            'image_file' => Yii::t('easyii', 'Image'),
             'link' =>  Yii::t('easyii', 'Link'),
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
@@ -41,31 +42,8 @@ class Carousel extends \yii\easyii\components\ActiveRecord
     {
         return [
             CacheFlush::className(),
-            SortableModel::className()
+            SortableModel::className(),
+            ImageFile::className()
         ];
-    }
-
-    public function getImage()
-    {
-        return Upload::getLink($this->image_file);
-    }
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
-                Upload::delete($this->oldAttributes['image_file']);
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function afterDelete()
-    {
-        parent::afterDelete();
-
-        Upload::delete($this->image_file);
     }
 }
