@@ -12,10 +12,13 @@ use yii\helpers\Url;
 
 class Upload
 {
-    public static $UPLOADS_DIR = 'uploads';
+    static $RESTRICTED_EXTENSIONS = ['php', 'phtml', 'php5', 'htm', 'html', 'js', 'jsp', 'sh', 'exe', 'bat', 'com'];
 
     public static function file(UploadedFile $fileInstance, $dir = '', $namePostfix = true)
     {
+        if(in_array($fileInstance->extension, self::$RESTRICTED_EXTENSIONS)){
+            return false;
+        }
         $fileName = Upload::getUploadPath($dir) . DIRECTORY_SEPARATOR . Upload::getFileName($fileInstance, $namePostfix);
 
         if(!$fileInstance->saveAs($fileName)){

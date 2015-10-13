@@ -1,5 +1,4 @@
 <?php
-use yii\easyii\models\Setting;
 use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\helpers\Image;
 use yii\easyii\widgets\TagsInput;
@@ -26,18 +25,7 @@ $module = $this->context->module->id;
     <?= $form->field($model, 'short')->textarea() ?>
 <?php endif; ?>
 
-<?= $form->field($model, 'text')->widget(\vova07\imperavi\Widget::className(), [
-    'settings' => [
-        'lang' => \yii\easyii\helpers\Data::getLocale(),
-        'minHeight' => 400,
-        'imageUpload' => Url::to(['/admin/redactor/image-upload']),
-        'fileUpload' => Url::to(['/admin/redactor/file-upload']),
-        'imageManagerJson' => Url::to(['/admin/redactor/images-get']),
-        'fileManagerJson' => Url::to(['/admin/redactor/files-get']),
-        'plugins' => Setting::getAsArray('redactor_plugins')
-    ]
-]) ?>
-
+<?= $form->field($model, 'text')->widget(\yii\easyii\widgets\Redactor::className()) ?>
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
 <?php if($this->context->module->settings['enableTags']) : ?>

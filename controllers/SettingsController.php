@@ -17,7 +17,7 @@ class SettingsController extends \yii\easyii\components\Controller
             'delete' => [
                 'class' => DeleteAction::className(),
                 'model' => Setting::className(),
-                'successMessage' => Yii::t('easyii/text', 'Setting deleted')
+                'successMessage' => Yii::t('easyii', 'Setting deleted')
             ]
         ];
     }

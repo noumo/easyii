@@ -1,12 +1,12 @@
 <?php
-namespace yii\easyii\modules\catalog\models;
+namespace yii\easyii\modules\entity\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\catalog\CatalogModule;
+use yii\easyii\modules\entity\EntityModule;
 
 class Item extends \yii\easyii\components\ActiveRecord
 {
@@ -15,7 +15,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public static function tableName()
     {
-        return 'easyii_catalog_items';
+        return 'easyii_entity_items';
     }
 
     public function rules()
@@ -42,29 +42,12 @@ class Item extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'image' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
-            'available' => Yii::t('easyii/catalog', 'Available'),
-            'price' => Yii::t('easyii/catalog', 'Price'),
-            'discount' => Yii::t('easyii/catalog', 'Discount'),
+            'available' => Yii::t('easyii/entity', 'Available'),
+            'price' => Yii::t('easyii/entity', 'Price'),
+            'discount' => Yii::t('easyii/entity', 'Discount'),
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
-    }
-
-    public function behaviors()
-    {
-        $behaviors = [
-            'seoBehavior' => SeoBehavior::className(),
-            'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true,
-                'immutable' => CatalogModule::setting('itemSlugImmutable')
-            ]
-        ];
-        if(CatalogModule::setting('itemThumb')){
-            $behaviors['imageFileBehavior'] = ImageFile::className();
-        }
-        return $behaviors;
     }
 
     public function beforeSave($insert)
@@ -82,28 +65,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function afterSave($insert, $attributes){
         parent::afterSave($insert, $attributes);
-
         $this->parseData();
-
-        ItemData::deleteAll(['item_id' => $this->primaryKey]);
-
-        foreach($this->data as $name => $value){
-            if(!is_array($value)){
-                $this->insertDataValue($name, $value);
-            } else {
-                foreach($value as $arrayItem){
-                    $this->insertDataValue($name, $arrayItem);
-                }
-            }
-        }
-    }
-
-    private function insertDataValue($name, $value){
-        Yii::$app->db->createCommand()->insert(ItemData::tableName(), [
-            'item_id' => $this->primaryKey,
-            'name' => $name,
-            'value' => $value
-        ])->execute();
     }
 
     public function afterFind()
@@ -129,8 +91,6 @@ class Item extends \yii\easyii\components\ActiveRecord
         foreach($this->getPhotos()->all() as $photo){
             $photo->delete();
         }
-
-        ItemData::deleteAll(['item_id' => $this->primaryKey]);
     }
 
     private function parseData(){

@@ -1,5 +1,5 @@
 <?php
-namespace yii\easyii\modules\catalog\controllers;
+namespace yii\easyii\modules\entity\controllers;
 
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
@@ -15,8 +15,8 @@ use yii\validators\FileValidator;
 use yii\web\UploadedFile;
 use yii\helpers\Html;
 use yii\easyii\components\Controller;
-use yii\easyii\modules\catalog\models\Category;
-use yii\easyii\modules\catalog\models\Item;
+use yii\easyii\modules\entity\models\Category;
+use yii\easyii\modules\entity\models\Item;
 use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
@@ -28,7 +28,7 @@ class ItemsController extends Controller
             'delete' => [
                 'class' => DeleteAction::className(),
                 'model' => $className,
-                'successMessage' => Yii::t('easyii/catalog', 'Item deleted')
+                'successMessage' => Yii::t('easyii/entity', 'Item deleted')
             ],
             'clear-image' => [
                 'class' => ClearImageAction::className(),
@@ -87,7 +87,7 @@ class ItemsController extends Controller
                 $this->parseData($model);
 
                 if ($model->save()) {
-                    $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
+                    $this->flash('success', Yii::t('easyii/entity', 'Item created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit/', 'id' => $model->primaryKey]);
                 } else {
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -119,7 +119,7 @@ class ItemsController extends Controller
                 $this->parseData($model);
 
                 if ($model->save()) {
-                    $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
+                    $this->flash('success', Yii::t('easyii/entity', 'Item updated'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
                 } else {
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
@@ -185,7 +185,7 @@ class ItemsController extends Controller
                 $result .= '<div class="checkbox"><label>'. Html::checkbox("Data[{$field->name}]", $value, ['uncheck' => 0]) .' '. $field->title .'</label></div>';
             }
             elseif ($field->type === 'select') {
-                $options = ['' => Yii::t('easyii/catalog', 'Select')];
+                $options = ['' => Yii::t('easyii/entity', 'Select')];
                 foreach($field->options as $option){
                     $options[$option] = $option;
                 }
@@ -214,11 +214,6 @@ class ItemsController extends Controller
                 }
                 $result .= '</p>' . Html::fileInput("Data[{$field->name}]"). '</div>';
             }
-            elseif ($field->type === 'date') {
-                $result .= '<div class="form-group"><label>'. $field->title .'</label>';
-
-                $result .= '</div>';
-            }
         }
         return $result;
     }
@@ -233,7 +228,7 @@ class ItemsController extends Controller
                 $field = $model->category->getFieldByName($fieldName);
                 $validator = new FileValidator(['extensions' => $field->options ? $field->options : null]);
                 $uploadInstance = UploadedFile::getInstanceByName('Data['.$fieldName.']');
-                if($uploadInstance && $validator->validate($uploadInstance) && ($result = Upload::file($uploadInstance, 'catalog', false))) {
+                if($uploadInstance && $validator->validate($uploadInstance) && ($result = Upload::file($uploadInstance, 'entity', false))) {
                     if(!empty($model->data->{$fieldName})){
                         Upload::delete($model->data->{$fieldName});
                     }

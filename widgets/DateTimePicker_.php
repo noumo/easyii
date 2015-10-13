@@ -2,23 +2,17 @@
 namespace yii\easyii\widgets;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\base\Model;
 use yii\easyii\assets\DateTimePickerAsset;
 use yii\easyii\helpers\Data;
+use yii\widgets\InputWidget;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\AssetBundle;
 
-class DateTimePicker extends \yii\base\Widget
+class DateTimePicker extends InputWidget
 {
-    public $model;
-    public $attribute;
-    public $options = [];
-    public $name;
-    public $value;
     public $widgetId;
-    public $inputId;
+    public $options = [];
 
     private $_assetBundle;
     private $_defaultOptions = [
@@ -27,18 +21,9 @@ class DateTimePicker extends \yii\base\Widget
 
     public function init()
     {
-        if ($this->name === null && !$this->hasModel()) {
-            throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");
-        }
-        if (empty($this->options['locale'])) {
-            $this->options['locale'] = substr(Yii::$app->language, 0, 2);
-        }
-
         $this->options = array_merge($this->_defaultOptions, $this->options);
 
         $this->widgetId = 'dtp-'.Html::getInputId($this->model, $this->attribute);
-        $this->inputId = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->getId();
-
         $this->registerAssetBundle();
         $this->registerScript();
     }
@@ -48,7 +33,7 @@ class DateTimePicker extends \yii\base\Widget
         echo '
             <div class="input-group date" id="'.$this->widgetId.'">
                 '.Html::textInput('', '', ['class' => 'form-control']).'
-                '.($this->hasModel() ? Html::activeHiddenInput($this->model, $this->attribute, ['id' => $this->inputId]) : Html::hiddenInput($this->name, $this->value, ['id' => $this->inputId])).'
+                '.Html::activeHiddenInput($this->model, $this->attribute).'
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             </div>
         ';
@@ -67,15 +52,14 @@ class DateTimePicker extends \yii\base\Widget
     
                 dtpContainer.datetimepicker('.$clientOptions.')
                 .on("dp.change", function (e) {
-                    $("#'.$this->inputId.'").val(e.date.unix());
-                    console.log("change", e.date.unix());
+                    $("#'.Html::getInputId($this->model, $this->attribute).'").val(e.date.unix());
                 })
                 .data("DateTimePicker")
                 .date(moment('.($time * 1000).'));
     
-                //$("[type=text]", dtpContainer).focus(function(e){
-                //    dtpContainer.data("DateTimePicker").show();
-                //});
+                $("[type=text]", dtpContainer).focus(function(e){
+                    dtpContainer.data("DateTimePicker").show();
+                });
             })();
         ');
     }
@@ -93,11 +77,4 @@ class DateTimePicker extends \yii\base\Widget
         return $this->_assetBundle;
     }
 
-    /**
-     * @return boolean whether this widget is associated with a data model.
-     */
-    protected function hasModel()
-    {
-        return $this->model instanceof Model && $this->attribute !== null;
-    }
 }

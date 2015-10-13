@@ -1,5 +1,5 @@
 <?php
-namespace yii\easyii\modules\catalog\models;
+namespace yii\easyii\modules\entity\models;
 
 class Category extends \yii\easyii\components\CategoryModel
 {
@@ -15,7 +15,7 @@ class Category extends \yii\easyii\components\CategoryModel
 
     public static function tableName()
     {
-        return 'easyii_catalog_categories';
+        return 'easyii_entity_categories';
     }
 
     public function beforeSave($insert)

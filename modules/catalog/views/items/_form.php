@@ -1,6 +1,5 @@
 <?php
 use yii\easyii\helpers\Image;
-use yii\easyii\models\Setting;
 use yii\easyii\widgets\DateTimePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -24,17 +23,7 @@ $module = $this->context->module->id;
 <?php endif; ?>
 <?= $dataForm ?>
 <?php if($settings['itemDescription']) : ?>
-    <?= $form->field($model, 'description')->widget(\vova07\imperavi\Widget::className(), [
-        'settings' => [
-            'lang' => \yii\easyii\helpers\Data::getLocale(),
-            'minHeight' => 400,
-            'imageUpload' => Url::to(['/admin/redactor/image-upload']),
-            'fileUpload' => Url::to(['/admin/redactor/file-upload']),
-            'imageManagerJson' => Url::to(['/admin/redactor/images-get']),
-            'fileManagerJson' => Url::to(['/admin/redactor/files-get']),
-            'plugins' => Setting::getAsArray('redactor_plugins')
-        ]
-    ]) ?>
+    <?= $form->field($model, 'description')->widget(\yii\easyii\widgets\Redactor::className()) ?>
 <?php endif; ?>
 
 <?= $form->field($model, 'available') ?>

@@ -272,6 +272,7 @@ class ModulesController extends \yii\easyii\components\Controller
             }
         }
 
+
         return $this->render('copy', [
             'model' => $module,
             'formModel' => $formModel
