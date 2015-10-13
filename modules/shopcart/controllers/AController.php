@@ -3,8 +3,7 @@ namespace yii\easyii\modules\shopcart\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\shopcart\models\Good;
 use yii\easyii\modules\shopcart\models\Order;
@@ -15,13 +14,14 @@ class AController extends Controller
     public $processed = 0;
     public $sent = 0;
 
-    public function behaviors()
+    public function actions()
     {
         return [
-            [
-                'class' => CommonActions::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
                 'model' => Order::className(),
-            ],
+                'successMessage' => Yii::t('easyii/shopcart', 'Order deleted')
+            ]
         ];
     }
 
@@ -138,10 +138,5 @@ class AController extends Controller
                 'goods' => $goods
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/shopcart', 'Order deleted'));
     }
 }

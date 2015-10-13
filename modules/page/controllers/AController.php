@@ -3,9 +3,8 @@ namespace yii\easyii\modules\page\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
 use yii\widgets\ActiveForm;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\page\models\Page;
 
@@ -13,13 +12,14 @@ class AController extends Controller
 {
     public $rootActions = ['create', 'delete'];
 
-    public function behaviors()
+    public function actions()
     {
         return [
-            [
-                'class' => CommonActions::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
                 'model' => Page::className(),
-            ],
+                'successMessage' => Yii::t('easyii/page', 'Page deleted')
+            ]
         ];
     }
 
@@ -91,10 +91,5 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/page', 'Page deleted'));
     }
 }

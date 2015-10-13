@@ -3,10 +3,9 @@ namespace yii\easyii\modules\subscribe\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
 use yii\easyii\components\Controller;
 use yii\easyii\models\Setting;
 use yii\easyii\modules\subscribe\models\Subscriber;
@@ -14,13 +13,14 @@ use yii\easyii\modules\subscribe\models\History;
 
 class AController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
         return [
-            [
-                'class' => CommonActions::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
                 'model' => Subscriber::className(),
-            ],
+                'successMessage' => Yii::t('easyii/subscribe', 'Subscriber deleted')
+            ]
         ];
     }
 
@@ -86,11 +86,6 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/subscribe', 'Subscriber deleted'));
     }
 
     private function send($model)

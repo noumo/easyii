@@ -2,24 +2,20 @@
 namespace yii\easyii\modules\shopcart\controllers;
 
 use Yii;
-
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\shopcart\models\Good;
 
 class GoodsController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
         return [
-            [
-                'class' => CommonActions::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
                 'model' => Good::className(),
-            ],
+                'successMessage' => Yii::t('easyii/shopcart', 'Item deleted')
+            ]
         ];
-    }
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/shopcart', 'Item deleted'));
     }
 }

@@ -2,7 +2,8 @@
 namespace yii\easyii\components;
 
 use Yii;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\ClearImageAction;
 use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
 
@@ -21,12 +22,23 @@ class CategoryController extends Controller
     /** @var string  */
     public $viewRoute = '/items';
 
-    public function behaviors()
+    public function actions()
     {
+        $className = $this->categoryClass;
         return [
-            [
-                'class' => CommonActions::className(),
-                'model' => $this->categoryClass,
+            'clear-image' => [
+                'class' => ClearImageAction::className(),
+                'model' => $className
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => $className::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => $className::STATUS_OFF
             ],
         ];
     }
@@ -129,17 +141,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove category image
-     *
-     * @param $id
-     * @return \yii\web\Response
-     */
-    public function actionClearImage($id)
-    {
-        return $this->clearImage($id);
-    }
-
-    /**
      * Delete the category by ID
      *
      * @param $id
@@ -180,30 +181,6 @@ class CategoryController extends Controller
     public function actionDown($id)
     {
         return $this->move($id, 'down');
-    }
-
-    /**
-     * Activate category action
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function actionOn($id)
-    {
-        $class = $this->categoryClass;
-        return $this->changeStatus($id, $class::STATUS_ON);
-    }
-
-    /**
-     * Activate category action
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function actionOff($id)
-    {
-        $class = $this->categoryClass;
-        return $this->changeStatus($id, $class::STATUS_OFF);
     }
 
     /**

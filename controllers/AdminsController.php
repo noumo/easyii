@@ -3,7 +3,7 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\Admin;
 
@@ -11,13 +11,14 @@ class AdminsController extends \yii\easyii\components\Controller
 {
     public $rootActions = 'all';
 
-    public function behaviors()
+    public function actions()
     {
         return [
-            [
-                'class' => CommonActions::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
                 'model' => Admin::className(),
-            ],
+                'successMessage' => Yii::t('easyii', 'Admin deleted')
+            ]
         ];
     }
 
@@ -90,10 +91,5 @@ class AdminsController extends \yii\easyii\components\Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii', 'Admin deleted'));
     }
 }

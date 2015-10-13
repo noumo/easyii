@@ -3,7 +3,7 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\Setting;
 
@@ -11,13 +11,14 @@ class SettingsController extends \yii\easyii\components\Controller
 {
     public $rootActions = ['create', 'delete'];
 
-    public function behaviors()
+    public function actions()
     {
         return [
-            [
-                'class' => CommonActions::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
                 'model' => Setting::className(),
-            ],
+                'successMessage' => Yii::t('easyii/text', 'Setting deleted')
+            ]
         ];
     }
 
@@ -89,10 +90,5 @@ class SettingsController extends \yii\easyii\components\Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii', 'Setting deleted'));
     }
 }

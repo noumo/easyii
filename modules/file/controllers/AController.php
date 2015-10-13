@@ -3,22 +3,34 @@ namespace yii\easyii\modules\file\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortAction;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\file\models\File;
 use yii\easyii\helpers\Upload;
 
 class AController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
+        $className = File::className();
         return [
-            [
-                'class' => CommonActions::className(),
-                'model' => File::className()
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/file', 'File deleted')
+            ],
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
             ],
         ];
     }
@@ -123,20 +135,5 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/file', 'File deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->moveByNum($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->moveByNum($id, 'down');
     }
 }

@@ -3,19 +3,48 @@ namespace yii\easyii\modules\news\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\ClearImageAction;
+use yii\easyii\actions\SortAction;
+use yii\easyii\actions\DeleteAction;
 use yii\widgets\ActiveForm;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\news\models\News;
 
 class AController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
+        $className = News::className();
         return [
-            [
-                'class' => CommonActions::className(),
-                'model' => News::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/news', 'News deleted')
+            ],
+            'clear-image' => [
+                'class' => ClearImageAction::className(),
+                'model' => $className
+            ],
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => News::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => News::STATUS_OFF
             ],
         ];
     }
@@ -93,41 +122,11 @@ class AController extends Controller
     public function actionPhotos($id)
     {
         if(!($model = News::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
+            return $this->redirect(['/admin/' . $this->module->id]);
         }
 
         return $this->render('photos', [
             'model' => $model,
         ]);
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/news', 'News deleted'));
-    }
-
-    public function actionClearImage($id)
-    {
-        return $this->clearImage($id);
-    }
-
-    public function actionUp($id)
-    {
-        return $this->moveByTime($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->moveByTime($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, News::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, News::STATUS_OFF);
     }
 }

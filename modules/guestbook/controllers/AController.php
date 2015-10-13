@@ -3,8 +3,8 @@ namespace yii\easyii\modules\guestbook\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\guestbook\models\Guestbook;
 
@@ -13,13 +13,25 @@ class AController extends Controller
     public $new = 0;
     public $noAnswer = 0;
 
-    public function behaviors()
+    public function actions()
     {
+        $className = Guestbook::className();
         return [
-            [
-                'class' => CommonActions::className(),
-                'model' => Guestbook::className()
-            ]
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/guestbook', 'Entry deleted')
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Guestbook::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Guestbook::STATUS_OFF
+            ],
         ];
     }
 
@@ -88,11 +100,6 @@ class AController extends Controller
         }
     }
 
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/guestbook', 'Entry deleted'));
-    }
-
     public function actionViewall()
     {
         Guestbook::updateAll(['new' => 0]);
@@ -122,15 +129,5 @@ class AController extends Controller
             }
         }
         return $this->redirect($this->getReturnUrl(['/admin/'.$this->module->id]));
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Guestbook::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Guestbook::STATUS_OFF);
     }
 }

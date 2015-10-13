@@ -3,19 +3,43 @@ namespace yii\easyii\modules\carousel\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortAction;
 use yii\widgets\ActiveForm;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\carousel\models\Carousel;
 
 class AController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
+        $className = Carousel::className();
         return [
-            [
-                'class' => CommonActions::className(),
-                'model' => Carousel::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/carousel', 'Carousel item deleted')
+            ],
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Carousel::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Carousel::STATUS_OFF
             ],
         ];
     }
@@ -88,30 +112,5 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/carousel', 'Carousel item deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->moveByNum($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->moveByNum($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Carousel::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Carousel::STATUS_OFF);
     }
 }

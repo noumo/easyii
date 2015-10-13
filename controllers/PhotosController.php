@@ -2,7 +2,7 @@
 namespace yii\easyii\controllers;
 
 use Yii;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Module;
 use yii\easyii\helpers\Upload;
 use yii\web\UploadedFile;
@@ -22,10 +22,17 @@ class PhotosController extends Controller
                     'application/json' => Response::FORMAT_JSON
                 ],
             ],
-            [
-                'class' => CommonActions::className(),
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'delete' => [
+                'class' => DeleteAction::className(),
                 'model' => Photo::className(),
-            ]
+                'successMessage' => Yii::t('easyii', 'Photo deleted')
+            ],
         ];
     }
 
@@ -137,11 +144,6 @@ class PhotosController extends Controller
         return $this->formatResponse($success);
     }
 
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii', 'Photo deleted'));
-    }
-
     public function actionUp($id, $class, $item_id)
     {
         return $this->moveByNum($id, 'up', ['class' => $class, 'item_id' => $item_id]);
@@ -150,5 +152,47 @@ class PhotosController extends Controller
     public function actionDown($id, $class, $item_id)
     {
         return $this->moveByNum($id, 'down', ['class' => $class, 'item_id' => $item_id]);
+    }
+
+    public function moveByNum($id, $direction, $condition = [])
+    {
+        $modelClass = $this->model;
+        $success = '';
+        if (($model = $modelClass::findOne($id))) {
+            if ($direction === 'up') {
+                $eq = '>';
+                $orderDir = 'ASC';
+            } else {
+                $eq = '<';
+                $orderDir = 'DESC';
+            }
+
+            $query = $modelClass::find()->orderBy('order_num ' . $orderDir)->limit(1);
+
+            $where = [$eq, 'order_num', $model->order_num];
+            if (count($condition)) {
+                $where = ['and', $where];
+                foreach ($condition as $key => $value) {
+                    $where[] = [$key => $value];
+                }
+            }
+            $modelSwap = $query->where($where)->one();
+
+            if (!empty($modelSwap)) {
+                $newOrderNum = $modelSwap->order_num;
+
+                $modelSwap->order_num = $model->order_num;
+                $modelSwap->update();
+
+                $model->order_num = $newOrderNum;
+                $model->update();
+
+                $success = ['swap_id' => $modelSwap->primaryKey];
+            }
+        } else {
+            $this->owner->error = Yii::t('easyii', 'Not found');
+        }
+
+        return $this->owner->formatResponse($success);
     }
 }

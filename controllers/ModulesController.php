@@ -3,23 +3,46 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortAction;
 use yii\easyii\models\CopyModuleForm;
 use yii\helpers\FileHelper;
 use yii\widgets\ActiveForm;
-
 use yii\easyii\models\Module;
 
 class ModulesController extends \yii\easyii\components\Controller
 {
     public $rootActions = 'all';
 
-    public function behaviors()
+    public function actions()
     {
+        $className = Module::className();
         return [
-            [
-                'class' => CommonActions::className(),
-                'model' => Module::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii', 'Module deleted')
+            ],
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Module::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Module::STATUS_OFF
             ],
         ];
     }
@@ -249,35 +272,9 @@ class ModulesController extends \yii\easyii\components\Controller
             }
         }
 
-
         return $this->render('copy', [
             'model' => $module,
             'formModel' => $formModel
         ]);
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii', 'Module deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->moveByNum($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->moveByNum($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Module::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Module::STATUS_OFF);
     }
 }

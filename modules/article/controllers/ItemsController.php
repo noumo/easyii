@@ -2,7 +2,10 @@
 namespace yii\easyii\modules\article\controllers;
 
 use Yii;
-use yii\easyii\behaviors\CommonActions;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\ClearImageAction;
+use yii\easyii\actions\SortAction;
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
@@ -10,12 +13,38 @@ use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
+        $className = Item::className();
         return [
-            [
-                'class' => CommonActions::className(),
-                'model' => Item::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/article', 'Article deleted')
+            ],
+            'clear-image' => [
+                'class' => ClearImageAction::className(),
+                'model' => $className
+            ],
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Item::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Item::STATUS_OFF
             ],
         ];
     }
@@ -101,35 +130,5 @@ class ItemsController extends Controller
         return $this->render('photos', [
             'model' => $model,
         ]);
-    }
-
-    public function actionClearImage($id)
-    {
-        return $this->clearImage($id);
-    }
-
-    public function actionDelete($id)
-    {
-        return $this->deleteModel($id, Yii::t('easyii/article', 'Article deleted'));
-    }
-
-    public function actionUp($id, $category_id)
-    {
-        return $this->moveByTime($id, 'up', ['category_id' => $category_id]);
-    }
-
-    public function actionDown($id, $category_id)
-    {
-        return $this->moveByTime($id, 'down', ['category_id' => $category_id]);
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Item::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Item::STATUS_OFF);
     }
 }
