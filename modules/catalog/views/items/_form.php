@@ -1,10 +1,10 @@
 <?php
 use yii\easyii\helpers\Image;
+use yii\easyii\models\Setting;
 use yii\easyii\widgets\DateTimePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
 
 $settings = $this->context->module->settings;
@@ -24,12 +24,15 @@ $module = $this->context->module->id;
 <?php endif; ?>
 <?= $dataForm ?>
 <?php if($settings['itemDescription']) : ?>
-    <?= $form->field($model, 'description')->widget(Redactor::className(),[
-        'options' => [
+    <?= $form->field($model, 'description')->widget(\vova07\imperavi\Widget::className(), [
+        'settings' => [
+            'lang' => \yii\easyii\helpers\Data::getLocale(),
             'minHeight' => 400,
-            'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'catalog'], true),
-            'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'catalog'], true),
-            'plugins' => ['fullscreen']
+            'imageUpload' => Url::to(['/admin/redactor/image-upload']),
+            'fileUpload' => Url::to(['/admin/redactor/file-upload']),
+            'imageManagerJson' => Url::to(['/admin/redactor/images-get']),
+            'fileManagerJson' => Url::to(['/admin/redactor/files-get']),
+            'plugins' => Setting::getAsArray('redactor_plugins')
         ]
     ]) ?>
 <?php endif; ?>

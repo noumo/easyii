@@ -39,15 +39,17 @@ class Upload
         return $uploadPath;
     }
 
-    static function getLink($fileName)
+    static function getFileUrl($fileName)
     {
-        if(!$fileName){
-            return '';
-        }
+        return $fileName ? self::getPathUrl() . '/' . $fileName : '';
+    }
+
+    static function getPathUrl($dir = '')
+    {
         return '/' . implode('/', array_filter([
             Yii::getAlias('@web'),
             basename(Yii::getAlias('@uploads')),
-            str_replace('\\', '/', $fileName)
+            $dir
         ]));
     }
 

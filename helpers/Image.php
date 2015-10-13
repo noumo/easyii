@@ -41,7 +41,7 @@ class Image
         $info = pathinfo($filename);
         $thumbName = $info['filename'] . '-' . md5( filemtime($filename) . (int)$width . (int)$height) . '.' . $info['extension'];
         $thumbFile = Upload::getUploadPath('thumbs') . DIRECTORY_SEPARATOR . $thumbName;
-        $thumbWebFile = Upload::getLink('thumbs/' . $thumbName);
+        $thumbWebFile = Upload::getFileUrl('thumbs/' . $thumbName);
         if(file_exists($thumbFile)){
             return $thumbWebFile;
         }

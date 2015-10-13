@@ -28,7 +28,7 @@ class InstallController extends \yii\web\Controller
     public function actionIndex()
     {
         if(!$this->checkDbConnection()){
-            $configFile = str_replace(Yii::getAlias('@webroot'), '', Yii::getAlias('@app')).'/config/db.php';
+            $configFile = str_replace(Yii::getAlias('@webroot'), '', Yii::getAlias('@app')) . '/config/db.php';
             return $this->showError(Yii::t('easyii/install', 'Cannot connect to database. Please configure `{0}`.', $configFile));
         }
         if($this->module->installed){
@@ -187,8 +187,15 @@ class InstallController extends \yii\web\Controller
 
         $db->createCommand()->insert(Setting::tableName(), [
             'name' => 'image_max_width',
-            'value' => 'top',
+            'value' => 1900,
             'title' => Yii::t('easyii/install', 'Max image width on upload which will not resize'),
+            'visibility' => Setting::VISIBLE_ALL
+        ])->execute();
+
+        $db->createCommand()->insert(Setting::tableName(), [
+            'name' => 'redactor_plugins',
+            'value' => 'imagemanager, filemanager, table, fullscreen',
+            'title' => Yii::t('easyii/install', 'List of Redactor Widget plugins separated with comma'),
             'visibility' => Setting::VISIBLE_ALL
         ])->execute();
     }

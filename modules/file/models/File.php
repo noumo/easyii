@@ -52,7 +52,7 @@ class File extends \yii\easyii\components\ActiveRecord
 
     public function getLink()
     {
-        return Upload::getLink($this->file);
+        return Upload::getFileUrl($this->file);
     }
 
     public function beforeSave($insert)

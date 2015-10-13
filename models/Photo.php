@@ -50,6 +50,6 @@ class Photo extends \yii\easyii\components\ActiveRecord
 
     public function getImage()
     {
-        return Upload::getLink($this->image_file);
+        return Upload::getFileUrl($this->image_file);
     }
 }

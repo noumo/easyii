@@ -68,7 +68,7 @@ class ImageFile extends \yii\base\Behavior
 
     public function getImage()
     {
-        return Upload::getLink($this->owner->image_file);
+        return Upload::getFileUrl($this->owner->image_file);
     }
 
     public function getSeoText()

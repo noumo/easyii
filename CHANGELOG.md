@@ -5,10 +5,12 @@
 * Tags added to FAQ
 * Tags added to gallery albums
 * Added immutable setting to all sluggable behaviors
+* Now using vova07 redactor widget
 
 //todo
 insert new module settings
 insert system setting max_image_width
+insert system setting redactor_plugins
 rename all image to image_file
 
 
