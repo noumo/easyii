@@ -5,8 +5,9 @@
 * Tags added to FAQ
 * Tags added to gallery albums
 * Added immutable setting to all sluggable behaviors
-* Now using vova07 redactor widget
-* New field types: html, file, date
+* Now using vova07 redactor widget and now list of widgets editable in settings
+* New additional field types: html, file, date
+* Remove bootstrap dependency from eaysii frontend toolbar.
 
 //todo
 insert new module settings
