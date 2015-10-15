@@ -20,8 +20,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     const STATUS_OFF = 0;
     const STATUS_ON = 1;
 
-    static $FLAT;
-    static $TREE;
+    static $FLAT = [];
+    static $TREE = [];
 
     public $parent;
     public $children;
@@ -31,7 +31,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         return [
             ['title', 'required'],
             ['title', 'trim'],
-            ['title', 'string', 'max' => 128],
+            [['title', 'slug'], 'string', 'max' => 128],
             ['image_file', 'image'],
             ['slug', 'match', 'pattern' => static::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
@@ -114,7 +114,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         $cache = Yii::$app->cache;
         $key = static::tableName().'_flat';
 
-        if(!static::$FLAT) {
+        if(empty(static::$FLAT[$key])) {
+
             $flat = $cache->get($key);
             if (!$flat) {
                 $flat = static::generateFlat();
@@ -126,13 +127,25 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                     'parent' => $cat->parent,
                     'children' => $cat->children
                 ]);
+
                 $model->load((array)$cat, '');
                 $model->populateRelation('seo', new SeoText($cat->seo));
                 $model->setTagNames($cat->tags);
-                static::$FLAT[] = $model;
+                $model->afterFind();
+                static::$FLAT[$key][] = $model;
             }
         }
-        return static::$FLAT;
+        return static::$FLAT[$key];
+    }
+
+    public static function get($id_slug)
+    {
+        foreach(static::cats() as $cat){
+            if($cat->category_id == $id_slug || $cat->slug == $id_slug){
+                return $cat;
+            }
+        }
+        return null;
     }
 
     /**

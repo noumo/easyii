@@ -18,14 +18,17 @@ class ApiObject extends \yii\base\Object
      * @param \yii\base\Model $model
      */
     public function __construct($model){
-        $this->model = $model;
+        if($model) {
+            $this->model = $model;
 
-        foreach($model->attributes as $attribute => $value){
-            if($this->canSetProperty($attribute)){
-                $this->{$attribute} = $value;
+            foreach ($model->attributes as $attribute => $value) {
+                if ($this->canSetProperty($attribute)) {
+                    $this->{$attribute} = $value;
+                }
             }
+        } else {
+            $this->model = new \stdClass();
         }
-
         $this->init();
     }
 
@@ -38,7 +41,8 @@ class ApiObject extends \yii\base\Object
      * Returns object id
      * @return int
      */
-    public function getId(){
+    public function getId($debug = false){
+
         return $this->model->primaryKey;
     }
 

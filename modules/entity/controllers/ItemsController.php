@@ -10,6 +10,7 @@ use yii\easyii\helpers\Data;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
 use yii\easyii\models\Setting;
+use yii\easyii\widgets\DateTimePicker;
 use yii\helpers\Url;
 use yii\validators\FileValidator;
 use yii\web\UploadedFile;
@@ -37,12 +38,12 @@ class ItemsController extends Controller
             'up' => [
                 'class' => SortAction::className(),
                 'model' => $className,
-                'attribute' => 'time'
+                'attribute' => 'order_num'
             ],
             'down' => [
                 'class' => SortAction::className(),
                 'model' => $className,
-                'attribute' => 'time'
+                'attribute' => 'order_num'
             ],
             'on' => [
                 'class' => ChangeStatusAction::className(),
@@ -206,13 +207,18 @@ class ItemsController extends Controller
                     $isImage = preg_match('/\.(jpg|jpeg|png|gif|bmp)$/', $basename);
 
                     if($isImage) {
-                        $result .= Html::a(Html::img(Image::thumb($value, 240, 180)), [$value], ['class' => 'fancybox']);
+                        $result .= Html::a(Html::img(Image::thumb($value, 240, 180)), Upload::getFileUrl($value), ['class' => 'fancybox']);
                     } else {
                         $result .= Html::a($basename, [$value], ['target' => 'blank']);
                     }
                     $result .= ' ' . Html::a($isImage ? 'Удалить' : '<i class="glyphicon glyphicon-remove"></i>', ['/admin/' . $this->module->id . '/items/delete-data-file', 'file' => $basename], ['class' => 'confirm-delete', 'data-reload' => 1, 'title' => Yii::t('easyii', 'Delete')]);
                 }
                 $result .= '</p>' . Html::fileInput("Data[{$field->name}]"). '</div>';
+            }
+            elseif ($field->type === 'date') {
+                $result .= '<div class="form-group"><label>'. $field->title .'</label>';
+                $result .= DateTimePicker::widget(['name' => "Data[{$field->name}]", 'value' => $value]);
+                $result .= '</div>';
             }
         }
         return $result;

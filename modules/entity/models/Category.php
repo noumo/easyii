@@ -10,12 +10,26 @@ class Category extends \yii\easyii\components\CategoryModel
         'boolean' => 'Boolean',
         'select' => 'Select',
         'checkbox' => 'Checkbox',
-        'file' => 'File'
+        'file' => 'File',
+        'date' => 'Date'
     ];
 
     public static function tableName()
     {
         return 'easyii_entity_categories';
+    }
+
+    public function rules()
+    {
+        return array_merge([
+            ['cache', 'integer'],
+            ['fields', 'safe'],
+        ], parent::rules());
+    }
+
+    public function attributeLabels()
+    {
+        return array_merge(['cache' => \Yii::t('easyii', 'Cache')], parent::attributeLabels());
     }
 
     public function beforeSave($insert)
@@ -50,7 +64,7 @@ class Category extends \yii\easyii\components\CategoryModel
 
     public function getItems()
     {
-        return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sortDate();
+        return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sort();
     }
 
     public function afterDelete()
@@ -75,5 +89,10 @@ class Category extends \yii\easyii\components\CategoryModel
     private function parseFields()
     {
         $this->fields = $this->fields !== '' ? json_decode($this->fields) : [];
+    }
+
+    public static function getCacheName($category_id)
+    {
+        return 'entity' . $category_id;
     }
 }

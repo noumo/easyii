@@ -19,12 +19,12 @@ class SortAction extends \yii\base\Action
         if(($model = $modelClass::findOne($id))) {
             if($this->direction === 'up') {
                 $eq = '>';
-                $orderDir = 'ASC';
+                $orderDir = SORT_ASC;
             } else {
                 $eq = '<';
-                $orderDir = 'DESC';
+                $orderDir = SORT_DESC;
             }
-            $modelSwap = $modelClass::find()->where([$eq, $attribute, $model->{$attribute}])->orderBy([$attribute => $orderDir])->one();
+            $modelSwap = $modelClass::find()->where([$eq, $attribute, $model->{$attribute}])->orderBy([$attribute => $orderDir])->limit(1)->one();
 
             if(!empty($modelSwap)) {
                 $newValue = $modelSwap->{$attribute};

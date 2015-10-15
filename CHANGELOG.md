@@ -6,6 +6,7 @@
 * Tags added to gallery albums
 * Added immutable setting to all sluggable behaviors
 * Now using vova07 redactor widget
+* New field types: html, file, date
 
 //todo
 insert new module settings

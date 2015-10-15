@@ -10,12 +10,20 @@ class Category extends \yii\easyii\components\CategoryModel
         'boolean' => 'Boolean',
         'select' => 'Select',
         'checkbox' => 'Checkbox',
-        'file' => 'File'
+        'file' => 'File',
+        'date' => 'Date'
     ];
 
     public static function tableName()
     {
         return 'easyii_catalog_categories';
+    }
+
+    public function rules()
+    {
+        return array_merge([
+            ['fields', 'safe'],
+        ], parent::rules());
     }
 
     public function beforeSave($insert)

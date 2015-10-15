@@ -34,7 +34,6 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     {
         if(!$this->_items){
             $this->_items = [];
-
             $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON);
 
             if(!empty($options['where'])){

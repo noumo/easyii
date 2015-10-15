@@ -22,7 +22,8 @@ class DateTimePicker extends \yii\base\Widget
 
     private $_assetBundle;
     private $_defaultOptions = [
-        'showTodayButton' => true
+        'showTodayButton' => true,
+        'widgetPositioning' => ['vertical' => 'top']
     ];
 
     public function init()
@@ -36,8 +37,8 @@ class DateTimePicker extends \yii\base\Widget
 
         $this->options = array_merge($this->_defaultOptions, $this->options);
 
-        $this->widgetId = 'dtp-'.Html::getInputId($this->model, $this->attribute);
         $this->inputId = $this->hasModel() ? Html::getInputId($this->model, $this->attribute) : $this->getId();
+        $this->widgetId = 'dtp-' . $this->inputId;
 
         $this->registerAssetBundle();
         $this->registerScript();
@@ -60,22 +61,21 @@ class DateTimePicker extends \yii\base\Widget
             $this->options['locale'] = Data::getLocale();
         }
         $clientOptions = (count($this->options)) ? Json::encode($this->options) : '';
-        $time = $this->model->{$this->attribute} ? $this->model->{$this->attribute} : time();
+        $time = $this->hasModel() ? $this->model->{$this->attribute} : $this->value;
         $this->getView()->registerJs('
-            (function(){    
+            (function(){
                 var dtpContainer = $("#'.$this->widgetId.'");
-    
+
                 dtpContainer.datetimepicker('.$clientOptions.')
                 .on("dp.change", function (e) {
                     $("#'.$this->inputId.'").val(e.date.unix());
-                    console.log("change", e.date.unix());
                 })
                 .data("DateTimePicker")
                 .date(moment('.($time * 1000).'));
-    
-                //$("[type=text]", dtpContainer).focus(function(e){
-                //    dtpContainer.data("DateTimePicker").show();
-                //});
+
+                $("[type=text]", dtpContainer).focus(function(e){
+                    dtpContainer.data("DateTimePicker").show();
+                });
             })();
         ');
     }

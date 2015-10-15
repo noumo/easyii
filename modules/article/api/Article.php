@@ -37,7 +37,7 @@ class Article extends \yii\easyii\components\API
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -155,13 +155,6 @@ class Article extends \yii\easyii\components\API
     public function api_pages()
     {
         return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
-    }
-
-    private function findCategory($id_slug)
-    {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
     }
 
     private function findItem($id_slug)

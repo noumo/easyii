@@ -223,6 +223,7 @@ class ModulesController extends \yii\easyii\components\Controller
                         $fileContent = str_replace($oldModuleClass, $newModuleClass, $fileContent);
                         $fileContent = str_replace("Yii::t('easyii/".$module->name, "Yii::t('easyii/".$formModel->name, $fileContent);
                         $fileContent = str_replace("'".$module->name."'", "'".$formModel->name."'", $fileContent);
+                        $fileContent = str_replace('/'.$module->name.'/', '/'.$formModel->name.'/', $fileContent);
 
                         file_put_contents($file, $fileContent);
                     }

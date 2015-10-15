@@ -9,12 +9,8 @@ use yii\helpers\Url;
 
 class ItemObject extends \yii\easyii\components\ApiObject
 {
-    public $slug;
     public $data;
     public $category_id;
-    public $available;
-    public $discount;
-    public $time;
 
     private $_photos;
 
@@ -22,24 +18,8 @@ class ItemObject extends \yii\easyii\components\ApiObject
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
     }
 
-    public function getDescription(){
-        return LIVE_EDIT ? API::liveEdit($this->model->description, $this->editLink, 'div') : $this->model->description;
-    }
-
     public function getCat(){
-        return Catalog::cats()[$this->category_id];
-    }
-
-    public function getPrice(){
-        return $this->discount ? round($this->model->price * (1 - $this->discount / 100) ) : $this->model->price;
-    }
-
-    public function getOldPrice(){
-        return $this->model->price;
-    }
-
-    public function getDate(){
-        return Yii::$app->formatter->asDate($this->time);
+        return Entity::cat($this->category_id);
     }
 
     public function getPhotos()
@@ -55,6 +35,14 @@ class ItemObject extends \yii\easyii\components\ApiObject
     }
 
     public function getEditLink(){
-        return Url::to(['/admin/catalog/items/edit/', 'id' => $this->id]);
+        return Url::to(['/admin/entity/items/edit/', 'id' => $this->id]);
+    }
+
+    public function __get($name)
+    {
+        if(!empty($this->data->{$name})){
+            return $this->data->{$name};
+        }
+        return parent::__get($name);
     }
 }

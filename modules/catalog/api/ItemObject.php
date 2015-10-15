@@ -27,7 +27,7 @@ class ItemObject extends \yii\easyii\components\ApiObject
     }
 
     public function getCat(){
-        return Catalog::cats()[$this->category_id];
+        return Catalog::cat($this->category_id);
     }
 
     public function getPrice(){

@@ -4,7 +4,6 @@ namespace yii\easyii\modules\entity\api;
 use Yii;
 
 use yii\data\ActiveDataProvider;
-use yii\easyii\modules\entity\models\ItemData;
 use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\entity\models\Category;
 use yii\easyii\modules\entity\models\Item;
@@ -25,7 +24,7 @@ use yii\widgets\LinkPager;
  * @method static \stdClass pagination() returns yii\data\Pagination object.
  */
 
-class Catalog extends \yii\easyii\components\API
+class Entity extends \yii\easyii\components\API
 {
     private $_cats;
     private $_items;
@@ -36,7 +35,7 @@ class Catalog extends \yii\easyii\components\API
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -68,19 +67,12 @@ class Catalog extends \yii\easyii\components\API
         if(!$this->_items){
             $this->_items = [];
 
-            $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
+            $query = Item::find()->with('category')->status(Item::STATUS_ON);
 
             if(!empty($options['where'])){
                 $query->andFilterWhere($options['where']);
             }
-            if(!empty($options['orderBy'])){
-                $query->orderBy($options['orderBy']);
-            } else {
-                $query->sortDate();
-            }
-            if(!empty($options['filters'])){
-                $query = self::applyFilters($options['filters'], $query);
-            }
+            $query->sort();
 
             $this->_adp = new ActiveDataProvider([
                 'query' => $query,
@@ -102,7 +94,7 @@ class Catalog extends \yii\easyii\components\API
 
         $result = [];
 
-        $query = Item::find()->with('seo')->sortDate()->status(Item::STATUS_ON)->limit($limit);
+        $query = Item::find()->sort()->status(Item::STATUS_ON)->limit($limit);
         if($where){
             $query->andFilterWhere($where);
         }
@@ -119,12 +111,12 @@ class Catalog extends \yii\easyii\components\API
         }
     }
 
-    public function api_get($id_slug)
+    public function api_get($id)
     {
-        if(!isset($this->_item[$id_slug])) {
-            $this->_item[$id_slug] = $this->findItem($id_slug);
+        if(!isset($this->_item[$id])) {
+            $this->_item[$id] = $this->findItem($id);
         }
-        return $this->_item[$id_slug];
+        return $this->_item[$id];
     }
 
     public function api_pagination()
@@ -144,64 +136,10 @@ class Catalog extends \yii\easyii\components\API
             'options' => $options
         ]);
     }
-    
-    public static function applyFilters($filters, $query)
+
+    private function findItem($id)
     {
-        if(is_array($filters)){
-
-            if(!empty($filters['price'])){
-                $price = $filters['price'];
-                if(is_array($price) && count($price) == 2) {
-                    if(!$price[0]){
-                        $query->andFilterWhere(['<=', 'price', (int)$price[1]]);
-                    } elseif(!$price[1]) {
-                        $query->andFilterWhere(['>=', 'price', (int)$price[0]]);
-                    } else {
-                        $query->andFilterWhere(['between', 'price', (int)$price[0], (int)$price[1]]);
-                    }
-                }
-                unset($filters['price']);
-            }
-            if(count($filters)){
-                $filtersApplied = 0;
-                $subQuery = ItemData::find()->select('item_id, COUNT(*) as filter_matched')->groupBy('item_id');
-                foreach($filters as $field => $value){
-                    if(!is_array($value)) {
-                        $subQuery->orFilterWhere(['and', ['name' => $field], ['value' => $value]]);
-                        $filtersApplied++;
-                    } elseif(count($value) == 2){
-                        if(!$value[0]){
-                            $additionalCondition = ['<=', 'value', (int)$value[1]];
-                        } elseif(!$value[1]) {
-                            $additionalCondition = ['>=', 'value', (int)$value[0]];
-                        } else {
-                            $additionalCondition = ['between', 'value', (int)$value[0], (int)$value[1]];
-                        }
-                        $subQuery->orFilterWhere(['and', ['name' => $field], $additionalCondition]);
-
-                        $filtersApplied++;
-                    }
-                }
-                if($filtersApplied) {
-                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '.Item::tableName().'.item_id');
-                    $query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
-                }
-            }
-        }
-        return $query;
-    }
-    
-
-    private function findCategory($id_slug)
-    {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
-    }
-
-    private function findItem($id_slug)
-    {
-        if(!($item = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())){
+        if(!($item = Item::find()->where(['item_id' => ':id'], [':id' => $id])->status(Item::STATUS_ON)->one())){
             return null;
         }
 

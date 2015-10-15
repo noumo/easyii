@@ -2,11 +2,8 @@
 namespace yii\easyii\modules\entity\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
-use yii\easyii\behaviors\ImageFile;
-use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\behaviors\SortableModel;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\entity\EntityModule;
 
 class Item extends \yii\easyii\components\ActiveRecord
 {
@@ -24,14 +21,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image_file', 'image'],
-            ['description', 'safe'],
-            ['price', 'number'],
-            ['discount', 'integer', 'max' => 99],
-            [['status', 'category_id', 'available', 'time'], 'integer'],
-            ['time', 'default', 'value' => time()],
-            ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
-            ['slug', 'default', 'value' => null],
+            [['status', 'category_id'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON],
         ];
     }
@@ -40,13 +30,13 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
-            'image' => Yii::t('easyii', 'Image'),
-            'description' => Yii::t('easyii', 'Description'),
-            'available' => Yii::t('easyii/entity', 'Available'),
-            'price' => Yii::t('easyii/entity', 'Price'),
-            'discount' => Yii::t('easyii/entity', 'Discount'),
-            'time' => Yii::t('easyii', 'Date'),
-            'slug' => Yii::t('easyii', 'Slug'),
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            SortableModel::className(),
         ];
     }
 
@@ -66,6 +56,9 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function afterSave($insert, $attributes){
         parent::afterSave($insert, $attributes);
         $this->parseData();
+        if($this->category && !empty($this->category->cache)) {
+            Yii::$app->cache->delete(Category::getCacheName($this->category_id));
+        }
     }
 
     public function afterFind()
@@ -81,7 +74,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+        return Category::get($this->category_id);
     }
 
     public function afterDelete()

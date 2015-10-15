@@ -101,9 +101,8 @@ html{
 #admin-body .main .container-fluid{
     padding: 20px;
 }
-#admin-body .main a, #admin-body .main .btn, #admin-body .main .form-control, .input-group-addon{
+#admin-body .main a, #admin-body .main .btn, #admin-body .main .form-control, .input-group-addon, .selectize-input{
     border-radius: 0 !important;
-    text-align: left;
 }
 
 #admin-body .table {

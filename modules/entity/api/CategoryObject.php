@@ -3,6 +3,8 @@ namespace yii\easyii\modules\entity\api;
 
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
+use yii\easyii\helpers\Data;
+use yii\easyii\modules\entity\models\Category;
 use yii\easyii\modules\entity\models\Item;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
@@ -14,6 +16,7 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     public $tree;
     public $fields;
     public $depth;
+    public $cache;
 
     private $_adp;
     private $_items;
@@ -35,27 +38,34 @@ class CategoryObject extends \yii\easyii\components\ApiObject
         if(!$this->_items){
             $this->_items = [];
 
-            $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON);
-
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
+            if($this->cache)
+            {
+                $this->_items = Data::cache(Category::getCacheName($this->id), 3600, function(){
+                    $items = [];
+                    $query = Item::find()->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sort();
+                    foreach($query->all() as $item){
+                        $items[] = new ItemObject($item);
+                    }
+                    return $items;
+                });
             }
-            if(!empty($options['orderBy'])){
-                $query->orderBy($options['orderBy']);
-            } else {
-                $query->sortDate();
-            }
-            if(!empty($options['filters'])){
-                $query = Catalog::applyFilters($options['filters'], $query);
-            }
+            else
+            {
+                $query = Item::find()->where(['category_id' => $this->id])->status(Item::STATUS_ON);
 
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
+                if(!empty($options['where'])){
+                    $query->andFilterWhere($options['where']);
+                }
+                $query->sort();
 
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new ItemObject($model);
+                $this->_adp = new ActiveDataProvider([
+                    'query' => $query,
+                    'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+                ]);
+
+                foreach($this->_adp->models as $model){
+                    $this->_items[] = new ItemObject($model);
+                }
             }
         }
         return $this->_items;

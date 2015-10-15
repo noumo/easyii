@@ -45,6 +45,9 @@ $settings = $this->context->module->settings;
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>
+    <?php if(isset($model->attributes['cache'])) : ?>
+        <?= $form->field($model, 'cache')->checkbox() ?>
+    <?php endif; ?>
     <?= SeoForm::widget(['model' => $model]) ?>
 <?php endif; ?>
 

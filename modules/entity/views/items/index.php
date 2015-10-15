@@ -3,7 +3,7 @@ use yii\easyii\modules\entity\models\Item;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('easyii/entity', 'Catalog');
+$this->title = Yii::t('easyii/entity', 'Entity');
 
 $module = $this->context->module->id;
 ?>
