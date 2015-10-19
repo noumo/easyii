@@ -66,4 +66,47 @@ class ApiObject extends \yii\base\Object
     public function seo($attribute, $default = ''){
         return !empty($this->model->seo->{$attribute}) ? $this->model->seo->{$attribute} : $default;
     }
+
+
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function liveEdit($value)
+    {
+        return LIVE_EDIT ? API::liveEdit($value, $this->editLink) : $value;
+    }
+
+    protected function placeholder($value)
+    {
+        if (is_string($value))
+        {
+            $value = preg_replace_callback('/{{([a-zA-Z][\w_-]*)}}/',
+                function( $matches )
+                {
+                    $key = strtolower( $matches[ 1 ] );
+
+                    if ($setting = Setting::get($key))
+                    {
+                        $result = $setting;
+                    }
+                    elseif ($text = Text::get($key))
+                    {
+                        $result = $text;
+                    }
+                    else
+                    {
+                        $result = $matches[0];
+                    }
+
+                    return $result ;
+                },
+
+                // the input string
+                $value
+            );
+        }
+
+        return $value;
+    }
 }
