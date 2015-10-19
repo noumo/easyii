@@ -9,6 +9,11 @@ use creocoder\nestedsets\NestedSetsBehavior;
 
 /**
  * Base CategoryModel. Shared by categories
+ *
+ * @property string $title
+ * @property string $image
+ * @property string $slug
+ *
  * @package yii\easyii\components
  * @inheritdoc
  */

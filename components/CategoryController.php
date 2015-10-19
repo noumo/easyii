@@ -16,11 +16,17 @@ class CategoryController extends Controller
     /** @var string */
     public $categoryClass;
 
+    //Todo: Better $this->module->id
     /** @var  string */
     public $moduleName;
 
+    //Todo: Remove the slash!
     /** @var string  */
     public $viewRoute = '/items';
+
+    public $indexView = '@easyii/views/category/index';
+    public $createView = '@easyii/views/category/create';
+    public $editView = '@easyii/views/category/edit';
 
     /**
      * Categories list
@@ -30,7 +36,7 @@ class CategoryController extends Controller
     public function actionIndex()
     {
         $class = $this->categoryClass;
-        return $this->render('@easyii/views/category/index', [
+        return $this->render($this->indexView, [
             'cats' => $class::cats()
         ]);
     }
@@ -84,7 +90,7 @@ class CategoryController extends Controller
             }
         }
         else {
-            return $this->render('@easyii/views/category/create', [
+            return $this->render($this->createView, [
                 'model' => $model,
                 'parent' => $parent
             ]);
@@ -130,7 +136,7 @@ class CategoryController extends Controller
             }
         }
         else {
-            return $this->render('@easyii/views/category/edit', [
+            return $this->render($this->editView, [
                 'model' => $model
             ]);
         }
