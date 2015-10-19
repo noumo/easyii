@@ -3,8 +3,10 @@ namespace yii\easyii\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\catalog\CatalogModule;
 
 class Item extends \yii\easyii\components\ActiveRecord
 {
@@ -22,7 +24,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['image_file', 'image'],
             ['description', 'safe'],
             ['price', 'number'],
             ['discount', 'integer', 'max' => 99],
@@ -50,14 +52,19 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function behaviors()
     {
-        return [
+        $behaviors = [
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
-                'ensureUnique' => true
+                'ensureUnique' => true,
+                'immutable' => CatalogModule::setting('itemSlugImmutable')
             ]
         ];
+        if(CatalogModule::setting('itemThumb')){
+            $behaviors['imageFileBehavior'] = ImageFile::className();
+        }
+        return $behaviors;
     }
 
     public function beforeSave($insert)
@@ -66,13 +73,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
                 $this->data = new \stdClass();
             }
-
             $this->data = json_encode($this->data);
-
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
-            }
-
             return true;
         } else {
             return false;
@@ -127,10 +128,6 @@ class Item extends \yii\easyii\components\ActiveRecord
 
         foreach($this->getPhotos()->all() as $photo){
             $photo->delete();
-        }
-
-        if($this->image) {
-            @unlink(Yii::getAlias('@webroot') . $this->image);
         }
 
         ItemData::deleteAll(['item_id' => $this->primaryKey]);

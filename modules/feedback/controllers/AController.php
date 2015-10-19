@@ -3,7 +3,7 @@ namespace yii\easyii\modules\feedback\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Controller;
 use yii\easyii\models\Setting;
 use yii\easyii\modules\feedback\models\Feedback;
@@ -12,6 +12,17 @@ class AController extends Controller
 {
     public $new = 0;
     public $noAnswer = 0;
+
+    public function actions()
+    {
+        return [
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => Feedback::className(),
+                'successMessage' => Yii::t('easyii/feedback', 'Feedback deleted')
+            ]
+        ];
+    }
 
     public function init()
     {
@@ -120,15 +131,5 @@ class AController extends Controller
             }
         }
         return $this->back();
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Feedback::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/feedback', 'Feedback deleted'));
     }
 }

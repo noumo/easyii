@@ -52,7 +52,7 @@ var fieldTemplate = \'\
                 </select>
             </td>
             <td>
-                <textarea class="form-control field-options" placeholder="<?= Yii::t('easyii/catalog', 'Type options with `comma` as delimiter') ?>" <?= !$field->options ? 'style="display: none;"' : '' ?> ><?= is_array($field->options) ? implode(',', $field->options) : '' ?></textarea>
+                <textarea class="form-control field-options" placeholder="<?= Yii::t('easyii/catalog', 'Type options with `comma` as delimiter') ?>" <?= (!$field->options && $field->type != 'file') ? 'style="display: none;"' : '' ?> ><?= is_array($field->options) ? implode(',', $field->options) : $field->options ?></textarea>
             </td>
             <td class="text-right">
                 <div class="btn-group btn-group-sm" role="group">

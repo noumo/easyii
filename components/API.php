@@ -24,11 +24,11 @@ class API extends \yii\base\Object
 
     public static function __callStatic($method, $params)
     {
-        $name = (new \ReflectionClass(self::className()))->getShortName();
-        if (!isset(self::$classes[$name])) {
-            self::$classes[$name] = new static();
+        $name = static::className();
+        if (!isset(static::$classes[$name])) {
+            static::$classes[$name] = new static();
         }
-        return call_user_func_array([self::$classes[$name], 'api_' . $method], $params);
+        return call_user_func_array([static::$classes[$name], 'api_' . $method], $params);
     }
 
     /**

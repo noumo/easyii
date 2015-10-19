@@ -36,7 +36,7 @@ class Catalog extends \yii\easyii\components\API
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -46,9 +46,21 @@ class Catalog extends \yii\easyii\components\API
         return Category::tree();
     }
 
-    public function api_cats()
+    public function api_cats($options = [])
     {
-        return Category::cats();
+        $result = [];
+        foreach(Category::cats() as $model){
+            $result[] = new CategoryObject($model);
+        }
+        if(!empty($options['tags'])){
+            foreach($result as $i => $item){
+                if(!in_array($options['tags'], $item->tags)){
+                    unset($result[$i]);
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function api_items($options = [])
@@ -141,11 +153,11 @@ class Catalog extends \yii\easyii\components\API
                 $price = $filters['price'];
                 if(is_array($price) && count($price) == 2) {
                     if(!$price[0]){
-                        $query->andFilterWhere(['<=', 'price', (int)$price[1]]);
+                        $query->andFilterWhere(['<=', 'price * ( 1 - discount / 100 )', (int)$price[1]]);
                     } elseif(!$price[1]) {
-                        $query->andFilterWhere(['>=', 'price', (int)$price[0]]);
+                        $query->andFilterWhere(['>=', 'price * ( 1 - discount / 100 )', (int)$price[0]]);
                     } else {
-                        $query->andFilterWhere(['between', 'price', (int)$price[0], (int)$price[1]]);
+                        $query->andFilterWhere(['between', 'price * ( 1 - discount / 100 )', (int)$price[0], (int)$price[1]]);
                     }
                 }
                 unset($filters['price']);
@@ -177,14 +189,6 @@ class Catalog extends \yii\easyii\components\API
             }
         }
         return $query;
-    }
-    
-
-    private function findCategory($id_slug)
-    {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
     }
 
     private function findItem($id_slug)

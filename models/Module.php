@@ -97,6 +97,11 @@ class Module extends \yii\easyii\components\ActiveRecord
         $this->settings = $newSettings;
     }
 
+    public function appendSettings($newSettings)
+    {
+        $this->settings = array_merge($this->settings, $newSettings);
+    }
+
     public function checkExists($attribute)
     {
         if(!class_exists($this->$attribute)){

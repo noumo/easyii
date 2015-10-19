@@ -30,7 +30,7 @@ class Gallery extends \yii\easyii\components\API
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -40,9 +40,21 @@ class Gallery extends \yii\easyii\components\API
         return Category::tree();
     }
 
-    public function api_cats()
+    public function api_cats($options = [])
     {
-        return Category::cats();
+        $result = [];
+        foreach(Category::cats() as $model){
+            $result[] = new CategoryObject($model);
+        }
+        if(!empty($options['tags'])){
+            foreach($result as $i => $item){
+                if(!in_array($options['tags'], $item->tags)){
+                    unset($result[$i]);
+                }
+            }
+        }
+
+        return $result;
     }
 
 
@@ -87,13 +99,6 @@ class Gallery extends \yii\easyii\components\API
             'selector' => '.easyii-box',
             'options' => $options
         ]);
-    }
-
-    private function findCategory($id_slug)
-    {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Category::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
     }
 
     private function findPhoto($id)

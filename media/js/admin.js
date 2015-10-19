@@ -75,6 +75,7 @@ $(function(){
     });
 
     window.notify = new Notify();
+    $('.fancybox').fancybox();
 });
 
 var Notify = function() {

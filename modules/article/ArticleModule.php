@@ -13,6 +13,8 @@ class ArticleModule extends \yii\easyii\components\Module
         'enableTags' => true,
 
         'itemsInFolder' => false,
+        'categorySlugImmutable' => false,
+        'itemSlugImmutable' => false
     ];
 
     public static $installConfig = [

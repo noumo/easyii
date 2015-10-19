@@ -11,15 +11,20 @@ use yii\widgets\LinkPager;
 class CategoryObject extends \yii\easyii\components\ApiObject
 {
     public $slug;
-    public $image;
     public $tree;
     public $depth;
+    public $parent;
+    public $children;
 
     private $_adp;
     private $_photos;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
+    }
+
+    public function getTags(){
+        return $this->model->tagsArray;
     }
 
     public function pages($options = []){

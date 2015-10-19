@@ -3,7 +3,7 @@ namespace yii\easyii\modules\shopcart\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\shopcart\models\Good;
 use yii\easyii\modules\shopcart\models\Order;
@@ -13,6 +13,17 @@ class AController extends Controller
     public $pending = 0;
     public $processed = 0;
     public $sent = 0;
+
+    public function actions()
+    {
+        return [
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => Order::className(),
+                'successMessage' => Yii::t('easyii/shopcart', 'Order deleted')
+            ]
+        ];
+    }
 
     public function init()
     {
@@ -127,15 +138,5 @@ class AController extends Controller
                 'goods' => $goods
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Order::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/shopcart', 'Order deleted'));
     }
 }

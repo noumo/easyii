@@ -4,6 +4,7 @@ namespace yii\easyii\modules\faq\models;
 use Yii;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\behaviors\Taggable;
 
 class Faq extends \yii\easyii\components\ActiveRecord
 {
@@ -22,6 +23,7 @@ class Faq extends \yii\easyii\components\ActiveRecord
         return [
             [['question','answer'], 'required'],
             [['question', 'answer'], 'trim'],
+            ['tagNames', 'safe'],
             ['status', 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON],
         ];
@@ -32,6 +34,7 @@ class Faq extends \yii\easyii\components\ActiveRecord
         return [
             'question' => Yii::t('easyii/faq', 'Question'),
             'answer' => Yii::t('easyii/faq', 'Answer'),
+            'tagNames' => Yii::t('easyii', 'Tags'),
         ];
     }
 
@@ -39,7 +42,8 @@ class Faq extends \yii\easyii\components\ActiveRecord
     {
         return [
             CacheFlush::className(),
-            SortableModel::className()
+            SortableModel::className(),
+            'taggabble' => Taggable::className(),
         ];
     }
 }

@@ -2,29 +2,50 @@
 namespace yii\easyii\modules\article\controllers;
 
 use Yii;
-use yii\easyii\behaviors\SortableDateController;
-use yii\easyii\behaviors\StatusController;
-use yii\web\UploadedFile;
-
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\ClearImageAction;
+use yii\easyii\actions\SortAction;
+use yii\easyii\actions\DeleteAction;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
-use yii\easyii\helpers\Image;
 use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
+        $className = Item::className();
         return [
-            [
-                'class' => SortableDateController::className(),
-                'model' => Item::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/article', 'Article deleted')
             ],
-            [
-            'class' => StatusController::className(),
-            'model' => Item::className()
-            ]
+            'clear-image' => [
+                'class' => ClearImageAction::className(),
+                'model' => $className
+            ],
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Item::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Item::STATUS_OFF
+            ],
         ];
     }
 
@@ -38,7 +59,6 @@ class ItemsController extends Controller
             'model' => $model
         ]);
     }
-
 
     public function actionCreate($id)
     {
@@ -55,15 +75,6 @@ class ItemsController extends Controller
             }
             else {
                 $model->category_id = $category->primaryKey;
-
-                if (isset($_FILES) && $this->module->settings['articleThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'article');
-                    } else {
-                        $model->image = '';
-                    }
-                }
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article created'));
@@ -94,15 +105,6 @@ class ItemsController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                if (isset($_FILES) && $this->module->settings['articleThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'article');
-                    } else {
-                        $model->image = $model->oldAttributes['image'];
-                    }
-                }
-
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article updated'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
@@ -128,53 +130,5 @@ class ItemsController extends Controller
         return $this->render('photos', [
             'model' => $model,
         ]);
-    }
-
-    public function actionClearImage($id)
-    {
-        $model = Item::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image){
-            $model->image = '';
-            if($model->update()){
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Item::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/article', 'Article deleted'));
-    }
-
-    public function actionUp($id, $category_id)
-    {
-        return $this->move($id, 'up', ['category_id' => $category_id]);
-    }
-
-    public function actionDown($id, $category_id)
-    {
-        return $this->move($id, 'down', ['category_id' => $category_id]);
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Item::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Item::STATUS_OFF);
     }
 }

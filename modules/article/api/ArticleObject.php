@@ -36,7 +36,7 @@ class ArticleObject extends \yii\easyii\components\ApiObject
     }
 
     public function getCat(){
-        return Article::cats()[$this->category_id];
+        return Article::cat($this->category_id);
     }
 
     public function getTags(){

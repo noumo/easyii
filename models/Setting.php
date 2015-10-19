@@ -65,6 +65,19 @@ class Setting extends \yii\easyii\components\ActiveRecord
         return isset(self::$_data[$name]) ? self::$_data[$name] : null;
     }
 
+    public static function getAsArray($name)
+    {
+        $result = [];
+        $value = self::get($name);
+        if($value) {
+            foreach(explode(',', $value) as $item){
+                $result[] = trim($item);
+            }
+            $result = array_filter($result);
+        }
+        return $result;
+    }
+
     public static function set($name, $value)
     {
         if(self::get($name)){

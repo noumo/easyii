@@ -6,6 +6,8 @@ class GalleryModule extends \yii\easyii\components\Module
     public $settings = [
         'categoryThumb' => true,
         'itemsInFolder' => false,
+        'categoryTags' => true,
+        'categorySlugImmutable' => false,
     ];
 
     public static $installConfig = [

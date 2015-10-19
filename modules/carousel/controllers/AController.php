@@ -3,29 +3,44 @@ namespace yii\easyii\modules\carousel\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortAction;
 use yii\widgets\ActiveForm;
-use yii\web\UploadedFile;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\carousel\models\Carousel;
-use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\SortableController;
-use yii\easyii\behaviors\StatusController;
-
 
 class AController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
+        $className = Carousel::className();
         return [
-            [
-                'class' => SortableController::className(),
-                'model' => Carousel::className()
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/carousel', 'Carousel item deleted')
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => Carousel::className()
-            ]
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Carousel::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Carousel::STATUS_OFF
+            ],
         ];
     }
 
@@ -42,6 +57,7 @@ class AController extends Controller
     public function actionCreate()
     {
         $model = new Carousel;
+        $model->scenario = 'create';
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -49,27 +65,13 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(($fileInstanse = UploadedFile::getInstance($model, 'image')))
-                {
-                    $model->image = $fileInstanse;
-                    if($model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'carousel');
-                        $model->status = Carousel::STATUS_ON;
-
-                        if($model->save()){
-                            $this->flash('success', Yii::t('easyii/carousel', 'Carousel created'));
-                            return $this->redirect(['/admin/'.$this->module->id]);
-                        }
-                        else{
-                            $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                        }
-                    }
-                    else {
-                        $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                    }
+                $model->status = Carousel::STATUS_ON;
+                if($model->save()){
+                    $this->flash('success', Yii::t('easyii/carousel', 'Carousel created'));
+                    return $this->redirect(['/admin/'.$this->module->id]);
                 }
-                else {
-                    $this->flash('error', Yii::t('yii', '{attribute} cannot be blank.', ['attribute' => $model->getAttributeLabel('image')]));
+                else{
+                    $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
                 }
                 return $this->refresh();
             }
@@ -96,21 +98,6 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(($fileInstanse = UploadedFile::getInstance($model, 'image')))
-                {
-                    $model->image = $fileInstanse;
-                    if($model->validate(['image'])){
-                        $model->image = Image::upload($model->image, 'carousel');
-                    }
-                    else {
-                        $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-                        return $this->refresh();
-                    }
-                }
-                else{
-                    $model->image = $model->oldAttributes['image'];
-                }
-
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii/carousel', 'Carousel updated'));
                 }
@@ -125,35 +112,5 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Carousel::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/carousel', 'Carousel item deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Carousel::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Carousel::STATUS_OFF);
     }
 }

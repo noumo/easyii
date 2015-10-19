@@ -2,10 +2,10 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\ClearImageAction;
 use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
-use yii\web\UploadedFile;
-use yii\easyii\helpers\Image;
 
 /**
  * Category controller component
@@ -21,6 +21,27 @@ class CategoryController extends Controller
 
     /** @var string  */
     public $viewRoute = '/items';
+
+    public function actions()
+    {
+        $className = $this->categoryClass;
+        return [
+            'clear-image' => [
+                'class' => ClearImageAction::className(),
+                'model' => $className
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => $className::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => $className::STATUS_OFF
+            ],
+        ];
+    }
 
     /**
      * Categories list
@@ -53,15 +74,6 @@ class CategoryController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, $this->moduleName);
-                    } else {
-                        $model->image = '';
-                    }
-                }
-
                 $model->status = $class::STATUS_ON;
 
                 $parent = (int)Yii::$app->request->post('parent', null);
@@ -112,14 +124,6 @@ class CategoryController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(isset($_FILES) && $this->module->settings['categoryThumb']){
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if($model->image && $model->validate(['image'])){
-                        $model->image = Image::upload($model->image, $this->moduleName);
-                    }else{
-                        $model->image = $model->oldAttributes['image'];
-                    }
-                }
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Category updated'));
                 }
@@ -134,31 +138,6 @@ class CategoryController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    /**
-     * Remove category image
-     *
-     * @param $id
-     * @return \yii\web\Response
-     */
-    public function actionClearImage($id)
-    {
-        $class = $this->categoryClass;
-        $model = $class::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image){
-            $model->image = '';
-            if($model->update()){
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
     }
 
     /**
@@ -202,30 +181,6 @@ class CategoryController extends Controller
     public function actionDown($id)
     {
         return $this->move($id, 'down');
-    }
-
-    /**
-     * Activate category action
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function actionOn($id)
-    {
-        $class = $this->categoryClass;
-        return $this->changeStatus($id, $class::STATUS_ON);
-    }
-
-    /**
-     * Activate category action
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function actionOff($id)
-    {
-        $class = $this->categoryClass;
-        return $this->changeStatus($id, $class::STATUS_OFF);
     }
 
     /**

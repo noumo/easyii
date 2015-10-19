@@ -65,4 +65,16 @@ class SystemController extends \yii\easyii\components\Controller
         }
         return rmdir($directory);
     }
+
+    public function actionTest()
+    {
+        foreach(\yii\easyii\modules\news\models\News::find()->all() as $photo){
+            $pieces = explode('/', $photo->image_file);
+            $count = count($pieces);
+            if($count > 2){
+                $new = $pieces[$count - 2] . '/' . $pieces[$count - 1];
+                \yii\easyii\modules\news\models\News::updateAll(['image_file' => $new], ['news_id' => $photo->news_id]);
+            }
+        }
+    }
 }

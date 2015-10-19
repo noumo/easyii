@@ -5,6 +5,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\components\API;
 use yii\easyii\models\Tag;
+use yii\easyii\modules\article\ArticleModule;
 use yii\easyii\modules\article\models\Item;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
@@ -37,7 +38,7 @@ class CategoryObject extends \yii\easyii\components\ApiObject
             $this->_items = [];
 
             $with = ['seo'];
-            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+            if(ArticleModule::setting('enableTags')){
                 $with[] = 'tags';
             }
 

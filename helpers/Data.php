@@ -2,8 +2,6 @@
 namespace yii\easyii\helpers;
 
 use Yii;
-use yii\helpers\Inflector;
-use yii\helpers\StringHelper;
 
 class Data
 {

@@ -3,29 +3,47 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortAction;
 use yii\easyii\models\CopyModuleForm;
 use yii\helpers\FileHelper;
 use yii\widgets\ActiveForm;
-
 use yii\easyii\models\Module;
-use yii\easyii\behaviors\SortableController;
-use yii\easyii\behaviors\StatusController;
 
 class ModulesController extends \yii\easyii\components\Controller
 {
     public $rootActions = 'all';
 
-    public function behaviors()
+    public function actions()
     {
+        $className = Module::className();
         return [
-            [
-                'class' => SortableController::className(),
-                'model' => Module::className()
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii', 'Module deleted')
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => Module::className()
-            ]
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'order_num'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Module::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Module::STATUS_OFF
+            ],
         ];
     }
 
@@ -202,8 +220,10 @@ class ModulesController extends \yii\easyii\components\Controller
                     if(!$object->isDir()){
                         $fileContent = file_get_contents($file);
                         $fileContent = str_replace($oldNameSpace, $newNameSpace, $fileContent);
+                        $fileContent = str_replace($oldModuleClass, $newModuleClass, $fileContent);
                         $fileContent = str_replace("Yii::t('easyii/".$module->name, "Yii::t('easyii/".$formModel->name, $fileContent);
                         $fileContent = str_replace("'".$module->name."'", "'".$formModel->name."'", $fileContent);
+                        $fileContent = str_replace('/'.$module->name.'/', '/'.$formModel->name.'/', $fileContent);
 
                         file_put_contents($file, $fileContent);
                     }
@@ -258,35 +278,5 @@ class ModulesController extends \yii\easyii\components\Controller
             'model' => $module,
             'formModel' => $formModel
         ]);
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Module::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii', 'Module deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Module::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Module::STATUS_OFF);
     }
 }
