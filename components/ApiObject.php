@@ -3,6 +3,8 @@ namespace yii\easyii\components;
 
 use Yii;
 use yii\easyii\helpers\Image;
+use yii\easyii\models\Setting;
+use yii\easyii\modules\text\api\Text;
 
 /**
  * Class ApiObject
@@ -90,6 +92,7 @@ class ApiObject extends \yii\base\Object
                     {
                         $result = $setting;
                     }
+                    //Todo: Text module active?
                     elseif ($text = Text::get($key))
                     {
                         $result = $text;
