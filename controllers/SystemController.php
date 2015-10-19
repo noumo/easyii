@@ -2,12 +2,14 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\easyii\helpers\WebConsole;
+use yii\easyii\models\LoginForm;
 use yii\easyii\models\Setting;
 
 class SystemController extends \yii\easyii\components\Controller
 {
-    public $rootActions = ['*'];
+    public $rootActions = 'all';
 
     public function actionIndex()
     {
@@ -52,6 +54,17 @@ class SystemController extends \yii\easyii\components\Controller
         $this->back();
     }
 
+    public function actionLogs()
+    {
+        $data = new ActiveDataProvider([
+            'query' => LoginForm::find()->desc(),
+        ]);
+
+        return $this->render('logs', [
+            'data' => $data
+        ]);
+    }
+
     private function deleteDir($directory)
     {
         $iterator = new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -64,17 +77,5 @@ class SystemController extends \yii\easyii\components\Controller
             }
         }
         return rmdir($directory);
-    }
-
-    public function actionTest()
-    {
-        foreach(\yii\easyii\modules\news\models\News::find()->all() as $photo){
-            $pieces = explode('/', $photo->image_file);
-            $count = count($pieces);
-            if($count > 2){
-                $new = $pieces[$count - 2] . '/' . $pieces[$count - 1];
-                \yii\easyii\modules\news\models\News::updateAll(['image_file' => $new], ['news_id' => $photo->news_id]);
-            }
-        }
     }
 }

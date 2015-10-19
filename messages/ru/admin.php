@@ -111,6 +111,7 @@ return [
     'Assets cleared' => 'Assets очищены',
     'Cache flushed' => 'Кэш успешно сброшен',
     'Logs' => 'Логи',
+    'Tools' => 'Инструменты',
     'Seo texts' => 'Seo тексты',
 
     'Categories' => 'Категории',

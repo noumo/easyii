@@ -4,6 +4,7 @@ use yii\helpers\Url;
 
 $this->title = Yii::t('easyii', 'System');
 ?>
+<?= $this->render('_menu') ?>
 
 <h4><?= Yii::t('easyii', 'Current version') ?>: <b><?= Setting::get('easyii_version') ?></b>
     <?php if(\yii\easyii\AdminModule::VERSION > floatval(Setting::get('easyii_version'))) : ?>

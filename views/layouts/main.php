@@ -62,10 +62,6 @@ $moduleName = $this->context->module->id;
                             <i class="glyphicon glyphicon-hdd"></i>
                             <?= Yii::t('easyii', 'System') ?>
                         </a>
-                        <a href="<?= Url::to(['/admin/logs']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>">
-                            <i class="glyphicon glyphicon-align-justify"></i>
-                            <?= Yii::t('easyii', 'Logs') ?>
-                        </a>
                     <?php endif; ?>
                 </div>
                 <div class="box content">
