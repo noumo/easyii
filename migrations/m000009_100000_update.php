@@ -45,6 +45,16 @@ class m000009_100000_update extends \yii\db\Migration
             'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
 
+        $this->insert(models\Module::tableName(), [
+            'name' => 'entity',
+            'title' => 'Entities',
+            'class' => 'yii\noumo\easyii\modules\entity\EntityModule',
+            'icon' => 'asterisk',
+            'settings' => '[]',
+            'order_num' => 95,
+            'status' => models\Module::STATUS_ON
+        ]);
+
         $this->renameColumn(catalog\models\Category::tableName(), 'image', 'image_file');
         $this->renameColumn(catalog\models\Item::tableName(), 'image', 'image_file');
         $this->renameColumn(article\models\Category::tableName(), 'image', 'image_file');
