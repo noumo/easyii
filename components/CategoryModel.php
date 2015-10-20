@@ -12,6 +12,11 @@ use yii\easyii\models\SeoText;
 
 /**
  * Base CategoryModel. Shared by categories
+ *
+ * @property string $title
+ * @property string $image
+ * @property string $slug
+ *
  * @package yii\easyii\components
  * @inheritdoc
  */
