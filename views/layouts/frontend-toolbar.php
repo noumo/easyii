@@ -9,7 +9,7 @@ $position = Setting::get('toolbar_position') === 'bottom' ? 'bottom' : 'top';
 $this->registerCss('body {padding-'.$position.': 50px;}');
 ?>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<nav id="easyii-navbar">
+<nav id="easyii-navbar" class="<?= $position ?>">
     <div class="easyii-container">
         <a href="<?= Url::to(['/admin']) ?>" class="pull-left"><span class="glyphicon glyphicon-arrow-left"></span> <?= Yii::t('easyii', 'Control Panel') ?></a>
         <div class="live-edit-label pull-left">
