@@ -2,7 +2,10 @@
 namespace yii\easyii\modules\content\controllers;
 
 use Yii;
-use yii\easyii\behaviors\StatusController;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\ClearImageAction;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortAction;
 use yii\easyii\modules\content\models\Layout;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
@@ -11,22 +14,43 @@ use yii\helpers\Html;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\content\models\Item;
 use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\SortableDateController;
 use yii\widgets\ActiveForm;
 
 class ItemController extends Controller
 {
-    public function behaviors()
+    public function actions()
     {
+        $className = Item::className();
         return [
-            [
-                'class' => SortableDateController::className(),
-                'model' => Item::className(),
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/content', 'Item deleted')
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => Item::className()
-            ]
+            'clear-image' => [
+                'class' => ClearImageAction::className(),
+                'model' => $className
+            ],
+            'up' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'down' => [
+                'class' => SortAction::className(),
+                'model' => $className,
+                'attribute' => 'time'
+            ],
+            'on' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Item::STATUS_ON
+            ],
+            'off' => [
+                'class' => ChangeStatusAction::className(),
+                'model' => $className,
+                'status' => Item::STATUS_OFF
+            ],
         ];
     }
 
