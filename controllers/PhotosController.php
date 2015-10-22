@@ -54,7 +54,7 @@ class PhotosController extends Controller
                         'message' => Yii::t('easyii', 'Photo uploaded'),
                         'photo' => [
                             'id' => $photo->primaryKey,
-                            'image' => $photo->image,
+                            'image_file' => $photo->image_file,
                             'thumb' => Image::thumb($photo->image_file, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT),
                             'description' => ''
                         ]
@@ -117,7 +117,7 @@ class PhotosController extends Controller
                         $success = [
                             'message' => Yii::t('easyii', 'Photo uploaded'),
                             'photo' => [
-                                'image' => $photo->image,
+                                'image_file' => $photo->image_file,
                                 'thumb' => Image::thumb($photo->image_file, Photo::PHOTO_THUMB_WIDTH, Photo::PHOTO_THUMB_HEIGHT)
                             ]
                         ];

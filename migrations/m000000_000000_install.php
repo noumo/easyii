@@ -65,7 +65,7 @@ class m000000_000000_install extends \yii\db\Migration
             'photo_id' => 'pk',
             'class' => Schema::TYPE_STRING . '(128) NOT NULL',
             'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
-            'image' => Schema::TYPE_STRING . '(128) NOT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) NOT NULL',
             'description' => Schema::TYPE_STRING . '(1024) NOT NULL',
             'order_num' => Schema::TYPE_INTEGER . " NOT NULL",
         ], $this->engine);
@@ -96,7 +96,7 @@ class m000000_000000_install extends \yii\db\Migration
         //CAROUSEL MODULE
         $this->createTable(Carousel::tableName(), [
             'carousel_id' => 'pk',
-            'image' => Schema::TYPE_STRING . '(128) NOT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) NOT NULL',
             'link' => Schema::TYPE_STRING . '(255) NOT NULL',
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
@@ -108,7 +108,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(catalog\models\Category::tableName(), [
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'tree' => Schema::TYPE_INTEGER,
@@ -129,7 +129,7 @@ class m000000_000000_install extends \yii\db\Migration
             'price' => Schema::TYPE_FLOAT . " DEFAULT '0'",
             'discount' => Schema::TYPE_INTEGER . " DEFAULT '0'",
             'data' => Schema::TYPE_TEXT . ' NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
@@ -203,7 +203,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(gallery\models\Category::tableName(), [
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'tree' => Schema::TYPE_INTEGER,
             'lft' => Schema::TYPE_INTEGER,
@@ -232,7 +232,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(News::tableName(), [
             'news_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
@@ -246,7 +246,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createTable(article\models\Category::tableName(), [
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER,
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'tree' => Schema::TYPE_INTEGER,
@@ -261,7 +261,7 @@ class m000000_000000_install extends \yii\db\Migration
             'item_id' => 'pk',
             'category_id' => Schema::TYPE_INTEGER,
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
             'text' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',

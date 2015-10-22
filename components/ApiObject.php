@@ -57,6 +57,7 @@ class ApiObject extends \yii\base\Object
      */
     public function thumb($width = null, $height = null)
     {
+        var_dump(Image::thumb($this->model->image_file, $width, $height));
         return !empty($this->model->image_file) ? Image::thumb($this->model->image_file, $width, $height) : '';
     }
 

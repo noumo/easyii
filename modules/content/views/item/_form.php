@@ -18,11 +18,11 @@ $module = $this->context->module->id;
 <?= $form->field($model, 'header') ?>
 
 <?php if($settings['itemThumb']) : ?>
-    <?php if($model->image) : ?>
-        <img src="<?= Image::thumb($model->image, 240) ?>">
+    <?php if($model->image_file) : ?>
+        <img src="<?= Image::thumb($model->image_file, 240) ?>">
         <a href="<?= Url::to(['/admin/'.$module.'/item/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
     <?php endif; ?>
-    <?= $form->field($model, 'image')->fileInput() ?>
+    <?= $form->field($model, 'image_file')->fileInput() ?>
 <?php endif; ?>
 <?= $dataForm ?>
 

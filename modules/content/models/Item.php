@@ -25,7 +25,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['image_file', 'image'],
             [['content', 'header'], 'safe'],
             [['nav', 'status', 'category_id', 'time'], 'integer'],
             ['time', 'default', 'value' => time()],
@@ -41,7 +41,7 @@ class Item extends \yii\easyii\components\ActiveRecord
         return [
             'category_id' => Yii::t('easyii', 'Layout'),
             'title' => Yii::t('easyii', 'Title'),
-            'image' => Yii::t('easyii', 'Image'),
+            'image_file' => Yii::t('easyii', 'Image'),
             'content' => Yii::t('easyii', 'Content'),
             'header' => Yii::t('easyii', 'Header'),
             'time' => Yii::t('easyii', 'Date'),
@@ -71,8 +71,8 @@ class Item extends \yii\easyii\components\ActiveRecord
 
             $this->data = json_encode($this->data);
 
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
+            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
+                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image_file']);
             }
 
             return true;
@@ -131,8 +131,8 @@ class Item extends \yii\easyii\components\ActiveRecord
             $photo->delete();
         }
 
-        if($this->image) {
-            @unlink(Yii::getAlias('@webroot') . $this->image);
+        if($this->image_file) {
+            @unlink(Yii::getAlias('@webroot') . $this->image_file);
         }
 
         ItemData::deleteAll(['item_id' => $this->primaryKey]);
