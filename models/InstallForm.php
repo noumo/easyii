@@ -18,7 +18,7 @@ class InstallForm extends Model
     public function rules()
     {
         return [
-            ['root_password', 'required'],
+            [['root_password', 'admin_email'], 'required'],
             ['root_password', 'string', 'min' => 6],
             [['recaptcha_key', 'recaptcha_secret'], 'string'],
             [['robot_email', 'admin_email'], 'email'],
