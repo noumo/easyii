@@ -28,13 +28,13 @@ use yii\helpers\Url;
 <div class="row">
     <div class="col-md-6">
         <table class="chart-table">
-            <tr><th><?= Yii::t('easyii', 'Countries') ?>.</th></tr>
+            <tr><th><?= Yii::t('easyii', 'Countries') ?></th></tr>
             <tr><td><div id="chart-2-container"><br/><span class="small smooth"><?= Yii::t('easyii', 'chart is loading') ?>...</span></div></td></tr>
         </table>
     </div>
     <div class="col-md-6">
         <table class="chart-table">
-            <tr><th><?= Yii::t('easyii', 'Sources') ?>.</th></tr>
+            <tr><th><?= Yii::t('easyii', 'Sources') ?></th></tr>
             <tr><td><div id="chart-3-container"><br/><span class="small smooth"><?= Yii::t('easyii', 'chart is loading') ?>...</span></div></td></tr>
         </table>
     </div>

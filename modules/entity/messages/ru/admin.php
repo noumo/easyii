@@ -1,6 +1,7 @@
 <?php
 return [
-    'Catalog' => 'Каталог',
+    'Entity' => 'Объект',
+    'Entities' => 'Объекты',
     'Category fields' => 'Поля категории',
     'Manage fields' => 'Редактировать поля',
 
@@ -15,9 +16,5 @@ return [
 
     'Title' => 'Название',
     'Type' => 'Тип поля',
-    'Options' => 'Опции',
-    'Available' => 'Доступно',
-    'Price' => 'Цена',
-    'Discount' => 'Скидка',
     'Select' => 'Выбрать',
 ];

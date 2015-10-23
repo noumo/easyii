@@ -1,4 +1,5 @@
 <?php
+use yii\easyii\helpers\Data;
 use yii\easyii\helpers\MigrationHelper;
 use yii\easyii\models;
 use yii\easyii\models\Setting;
@@ -10,6 +11,7 @@ use yii\easyii\modules\article;
 use yii\easyii\modules\carousel\models\Carousel;
 use yii\easyii\modules\gallery;
 use yii\easyii\modules\news\models\News;
+use yii\easyii\modules\entity\EntityModule;
 
 class m000009_100000_update extends \yii\db\Migration
 {
@@ -45,10 +47,12 @@ class m000009_100000_update extends \yii\db\Migration
             'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
 
+        $language = Data::getLocale();
+
         $this->insert(models\Module::tableName(), [
             'name' => 'entity',
-            'title' => 'Entities',
-            'class' => 'yii\easyii\modules\entity\EntityModule',
+            'title' => (!empty(EntityModule::$installConfig['title'][$language]) ? EntityModule::$installConfig['title'][$language] : EntityModule::$installConfig['title']['en']),
+            'class' => EntityModule::className(),
             'icon' => 'asterisk',
             'settings' => '[]',
             'order_num' => 95,

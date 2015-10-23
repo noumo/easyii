@@ -16,7 +16,7 @@ class EntityModule extends \yii\easyii\components\Module
 
     public static $installConfig = [
         'title' => [
-            'en' => 'Entity',
+            'en' => 'Entities',
             'ru' => 'Объекты',
         ],
         'icon' => 'list-asterisk',
