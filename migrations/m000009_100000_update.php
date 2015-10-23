@@ -48,7 +48,7 @@ class m000009_100000_update extends \yii\db\Migration
         $this->insert(models\Module::tableName(), [
             'name' => 'entity',
             'title' => 'Entities',
-            'class' => 'yii\noumo\easyii\modules\entity\EntityModule',
+            'class' => 'yii\easyii\modules\entity\EntityModule',
             'icon' => 'asterisk',
             'settings' => '[]',
             'order_num' => 95,
