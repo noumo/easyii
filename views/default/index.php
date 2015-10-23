@@ -19,9 +19,10 @@ $this->title = Yii::t('easyii', 'Welcome');
             </div>
         <?php endforeach; ?>
     </div>
+    <hr class="margin-30"/>
 <?php endif; ?>
 <?php if(Setting::get('ga_service_email') && Setting::get('ga_profile_id') && Setting::get('ga_p12_file')) : ?>
-    <hr class="margin-30"/>
+
     <?php \yii\easyii\widgets\GoogleCharts::widget([
         'email' => Setting::get('ga_service_email'),
         'ids' => Setting::get('ga_profile'),
