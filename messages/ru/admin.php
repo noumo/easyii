@@ -126,4 +126,16 @@ return [
     'Image cleared' => 'Изображение очищено',
 
 
+    'New on website' => 'Новое на сайте',
+    'Statistics' => 'Статистика',
+    'Month' => 'Месяц',
+    'Week' => 'Неделя',
+    'Today' => 'Сегодня',
+    'Active users' => 'На сайте',
+    'Sessions and views' => 'Сессии и просмотры',
+    'Countries' => 'Страны',
+    'Sources' => 'Источники',
+    'chart is loading' => 'график загружается',
+
+
 ];

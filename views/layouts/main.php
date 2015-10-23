@@ -12,7 +12,7 @@ $moduleName = $this->context->module->id;
     <meta charset="<?= Yii::$app->charset ?>"/>
     <?= Html::csrfMetaTags() ?>
     <title><?= Yii::t('easyii', 'Control Panel') ?> - <?= Html::encode($this->title) ?></title>
-<!--    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="<?= $asset->baseUrl ?>/favicon.ico" type="image/x-icon">
     <link rel="icon" href="<?= $asset->baseUrl ?>/favicon.ico" type="image/x-icon">
     <?php $this->head() ?>
@@ -23,10 +23,9 @@ $moduleName = $this->context->module->id;
     <div class="container">
         <div class="wrapper">
             <div class="header">
-                <div class="logo">
-                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png">
-                    EasyiiCMS
-                </div>
+                <a href="<?= Url::to(['/admin']) ?>" class="logo">
+                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png">EasyiiCMS
+                </a>
                 <div class="nav">
                     <a href="<?= Url::to(['/']) ?>" class="pull-left"><i class="glyphicon glyphicon-home"></i> <?= Yii::t('easyii', 'Open site') ?></a>
                     <a href="<?= Url::to(['/admin/sign/out']) ?>" class="pull-right"><i class="glyphicon glyphicon-log-out"></i> <?= Yii::t('easyii', 'Logout') ?></a>

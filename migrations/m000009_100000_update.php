@@ -19,58 +19,58 @@ class m000009_100000_update extends \yii\db\Migration
     
     public function up()
     {
-//        //ENTITY MODULE
-//        $this->createTable(entity\models\Category::tableName(), [
-//            'category_id' => $this->primaryKey(),
-//            'title' => $this->string(128)->notNull(),
-//            'image_file' => $this->string(128),
-//            'fields' => $this->text()->notNull(),
-//            'slug' => $this->string(128),
-//            'cache' => $this->boolean()->notNull()->defaultValue(1),
-//            'tree' => $this->integer(),
-//            'lft' => $this->integer(),
-//            'rgt' => $this->integer(),
-//            'depth' => $this->integer(),
-//            'order_num' => $this->integer(),
-//            'status' => $this->boolean()->defaultValue(1)
-//        ], $this->engine);
-//        $this->createIndex('slug', entity\models\Category::tableName(), 'slug', true);
-//
-//        $this->createTable(entity\models\Item::tableName(), [
-//            'item_id' => $this->primaryKey(),
-//            'category_id' => $this->integer()->notNull(),
-//            'title' => $this->string(128)->notNull(),
-//            'data' => $this->text()->notNull(),
-//            'order_num' => $this->integer(),
-//            'status' => $this->boolean()->defaultValue(1)
-//        ], $this->engine);
-//
-//        $this->insert(models\Module::tableName(), [
-//            'name' => 'entity',
-//            'title' => 'Entities',
-//            'class' => 'yii\noumo\easyii\modules\entity\EntityModule',
-//            'icon' => 'asterisk',
-//            'settings' => '[]',
-//            'order_num' => 95,
-//            'status' => models\Module::STATUS_ON
-//        ]);
-//
-//        $this->renameColumn(catalog\models\Category::tableName(), 'image', 'image_file');
-//        $this->renameColumn(catalog\models\Item::tableName(), 'image', 'image_file');
-//        $this->renameColumn(article\models\Category::tableName(), 'image', 'image_file');
-//        $this->renameColumn(article\models\Item::tableName(), 'image', 'image_file');
-//        $this->renameColumn(gallery\models\Category::tableName(), 'image', 'image_file');
-//        $this->renameColumn(News::tableName(), 'image', 'image_file');
-//        $this->renameColumn(Carousel::tableName(), 'image', 'image_file');
-//        $this->renameColumn(models\Photo::tableName(), 'image', 'image_file');
-//
-//        $this->updateFilePath(catalog\models\Category::className());
-//        $this->updateFilePath(catalog\models\Item::className());
-//        $this->updateFilePath(article\models\Category::className());
-//        $this->updateFilePath(article\models\Item::className());
-//        $this->updateFilePath(News::className());
-//        $this->updateFilePath(Carousel::className());
-//        $this->updateFilePath(models\Photo::className());
+        //ENTITY MODULE
+        $this->createTable(entity\models\Category::tableName(), [
+            'category_id' => $this->primaryKey(),
+            'title' => $this->string(128)->notNull(),
+            'image_file' => $this->string(128),
+            'fields' => $this->text()->notNull(),
+            'slug' => $this->string(128),
+            'cache' => $this->boolean()->notNull()->defaultValue(1),
+            'tree' => $this->integer(),
+            'lft' => $this->integer(),
+            'rgt' => $this->integer(),
+            'depth' => $this->integer(),
+            'order_num' => $this->integer(),
+            'status' => $this->boolean()->defaultValue(1)
+        ], $this->engine);
+        $this->createIndex('slug', entity\models\Category::tableName(), 'slug', true);
+
+        $this->createTable(entity\models\Item::tableName(), [
+            'item_id' => $this->primaryKey(),
+            'category_id' => $this->integer()->notNull(),
+            'title' => $this->string(128)->notNull(),
+            'data' => $this->text()->notNull(),
+            'order_num' => $this->integer(),
+            'status' => $this->boolean()->defaultValue(1)
+        ], $this->engine);
+
+        $this->insert(models\Module::tableName(), [
+            'name' => 'entity',
+            'title' => 'Entities',
+            'class' => 'yii\noumo\easyii\modules\entity\EntityModule',
+            'icon' => 'asterisk',
+            'settings' => '[]',
+            'order_num' => 95,
+            'status' => models\Module::STATUS_ON
+        ]);
+
+        $this->renameColumn(catalog\models\Category::tableName(), 'image', 'image_file');
+        $this->renameColumn(catalog\models\Item::tableName(), 'image', 'image_file');
+        $this->renameColumn(article\models\Category::tableName(), 'image', 'image_file');
+        $this->renameColumn(article\models\Item::tableName(), 'image', 'image_file');
+        $this->renameColumn(gallery\models\Category::tableName(), 'image', 'image_file');
+        $this->renameColumn(News::tableName(), 'image', 'image_file');
+        $this->renameColumn(Carousel::tableName(), 'image', 'image_file');
+        $this->renameColumn(models\Photo::tableName(), 'image', 'image_file');
+
+        $this->updateFilePath(catalog\models\Category::className());
+        $this->updateFilePath(catalog\models\Item::className());
+        $this->updateFilePath(article\models\Category::className());
+        $this->updateFilePath(article\models\Item::className());
+        $this->updateFilePath(News::className());
+        $this->updateFilePath(Carousel::className());
+        $this->updateFilePath(models\Photo::className());
         $this->updateFilePath(file\models\File::className(), 'file');
 
 
@@ -86,6 +86,27 @@ class m000009_100000_update extends \yii\db\Migration
             'name' => 'redactor_plugins',
             'value' => 'imagemanager, filemanager, table, fullscreen',
             'title' => Yii::t('easyii/install', 'List of Redactor Widget plugins separated with comma'),
+            'visibility' => Setting::VISIBLE_ALL
+        ]);
+
+        $this->insert(Setting::tableName(), [
+            'name' => 'ga_service_email',
+            'value' => '',
+            'title' => Yii::t('easyii/install', 'Google analytics service account email'),
+            'visibility' => Setting::VISIBLE_ALL
+        ]);
+
+        $this->insert(Setting::tableName(), [
+            'name' => 'ga_profile_id',
+            'value' => '',
+            'title' => Yii::t('easyii/install', 'Google analytics profile id'),
+            'visibility' => Setting::VISIBLE_ALL
+        ]);
+
+        $this->insert(Setting::tableName(), [
+            'name' => 'ga_p12_file',
+            'value' => '',
+            'title' => Yii::t('easyii/install', 'Path to Google analytics service account p12 key file'),
             'visibility' => Setting::VISIBLE_ALL
         ]);
 
