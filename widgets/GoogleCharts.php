@@ -28,8 +28,8 @@ class GoogleCharts extends Widget
 
     public function run()
     {
-        $client = new Google_Client();
-        $client->setAssertionCredentials(new Google_Auth_AssertionCredentials($this->email, ['https://www.googleapis.com/auth/analytics.readonly'], file_get_contents(Yii::getAlias($this->p12))));
+        $client = new \Google_Client();
+        $client->setAssertionCredentials(new \Google_Auth_AssertionCredentials($this->email, ['https://www.googleapis.com/auth/analytics.readonly'], file_get_contents(Yii::getAlias($this->p12))));
         if($client->getAuth()->isAccessTokenExpired()) {
             $client->getAuth()->refreshTokenWithAssertion();
         }
