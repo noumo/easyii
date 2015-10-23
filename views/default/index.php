@@ -5,7 +5,7 @@ use yii\helpers\Url;
 $this->title = Yii::t('easyii', 'Welcome');
 ?>
 <?php if(count($notifications)) : ?>
-    <h2><?= Yii::t('eaysii', 'New on website') ?></h2>
+    <h2><?= Yii::t('easyii', 'New on website') ?></h2>
     <div class="row welcome-notifications">
         <?php foreach($notifications as $i => $module) : ?>
             <div class="col-md-3">
