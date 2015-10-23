@@ -25,6 +25,7 @@ class InstallForm extends Model
             [['root_password', 'recaptcha_key', 'recaptcha_secret', 'robot_email', 'admin_email'], 'trim'],
         ];
     }
+
     public function attributeLabels()
     {
         return [
@@ -32,5 +33,10 @@ class InstallForm extends Model
             'admin_email' => Yii::t('easyii/install', 'Admin E-mail'),
             'robot_email' => Yii::t('easyii/install', 'Robot E-mail')
         ];
+    }
+
+    public function init()
+    {
+        $this->robot_email = 'noreply@'.Yii::$app->request->serverName;
     }
 }

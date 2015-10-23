@@ -37,7 +37,7 @@ class InstallController extends \yii\web\Controller
 
         $installForm = new InstallForm();
 
-        if ($installForm->load(Yii::$app->request->post())) {
+        if ($installForm->load(Yii::$app->request->post()) && $installForm->validate()) {
             $this->createUploadsDir();
 
             WebConsole::migrate();
@@ -51,8 +51,6 @@ class InstallController extends \yii\web\Controller
             return $this->redirect(['/admin/install/finish']);
         }
         else {
-            $installForm->robot_email = 'noreply@'.Yii::$app->request->serverName;
-
             return $this->render('index', [
                 'model' => $installForm
             ]);
