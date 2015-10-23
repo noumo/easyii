@@ -1,9 +1,12 @@
+<?php
+use yii\helpers\Url;
+?>
 <h2>
     <?= Yii::t('eaysii', 'Statistics') ?>
     <div class="btn-group pull-right" role="group">
-        <a type="button" class="btn btn-<?= ($period == 30 ? 'primary' : 'default') ?>"><?= Yii::t('eaysii', 'Month') ?></a>
-        <a type="button" class="btn btn-<?= ($period == 7 ? 'primary' : 'default') ?>"><?= Yii::t('eaysii', 'Week') ?></a>
-        <a type="button" class="btn btn-<?= ($period ? 'default' : 'primary') ?>"><?= Yii::t('eaysii', 'Today') ?></a>
+        <a href="<?= Url::current(['period' => 30]) ?>" type="button" class="btn btn-<?= ($period == 30 ? 'primary' : 'default') ?>"><?= Yii::t('eaysii', 'Month') ?></a>
+        <a href="<?= Url::current(['period' => 7]) ?>" type="button" class="btn btn-<?= ($period == 7 ? 'primary' : 'default') ?>"><?= Yii::t('eaysii', 'Week') ?></a>
+        <a href="<?= Url::current(['period' => '']) ?>" type="button" class="btn btn-<?= ($period ? 'default' : 'primary') ?>"><?= Yii::t('eaysii', 'Today') ?></a>
     </div>
 </h2>
 
