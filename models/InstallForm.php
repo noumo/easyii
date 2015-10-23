@@ -10,10 +10,10 @@ class InstallForm extends Model
     const ROOT_PASSWORD_KEY = 'easyii_install_success_return';
 
     public $root_password;
-    public $recaptcha_key;
-    public $recaptcha_secret;
-    public $robot_email;
-    public $admin_email;
+    public $recaptcha_key = '';
+    public $recaptcha_secret = '';
+    public $robot_email = '';
+    public $admin_email = '';
 
     public function rules()
     {

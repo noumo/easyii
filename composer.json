@@ -30,7 +30,8 @@
         "bower-asset/eonasdan-bootstrap-datetimepicker": "4.7.14",
         "2amigos/yii2-selectize-widget": "~1.0",
         "vova07/yii2-imperavi-widget": "*",
-        "stojg/crop": "*"
+        "stojg/crop": "*",
+        "google/apiclient": "1.0.*@beta"
     },
     "autoload": {
         "psr-4": {
