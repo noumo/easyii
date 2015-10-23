@@ -175,6 +175,7 @@ html{
     padding: 15px;
     color: #fff;
 }
+
 .welcome-notifications a.module-link-color1{background: #1ab394;}
 .welcome-notifications a.module-link-color1:hover{background: #189177;}
 .welcome-notifications a.module-link-color2{background: #23c6c8;}
@@ -226,7 +227,9 @@ h2{
     margin-top: 10px;
     font-size: 30px;
 }
-
+h2 .btn-group a{
+    text-transform: none;
+}
 h4{
     text-transform: uppercase;
     font-size: 24px;
