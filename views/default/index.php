@@ -23,7 +23,7 @@ $this->title = Yii::t('easyii', 'Welcome');
 <?php endif; ?>
 <?php if(Setting::get('ga_service_email') && Setting::get('ga_profile_id') && Setting::get('ga_p12_file')) : ?>
 
-    <?php \yii\easyii\widgets\GoogleCharts::widget([
+    <?= \yii\easyii\widgets\GoogleCharts::widget([
         'email' => Setting::get('ga_service_email'),
         'ids' => Setting::get('ga_profile_id'),
         'p12' => Setting::get('ga_p12_file')
