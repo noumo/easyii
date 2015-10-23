@@ -25,8 +25,8 @@ $this->title = Yii::t('easyii', 'Welcome');
 
     <?php \yii\easyii\widgets\GoogleCharts::widget([
         'email' => Setting::get('ga_service_email'),
-        'ids' => Setting::get('ga_profile'),
-        'p12' => Setting::get('ga_p12')
+        'ids' => Setting::get('ga_profile_id'),
+        'p12' => Setting::get('ga_p12_file')
     ]) ?>
 <?php else : ?>
     <p><?= Yii::t('easyii', 'Welcome to control panel, choose which section you want to manage in left menu.') ?></p>
