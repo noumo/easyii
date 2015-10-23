@@ -86,28 +86,28 @@ class m000009_100000_update extends \yii\db\Migration
             'name' => 'redactor_plugins',
             'value' => 'imagemanager, filemanager, table, fullscreen',
             'title' => Yii::t('easyii/install', 'List of Redactor Widget plugins separated with comma'),
-            'visibility' => Setting::VISIBLE_ALL
+            'visibility' => Setting::VISIBLE_ROOT
         ]);
 
         $this->insert(Setting::tableName(), [
             'name' => 'ga_service_email',
             'value' => '',
             'title' => Yii::t('easyii/install', 'Google analytics service account email'),
-            'visibility' => Setting::VISIBLE_ALL
+            'visibility' => Setting::VISIBLE_ROOT
         ]);
 
         $this->insert(Setting::tableName(), [
             'name' => 'ga_profile_id',
             'value' => '',
             'title' => Yii::t('easyii/install', 'Google analytics profile id'),
-            'visibility' => Setting::VISIBLE_ALL
+            'visibility' => Setting::VISIBLE_ROOT
         ]);
 
         $this->insert(Setting::tableName(), [
             'name' => 'ga_p12_file',
             'value' => '',
             'title' => Yii::t('easyii/install', 'Path to Google analytics service account p12 key file'),
-            'visibility' => Setting::VISIBLE_ALL
+            'visibility' => Setting::VISIBLE_ROOT
         ]);
 
         MigrationHelper::appendModuleSettings('article', [
