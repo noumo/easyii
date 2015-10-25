@@ -87,6 +87,6 @@ class LayoutObject extends ApiObject
 
 	public function getEditLink()
 	{
-		return Url::to(['/admin/catalog/a/edit/', 'id' => $this->id]);
+		return Url::to(['/admin/catalog/layout/edit/', 'id' => $this->id]);
 	}
 }

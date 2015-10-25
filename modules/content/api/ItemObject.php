@@ -71,7 +71,7 @@ class ItemObject extends ApiObject
     }
 
     public function getEditLink(){
-        return Url::to(['/admin/content/items/edit/', 'id' => $this->id]);
+        return Url::to(['/admin/content/item/edit/', 'id' => $this->id]);
     }
 
     public function getCreateLink(){
