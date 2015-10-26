@@ -4,7 +4,6 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\helpers\Image;
 use yii\easyii\models\Setting;
-use yii\easyii\modules\text\api\Text;
 
 /**
  * Class ApiObject
@@ -96,26 +95,22 @@ class ApiObject extends \yii\base\Object
     {
         if (is_string($value))
         {
-            $value = preg_replace_callback('/{{([a-zA-Z][\w_-]*)}}/',
-                function( $matches )
+            $value = preg_replace_callback(
+                '/{{([a-zA-Z][\w_-]*)}}/',
+                function ($matches)
                 {
-                    $key = strtolower( $matches[ 1 ] );
+                    $key = strtolower($matches[1]);
 
                     if ($setting = Setting::get($key))
                     {
                         $result = $setting;
-                    }
-                    //Todo: Text module active?
-                    elseif ($text = Text::get($key))
-                    {
-                        $result = $text;
                     }
                     else
                     {
                         $result = $matches[0];
                     }
 
-                    return $result ;
+                    return $result;
                 },
 
                 // the input string
