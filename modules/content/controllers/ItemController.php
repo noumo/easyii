@@ -6,6 +6,7 @@ use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
 use yii\easyii\actions\DeleteAction;
 use yii\easyii\actions\SortAction;
+use yii\easyii\modules\content\api\Content;
 use yii\easyii\modules\content\models\Layout;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
@@ -96,7 +97,7 @@ class ItemController extends Controller
             }
         }
         else {
-            $categories = ArrayHelper::map(Item::tree(), 'category_id', 'title');
+            $categories = ArrayHelper::map(Content::tree(), 'category_id', 'title');
 
             return $this->render('new', [
                 'model' => $model,
