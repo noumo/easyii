@@ -229,7 +229,7 @@ class Content extends \yii\easyii\components\API
 
 	private function findLayout($id_slug)
 	{
-		$layout = Item::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
+		$layout = Layout::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
 
 		return $layout ? new LayoutObject($layout) : null;
 	}

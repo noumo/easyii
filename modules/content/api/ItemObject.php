@@ -50,8 +50,11 @@ class ItemObject extends ApiObject
         return $this->liveEdit($value);
     }
 
-    public function getCat(){
-        return Content::cats()[$this->category_id];
+    /**
+     * @return LayoutObject
+     */
+    public function getLayout(){
+        return Content::cat($this->category_id);
     }
 
     public function getDate(){
