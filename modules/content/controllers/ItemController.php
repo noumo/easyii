@@ -6,15 +6,18 @@ use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
 use yii\easyii\actions\DeleteAction;
 use yii\easyii\actions\SortAction;
-use yii\easyii\modules\content\api\Content;
-use yii\easyii\modules\content\models\Layout;
-use yii\helpers\ArrayHelper;
-use yii\web\UploadedFile;
-use yii\helpers\Html;
-
 use yii\easyii\components\Controller;
-use yii\easyii\modules\content\models\Item;
 use yii\easyii\helpers\Image;
+use yii\easyii\modules\content\api\Content;
+use yii\easyii\modules\content\api\ItemObject;
+use yii\easyii\modules\content\models\Item;
+use yii\easyii\modules\content\models\Layout;
+use yii\easyii\widgets\Redactor;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\web\UploadedFile;
+use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 class ItemController extends Controller
@@ -144,7 +147,7 @@ class ItemController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'layout' => $layout,
-                'dataForm' => $this->generateForm($layout->fields)
+                'dataForm' => $this->generateForm($layout->fields, $model->data)
             ]);
         }
     }
@@ -261,6 +264,26 @@ class ItemController extends Controller
             }
             elseif ($field->type === 'text') {
                 $result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::textarea("Data[{$field->name}]", $value, ['class' => 'form-control']) .'</div>';
+            }
+            elseif ($field->type === 'html') {
+                $result .= Html::beginTag('div', ['class' => 'form-group']);
+                $result .= Html::label($field->title);
+                $result .= Redactor::widget([
+                        'name' => "Data[{$field->name}]",
+                        'value' => $value,
+                        'settings' => [
+                            'minHeight' => 100,
+                        ],
+                        'options' => [
+                            'class' => 'form-control',
+                            'minHeight' => 100,
+                            'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
+                            'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
+                            'plugins' => ['fullscreen']
+                        ]
+                    ]
+                );
+                $result .= Html::endTag('div');
             }
             elseif ($field->type === 'boolean') {
                 $result .= '<div class="checkbox"><label>'. Html::checkbox("Data[{$field->name}]", $value, ['uncheck' => 0]) .' '. $field->title .'</label></div>';

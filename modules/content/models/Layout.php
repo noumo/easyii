@@ -8,6 +8,7 @@ class Layout extends \yii\easyii\components\CategoryModel
 	static $fieldTypes = [
 		'string' => 'String',
 		'text' => 'Text',
+		'html' => 'Html',
 		'boolean' => 'Boolean',
 		'select' => 'Select',
 		'checkbox' => 'Checkbox'
