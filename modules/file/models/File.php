@@ -8,6 +8,9 @@ use yii\easyii\behaviors\SortableModel;
 
 class File extends \yii\easyii\components\ActiveRecord
 {
+
+    public $_filename;
+
     public static function tableName()
     {
         return 'easyii_files';
@@ -23,7 +26,8 @@ class File extends \yii\easyii\components\ActiveRecord
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             [['downloads', 'size'], 'integer'],
-            ['time', 'default', 'value' => time()]
+            ['time', 'default', 'value' => time()],
+            ['_filename', 'string', 'max'=>128]
         ];
     }
 
@@ -32,7 +36,8 @@ class File extends \yii\easyii\components\ActiveRecord
         return [
             'title' => Yii::t('easyii', 'Title'),
             'file' => Yii::t('easyii', 'File'),
-            'slug' => Yii::t('easyii', 'Slug')
+            'slug' => Yii::t('easyii', 'Slug'),
+            '_filename' => Yii::t('easyii', 'File name')
         ];
     }
 

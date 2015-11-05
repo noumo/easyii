@@ -14,6 +14,10 @@ use yii\easyii\widgets\SeoForm;
     <br>
 <?php endif; ?>
 
+<?php if($model->isNewRecord) : ?>
+    <?= $form->field($model, '_filename') ?>
+<?php endif; ?>
+
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>
     <?= SeoForm::widget(['model' => $model]) ?>
