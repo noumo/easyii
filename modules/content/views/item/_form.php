@@ -9,6 +9,7 @@ use yii\easyii\widgets\SeoForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\easyii\modules\content\models\Item;
 
 $settings = $this->context->module->settings;
 $module = $this->context->module->id;
@@ -20,6 +21,7 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 		'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 	]
 ); ?>
+
 <?= $form->field($model, 'title') ?>
 <?= $form->field($model, 'header') ?>
 

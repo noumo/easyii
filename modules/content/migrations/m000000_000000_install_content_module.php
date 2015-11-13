@@ -29,7 +29,8 @@ class m000000_000000_install_content_module extends \yii\db\Migration
 
         $this->createTable(Item::tableName(), [
             'item_id' => 'pk',
-            'category_id' => Schema::TYPE_INTEGER,
+	        'category_id' => Schema::TYPE_INTEGER,
+	        'parent_item_id' => Schema::TYPE_INTEGER,
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
             'header' => Schema::TYPE_STRING . ' DEFAULT NULL',
             'nav' => Schema::TYPE_BOOLEAN . " NOT NULL DEFAULT '1'",
@@ -38,7 +39,12 @@ class m000000_000000_install_content_module extends \yii\db\Migration
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+	        'tree' => Schema::TYPE_INTEGER,
+	        'lft' => Schema::TYPE_INTEGER,
+	        'rgt' => Schema::TYPE_INTEGER,
+	        'depth' => Schema::TYPE_INTEGER,
+	        'order_num' => Schema::TYPE_INTEGER,
+	        'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);
         $this->createIndex('slug', Item::tableName(), 'slug', true);
 

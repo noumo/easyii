@@ -1,8 +1,9 @@
 <?php
-use yii\easyii\modules\content\models\Item;
-use yii\helpers\Html;
-use yii\helpers\Url;
+/**
+ * @var \yii\web\View $this
+ */
 
+\yii\bootstrap\BootstrapPluginAsset::register($this);
 $this->title = Yii::t('easyii/content', 'Catalog');
 
 $module = $this->context->module->id;
@@ -24,33 +25,7 @@ $module = $this->context->module->id;
         </thead>
         <tbody>
         <?php foreach($model->items as $item) : ?>
-            <tr data-id="<?= $item->primaryKey ?>">
-                <?php if(IS_ROOT) : ?>
-                    <td><?= $item->primaryKey ?></td>
-                <?php endif; ?>
-                <td><a href="<?= Url::to(['/admin/'.$module.'/item/edit', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
-                <td class="nav">
-                    <?= Html::checkbox('', $item->nav == Item::NAV_ON, [
-                        'class' => 'switch',
-                        'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/nav']),
-                    ]) ?>
-                </td>
-                <td class="status">
-                    <?= Html::checkbox('', $item->status == Item::STATUS_ON, [
-                        'class' => 'switch',
-                        'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/item']),
-                    ]) ?>
-                </td>
-                <td class="text-right">
-                    <div class="btn-group btn-group-sm" role="group">
-                        <a href="<?= Url::to(['/admin/'.$module.'/item/up', 'id' => $item->primaryKey, 'category_id' => $model->primaryKey]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
-                        <a href="<?= Url::to(['/admin/'.$module.'/item/down', 'id' => $item->primaryKey, 'category_id' => $model->primaryKey]) ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
-                        <a href="<?= Url::to(['/admin/'.$module.'/item/delete', 'id' => $item->primaryKey]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
-                    </div>
-                </td>
-            </tr>
+	        <?php $this->render('_listItem', ['item' => $item, 'module' => $module])?>
         <?php endforeach; ?>
         </tbody>
     </table>

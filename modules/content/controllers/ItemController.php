@@ -5,7 +5,9 @@ use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
 use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\MoveAction;
 use yii\easyii\actions\SortAction;
+use yii\easyii\behaviors\SortableModel;
 use yii\easyii\components\Controller;
 use yii\easyii\helpers\Image;
 use yii\easyii\modules\content\api\Content;
@@ -35,16 +37,16 @@ class ItemController extends Controller
                 'class' => ClearImageAction::className(),
                 'model' => $className
             ],
-            'up' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'time'
-            ],
-            'down' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'time'
-            ],
+	        'up' => [
+		        'class' => MoveAction::className(),
+		        'model' => $className,
+		        'direction' => 'up'
+	        ],
+	        'down' => [
+		        'class' => MoveAction::className(),
+		        'model' => $className,
+		        'direction' => 'down'
+	        ],
             'on' => [
                 'class' => ChangeStatusAction::className(),
                 'model' => $className,
@@ -71,7 +73,7 @@ class ItemController extends Controller
 
     public function actionAll()
     {
-        if(!($items = Item::find()->all())){
+        if(!($items = Item::items())){
             return $this->redirect(['/admin/'.$this->module->id]);
         }
 
@@ -80,7 +82,7 @@ class ItemController extends Controller
         ]);
     }
 
-    public function actionNew()
+    public function actionNew($parent = null)
     {
         $model = new Item;
 
@@ -90,6 +92,15 @@ class ItemController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
+	            $parent = (int)Yii::$app->request->post('parent', null);
+	            if($parent > 0 && ($parentCategory = Item::findOne($parent))){
+		            $model->order_num = $parentCategory->order_num;
+		            $model->appendTo($parentCategory);
+	            } else {
+		            $model->attachBehavior('sortable', SortableModel::className());
+		            $model->makeRoot();
+	            }
+
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/content', 'Item created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/item/edit/', 'id' => $model->primaryKey]);
@@ -105,12 +116,15 @@ class ItemController extends Controller
             return $this->render('new', [
                 'model' => $model,
                 'categories' => $categories,
+	            'parent' => $parent,
             ]);
         }
     }
 
+	/*
     public function actionCreate($layoutId)
     {
+	    die;
         if(!($layout = Item::findOne($layoutId))){
             return $this->redirect(['/admin/'.$this->module->id]);
         }
@@ -134,6 +148,7 @@ class ItemController extends Controller
                         $model->image_file = '';
                     }
                 }
+
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/content', 'Item created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/item/edit/', 'id' => $model->primaryKey]);
@@ -151,6 +166,7 @@ class ItemController extends Controller
             ]);
         }
     }
+	*/
 
     public function actionEdit($id)
     {
