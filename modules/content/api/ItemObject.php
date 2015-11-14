@@ -16,11 +16,20 @@ class ItemObject extends ApiObject
     public $category_id;
     public $available;
     public $discount;
-    public $time;
+	public $time;
 
-    private $_photos;
+	public $tree;
+	public $depth;
+	public $order_num;
 
-    public function getTitle(){
+	/** @var  ItemObject */
+	public $parent;
+	/** @var  ItemObject[] */
+	public $children;
+
+	private $_photos;
+
+	public function getTitle(){
         if($this->model->isNewRecord){
             return $this->createLink;
         }
@@ -72,6 +81,32 @@ class ItemObject extends ApiObject
         }
         return $this->_photos;
     }
+
+	public function getParents()
+	{
+		if(!$this->parent)
+		{
+			if ($parent = $this->model->parents()->one())
+			{
+				$this->parent = new ItemObject($parent);
+			}
+		}
+		return $this->parent;
+	}
+
+	public function getChildren()
+	{
+		if (!$this->children)
+		{
+			$this->children = [];
+			foreach ($this->model->children()->all() as $child)
+			{
+				$this->children[] = new ItemObject($child);
+			}
+		}
+
+		return $this->children;
+	}
 
     public function getEditLink(){
         return Url::to(['/admin/content/item/edit/', 'id' => $this->id]);
