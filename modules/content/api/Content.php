@@ -181,7 +181,7 @@ class Content extends \yii\easyii\components\API
 				'url' => ['/' . str_replace('-', '/', $item->slug)],
 			];
 
-			if (count($item->getChildren()) > 0)
+			if (count($item->getChildren(['nav' => Item::NAV_ON])) > 0)
 			{
 				$subItems = [];
 				foreach ($item->getChildren() as $child)

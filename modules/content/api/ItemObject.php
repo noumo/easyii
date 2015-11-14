@@ -13,7 +13,8 @@ class ItemObject extends ApiObject
     public $slug;
     public $image;
     public $data;
-    public $category_id;
+	public $category_id;
+	public $nav;
     public $available;
     public $discount;
 	public $time;
@@ -82,11 +83,11 @@ class ItemObject extends ApiObject
         return $this->_photos;
     }
 
-	public function getParents()
+	public function getParents($where = null)
 	{
 		if(!$this->parent)
 		{
-			if ($parent = $this->model->parents()->one())
+			if ($parent = $this->model->parents(1)->andWhere($where)->one())
 			{
 				$this->parent = new ItemObject($parent);
 			}
@@ -94,12 +95,12 @@ class ItemObject extends ApiObject
 		return $this->parent;
 	}
 
-	public function getChildren()
+	public function getChildren($where = null)
 	{
 		if (!$this->children)
 		{
 			$this->children = [];
-			foreach ($this->model->children()->all() as $child)
+			foreach ($this->model->children(1)->andWhere($where)->all() as $child)
 			{
 				$this->children[] = new ItemObject($child);
 			}
