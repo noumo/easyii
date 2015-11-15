@@ -32,3 +32,4 @@ $module = $this->context->module->id;
 <?php else : ?>
     <p><?= Yii::t('easyii', 'No records found') ?></p>
 <?php endif; ?>
+

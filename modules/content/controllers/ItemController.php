@@ -121,53 +121,6 @@ class ItemController extends Controller
         }
     }
 
-	/*
-    public function actionCreate($layoutId)
-    {
-	    die;
-        if(!($layout = Item::findOne($layoutId))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
-        $model = new Item;
-
-        if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ActiveForm::validate($model);
-            }
-            else {
-                $model->category_id = $layout->primaryKey;
-                $model->data = Yii::$app->request->post('Data');
-
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if ($model->image_file_ && $model->validate(['image_file'])) {
-                        $model->image_file = Image::upload($model->image_file, 'content');
-                    } else {
-                        $model->image_file = '';
-                    }
-                }
-
-                if ($model->save()) {
-                    $this->flash('success', Yii::t('easyii/content', 'Item created'));
-                    return $this->redirect(['/admin/'.$this->module->id.'/item/edit/', 'id' => $model->primaryKey]);
-                } else {
-                    $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
-                    return $this->refresh();
-                }
-            }
-        }
-        else {
-            return $this->render('create', [
-                'model' => $model,
-                'layout' => $layout,
-                'dataForm' => $this->generateForm($layout->fields, $model->data)
-            ]);
-        }
-    }
-	*/
-
     public function actionEdit($id)
     {
         if(!($model = Item::findOne($id))){
