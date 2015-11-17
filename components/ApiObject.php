@@ -7,6 +7,8 @@ use yii\easyii\helpers\Image;
 /**
  * Class ApiObject
  * @package yii\easyii\components
+ * @var integer $id
+ * @var string $image
  */
 class ApiObject extends \yii\base\Object
 {

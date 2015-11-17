@@ -18,7 +18,6 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     public $depth;
 
     private $_adp;
-    private $_items;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
@@ -34,36 +33,39 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $with = ['seo'];
-            if(ArticleModule::setting('enableTags')){
-                $with[] = 'tags';
-            }
-
-            $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sortDate();
-
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-            if(!empty($options['tags'])){
-                $query
-                    ->innerJoinWith('tags', false)
-                    ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
-                    ->addGroupBy('item_id');
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new ArticleObject($model);
-            }
+        $with = ['seo'];
+        if(ArticleModule::setting('enableTags')){
+            $with[] = 'tags';
         }
-        return $this->_items;
+
+        $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sortDate();
+
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
+        }
+        if(!empty($options['tags'])){
+            $query
+                ->innerJoinWith('tags', false)
+                ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
+                ->addGroupBy('item_id');
+        }
+        if(!empty($options['orderBy'])){
+            $query->orderBy($options['orderBy']);
+        } else {
+            $query->sortDate();
+        }
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new ArticleObject($model);
+        }
+        return $result;
     }
 
     public function getEditLink(){

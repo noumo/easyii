@@ -28,8 +28,6 @@ class Guestbook extends \yii\easyii\components\API
     const SENT_VAR = 'guestbook_sent';
 
     private $_adp;
-    private $_last;
-    private $_items;
 
     private $_defaultFormOptions = [
         'errorUrl' => '',
@@ -38,44 +36,32 @@ class Guestbook extends \yii\easyii\components\API
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $query = GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate();
+        $query = GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate();
 
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new PostObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
         }
-        return $this->_items;
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new PostObject($model);
+        }
+        return $result;
     }
 
     public function api_last($limit = 1)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
         foreach(GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate()->limit($limit)->all() as $item){
             $result[] = new PostObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        } else {
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_form($options = [])
