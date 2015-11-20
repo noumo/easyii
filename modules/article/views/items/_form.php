@@ -1,5 +1,6 @@
 <?php
 use yii\easyii\helpers\Image;
+use yii\easyii\modules\article\models\Category;
 use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
@@ -14,6 +15,7 @@ $module = $this->context->module->id;
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
+<?= $form->field($model, 'category_id')->dropDownList($cats) ?>
 
 <?php if($this->context->module->settings['articleThumb']) : ?>
     <?php if($model->image_file) : ?>

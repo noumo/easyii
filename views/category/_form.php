@@ -24,7 +24,7 @@ $settings = $this->context->module->settings;
                 <option
                     value="<?= $node['category_id'] ?>"
                     <?php if($parent == $node['category_id']) echo 'SELECTED' ?>
-                    style="padding-left: <?= $node['depth']*20 ?>px;"
+                    style="padding-left: <?= $node['depth'] * 20 ?>px;"
                 ><?= $node['title'] ?></option>
             <?php endforeach; ?>
         </select>

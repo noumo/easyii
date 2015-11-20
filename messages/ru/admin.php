@@ -58,6 +58,7 @@ return [
     'Add subcategory' => 'Добавить подкатегорию',
     'Anti-spam check' => 'Проверка на спам',
     'Actions' => 'Действия',
+    'Category' => 'Категория',
 
     'Not found' => 'Не найдено',
     'Create error. {0}' => 'Ошибка при создании. {0}',

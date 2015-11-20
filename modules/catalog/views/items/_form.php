@@ -14,6 +14,11 @@ $module = $this->context->module->id;
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
+
+<?php if(!empty($cats) && count($cats) > 1) : ?>
+    <?= $form->field($model, 'category_id')->dropDownList($cats) ?>
+<?php endif; ?>
+
 <?php if($settings['itemThumb']) : ?>
     <?php if($model->image_file) : ?>
         <a href="<?= $model->image ?>" class="fancybox"><img src="<?= Image::thumb($model->image_file, 240, 180) ?>"></a>

@@ -40,6 +40,7 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
+            'category_id' => Yii::t('easyii', 'Category'),
             'image' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
             'available' => Yii::t('easyii/catalog', 'Available'),

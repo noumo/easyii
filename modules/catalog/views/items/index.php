@@ -7,9 +7,9 @@ $this->title = Yii::t('easyii/catalog', 'Catalog');
 
 $module = $this->context->module->id;
 ?>
-<?= $this->render('_menu', ['category' => $model]) ?>
+<?= $this->render('_menu', ['category' => $category]) ?>
 
-<?php if(count($model->items)) : ?>
+<?php if(count($category->items)) : ?>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -22,7 +22,7 @@ $module = $this->context->module->id;
         </tr>
         </thead>
         <tbody>
-        <?php foreach($model->items as $item) : ?>
+        <?php foreach($category->items as $item) : ?>
             <tr data-id="<?= $item->primaryKey ?>">
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
@@ -37,8 +37,8 @@ $module = $this->context->module->id;
                 </td>
                 <td class="text-right">
                     <div class="btn-group btn-group-sm" role="group">
-                        <a href="<?= Url::to(['/admin/'.$module.'/items/up', 'id' => $item->primaryKey, 'category_id' => $model->primaryKey]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
-                        <a href="<?= Url::to(['/admin/'.$module.'/items/down', 'id' => $item->primaryKey, 'category_id' => $model->primaryKey]) ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
+                        <a href="<?= Url::to(['/admin/'.$module.'/items/up', 'id' => $item->primaryKey, 'category_id' => $category->primaryKey]) ?>" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
+                        <a href="<?= Url::to(['/admin/'.$module.'/items/down', 'id' => $item->primaryKey, 'category_id' => $category->primaryKey]) ?>" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
                         <a href="<?= Url::to(['/admin/'.$module.'/items/delete', 'id' => $item->primaryKey]) ?>" class="btn btn-default confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
                     </div>
                 </td>

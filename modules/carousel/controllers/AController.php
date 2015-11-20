@@ -5,42 +5,26 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\DeleteAction;
-use yii\easyii\actions\SortAction;
+use yii\easyii\actions\SortByNumAction;
 use yii\widgets\ActiveForm;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\carousel\models\Carousel;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\carousel\models\Carousel';
+
     public function actions()
     {
-        $className = Carousel::className();
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => $className,
                 'successMessage' => Yii::t('easyii/carousel', 'Carousel item deleted')
             ],
-            'up' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'order_num'
-            ],
-            'down' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'order_num'
-            ],
-            'on' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Carousel::STATUS_ON
-            ],
-            'off' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Carousel::STATUS_OFF
-            ],
+            'up' => SortByNumAction::className(),
+            'down' => SortByNumAction::className(),
+            'on' => ChangeStatusAction::className(),
+            'off' => ChangeStatusAction::className(),
         ];
     }
 
@@ -85,12 +69,7 @@ class AController extends Controller
 
     public function actionEdit($id)
     {
-        $model = Carousel::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
