@@ -16,51 +16,41 @@ class MoveAction extends \yii\base\Action
 	 */
 	public function run($id)
 	{
-		$modelClass = $this->model;
+		$model = $this->findCategory($id);
+		$modelClass = $this->categoryClass;
 
-		if(($model = $modelClass::findOne($id)))
-		{
-			$up = $this->direction == 'up';
-			$orderDir = $up ? SORT_ASC : SORT_DESC;
+		$up = $this->direction == 'up';
+		$orderDir = $up ? SORT_ASC : SORT_DESC;
 
-			if($model->depth == 0){
+		if ($model->depth == 0) {
 
-				$swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
-				if($swapCat)
-				{
-					$modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
-					$modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
-					$modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
-					$model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
+			$swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
+			if ($swapCat) {
+				$modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
+				$modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
+				$modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
+				$model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
+			}
+		} else {
+			$where = [
+				'and',
+				['tree' => $model->tree],
+				['depth' => $model->depth],
+				[($up ? '<' : '>'), 'lft', $model->lft]
+			];
+
+			$swapCat = $modelClass::find()->where($where)->orderBy(['lft' => ($up ? SORT_DESC : SORT_ASC)])->one();
+			if ($swapCat) {
+				if ($up) {
+					$model->insertBefore($swapCat);
+				} else {
+					$model->insertAfter($swapCat);
 				}
-			} else {
-				$where = [
-					'and',
-					['tree' => $model->tree],
-					['depth' => $model->depth],
-					[($up ? '<' : '>'), 'lft', $model->lft]
-				];
 
-				$swapCat = $modelClass::find()->where($where)->orderBy(['lft' => ($up ? SORT_DESC : SORT_ASC)])->one();
-				if($swapCat)
-				{
-					if($up) {
-						$model->insertBefore($swapCat);
-					} else {
-						$model->insertAfter($swapCat);
-					}
-
-					$swapCat->update();
-					$model->update();
-
-					$success = ['swap_id' => $swapCat->primaryKey];
-				}
+				$swapCat->update();
+				$model->update();
 			}
 		}
-		else {
-			$this->controller->error = \Yii::t('easyii', 'Not found');
-		}
-
-		return $this->controller->formatResponse($success);
+		return $this->controller->back();
 	}
 }
