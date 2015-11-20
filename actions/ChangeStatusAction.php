@@ -8,7 +8,10 @@ class ChangeStatusAction extends \yii\base\Action
 
     public function run($id)
     {
-        $modelClass = $this->model;
+        $modelClass = $this->model ? $this->model : $this->controller->modelClass;
+        if($this->status === null){
+            $this->status = $this->id == 'off' ? 0 : 1;
+        }
 
         if(($model = $modelClass::findOne($id))){
             $model->status = $this->status;

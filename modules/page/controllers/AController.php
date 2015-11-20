@@ -10,6 +10,7 @@ use yii\easyii\modules\page\models\Page;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\page\models\Page';
     public $rootActions = ['create', 'delete'];
 
     public function actions()
@@ -17,7 +18,6 @@ class AController extends Controller
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => Page::className(),
                 'successMessage' => Yii::t('easyii/page', 'Page deleted')
             ]
         ];
@@ -64,12 +64,7 @@ class AController extends Controller
 
     public function actionEdit($id)
     {
-        $model = Page::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){

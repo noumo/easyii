@@ -10,6 +10,7 @@ use yii\easyii\modules\shopcart\models\Order;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\shopcart\models\Order';
     public $pending = 0;
     public $processed = 0;
     public $sent = 0;
@@ -19,7 +20,6 @@ class AController extends Controller
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => Order::className(),
                 'successMessage' => Yii::t('easyii/shopcart', 'Order deleted')
             ]
         ];
@@ -98,14 +98,8 @@ class AController extends Controller
 
     public function actionView($id)
     {
+        $order = $this->findModel($id);
         $request = Yii::$app->request;
-        $order = Order::findOne($id);
-
-        if($order === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
 
         if($request->post('status')){
             $newStatus = $request->post('status');

@@ -3,15 +3,12 @@ namespace yii\easyii\modules\entity\controllers;
 
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
-use yii\easyii\actions\ClearImageAction;
-use yii\easyii\actions\SortAction;
 use yii\easyii\actions\DeleteAction;
-use yii\easyii\helpers\Data;
+use yii\easyii\actions\SortByNumAction;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
-use yii\easyii\models\Setting;
+use yii\easyii\modules\entity\EntityModule;
 use yii\easyii\widgets\DateTimePicker;
-use yii\helpers\Url;
 use yii\validators\FileValidator;
 use yii\web\UploadedFile;
 use yii\helpers\Html;
@@ -22,61 +19,36 @@ use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\entity\models\Item';
+    public $categoryClass = 'yii\easyii\modules\entity\models\Category';
+
     public function actions()
     {
-        $className = Item::className();
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => $className,
                 'successMessage' => Yii::t('easyii/entity', 'Item deleted')
             ],
-            'clear-image' => [
-                'class' => ClearImageAction::className(),
-                'model' => $className
-            ],
-            'up' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'order_num'
-            ],
-            'down' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'order_num'
-            ],
-            'on' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Item::STATUS_ON
-            ],
-            'off' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Item::STATUS_OFF
-            ],
+            'up' => SortByNumAction::className(),
+            'down' => SortByNumAction::className(),
+            'on' => ChangeStatusAction::className(),
+            'off' => ChangeStatusAction::className(),
         ];
     }
 
     public function actionIndex($id)
     {
-        if(!($model = Category::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
         return $this->render('index', [
-            'model' => $model
+            'category' => $this->findCategory($id)
         ]);
     }
 
 
     public function actionCreate($id)
     {
-        if(!($category = Category::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $category = $this->findCategory($id);
 
-        $model = new Item;
+        $model = new Item(['category_id' => $id]);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -84,7 +56,6 @@ class ItemsController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                $model->category_id = $category->primaryKey;
                 $this->parseData($model);
 
                 if ($model->save()) {
@@ -100,16 +71,15 @@ class ItemsController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'category' => $category,
-                'dataForm' => $this->generateForm($category->fields)
+                'dataForm' => $this->generateForm($category->fields),
+                'cats' => $this->getSameCats($category)
             ]);
         }
     }
 
     public function actionEdit($id)
     {
-        if(!($model = Item::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -131,19 +101,16 @@ class ItemsController extends Controller
         else {
             return $this->render('edit', [
                 'model' => $model,
-                'dataForm' => $this->generateForm($model->category->fields, $model->data)
+                'dataForm' => $this->generateForm($model->category->fields, $model->data),
+                'cats' => $this->getSameCats($model->category)
             ]);
         }
     }
 
     public function actionPhotos($id)
     {
-        if(!($model = Item::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
         return $this->render('photos', [
-            'model' => $model,
+            'model' => $this->findModel($id),
         ]);
     }
 
@@ -246,5 +213,17 @@ class ItemsController extends Controller
         }
 
         $model->data = $data;
+    }
+
+    private function getSameCats($cat)
+    {
+        $result = [];
+        $fieldsHash = md5(json_encode($cat->fields));
+        foreach(Category::cats() as $cat){
+            if(md5(json_encode($cat->fields)) == $fieldsHash && (!count($cat->children) || EntityModule::setting('itemsInFolder'))) {
+                $result[$cat->category_id] = $cat->title;
+            }
+        }
+        return $result;
     }
 }

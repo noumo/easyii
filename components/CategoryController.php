@@ -13,13 +13,10 @@ use yii\widgets\ActiveForm;
  */
 class CategoryController extends Controller
 {
-    /** @var string */
-    public $categoryClass;
-
     /** @var  string */
     public $moduleName;
 
-    /** @var string  */
+    /** @var string */
     public $viewRoute = '/items';
 
     public function actions()
@@ -33,12 +30,10 @@ class CategoryController extends Controller
             'on' => [
                 'class' => ChangeStatusAction::className(),
                 'model' => $className,
-                'status' => $className::STATUS_ON
             ],
             'off' => [
                 'class' => ChangeStatusAction::className(),
                 'model' => $className,
-                'status' => $className::STATUS_OFF
             ],
         ];
     }
@@ -69,15 +64,14 @@ class CategoryController extends Controller
         $model = new $class;
 
         if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
+            if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
-            }
-            else{
+            } else {
                 $model->status = $class::STATUS_ON;
 
                 $parent = (int)Yii::$app->request->post('parent', null);
-                if($parent > 0 && ($parentCategory = $class::findOne($parent))){
+                if ($parent > 0 && ($parentCategory = $class::findOne($parent))) {
                     $model->order_num = $parentCategory->order_num;
                     $model->appendTo($parentCategory);
                 } else {
@@ -85,17 +79,15 @@ class CategoryController extends Controller
                     $model->makeRoot();
                 }
 
-                if(!$model->hasErrors()){
+                if (!$model->hasErrors()) {
                     $this->flash('success', Yii::t('easyii', 'Category created'));
-                    return $this->redirect(['/admin/'.$this->moduleName, 'id' => $model->primaryKey]);
-                }
-                else{
+                    return $this->redirect(['/admin/' . $this->moduleName, 'id' => $model->primaryKey]);
+                } else {
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
                     return $this->refresh();
                 }
             }
-        }
-        else {
+        } else {
             return $this->render('@easyii/views/category/create', [
                 'model' => $model,
                 'parent' => $parent
@@ -112,28 +104,21 @@ class CategoryController extends Controller
      */
     public function actionEdit($id)
     {
-        $class = $this->categoryClass;
-
-        if(!($model = $class::findOne($id))){
-            return $this->redirect(['/admin/' . $this->moduleName]);
-        }
+        $model = $this->findCategory($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
+            if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
-            }
-            else{
-                if($model->save()){
+            } else {
+                if ($model->save()) {
                     $this->flash('success', Yii::t('easyii', 'Category updated'));
-                }
-                else{
+                } else {
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                 }
                 return $this->refresh();
             }
-        }
-        else {
+        } else {
             return $this->render('@easyii/views/category/edit', [
                 'model' => $model
             ]);
@@ -148,16 +133,13 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $class = $this->categoryClass;
-        if(($model = $class::findOne($id))){
-            $children = $model->children()->all();
-            $model->deleteWithChildren();
-            foreach($children as $child) {
-                $child->afterDelete();
-            }
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
+        $model = $this->findCategory($id);
+        $children = $model->children()->all();
+        $model->deleteWithChildren();
+        foreach ($children as $child) {
+            $child->afterDelete();
         }
+
         return $this->formatResponse(Yii::t('easyii', 'Category deleted'));
     }
 
@@ -193,47 +175,40 @@ class CategoryController extends Controller
      */
     private function move($id, $direction)
     {
+        $model = $this->findCategory($id);
         $modelClass = $this->categoryClass;
 
-        if(($model = $modelClass::findOne($id)))
-        {
-            $up = $direction == 'up';
-            $orderDir = $up ? SORT_ASC : SORT_DESC;
+        $up = $direction == 'up';
+        $orderDir = $up ? SORT_ASC : SORT_DESC;
 
-            if($model->depth == 0){
+        if ($model->depth == 0) {
 
-                $swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
-                if($swapCat)
-                {
-                    $modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
-                    $modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
-                    $modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
-                    $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
-                }
-            } else {
-                $where = [
-                    'and',
-                    ['tree' => $model->tree],
-                    ['depth' => $model->depth],
-                    [($up ? '<' : '>'), 'lft', $model->lft]
-                ];
-
-                $swapCat = $modelClass::find()->where($where)->orderBy(['lft' => ($up ? SORT_DESC : SORT_ASC)])->one();
-                if($swapCat)
-                {
-                    if($up) {
-                        $model->insertBefore($swapCat);
-                    } else {
-                        $model->insertAfter($swapCat);
-                    }
-
-                    $swapCat->update();
-                    $model->update();
-                }
+            $swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
+            if ($swapCat) {
+                $modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
+                $modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
+                $modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
+                $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
             }
-        }
-        else {
-            $this->flash('error', Yii::t('easyii', 'Not found'));
+        } else {
+            $where = [
+                'and',
+                ['tree' => $model->tree],
+                ['depth' => $model->depth],
+                [($up ? '<' : '>'), 'lft', $model->lft]
+            ];
+
+            $swapCat = $modelClass::find()->where($where)->orderBy(['lft' => ($up ? SORT_DESC : SORT_ASC)])->one();
+            if ($swapCat) {
+                if ($up) {
+                    $model->insertBefore($swapCat);
+                } else {
+                    $model->insertAfter($swapCat);
+                }
+
+                $swapCat->update();
+                $model->update();
+            }
         }
         return $this->back();
     }
@@ -247,20 +222,15 @@ class CategoryController extends Controller
      */
     public function changeStatus($id, $status)
     {
+        $model = $this->findCategory($id);
         $modelClass = $this->categoryClass;
-        $ids = [];
+        $ids = [$model->primaryKey];
 
-        if(($model = $modelClass::findOne($id))){
-            $ids[] = $model->primaryKey;
-            foreach($model->children()->all() as $child){
-                $ids[] = $child->primaryKey;
-            }
-            $modelClass::updateAll(['status' => $status], ['in', 'category_id', $ids]);
-            $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
+        foreach ($model->children()->all() as $child) {
+            $ids[] = $child->primaryKey;
         }
-        else{
-            $this->error = Yii::t('easyii', 'Not found');
-        }
+        $modelClass::updateAll(['status' => $status], ['in', 'category_id', $ids]);
+        $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
 
         return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));
     }

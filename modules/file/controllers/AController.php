@@ -4,7 +4,7 @@ namespace yii\easyii\modules\file\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\actions\DeleteAction;
-use yii\easyii\actions\SortAction;
+use yii\easyii\actions\SortByNumAction;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
 use yii\easyii\components\Controller;
@@ -13,25 +13,17 @@ use yii\easyii\helpers\Upload;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\file\models\File';
+
     public function actions()
     {
-        $className = File::className();
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => $className,
                 'successMessage' => Yii::t('easyii/file', 'File deleted')
             ],
-            'up' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'order_num'
-            ],
-            'down' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'order_num'
-            ],
+            'up' => SortByNumAction::className(),
+            'down' => SortByNumAction::className(),
         ];
     }
 
@@ -91,12 +83,7 @@ class AController extends Controller
 
     public function actionEdit($id)
     {
-        $model = File::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){

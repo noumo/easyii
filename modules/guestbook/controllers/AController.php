@@ -3,35 +3,27 @@ namespace yii\easyii\modules\guestbook\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortByDateAction;
 use yii\easyii\components\Controller;
+use yii\easyii\models\Module;
 use yii\easyii\modules\guestbook\models\Guestbook;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\carousel\models\Carousel';
     public $new = 0;
     public $noAnswer = 0;
 
     public function actions()
     {
-        $className = Guestbook::className();
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => $className,
                 'successMessage' => Yii::t('easyii/guestbook', 'Entry deleted')
             ],
-            'on' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Guestbook::STATUS_ON
-            ],
-            'off' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Guestbook::STATUS_OFF
-            ],
+            'up' => SortByDateAction::className(),
+            'down' => SortByDateAction::className(),
         ];
     }
 
@@ -68,32 +60,25 @@ class AController extends Controller
 
     public function actionView($id)
     {
-        $model = Guestbook::findOne($id);
+        $model = $this->findModel($id);
 
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
-        if($model->new > 0){
+        if ($model->new > 0) {
             $model->new = 0;
             $model->update();
         }
 
         if (Yii::$app->request->post('Guestbook')) {
             $model->answer = trim(Yii::$app->request->post('Guestbook')['answer']);
-            if($model->save($model)){
-                if(Yii::$app->request->post('mailUser')){
+            if ($model->save($model)) {
+                if (Yii::$app->request->post('mailUser')) {
                     $model->notifyUser();
                 }
                 $this->flash('success', Yii::t('easyii/guestbook', 'Answer successfully saved'));
-            }
-            else{
+            } else {
                 $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
             }
             return $this->refresh();
-        }
-        else {
+        } else {
             return $this->render('view', [
                 'model' => $model
             ]);
@@ -103,7 +88,7 @@ class AController extends Controller
     public function actionViewall()
     {
         Guestbook::updateAll(['new' => 0]);
-        $module = \yii\easyii\models\Module::findOne(['name' => 'guestbook']);
+        $module = Module::findOne(['name' => 'guestbook']);
         $module->notice = 0;
         $module->save();
 
@@ -114,20 +99,14 @@ class AController extends Controller
 
     public function actionSetnew($id)
     {
-        $model = Guestbook::findOne($id);
+        $model = $this->findModel($id);
 
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
+        $model->new = 1;
+        if ($model->update()) {
+            $this->flash('success', Yii::t('easyii/guestbook', 'Guestbook updated'));
+        } else {
+            $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
         }
-        else{
-            $model->new = 1;
-            if($model->update()) {
-                $this->flash('success', Yii::t('easyii/guestbook', 'Guestbook updated'));
-            }
-            else{
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->redirect($this->getReturnUrl(['/admin/'.$this->module->id]));
+        return $this->redirect($this->getReturnUrl(['/admin/' . $this->module->id]));
     }
 }
