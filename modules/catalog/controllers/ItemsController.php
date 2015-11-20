@@ -51,7 +51,10 @@ class ItemsController extends Controller
     {
         $category = $this->findCategory($id);
 
-        $model = new Item(['category_id' => $id]);
+        $model = new Item([
+            'category_id' => $id,
+            'time' => time()
+        ]);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
