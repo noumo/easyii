@@ -8,6 +8,8 @@ use yii\easyii\models\Setting;
 /**
  * Class ApiObject
  * @package yii\easyii\components
+ * @var integer $id
+ * @var string $image
  */
 class ApiObject extends \yii\base\Object
 {

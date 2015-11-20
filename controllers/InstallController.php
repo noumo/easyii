@@ -37,7 +37,7 @@ class InstallController extends \yii\web\Controller
 
         $installForm = new InstallForm();
 
-        if ($installForm->load(Yii::$app->request->post())) {
+        if ($installForm->load(Yii::$app->request->post()) && $installForm->validate()) {
             $this->createUploadsDir();
 
             WebConsole::migrate();
@@ -51,8 +51,6 @@ class InstallController extends \yii\web\Controller
             return $this->redirect(['/admin/install/finish']);
         }
         else {
-            $installForm->robot_email = 'noreply@'.Yii::$app->request->serverName;
-
             return $this->render('index', [
                 'model' => $installForm
             ]);
@@ -183,20 +181,6 @@ class InstallController extends \yii\web\Controller
             'value' => 'top',
             'title' => Yii::t('easyii/install', 'Frontend toolbar position').' ("top" or "bottom")',
             'visibility' => Setting::VISIBLE_ROOT
-        ])->execute();
-
-        $db->createCommand()->insert(Setting::tableName(), [
-            'name' => 'image_max_width',
-            'value' => 1900,
-            'title' => Yii::t('easyii/install', 'Max image width on upload which will not resize'),
-            'visibility' => Setting::VISIBLE_ALL
-        ])->execute();
-
-        $db->createCommand()->insert(Setting::tableName(), [
-            'name' => 'redactor_plugins',
-            'value' => 'imagemanager, filemanager, table, fullscreen',
-            'title' => Yii::t('easyii/install', 'List of Redactor Widget plugins separated with comma'),
-            'visibility' => Setting::VISIBLE_ALL
         ])->execute();
     }
 

@@ -33,7 +33,6 @@ class Item extends ItemModel
     {
         return [
 	        'category_id' => Yii::t('easyii', 'Layout'),
-	        'parent_id' => Yii::t('easyii', 'Parent'),
             'title' => Yii::t('easyii', 'Title'),
             'image_file' => Yii::t('easyii', 'Image'),
             'content' => Yii::t('easyii', 'Content'),

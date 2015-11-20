@@ -49,11 +49,7 @@ class Upload
 
     static function getPathUrl($dir = '')
     {
-        return '/' . implode('/', array_filter([
-            Yii::getAlias('@web'),
-            basename(Yii::getAlias('@uploads')),
-            $dir
-        ]));
+        return Yii::getAlias('@web') . str_replace(Yii::getAlias('@webroot'), '', str_replace('\\', '/', Yii::getAlias('@uploads'))) . ($dir ? '/' . $dir : '');
     }
 
     static function getAbsolutePath($fileName)

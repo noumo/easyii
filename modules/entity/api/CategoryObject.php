@@ -19,7 +19,6 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     public $cache;
 
     private $_adp;
-    private $_items;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
@@ -35,40 +34,38 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            if($this->cache)
-            {
-                $this->_items = Data::cache(Category::getCacheName($this->id), 3600, function(){
-                    $items = [];
-                    $query = Item::find()->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sort();
-                    foreach($query->all() as $item){
-                        $items[] = new ItemObject($item);
-                    }
-                    return $items;
-                });
+        if($this->cache)
+        {
+            $result = Data::cache(Category::getCacheName($this->id), 3600, function(){
+                $items = [];
+                $query = Item::find()->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sort();
+                foreach($query->all() as $item){
+                    $items[] = new ItemObject($item);
+                }
+                return $items;
+            });
+        }
+        else
+        {
+            $query = Item::find()->where(['category_id' => $this->id])->status(Item::STATUS_ON);
+
+            if(!empty($options['where'])){
+                $query->andFilterWhere($options['where']);
             }
-            else
-            {
-                $query = Item::find()->where(['category_id' => $this->id])->status(Item::STATUS_ON);
+            $query->sort();
 
-                if(!empty($options['where'])){
-                    $query->andFilterWhere($options['where']);
-                }
-                $query->sort();
+            $this->_adp = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+            ]);
 
-                $this->_adp = new ActiveDataProvider([
-                    'query' => $query,
-                    'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-                ]);
-
-                foreach($this->_adp->models as $model){
-                    $this->_items[] = new ItemObject($model);
-                }
+            foreach($this->_adp->models as $model){
+                $result[] = new ItemObject($model);
             }
         }
-        return $this->_items;
+        return $result;
     }
 
     public function fieldOptions($name, $firstOption = '')
@@ -90,6 +87,6 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     }
 
     public function getEditLink(){
-        return Url::to(['/admin/catalog/a/edit/', 'id' => $this->id]);
+        return Url::to(['/admin/entity/a/edit/', 'id' => $this->id]);
     }
 }

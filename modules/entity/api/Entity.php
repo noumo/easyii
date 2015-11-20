@@ -27,10 +27,8 @@ use yii\widgets\LinkPager;
 class Entity extends \yii\easyii\components\API
 {
     private $_cats;
-    private $_items;
     private $_adp;
     private $_item = [];
-    private $_last;
 
     public function api_cat($id_slug)
     {
@@ -64,34 +62,28 @@ class Entity extends \yii\easyii\components\API
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $query = Item::find()->with('category')->status(Item::STATUS_ON);
+        $query = Item::find()->with('category')->status(Item::STATUS_ON);
 
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-            $query->sort();
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new ItemObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
         }
-        return $this->_items;
+        $query->sort();
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new ItemObject($model);
+        }
+        return $result;
     }
 
     public function api_last($limit = 1, $where = null)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
 
         $query = Item::find()->sort()->status(Item::STATUS_ON)->limit($limit);
@@ -102,13 +94,7 @@ class Entity extends \yii\easyii\components\API
         foreach($query->all() as $item){
             $result[] = new ItemObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        }else{
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_get($id)

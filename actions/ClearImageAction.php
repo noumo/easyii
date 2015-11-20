@@ -9,7 +9,7 @@ class ClearImageAction extends \yii\base\Action
 
     public function run($id)
     {
-        $modelClass = $this->model;
+        $modelClass = $this->model ? $this->model : $this->controller->modelClass;
         $model = $modelClass::findOne($id);
 
         if($model === null){

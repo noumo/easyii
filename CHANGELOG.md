@@ -1,22 +1,17 @@
 #Changelog
 
-###0.8.1
+###0.9.1
 * File type in catalog fields added
 * Tags added to FAQ
 * Tags added to gallery albums
 * Added immutable setting to all sluggable behaviors
 * Now using vova07 redactor widget and now list of widgets editable in settings
 * New additional field types: html, file, date
-* Remove bootstrap dependency from eaysii frontend toolbar.
+* Remove bootstrap dependency from eaysii frontend toolbar
+* Logs moved to system page
+* A lot of core refactoring
 
-//todo
-insert new module settings
-insert system setting max_image_width
-insert system setting redactor_plugins
-rename all image to image_file
-
-
-###0.8.0
+###0.9.0
 * Articles module added
 * FAQ module added
 * SEO h1, title, description, keywords fields added

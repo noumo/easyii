@@ -36,9 +36,15 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
+        static::registerTranslations(static::getSelfName());
+    }
 
-        static::$NAME = static::getModuleName(static::className());
-        static::registerTranslations(static::$NAME);
+    public static function getSelfName()
+    {
+        if(!static::$NAME){
+            static::$NAME = static::getModuleName(static::className());
+        }
+        return static::$NAME;
     }
 
     /**
@@ -88,7 +94,7 @@ class Module extends \yii\base\Module
 
     public static function setting($name)
     {
-        $settings = Yii::$app->getModule('admin')->activeModules[static::$NAME]->settings;
+        $settings = Yii::$app->getModule('admin')->activeModules[static::getSelfName()]->settings;
         return $settings[$name] !== null ? $settings[$name] : null;
     }
 }

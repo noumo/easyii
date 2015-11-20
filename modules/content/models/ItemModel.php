@@ -12,6 +12,7 @@ use yii;
 use yii\easyii\components\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\components\ActiveQueryNS;
 use creocoder\nestedsets\NestedSetsBehavior;
 
 class ItemModel extends ActiveRecord
@@ -46,19 +47,11 @@ class ItemModel extends ActiveRecord
 	}
 
 	/**
-	 * @return yii\easyii\components\ActiveQuery
+	 * @return ActiveQueryNS
 	 */
-	public function getParentItem()
+	public static function find()
 	{
-		return $this->hasOne(static::className(), ['item_id' => 'parent_item_id']);
-	}
-
-	/**
-	 * @return yii\easyii\components\ActiveQuery
-	 */
-	public function getSubItems()
-	{
-		return $this->hasMany(static::className(), ['parent_item_id' => 'item_id'])->sortDate();
+		return new ActiveQueryNS(get_called_class());
 	}
 
 	/**

@@ -25,7 +25,6 @@ class Gallery extends \yii\easyii\components\API
 {
     private $_cats;
     private $_photos;
-    private $_last;
 
     public function api_cat($id_slug)
     {
@@ -57,13 +56,8 @@ class Gallery extends \yii\easyii\components\API
         return $result;
     }
 
-
     public function api_last($limit = 1, $where = null)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
 
         $query = Photo::find()->where(['class' => Category::className()])->sort()->limit($limit);
@@ -76,13 +70,7 @@ class Gallery extends \yii\easyii\components\API
             $photoObject->rel = 'last';
             $result[] = $photoObject;
         }
-
-        if($limit > 1){
-            return $result;
-        }else{
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_get($id)

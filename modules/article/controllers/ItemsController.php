@@ -4,69 +4,49 @@ namespace yii\easyii\modules\article\controllers;
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
-use yii\easyii\actions\SortAction;
 use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortByDateAction;
 use yii\easyii\components\Controller;
+use yii\easyii\modules\article\ArticleModule;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
 use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\article\models\Item';
+    public $categoryClass = 'yii\easyii\modules\article\models\Category';
+
     public function actions()
     {
-        $className = Item::className();
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => $className,
                 'successMessage' => Yii::t('easyii/article', 'Article deleted')
             ],
-            'clear-image' => [
-                'class' => ClearImageAction::className(),
-                'model' => $className
-            ],
-            'up' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'time'
-            ],
-            'down' => [
-                'class' => SortAction::className(),
-                'model' => $className,
-                'attribute' => 'time'
-            ],
-            'on' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Item::STATUS_ON
-            ],
-            'off' => [
-                'class' => ChangeStatusAction::className(),
-                'model' => $className,
-                'status' => Item::STATUS_OFF
-            ],
+            'clear-image' => ClearImageAction::className(),
+            'up' => SortByDateAction::className(),
+            'down' => SortByDateAction::className(),
+            'on' => ChangeStatusAction::className(),
+            'off' => ChangeStatusAction::className(),
         ];
     }
 
     public function actionIndex($id)
     {
-        if(!($model = Category::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
         return $this->render('index', [
-            'model' => $model
+            'category' => $this->findCategory($id)
         ]);
     }
 
     public function actionCreate($id)
     {
-        if(!($category = Category::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $category = $this->findCategory($id);
 
-        $model = new Item;
+        $model = new Item([
+            'category_id' => $id,
+            'time' => time()
+        ]);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -74,8 +54,6 @@ class ItemsController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                $model->category_id = $category->primaryKey;
-
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/article', 'Article created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
@@ -89,15 +67,14 @@ class ItemsController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'category' => $category,
+                'cats' => $this->getCats()
             ]);
         }
     }
 
     public function actionEdit($id)
     {
-        if(!($model = Item::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -117,18 +94,28 @@ class ItemsController extends Controller
         else {
             return $this->render('edit', [
                 'model' => $model,
+                'cats' => $this->getCats()
             ]);
         }
     }
 
     public function actionPhotos($id)
     {
-        if(!($model = Item::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
         return $this->render('photos', [
-            'model' => $model,
+            'model' => $this->findModel($id),
         ]);
     }
+
+    private function getCats()
+    {
+        $result = [];
+        foreach(Category::cats() as $cat){
+            if(!count($cat->children) || ArticleModule::setting('itemsInFolder')) {
+                $result[$cat->category_id] = $cat->title;
+            }
+        }
+        return $result;
+    }
+
+
 }

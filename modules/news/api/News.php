@@ -25,46 +25,42 @@ use yii\easyii\modules\news\models\News as NewsModel;
 class News extends \yii\easyii\components\API
 {
     private $_adp;
-    private $_last;
-    private $_items;
     private $_item = [];
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $with = ['seo'];
-            if(NewsModule::setting('enableTags')){
-                $with[] = 'tags';
-            }
-            $query = NewsModel::find()->with($with)->status(NewsModel::STATUS_ON);
-
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-            if(!empty($options['tags'])){
-                $query
-                    ->innerJoinWith('tags', false)
-                    ->andWhere([Tag::tableName() . '.name' => (new NewsModel)->filterTagValues($options['tags'])])
-                    ->addGroupBy('news_id');
-            }
-            if(!empty($options['orderBy'])){
-                $query->orderBy($options['orderBy']);
-            } else {
-                $query->sortDate();
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new NewsObject($model);
-            }
+        $with = ['seo'];
+        if(NewsModule::setting('enableTags')){
+            $with[] = 'tags';
         }
-        return $this->_items;
+        $query = NewsModel::find()->with($with)->status(NewsModel::STATUS_ON);
+
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
+        }
+        if(!empty($options['tags'])){
+            $query
+                ->innerJoinWith('tags', false)
+                ->andWhere([Tag::tableName() . '.name' => (new NewsModel)->filterTagValues($options['tags'])])
+                ->addGroupBy('news_id');
+        }
+        if(!empty($options['orderBy'])){
+            $query->orderBy($options['orderBy']);
+        } else {
+            $query->sortDate();
+        }
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new NewsObject($model);
+        }
+        return $result;
     }
 
     public function api_get($id_slug)
@@ -77,10 +73,6 @@ class News extends \yii\easyii\components\API
 
     public function api_last($limit = 1)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $with = ['seo'];
         if(NewsModule::setting('enableTags')){
             $with[] = 'tags';
@@ -90,13 +82,7 @@ class News extends \yii\easyii\components\API
         foreach(NewsModel::find()->with($with)->status(NewsModel::STATUS_ON)->sortDate()->limit($limit)->all() as $item){
             $result[] = new NewsObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        } else {
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_plugin($options = [])

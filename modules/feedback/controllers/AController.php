@@ -10,6 +10,7 @@ use yii\easyii\modules\feedback\models\Feedback;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\feedback\models\Feedback';
     public $new = 0;
     public $noAnswer = 0;
 
@@ -18,7 +19,6 @@ class AController extends Controller
         return [
             'delete' => [
                 'class' => DeleteAction::className(),
-                'model' => Feedback::className(),
                 'successMessage' => Yii::t('easyii/feedback', 'Feedback deleted')
             ]
         ];
@@ -68,41 +68,32 @@ class AController extends Controller
 
     public function actionView($id)
     {
-        $model = Feedback::findOne($id);
+        $model = $this->findModel($id);
 
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
-        if($model->status == Feedback::STATUS_NEW){
+        if ($model->status == Feedback::STATUS_NEW) {
             $model->status = Feedback::STATUS_VIEW;
             $model->update();
         }
 
         $postData = Yii::$app->request->post('Feedback');
-        if($postData) {
-            if(filter_var(Setting::get('admin_email'), FILTER_VALIDATE_EMAIL))
-            {
+        if ($postData) {
+            if (filter_var(Setting::get('admin_email'), FILTER_VALIDATE_EMAIL)) {
                 $model->answer_subject = filter_var($postData['answer_subject'], FILTER_SANITIZE_STRING);
                 $model->answer_text = filter_var($postData['answer_text'], FILTER_SANITIZE_STRING);
-                if($model->sendAnswer()){
+                if ($model->sendAnswer()) {
                     $model->status = Feedback::STATUS_ANSWERED;
                     $model->save();
                     $this->flash('success', Yii::t('easyii/feedback', 'Answer successfully sent'));
-                }
-                else{
+                } else {
                     $this->flash('error', Yii::t('easyii/feedback', 'An error has occurred while sending mail'));
                 }
-            }
-            else {
+            } else {
                 $this->flash('error', Yii::t('easyii/feedback', 'Please fill correct `Admin E-mail` in Settings'));
             }
 
             return $this->refresh();
-        }
-        else {
-            if(!$model->answer_text) {
+        } else {
+            if (!$model->answer_text) {
                 $model->answer_subject = Yii::t('easyii/feedback', $this->module->settings['answerSubject']);
                 if ($this->module->settings['answerHeader']) $model->answer_text = Yii::t('easyii/feedback', $this->module->settings['answerHeader']) . " " . $model->name . ".\n";
                 if ($this->module->settings['answerFooter']) $model->answer_text .= "\n\n" . Yii::t('easyii/feedback', $this->module->settings['answerFooter']);
@@ -116,19 +107,13 @@ class AController extends Controller
 
     public function actionSetAnswer($id)
     {
-        $model = Feedback::findOne($id);
+        $model = $this->findModel($id);
 
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        else{
-            $model->status = Feedback::STATUS_ANSWERED;
-            if($model->update()) {
-                $this->flash('success', Yii::t('easyii/feedback', 'Feedback updated'));
-            }
-            else{
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
+        $model->status = Feedback::STATUS_ANSWERED;
+        if ($model->update()) {
+            $this->flash('success', Yii::t('easyii/feedback', 'Feedback updated'));
+        } else {
+            $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
         }
         return $this->back();
     }

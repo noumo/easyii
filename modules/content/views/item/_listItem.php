@@ -15,9 +15,8 @@ use yii\easyii\modules\content\models\ItemModel;
 	<?php endif; ?>
 
 	<td style="padding-left:  <?= $item->depth * 20 ?>px;">
-		<?php if(count($item->children)) : ?>
-			<i class="caret"></i>
-		<?php endif; ?>
+
+		<i class="caret" style="opacity: <?= count($item->children) ?>"></i>
 
 		<?php if(!count($item->children) || !empty(Yii::$app->controller->module->settings['itemsInFolder'])) : ?>
 			<a href="<?= Url::to(['/admin/'.$module.'/item/edit', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a>

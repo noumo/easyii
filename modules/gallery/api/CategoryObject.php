@@ -17,7 +17,6 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     public $children;
 
     private $_adp;
-    private $_photos;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
@@ -37,25 +36,23 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function photos($options = [])
     {
-        if(!$this->_photos){
-            $this->_photos = [];
+        $result = [];
 
-            $query = Photo::find()->where(['class' => Category::className(), 'item_id' => $this->id])->sort();
+        $query = Photo::find()->where(['class' => Category::className(), 'item_id' => $this->id])->sort();
 
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_photos[] = new PhotoObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
         }
-        return $this->_photos;
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new PhotoObject($model);
+        }
+        return $result;
     }
 
     public function getEditLink(){

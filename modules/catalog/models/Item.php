@@ -3,6 +3,7 @@ namespace yii\easyii\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\DataBehavior;
 use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\models\Photo;
@@ -40,6 +41,7 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
+            'category_id' => Yii::t('easyii', 'Category'),
             'image' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
             'available' => Yii::t('easyii/catalog', 'Available'),
@@ -53,7 +55,11 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function behaviors()
     {
         $behaviors = [
-            'seoBehavior' => SeoBehavior::className(),
+	        'seoBehavior' => SeoBehavior::className(),
+	        'dataBehavior' => [
+		        'class' => DataBehavior::className(),
+		        'dataClass' => ItemData::className()
+	        ],
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
@@ -67,51 +73,6 @@ class Item extends \yii\easyii\components\ActiveRecord
         return $behaviors;
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
-                $this->data = new \stdClass();
-            }
-            $this->data = json_encode($this->data);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function afterSave($insert, $attributes){
-        parent::afterSave($insert, $attributes);
-
-        $this->parseData();
-
-        ItemData::deleteAll(['item_id' => $this->primaryKey]);
-
-        foreach($this->data as $name => $value){
-            if(!is_array($value)){
-                $this->insertDataValue($name, $value);
-            } else {
-                foreach($value as $arrayItem){
-                    $this->insertDataValue($name, $arrayItem);
-                }
-            }
-        }
-    }
-
-    private function insertDataValue($name, $value){
-        Yii::$app->db->createCommand()->insert(ItemData::tableName(), [
-            'item_id' => $this->primaryKey,
-            'name' => $name,
-            'value' => $value
-        ])->execute();
-    }
-
-    public function afterFind()
-    {
-        parent::afterFind();
-        $this->parseData();
-    }
-
     public function getPhotos()
     {
         return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
@@ -122,18 +83,11 @@ class Item extends \yii\easyii\components\ActiveRecord
         return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
     }
 
-    public function afterDelete()
-    {
-        parent::afterDelete();
-
-        foreach($this->getPhotos()->all() as $photo){
-            $photo->delete();
-        }
-
-        ItemData::deleteAll(['item_id' => $this->primaryKey]);
-    }
-
-    private function parseData(){
-        $this->data = $this->data !== '' ? json_decode($this->data) : [];
-    }
+	public function afterDelete()
+	{
+		foreach ($this->getPhotos()->all() as $photo)
+		{
+			$photo->delete();
+		}
+	}
 }

@@ -1,15 +1,16 @@
 <?php
 namespace yii\easyii\actions;
 
-class SortAction extends \yii\base\Action
+class BaseSortAction extends \yii\base\Action
 {
     public $model;
     public $attribute;
     public $direction;
+    public $addititonalEquality = [];
 
     public function run($id)
     {
-        $modelClass = $this->model;
+        $modelClass = $this->model ? $this->model : $this->controller->modelClass;
         $attribute = $this->attribute;
 
         if(!$this->direction){
@@ -24,7 +25,17 @@ class SortAction extends \yii\base\Action
                 $eq = '<';
                 $orderDir = SORT_DESC;
             }
-            $modelSwap = $modelClass::find()->where([$eq, $attribute, $model->{$attribute}])->orderBy([$attribute => $orderDir])->limit(1)->one();
+
+            $query = $modelClass::find()->orderBy([$attribute => $orderDir])->limit(1);
+
+            $where = [$eq, $attribute, $model->{$attribute}];
+            if (count($this->addititonalEquality)) {
+                $where = ['and', $where];
+                foreach ($this->addititonalEquality as $item) {
+                    $where[] = [$item => $model->{$item}];
+                }
+            }
+            $modelSwap = $query->where($where)->one();
 
             if(!empty($modelSwap)) {
                 $newValue = $modelSwap->{$attribute};

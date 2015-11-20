@@ -18,10 +18,6 @@ class m000000_000000_install_content_module extends \yii\db\Migration
             'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'tree' => Schema::TYPE_INTEGER,
-            'lft' => Schema::TYPE_INTEGER,
-            'rgt' => Schema::TYPE_INTEGER,
-            'depth' => Schema::TYPE_INTEGER,
             'order_num' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);

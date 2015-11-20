@@ -1,10 +1,16 @@
 <?php
 namespace yii\easyii\modules\content\models;
 
+use yii;
 use yii\db\ActiveQuery;
+use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\ActiveRecord;
 
-class Layout extends \yii\easyii\components\CategoryModel
+class Layout extends ActiveRecord
 {
+	const STATUS_OFF = 0;
+	const STATUS_ON = 1;
+
 	static $fieldTypes = [
 		'string' => 'String',
 		'text' => 'Text',
@@ -19,13 +25,39 @@ class Layout extends \yii\easyii\components\CategoryModel
 		return 'easyii_content_layouts';
 	}
 
+	public function rules()
+	{
+		return [
+			['title', 'required'],
+			['title', 'trim'],
+			[['title', 'slug'], 'string', 'max' => 128],
+			['image_file', 'image'],
+			['slug', 'match', 'pattern' => static::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
+			['slug', 'default', 'value' => null],
+			[['status'], 'integer'],
+			['status', 'default', 'value' => self::STATUS_ON]
+		];
+	}
+
+	public function attributeLabels()
+	{
+		return [
+			'title' => Yii::t('easyii', 'Title'),
+			'image_file' => Yii::t('easyii', 'Image'),
+			'slug' => Yii::t('easyii', 'Slug'),
+		];
+	}
+
+	public function behaviors()
+	{
+		return [
+			SortableModel::className(),
+		];
+	}
+
 	public function beforeSave($insert)
 	{
 		if (parent::beforeSave($insert)) {
-			if ($insert && ($parent = $this->parents(1)->one())) {
-				$this->fields = $parent->fields;
-			}
-
 			if (!$this->fields || !is_array($this->fields)) {
 				$this->fields = [];
 			}
@@ -55,7 +87,7 @@ class Layout extends \yii\easyii\components\CategoryModel
 	 */
 	public function getItems()
 	{
-		return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sortDate();
+		return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sort();
 	}
 
 	public function afterDelete()

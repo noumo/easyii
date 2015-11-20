@@ -8,7 +8,7 @@ use yii\helpers\Url;
 \yii\bootstrap\BootstrapPluginAsset::register($this);
 $this->title = Yii::$app->getModule('admin')->activeModules[$this->context->module->id]->title;
 
-$baseUrl = '/admin/'.$this->context->moduleName;
+$baseUrl = '/admin/'.$this->context->module->id;
 ?>
 
 <?= $this->render('_menu') ?>
@@ -20,10 +20,9 @@ $baseUrl = '/admin/'.$this->context->moduleName;
                 <tr>
                     <td width="50"><?= $cat->category_id ?></td>
                     <td style="padding-left:  <?= $cat->depth * 20 ?>px;">
-                        <?php if(count($cat->children)) : ?>
-                            <i class="caret"></i>
-                        <?php endif; ?>
-                        <?php if(!count($cat->children) || !empty(Yii::$app->controller->module->settings['itemsInFolder'])) : ?>
+	                    <i class="caret" style="opacity: <?= count($cat->children) ?>"></i>
+
+	                    <?php if(!count($cat->children) || !empty(Yii::$app->controller->module->settings['itemsInFolder'])) : ?>
                             <a href="<?= Url::to([$baseUrl . $this->context->viewRoute, 'id' => $cat->category_id]) ?>" <?= ($cat->status == CategoryModel::STATUS_OFF ? 'class="smooth"' : '') ?>><?= $cat->title ?></a>
                         <?php else : ?>
                             <span <?= ($cat->status == CategoryModel::STATUS_OFF ? 'class="smooth"' : '') ?>><?= $cat->title ?></span>

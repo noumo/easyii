@@ -8,7 +8,7 @@ class DeleteAction extends \yii\base\Action
 
     public function run($id)
     {
-        $modelClass = $this->model;
+        $modelClass = $this->model ? $this->model : $this->controller->modelClass;
         if(($model = $modelClass::findOne($id))){
             $model->delete();
         } else {

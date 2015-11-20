@@ -13,6 +13,8 @@ use yii\easyii\modules\subscribe\models\History;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\subscribe\models\History';
+
     public function actions()
     {
         return [
@@ -48,12 +50,7 @@ class AController extends Controller
 
     public function actionView($id)
     {
-        $model = History::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id.'/history']);
-        }
+        $model = $this->findModel($id);
 
         return $this->render('view', [
             'model' => $model

@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\modules\content\api;
 
+use creocoder\nestedsets\NestedSetsBehavior;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\easyii\modules\content\models\Item;
@@ -44,7 +45,7 @@ class Content extends \yii\easyii\components\API
 
 	public function api_tree()
 	{
-		return Layout::tree();
+		return Item::tree();
 	}
 
 	public function api_cats()
@@ -52,6 +53,11 @@ class Content extends \yii\easyii\components\API
 		return Layout::cats();
 	}
 
+	/**
+	 * @param array $options
+	 *
+	 * @return ItemObject[]
+	 */
 	public function api_items($options = [])
 	{
 		if (!$this->_items) {
@@ -62,18 +68,22 @@ class Content extends \yii\easyii\components\API
 			if (!empty($options['where'])) {
 				$query->andFilterWhere($options['where']);
 			}
-			if (!empty($options['status'])) {
+			if (isset($options['status'])) {
 				$query->status($options['status']);
 			}
-			if (!empty($options['nav'])) {
+			if (isset($options['nav'])) {
 				$query->andWhere(['nav' => (int)$options['nav']]);
+			}
+			if (isset($options['depth'])) {
+				$query->andWhere(['depth' => (int)$options['depth']]);
 			}
 			if (!empty($options['orderBy'])) {
 				$query->orderBy($options['orderBy']);
 			}
 			else {
-				$query->sortDate();
+				$query->sort();
 			}
+
 			if (!empty($options['filters'])) {
 				$query = self::applyFilters($options['filters'], $query);
 			}
@@ -92,7 +102,8 @@ class Content extends \yii\easyii\components\API
 			]);
 
 			foreach ($this->_adp->models as $model) {
-				$this->_items[] = new ItemObject($model);
+				$item = new ItemObject($model);
+				$this->_items[] = $item;
 			}
 		}
 		return $this->_items;
@@ -162,10 +173,30 @@ class Content extends \yii\easyii\components\API
 
 		$menuItems = [];
 
-		$items = $this->api_items(['nav' => Item::NAV_ON, 'orderBy' => ['time' => SORT_ASC]]);
+		$items = $this->api_items(['nav' => Item::NAV_ON, 'depth' => 0]);
 		foreach ($items as $item)
 		{
-			$menuItems[] = ['label' => $item->model->title, 'url' => ['/' . str_replace('-', '/', $item->slug)]];
+			$menuItem = [
+				'label' => $item->model->title,
+				'url' => ['/' . str_replace('-', '/', $item->slug)],
+			];
+
+			if (count($item->getChildren(['nav' => Item::NAV_ON])) > 0)
+			{
+				$subItems = [];
+				foreach ($item->getChildren() as $child)
+				{
+					$subItems[] = [
+						'label' => $child->model->title,
+						'url' => ['/' . str_replace('-', '/', $child->slug)],
+					];
+				}
+
+				$menuItem['items'] = $subItems;
+			}
+
+
+			$menuItems[] = $menuItem;
 		}
 
 		echo Nav::widget([
