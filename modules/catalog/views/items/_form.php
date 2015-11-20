@@ -15,7 +15,7 @@ $module = $this->context->module->id;
 ]); ?>
 <?= $form->field($model, 'title') ?>
 
-<?php if(!empty($cats) && count($cats) > 1) : ?>
+<?php if(!empty($cats) && count($cats)) : ?>
     <?= $form->field($model, 'category_id')->dropDownList($cats) ?>
 <?php endif; ?>
 
