@@ -4,20 +4,14 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
-use yii\easyii\actions\SortAction;
 use yii\easyii\actions\DeleteAction;
-use yii\easyii\helpers\Data;
+use yii\easyii\actions\SortByDateAction;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
-use yii\easyii\models\Setting;
 use yii\easyii\widgets\DateTimePicker;
-use yii\helpers\Url;
 use yii\validators\FileValidator;
 use yii\web\UploadedFile;
 use yii\helpers\Html;
-use yii\easyii\components\Controller;
-use yii\easyii\modules\catalog\models\Category;
-use yii\easyii\modules\catalog\models\Item;
 use yii\widgets\ActiveForm;
 
 class CategoryItemsController extends Controller
@@ -46,14 +40,12 @@ class CategoryItemsController extends Controller
                 'model' => $className
             ],
             'up' => [
-                'class' => SortAction::className(),
+                'class' => SortByDateAction::className(),
                 'model' => $className,
-                'attribute' => 'time'
             ],
             'down' => [
-                'class' => SortAction::className(),
+                'class' => SortByDateAction::className(),
                 'model' => $className,
-                'attribute' => 'time'
             ],
             'on' => [
                 'class' => ChangeStatusAction::className(),
