@@ -3,15 +3,15 @@ namespace yii\easyii\modules\guestbook\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\DeleteAction;
-use yii\easyii\actions\SortByDateAction;
 use yii\easyii\components\Controller;
 use yii\easyii\models\Module;
 use yii\easyii\modules\guestbook\models\Guestbook;
 
 class AController extends Controller
 {
-    public $modelClass = 'yii\easyii\modules\carousel\models\Carousel';
+    public $modelClass = 'yii\easyii\modules\guestbook\models\Guestbook';
     public $new = 0;
     public $noAnswer = 0;
 
@@ -22,8 +22,8 @@ class AController extends Controller
                 'class' => DeleteAction::className(),
                 'successMessage' => Yii::t('easyii/guestbook', 'Entry deleted')
             ],
-            'up' => SortByDateAction::className(),
-            'down' => SortByDateAction::className(),
+            'on' => ChangeStatusAction::className(),
+            'off' => ChangeStatusAction::className(),
         ];
     }
 
