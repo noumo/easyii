@@ -107,16 +107,6 @@ class LayoutController extends Controller
 
 			if ($model->save())
 			{
-				$ids = [];
-				foreach ($model->children()->all() as $child)
-				{
-					$ids[] = $child->primaryKey;
-				}
-				if (count($ids))
-				{
-					Layout::updateAll(['fields' => json_encode($model->fields)], ['in', 'category_id', $ids]);
-				}
-
 				$this->flash('success', Yii::t('easyii/content', 'Layout updated'));
 			}
 			else

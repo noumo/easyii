@@ -104,7 +104,7 @@ class CategoryController extends Controller
 
                 if(!$model->hasErrors()){
                     $this->flash('success', Yii::t('easyii', 'Category created'));
-                    return $this->redirect(['/admin/'.$this->moduleName, 'id' => $model->primaryKey]);
+                    return $this->redirect(['/admin/'.$this->module->id, 'id' => $model->primaryKey]);
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -132,7 +132,7 @@ class CategoryController extends Controller
         $class = $this->categoryClass;
 
         if(!($model = $class::findOne($id))){
-            return $this->redirect(['/admin/' . $this->moduleName]);
+            return $this->redirect(['/admin/' . $this->module->id]);
         }
 
         if ($model->load(Yii::$app->request->post())) {
