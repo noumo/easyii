@@ -1,5 +1,5 @@
 $(function(){
-    var table = $('#layoutFields > tbody');
+    var table = $('#categoryFields > tbody');
 
     table.on('click', '.delete-field', function(){
         if(table.find('tr').length > 1) {
@@ -42,7 +42,7 @@ $(function(){
         table.append(fieldTemplate);
     });
 
-    $('#saveLayoutBtn').on('click', function(){
+    $('#saveCategoryBtn').on('click', function(){
         var form = '<input type="hidden" name="save" value="1">';
         table.find('tr').each(function(i, element) {
             var $this = $(element);
@@ -63,6 +63,6 @@ $(function(){
 
     function optionsIsNeeded(type)
     {
-        return type == 'select' || type == 'checkbox';
+        return type == 'select' || type == 'checkbox' || type == 'file';
     }
 });
