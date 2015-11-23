@@ -28,6 +28,15 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
             throw new \yii\web\ServerErrorHttpException('Please configure Cache component.');
         }
 
+	    // Redirect to install process
+	    if (!$this->installed) {
+		    Yii::$app->on(Application::EVENT_BEFORE_ACTION, function () {
+			    if (Yii::$app->controller->id != 'install') {
+				    Yii::$app->controller->redirect(['install/index']);
+			    }
+		    });
+	    }
+
         $this->activeModules = Module::findAllActive();
 
         $modules = [];
