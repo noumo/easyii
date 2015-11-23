@@ -17,10 +17,10 @@ class ContentModule extends \yii\easyii\components\Module
 
     public static $installConfig = [
         'title' => [
-            'en' => 'Catalog',
-            'ru' => 'Каталог',
+            'en' => 'Content',
+            'ru' => 'содержание',
         ],
         'icon' => 'list-alt',
-        'order_num' => 100,
+        'order_num' => 110,
     ];
 }

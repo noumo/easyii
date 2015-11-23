@@ -1,10 +1,13 @@
 <?php
+namespace yii\easyii\modules\content\migrations;
+
 use yii\db\Schema;
 use yii\easyii\models;
 
 use \yii\easyii\modules\content\models\Item;
 use \yii\easyii\modules\content\models\ItemData;
 use yii\easyii\modules\content\models\Layout;
+
 
 class m000000_000000_install_content_module extends \yii\db\Migration
 {

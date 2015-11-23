@@ -21,7 +21,7 @@ class InstallForm extends Model
             [['root_password', 'admin_email'], 'required'],
             ['root_password', 'string', 'min' => 6],
             [['recaptcha_key', 'recaptcha_secret'], 'string'],
-            [['robot_email', 'admin_email'], 'email'],
+         #   [['robot_email', 'admin_email'], 'email'],
             [['root_password', 'recaptcha_key', 'recaptcha_secret', 'robot_email', 'admin_email'], 'trim'],
         ];
     }
