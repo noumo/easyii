@@ -73,9 +73,7 @@ class ItemController extends Controller
 
     public function actionAll()
     {
-        if(!($items = Item::items())){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+	    $items = Item::items();
 
         return $this->render('all', [
             'items' => $items
