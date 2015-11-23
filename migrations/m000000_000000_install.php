@@ -330,6 +330,9 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createIndex('class', models\TagAssign::tableName(), 'class');
         $this->createIndex('item_tag', models\TagAssign::tableName(), ['item_id', 'tag_id']);
 
+	    //CONTENT MODULE
+	    (new m000000_000000_install_content_module())->up();
+
         //INSERT VERSION
         $this->delete(models\Setting::tableName(), ['name' => 'easyii_version']);
         $this->insert(models\Setting::tableName(), [
