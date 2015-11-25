@@ -73,10 +73,10 @@ class Item extends \yii\easyii\components\ActiveRecord
         return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
     }
 
-    public function getCategory()
-    {
-        return Category::get($this->category_id);
-    }
+	public function getCategory()
+	{
+		return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+	}
 
     public function afterDelete()
     {
