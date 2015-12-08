@@ -9,7 +9,7 @@ use \yii\easyii\modules\content\models\ItemData;
 use yii\easyii\modules\content\models\Layout;
 
 
-class m000000_000000_install_content_module extends \yii\db\Migration
+class m000009_100001_install_content_module extends \yii\db\Migration
 {
     public $engine = 'ENGINE=MyISAM DEFAULT CHARSET=utf8';
     

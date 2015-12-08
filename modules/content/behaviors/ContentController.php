@@ -18,23 +18,6 @@ use yii\web\Controller;
  */
 class ContentController extends Behavior
 {
-    /**
-     * Returns the view object that can be used to render views or view files.
-     * The [[render()]], [[renderPartial()]] and [[renderFile()]] methods will use
-     * this view object to implement the actual view rendering.
-     * If not set, it will default to the "view" application component.
-     * @return View|\yii\web\View the view object that can be used to render views or view files.
-     */
-    public function getView()
-    {
-        $view = $this->owner->getView();
-
-        if ($this->content->model) {
-            $view->title = $this->content->seo('title', $this->content->model->title);
-        }
-
-        return $view;
-    }
 
     private $_content;
 

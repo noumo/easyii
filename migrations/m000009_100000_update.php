@@ -136,7 +136,10 @@ class m000009_100000_update extends \yii\db\Migration
             'slugImmutable' => false,
         ]);
 
-        //UPDATE VERSION
+	    //CONTENT MODULE
+	    (new \yii\easyii\modules\content\migrations\m000009_100001_install_content_module())->up();
+
+	    //UPDATE VERSION
         $this->update(models\Setting::tableName(), ['value' => self::VERSION], ['name' => 'easyii_version']);
     }
 
@@ -157,7 +160,10 @@ class m000009_100000_update extends \yii\db\Migration
         $this->delete(Setting::tableName(), ['name' => 'image_max_width']);
         $this->delete(Setting::tableName(), ['name' => 'redactor_plugins']);
 
-        //UPDATE VERSION
+	    //CONTENT MODULE
+	    (new \yii\easyii\modules\content\migrations\m000009_100001_install_content_module())->down();
+
+	    //UPDATE VERSION
         $this->update(models\Setting::tableName(), ['value' => 0.9], ['name' => 'easyii_version']);
 
         echo 'New image and file paths cannot be reverted.';
