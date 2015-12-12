@@ -1,5 +1,7 @@
 <?php
 
+Yii::setAlias('@uploads', dirname($basePath) . '/uploads');
+
 return [
     'modules' => [
         'admin' => [
