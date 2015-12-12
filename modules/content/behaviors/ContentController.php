@@ -4,64 +4,30 @@ namespace yii\easyii\modules\content\behaviors;
 
 use yii;
 use yii\base\ActionEvent;
+use yii\base\Behavior;
+use yii\base\View;
 use yii\easyii\modules\content\api\Content;
 use yii\easyii\modules\content\api\ItemObject;
 use yii\easyii\modules\content\models\Item;
-use yii\base\Behavior;
-use yii\base\View;
 use yii\web\Controller;
 
 /**
  * Class BaseController
- * @package app\controllers
  *
- * @property ItemObject $content
  * @property Controller $owner
+ * @property ItemObject $content
+ * @property string $slug
  */
-class ContentController extends Behavior
+trait ContentController
 {
+    private $_slug;
 
     private $_content;
 
-    /**
-     * Declares event handlers for the [[owner]]'s events.
-     *
-     * Child classes may override this method to declare what PHP callbacks should
-     * be attached to the events of the [[owner]] component.
-     *
-     * The callbacks will be attached to the [[owner]]'s events when the behavior is
-     * attached to the owner; and they will be detached from the events when
-     * the behavior is detached from the component.
-     *
-     * The callbacks can be any of the following:
-     *
-     * - method in this behavior: `'handleClick'`, equivalent to `[$this, 'handleClick']`
-     * - object method: `[$object, 'handleClick']`
-     * - static method: `['Page', 'handleClick']`
-     * - anonymous function: `function ($event) { ... }`
-     *
-     * The following is an example:
-     *
-     * ~~~
-     * [
-     *     Model::EVENT_BEFORE_VALIDATE => 'myBeforeValidate',
-     *     Model::EVENT_AFTER_VALIDATE => 'myAfterValidate',
-     * ]
-     * ~~~
-     *
-     * @return array events (array keys) and the corresponding event handler methods (array values).
-     */
-    public function events()
-    {
-        return [
-            Controller::EVENT_BEFORE_ACTION => 'handleBeforeAction'
-        ];
-    }
-
-    public function handleBeforeAction(ActionEvent $event)
+    public function beforeAction($action)
     {
         if ($this->content->model) {
-            $this->owner->view->title = Yii::$app->name . " - " . $this->content->seo('title', $this->content->model->title);
+            $this->view->title = Yii::$app->name . " - " . $this->content->seo('title', $this->content->model->title);
         }
     }
 
@@ -72,11 +38,7 @@ class ContentController extends Behavior
     {
         if ($this->_content == null)
         {
-            /** @var Controller $controller */
-            $controller = $this->owner;
-            $idSlug = "{$controller->id}-{$controller->action->id}";
-
-            $this->_content = Content::get($idSlug);
+            $this->_content = Content::get($this->slug);
             if ($this->_content === null)
             {
                 $this->_content = new ItemObject(new Item());
@@ -84,5 +46,38 @@ class ContentController extends Behavior
         }
 
         return $this->_content;
+    }
+
+    public function actionContent($id = null)
+    {
+        if ($id) {
+            $this->slug = $id;
+        }
+
+        return $this->render('@easyii/modules/content/views/layouts/default', [
+            'content' => $this->content,
+        ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        if ($this->_slug === null) {
+            /** @var Controller $controller */
+            $controller = $this;
+            $this->_slug = "{$controller->id}-{$controller->action->id}";
+        }
+
+        return $this->_slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->_slug = $slug;
     }
 }
