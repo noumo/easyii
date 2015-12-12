@@ -45,7 +45,7 @@ class Content extends \yii\easyii\components\API
 
 	public function api_tree()
 	{
-		return Item::tree();
+		return Layout::tree();
 	}
 
 	public function api_cats()

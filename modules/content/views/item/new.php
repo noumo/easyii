@@ -29,5 +29,9 @@ $this->title = Yii::t('easyii/content', 'Create item');
 	</div>
 <?php endif; ?>
 
+<?php if (IS_ROOT) : ?>
+	<?= $form->field($model, 'slug') ?>
+<?php endif; ?>
+
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>
