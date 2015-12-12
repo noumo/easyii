@@ -28,11 +28,6 @@ class ItemController extends Controller
     {
         $className = Item::className();
         return [
-            'delete' => [
-                'class' => DeleteAction::className(),
-                'model' => $className,
-                'successMessage' => Yii::t('easyii/content', 'Item deleted')
-            ],
             'clear-image' => [
                 'class' => ClearImageAction::className(),
                 'model' => $className
@@ -192,11 +187,13 @@ class ItemController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Item::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
+        $model = Item::findOne($id);
+        $children = $model->children()->all();
+        $model->deleteWithChildren();
+        foreach ($children as $child) {
+            $child->afterDelete();
         }
+
         return $this->formatResponse(Yii::t('easyii/content', 'Item deleted'));
     }
 

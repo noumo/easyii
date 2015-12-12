@@ -54,6 +54,10 @@ class Layout extends ActiveRecord
 	public function behaviors()
 	{
 		return [
+			'cacheflush' => [
+				'class' => yii\easyii\behaviors\CacheFlush::className(),
+				'key' => [static::tableName().'_tree', static::tableName().'_flat']
+			],
 			SortableModel::className(),
 		];
 	}
