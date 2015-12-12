@@ -8,6 +8,9 @@ use yii\easyii\components\ActiveRecord;
 
 class Layout extends ActiveRecord
 {
+	use yii\easyii\components\TreeTrait;
+	use yii\easyii\components\FlatTrait;
+
 	const STATUS_OFF = 0;
 	const STATUS_ON = 1;
 
