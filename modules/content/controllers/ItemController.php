@@ -223,6 +223,11 @@ class ItemController extends Controller
     private function generateForm($fields, $data = null)
     {
         $result = '';
+
+        if (empty($fields)) {
+            return $result;
+        }
+
         foreach($fields as $field)
         {
             $value = !empty($data->{$field->name}) ? $data->{$field->name} : null;
@@ -271,6 +276,7 @@ class ItemController extends Controller
                 $result .= '<div class="checkbox well well-sm"><b>'. $field->title .'</b>'. $options .'</div>';
             }
         }
+
         return $result;
     }
 }
