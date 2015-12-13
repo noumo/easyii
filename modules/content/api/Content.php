@@ -1,14 +1,13 @@
 <?php
 namespace yii\easyii\modules\content\api;
 
-use creocoder\nestedsets\NestedSetsBehavior;
+use Yii;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\data\ActiveDataProvider;
 use yii\easyii\modules\content\models\Item;
 use yii\easyii\modules\content\models\ItemData;
 use yii\easyii\modules\content\models\Layout;
-use Yii;
-use yii\data\ActiveDataProvider;
 use yii\easyii\widgets\Fancybox;
 use yii\widgets\LinkPager;
 
@@ -162,14 +161,17 @@ class Content extends \yii\easyii\components\API
 		]);
 	}
 
-	public function api_nav()
+	public function api_nav(array $navBarConfig = [], array $navConfig = [])
 	{
-		NavBar::begin([
-			'id' => 'nav',
-			'options' => [
-				'class' => 'navbar navbar-default',
+		$navBarConfig = array_merge_recursive([
+				'id' => 'nav',
+				'options' => [
+					'class' => 'navbar navbar-default',
+				],
 			],
-		]);
+			$navBarConfig);
+
+		NavBar::begin($navBarConfig);
 
 		$menuItems = [];
 
@@ -199,9 +201,13 @@ class Content extends \yii\easyii\components\API
 			$menuItems[] = $menuItem;
 		}
 
-		echo Nav::widget([
-			'items' => $menuItems,
-		]);
+		$navConfig = array_merge_recursive([
+				'options' => ['class' => 'navbar-nav'],
+				'items' => $menuItems,
+			],
+			$navConfig);
+
+		echo Nav::widget($navConfig);
 
 		NavBar::end();
 	}
