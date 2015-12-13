@@ -31,7 +31,7 @@ trait TreeTrait
 	 */
 	public static function generateTree()
 	{
-		$collection = static::find()->with('seo')->sort()->asArray()->all();
+		$collection = static::find()->sort()->asArray()->all();
 		$trees = array();
 		$l = 0;
 

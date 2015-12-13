@@ -1,12 +1,10 @@
 <?php
 /** 
  * @var \yii\web\View $this
- * @var \yii\easyii\modules\content\api\ItemObject $content
+ * @var string $content
  */
 ?>
 
-<h2>
-	<?= $content->getHeader() ?>
-</h2>
-
-<?= $content->getContent() ?>
+<div class="content">
+	<?= $content ?>
+</div>

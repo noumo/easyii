@@ -39,7 +39,7 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 		</div>
 		<?php if (IS_ROOT) : ?>
 			<div class="col-md-3">
-				<?= $form->field($model, 'category_id')->dropDownList($categories) ?>
+				<?= $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'Default']) ?>
 			</div>
 		<?php endif; ?>
 	</div>
