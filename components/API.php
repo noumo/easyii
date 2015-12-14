@@ -38,7 +38,7 @@ class API extends \yii\base\Object
      * @param string $tag
      * @return string
      */
-    public static  function liveEdit($text, $path, $tag = 'span')
+    public static function liveEdit($text, $path, $tag = 'span')
     {
         return $text ? '<'.$tag.' class="easyiicms-edit" data-edit="'.$path.'">'.$text.'</'.$tag.'>' : '';
     }

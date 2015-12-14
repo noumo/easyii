@@ -1,5 +1,5 @@
 $(function(){
-    var table = $('#categoryFields > tbody');
+    var table = $('#layoutFields > tbody');
 
     table.on('click', '.delete-field', function(){
         if(table.find('tr').length > 1) {
@@ -42,7 +42,7 @@ $(function(){
         table.append(fieldTemplate);
     });
 
-    $('#saveCategoryBtn').on('click', function(){
+    $('#saveLayoutBtn').on('click', function(){
         var form = '<input type="hidden" name="save" value="1">';
         table.find('tr').each(function(i, element) {
             var $this = $(element);
