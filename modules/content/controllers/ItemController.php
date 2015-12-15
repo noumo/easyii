@@ -24,6 +24,8 @@ use yii\widgets\ActiveForm;
 
 class ItemController extends Controller
 {
+    public $categoryClass = 'yii\easyii\modules\content\models\Item';
+
     public function actions()
     {
         $className = Item::className();

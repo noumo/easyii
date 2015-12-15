@@ -1,6 +1,14 @@
 <?php
 namespace yii\easyii\actions;
 
+use yii\easyii\components\Controller;
+
+/**
+ * Class MoveAction
+ *
+ * @property Controller $controller
+ * @author Bennet Klarhoelter <boehsermoe@me.com>
+ */
 class MoveAction extends \yii\base\Action
 {
     public $model;
@@ -16,8 +24,8 @@ class MoveAction extends \yii\base\Action
 	 */
 	public function run($id)
 	{
-		$model = $this->findCategory($id);
-		$modelClass = $this->categoryClass;
+		$model = $this->controller->findCategory($id);
+		$modelClass = $this->controller->categoryClass;
 
 		$up = $this->direction == 'up';
 		$orderDir = $up ? SORT_ASC : SORT_DESC;
