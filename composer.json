@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": ">=2.0.6@stable",
+        "yiisoft/yii2": ">=2.0.6",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "creocoder/yii2-nested-sets": "0.9.*",
@@ -31,7 +31,7 @@
         "2amigos/yii2-selectize-widget": "~1.0",
         "vova07/yii2-imperavi-widget": "*",
         "stojg/crop": "*",
-        "google/apiclient": "1.0.*@beta"
+        "google/apiclient": "1.0.*"
     },
     "autoload": {
         "psr-4": {
