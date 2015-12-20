@@ -1,45 +1,4 @@
-# Dev Install
-## Install from git
-
-Clone the repo
-
-```
-git clone https://github.com/boehsermoe/easyii-start
-cd easyii-start
-```
-
-Make your own git repository
-
-```
-git checkout master
-rm -rf .git
-git init
-
-```
-
-Install composer
-
-```
-composer global require "fxp/composer-asset-plugin"
-composer install --prefer-dist 
-```
-
-# Configuration
-1. Configure database connection at `app/config/db.php`
-2. Set your language at `app/config/web.php`
-3. Open in browser your website url. You will see EasyiiCMS Welcome page
-4. Check the requirements.
-5. Fill simple form and complete installation.
-
-### Troubleshoot
-If you got PHP Notice Exceptions (Undefined index, ...), please insert following on top of `index.php`:
-
-```
-error_reporting(E_ALL ^ E_NOTICE);
-```
-
 # Get started
-## Content Module
 
 Please go in to your backend and open the "Content" module *http://www.example.com/admin* and create a "New" content item.
 

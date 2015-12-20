@@ -7,6 +7,9 @@ return [
         'admin' => [
             'class' => 'yii\easyii\AdminModule',
         ],
+        'markdown' => [
+            'class' => 'kartik\markdown\Module',
+        ]
     ],
     'components' => [
         'urlManager' => [

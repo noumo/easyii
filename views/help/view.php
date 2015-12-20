@@ -5,6 +5,8 @@
  */
 use kartik\markdown\Markdown;
 
+$this->title = $module->title;
+
 ?>
 
 <?= Markdown::convert($readmeContent, [], Markdown::SMARTYPANTS_ATTR_DO_NOTHING); ?>

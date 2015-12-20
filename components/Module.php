@@ -14,8 +14,6 @@ use yii\easyii\models\Module as ModuleModel;
  */
 class Module extends \yii\base\Module
 {
-    private $_readmePath = 'help/readme.md';
-
     /** @var string  */
     public $defaultRoute = 'a';
 
@@ -24,6 +22,10 @@ class Module extends \yii\base\Module
 
     /** @var  @todo */
     public $i18n;
+
+    public $controllerMap = [
+        'help' => 'yii\easyii\controllers\HelpController'
+    ];
 
     public static $NAME;
 
@@ -102,27 +104,5 @@ class Module extends \yii\base\Module
     {
         $settings = Yii::$app->getModule('admin')->activeModules[static::getSelfName()]->settings;
         return $settings[$name] !== null ? $settings[$name] : null;
-    }
-
-    /**
-     * Returns the directory that contains the view files for this module.
-     * @return string the root directory of view files. Defaults to "[[basePath]]/views".
-     */
-    public function getReadmePath()
-    {
-        if ($this->_readmePath === null) {
-            $this->_readmePath = $this->getBasePath() . DIRECTORY_SEPARATOR . 'help';
-        }
-        return $this->_readmePath;
-    }
-
-    /**
-     * Sets the directory that contains the view files.
-     * @param string $path the root directory of view files.
-     * @throws InvalidParamException if the directory is invalid
-     */
-    public function setReadmePath($path)
-    {
-        $this->_readmePath = Yii::getAlias($path);
     }
 }

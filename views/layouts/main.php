@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\easyii\assets\AdminAsset;
+use yii\easyii\components\Module as EasyiiModule;
 
 $asset = AdminAsset::register($this);
 $moduleName = $this->context->module->id;
@@ -66,6 +67,11 @@ $moduleName = $this->context->module->id;
                 <div class="box content">
                     <div class="page-title">
                         <?= $this->title ?>
+                        <?php if ($this->context->module instanceof EasyiiModule && is_file($this->context->module->readmePath)) : ?>
+                            <?= Html::a('<i class="glyphicon glyphicon-question-sign"></i>',
+                                ['help/view', 'moduleName' => $moduleName],
+                                ['class' => 'pull-right']) ?>
+                        <?php endif ?>
                     </div>
                     <div class="container-fluid">
                         <?php foreach(Yii::$app->session->getAllFlashes() as $key => $message) : ?>
