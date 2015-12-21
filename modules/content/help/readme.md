@@ -1,14 +1,13 @@
 # Get started
 
-Please go in to your backend and open the "Content" module *http://www.example.com/admin* and create a "New" content item.
+At first create a new content item:
 
-![](content-module-index.png)
+- Open the <a href="/admin/content" target="_blank">content module</a>.
 
-Create new Content with the title "Home" and save it:
-![](content-module-new.png)
+- Create a "New" content item with the title "Home" and save it.
 
-Insert a header and text:
-![](content-module-edit.png)
+- Now insert a header and text.
+
 
 Now go in your app directory and add following to your SiteController:
 
@@ -21,10 +20,10 @@ class SiteController extends Controller
 	...
 ```
 
-Checkout your **home** content under *http://www.example.com/site/content?id=home*
+Checkout your **home** content: [/site/content?id=home](/site/content?id=home).
 
 
-### Views
+## Views
 To customize the default content view just create the file `app/views/site/default.php` and insert following:
 
 ```
@@ -48,15 +47,15 @@ To customize the default content view just create the file `app/views/site/defau
 You can create for each content a custom view under `app/views/site/` and the view files have to be named with the slug name of the content.
 For example the view file for the **home** content is `app/views/site/home.php`
 
-### Custom Fields
+## Custom Fields
 
 In each *layout (see below)* you can configure custom fields and the content item inherited the fields from their layout.
 The field values are available as an array and the field name as key, like this: `$content->data->{field-name}` (without the braces)
 
-### Actions
+## Actions
 If you want your own action for your content, just named with the slug name of the content. The slug name is each to the action ID, not the action name! 
 For example, **index** becomes **actionIndex**, and **hello-world** becomes **actionHelloWorld**.
-See more [Yii2 Doku](http://www.yiiframework.com/doc-2.0/guide-structure-controllers.html#inline-actions)
+See more [Yii2 Doku](http://www.yiiframework.com/doc-2.0/guide-structure-controllers.html#inline-actions).
 
 Just add following action for the home content like this: 
 
@@ -71,9 +70,9 @@ public function actionHome()
 }
 ```
 
-### Layouts
+## Layouts
 
-Under *http://www.example.com/admin/content/layout* you can create your own layouts. A layout have a title, slug and custom fields.
+Under [/admin/content/layout](/admin/content/layout) you can create your own layouts. A layout have a title, slug and custom fields.
 The template files for the layout will be search under `app/views/layouts/content/`.
 If you don't have a layout, you can overwrite the default layout, just create the file `app/views/layouts/content/default.php` and insert following:
 
@@ -90,7 +89,7 @@ If you don't have a layout, you can overwrite the default layout, just create th
 </div>
 ```
 
-### Pretty Urls
+## Pretty Urls
 
 For pretty url just add the following url rule into the `app/config/web.php`:
 
@@ -104,13 +103,13 @@ For pretty url just add the following url rule into the `app/config/web.php`:
 ]
 ````
 
+Checkout your **home** content again: [/home](/home)
+
 > Each content is now avaiable via *http://www.example.com/{id or slug}*
 
-Checkout your **home** content: *http://www.example.com/home*
+## Navigation
 
-### Navigation
-
-Call `Content::nav()` inside your `layouts/main.php` after the body begin. It will generate a default bootstrap navigation, with your content items. 
+After the body begin call `Content::nav()` inside your `layouts/main.php`. It will generate a default bootstrap navigation, with your content items. 
 
 Please check in the backend which content item are activated for the navigation! No content item will be display in the navigation by default.
 

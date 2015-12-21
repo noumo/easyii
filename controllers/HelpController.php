@@ -24,14 +24,20 @@ use yii\easyii\components\Controller;
  */
 class HelpController extends Controller
 {
-    private $_readmePath = null;
+    public $readmeView = '@easyii/views/help/view';
 
-    public function actionView($moduleName)
+    private $_readmeFile = null;
+
+    public $defaultAction = 'view';
+
+    public function actionView()
     {
-        $readmeContent = file_get_contents($this->readmePath);
+        if ($this->readmeFile !== false) {
+            $readmeContent = $this->getReadmeContent();
+        }
 
-        return $this->render('@easyii/views/help/view', [
-            'module' => Yii::$app->getModule('admin')->activeModules[$moduleName],
+        return $this->render($this->readmeView, [
+            'module' => Yii::$app->getModule('admin')->activeModules[$this->module->selfName],
             'readmeContent' => $readmeContent,
         ]);
     }
@@ -42,10 +48,10 @@ class HelpController extends Controller
      */
     public function getReadmeFile()
     {
-        if ($this->_readmePath === null) {
-            $this->_readmePath = $this->module->getBasePath() . DIRECTORY_SEPARATOR . 'help' . DIRECTORY_SEPARATOR . 'readme.md';
+        if ($this->_readmeFile === null) {
+            $this->_readmeFile = $this->module->getBasePath() . DIRECTORY_SEPARATOR . 'help' . DIRECTORY_SEPARATOR . 'readme.md';
         }
-        return $this->_readmePath;
+        return $this->_readmeFile;
     }
 
     /**
@@ -55,6 +61,22 @@ class HelpController extends Controller
      */
     public function setReadmeFile($path)
     {
-        $this->_readmePath = Yii::getAlias($path);
+        $this->_readmeFile = Yii::getAlias($path);
+    }
+
+    /**
+     * @return string
+     */
+    public function getReadmeContent()
+    {
+        try {
+            $readmeContent = file_get_contents($this->readmeFile);
+        }
+        catch (\Exception $ex) {
+            $readmeContent = Yii::t('easyii', 'No help file found for this module.');
+            $readmeContent .= "\n\n*(" . $this->readmeFile . ")*";
+        }
+
+        return $readmeContent;
     }
 }

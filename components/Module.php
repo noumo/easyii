@@ -2,13 +2,13 @@
 namespace yii\easyii\components;
 
 use Yii;
-use yii\base\InvalidParamException;
+use yii\easyii\controllers\HelpController;
 use yii\easyii\models\Module as ModuleModel;
 
 /**
  * Base module class. Inherit from this if you are creating your own modules manually
  *
- * @property string $readmePath
+ * @property bool $showHelp
  *
  * @package yii\easyii\components
  */
@@ -104,5 +104,20 @@ class Module extends \yii\base\Module
     {
         $settings = Yii::$app->getModule('admin')->activeModules[static::getSelfName()]->settings;
         return $settings[$name] !== null ? $settings[$name] : null;
+    }
+
+    public function getShowHelp()
+    {
+        if (Yii::$app->controller instanceof HelpController) {
+            return false;
+        }
+
+        list($helpController, $route) = $this->createController('help');
+
+        if ($helpController instanceof HelpController) {
+            return is_file($helpController->readmeFile);
+        }
+
+        return false;
     }
 }
