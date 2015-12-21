@@ -9,7 +9,7 @@ use yii\easyii\modules\content\models\Item;
 use yii\web\Controller;
 
 /**
- * Class BaseController
+ * Default implementation to handle the content items.
  *
  * @property Controller $controller
  * @property ItemObject $content
