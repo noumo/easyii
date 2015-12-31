@@ -53,7 +53,8 @@ $(function(){
                 options : $this.find('.field-options').val()
             };
             if(data.name != '') {
-                form += '<input type="hidden" name="Field[' + i + ']" value=\'' + JSON.stringify(data) + '\'>';
+                form += $('<input type="hidden" name="Field[' + i + ']">').val(JSON.stringify(data)).clone().wrap('<div/>').parent().html();
+                //form += '<input type="hidden" name="Field[' + i + ']" value=\'' + JSON.stringify(data) + '\'>';
             }
         });
         $('<form method="post">' + form + '</form>').appendTo('body').submit();
