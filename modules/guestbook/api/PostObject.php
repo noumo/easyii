@@ -31,6 +31,6 @@ class PostObject extends \yii\easyii\components\ApiObject
     }
 
     public function getEditLink(){
-        return Url::to(['/admin/guestbook/a/edit', 'id' => $this->id]);
+        return Url::to(['/admin/guestbook/a/view', 'id' => $this->id]);
     }
 }
