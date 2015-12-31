@@ -44,12 +44,14 @@ class Redactor extends InputWidget
 
     public function registerRegional()
     {
-        $lang = Data::getLocale();
-        if ($lang != 'en') {
+        $langs = Data::getLocale();
+
+        foreach ($langs as $lang) {
             $langAsset = 'lang/' . $lang . '.js';
             if (file_exists(Yii::getAlias($this->assetBundle->sourcePath . '/' . $langAsset))) {
                 $this->assetBundle->js[] = $langAsset;
                 $this->options['lang'] = $lang;
+                break;
             }
         }
     }

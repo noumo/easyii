@@ -25,6 +25,12 @@ class Data
 
     public static function getLocale()
     {
-        return strtolower(substr(Yii::$app->language, 0, 2));
+        return [
+            str_replace('_', '-', Yii::$app->language),
+            str_replace('-', '_', Yii::$app->language),
+            str_replace('_', '-', strtolower(Yii::$app->language)),
+            str_replace('-', '_', strtolower(Yii::$app->language)),
+            preg_split('/[-_]/', strtolower(Yii::$app->language))[0],
+        ];
     }
 }
