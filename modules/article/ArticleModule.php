@@ -19,6 +19,7 @@ class ArticleModule extends \yii\easyii\components\Module
         'title' => [
             'en' => 'Articles',
             'ru' => 'Статьи',
+            'zh-TW' => '文章',
         ],
         'icon' => 'pencil',
         'order_num' => 65,

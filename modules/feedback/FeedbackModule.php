@@ -22,6 +22,7 @@ class FeedbackModule extends \yii\easyii\components\Module
         'title' => [
             'en' => 'Feedback',
             'ru' => 'Обратная связь',
+            'zh-TW' => '回饋',
         ],
         'icon' => 'earphone',
         'order_num' => 60,

@@ -17,6 +17,7 @@ class CatalogModule extends \yii\easyii\components\Module
         'title' => [
             'en' => 'Catalog',
             'ru' => 'Каталог',
+            'zh-TW' => '商品目錄',
         ],
         'icon' => 'list-alt',
         'order_num' => 100,

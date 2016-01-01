@@ -188,7 +188,7 @@ class InstallController extends \yii\web\Controller
 
     private function installModules()
     {
-        $language = Data::getLocale();
+        $languages = Data::getLocale();
 
         foreach(glob(Yii::getAlias('@easyii'). DIRECTORY_SEPARATOR .'modules/*') as $module)
         {
@@ -196,10 +196,15 @@ class InstallController extends \yii\web\Controller
             $moduleClass = 'yii\easyii\modules\\' . $moduleName . '\\' . ucfirst($moduleName) . 'Module';
             $moduleConfig = $moduleClass::$installConfig;
 
+            $title = $moduleConfig['title']['en'];
+            foreach ($languages as $language) {
+                $title = !empty($moduleConfig['title'][$language]) ? $moduleConfig['title'][$language] : $title;
+            }
+
             $module = new Module([
                 'name' => $moduleName,
                 'class' => $moduleClass,
-                'title' => !empty($moduleConfig['title'][$language]) ? $moduleConfig['title'][$language] : $moduleConfig['title']['en'],
+                'title' => $title,
                 'icon' => $moduleConfig['icon'],
                 'settings' => Yii::createObject($moduleClass, [$moduleName])->settings,
                 'order_num' => $moduleConfig['order_num'],

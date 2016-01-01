@@ -12,6 +12,7 @@ class CarouselModule extends \yii\easyii\components\Module
         'title' => [
             'en' => 'Carousel',
             'ru' => 'Карусель',
+            'zh-TW' => '輪播',
         ],
         'icon' => 'picture',
         'order_num' => 40,
