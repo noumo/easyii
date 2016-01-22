@@ -53,7 +53,8 @@ $(function(){
                 options : $this.find('.field-options').val()
             };
             if(data.name != '') {
-                form += '<input type="hidden" name="Field[' + i + ']" value=\'' + JSON.stringify(data) + '\'>';
+                var json = JSON.stringify(data).replace("'", "&apos;"); // See issue #103
+                form += '<input type="hidden" name="Field[' + i + ']" value=\'' + json + '\'>';
             }
         });
         $('<form method="post">' + form + '</form>').appendTo('body').submit();
