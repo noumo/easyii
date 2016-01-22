@@ -1,0 +1,9 @@
+h1:first-of-type {
+    margin-top: 0;
+}
+h2 {
+    margin-top: 20px;
+}
+blockquote {
+    font-size: inherit;
+}

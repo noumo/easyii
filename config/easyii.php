@@ -1,10 +1,15 @@
 <?php
 
+Yii::setAlias('@uploads', dirname($basePath) . '/uploads');
+
 return [
     'modules' => [
         'admin' => [
             'class' => 'yii\easyii\AdminModule',
         ],
+        'markdown' => [
+            'class' => 'kartik\markdown\Module',
+        ]
     ],
     'components' => [
         'urlManager' => [

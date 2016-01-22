@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\easyii\assets\AdminAsset;
+use yii\easyii\components\Module as EasyiiModule;
+use \yii\easyii\controllers\HelpController;
 
 $asset = AdminAsset::register($this);
 $moduleName = $this->context->module->id;
@@ -64,9 +66,16 @@ $moduleName = $this->context->module->id;
                     <?php endif; ?>
                 </div>
                 <div class="box content">
-                    <div class="page-title">
-                        <?= $this->title ?>
-                    </div>
+                    <?php if (!Yii::$app->controller instanceof HelpController) : ?>
+                        <div class="page-title">
+                            <?= $this->title ?>
+                            <?php if ($this->context->module->showHelp) : ?>
+                                <?= Html::a('<i class="glyphicon glyphicon-question-sign"></i>',
+                                    $this->context->module->id . '/help',
+                                    ['class' => 'pull-right', 'title' => Yii::t('easyii', 'Show help')]) ?>
+                            <?php endif ?>
+                        </div>
+                    <?php endif ?>
                     <div class="container-fluid">
                         <?php foreach(Yii::$app->session->getAllFlashes() as $key => $message) : ?>
                             <div class="alert alert-<?= $key ?>"><?= $message ?></div>
