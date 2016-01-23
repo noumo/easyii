@@ -33,9 +33,13 @@ class Upload
         if(!$uploadPath){
             throw new ServerErrorHttpException('Alias `@uploads` is not set.');
         }
+
         if($dir){
             $uploadPath .= DIRECTORY_SEPARATOR . $dir;
         }
+
+        $uploadPath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . $uploadPath;
+
         if(!FileHelper::createDirectory($uploadPath)){
             throw new HttpException(500, 'Cannot create "'.$uploadPath.'". Please check write permissions.');
         }
@@ -49,7 +53,16 @@ class Upload
 
     static function getPathUrl($dir = '')
     {
-        return Yii::getAlias('@web') . str_replace(Yii::getAlias('@webroot'), '', str_replace('\\', '/', Yii::getAlias('@uploads'))) . ($dir ? '/' . $dir : '');
+        $webroot = Yii::getAlias('@webroot');
+        $uploads = Yii::getAlias('@uploads');
+
+        $path = str_replace($webroot, '', str_replace('\\', '/', $uploads));
+
+        if ($dir) {
+            $path .= '/' . $dir;
+        }
+
+        return Yii::getAlias('@web') . $path;
     }
 
     static function getAbsolutePath($fileName)
@@ -60,7 +73,7 @@ class Upload
         if(strpos($fileName, Yii::getAlias('@uploads')) !== false ){
             return $fileName;
         } else {
-            return Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . $fileName;
+            return Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . Yii::getAlias('@uploads') . DIRECTORY_SEPARATOR . $fileName;
         }
     }
 
