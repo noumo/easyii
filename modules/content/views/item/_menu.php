@@ -17,11 +17,8 @@ $module = $this->context->module->id;
 				<?= Yii::t('easyii', 'List') ?>
 			</a>
 		</li>
-    <?php elseif($model == null) : ?>
-	    <li><a href="<?= Url::to(['/admin/'.$module.'/layout']) ?>"><i class="glyphicon glyphicon-chevron-left font-12"></i> <?= Yii::t('easyii', 'Layouts') ?></a></li>
-    <?php else : ?>
-
-	    <li><a href="<?= Url::to(['/admin/'.$module.'/item/all']) ?>"><i class="glyphicon glyphicon-chevron-left font-12"></i> <?= Yii::t('easyii', 'List') ?></a></li>
+	<?php else : ?>
+		<li><a href="<?= Url::to(['/admin/'.$module.'/item/all']) ?>"><i class="glyphicon glyphicon-chevron-left font-12"></i> <?= Yii::t('easyii', 'List') ?></a></li>
     <?php endif; ?>
 
     <li <?= ($action === 'new') ? 'class="active"' : '' ?>><a href="<?= Url::to(['/admin/'.$module.'/item/new']) ?>"><?= Yii::t('easyii', 'New') ?></a></li>

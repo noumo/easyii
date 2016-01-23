@@ -11,7 +11,7 @@ $this->title = Yii::t('easyii/content', 'Create item');
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
-<?= $form->field($model, 'category_id')->dropDownList($categories) ?>
+<?= $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'Default']) ?>
 
 <?php if(!empty($parent)) : ?>
 	<div class="form-group field-category-title required">
@@ -27,6 +27,10 @@ $this->title = Yii::t('easyii/content', 'Create item');
 			<?php endforeach; ?>
 		</select>
 	</div>
+<?php endif; ?>
+
+<?php if (IS_ROOT) : ?>
+	<?= $form->field($model, 'slug') ?>
 <?php endif; ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>

@@ -12,6 +12,7 @@ class ItemObject extends ApiObject
 {
     public $slug;
     public $image;
+	/** @var array */
     public $data;
 	public $category_id;
 	public $nav;

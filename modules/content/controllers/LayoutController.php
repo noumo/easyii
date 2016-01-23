@@ -5,6 +5,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\actions\DeleteAction;
 use yii\easyii\actions\SortAction;
+use yii\easyii\actions\SortByNumAction;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\content\models\Layout;
 use yii\easyii\widgets\Redactor;
@@ -26,14 +27,12 @@ class LayoutController extends Controller
 				'successMessage' => Yii::t('easyii/content', 'Entry deleted')
 			],
 			'up' => [
-				'class' => SortAction::className(),
+				'class' => SortByNumAction::className(),
 				'model' => $className,
-				'attribute' => 'order_num'
 			],
 			'down' => [
-				'class' => SortAction::className(),
+				'class' => SortByNumAction::className(),
 				'model' => $className,
-				'attribute' => 'order_num'
 			],
 		];
 	}

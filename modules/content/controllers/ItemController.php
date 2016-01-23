@@ -24,15 +24,12 @@ use yii\widgets\ActiveForm;
 
 class ItemController extends Controller
 {
+    public $categoryClass = 'yii\easyii\modules\content\models\Item';
+
     public function actions()
     {
         $className = Item::className();
         return [
-            'delete' => [
-                'class' => DeleteAction::className(),
-                'model' => $className,
-                'successMessage' => Yii::t('easyii/content', 'Item deleted')
-            ],
             'clear-image' => [
                 'class' => ClearImageAction::className(),
                 'model' => $className
@@ -73,9 +70,7 @@ class ItemController extends Controller
 
     public function actionAll()
     {
-        if(!($items = Item::items())){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+	    $items = Item::items();
 
         return $this->render('all', [
             'items' => $items
@@ -194,11 +189,13 @@ class ItemController extends Controller
 
     public function actionDelete($id)
     {
-        if(($model = Item::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
+        $model = Item::findOne($id);
+        $children = $model->children()->all();
+        $model->deleteWithChildren();
+        foreach ($children as $child) {
+            $child->afterDelete();
         }
+
         return $this->formatResponse(Yii::t('easyii/content', 'Item deleted'));
     }
 
@@ -225,6 +222,11 @@ class ItemController extends Controller
     private function generateForm($fields, $data = null)
     {
         $result = '';
+
+        if (empty($fields)) {
+            return $result;
+        }
+
         foreach($fields as $field)
         {
             $value = !empty($data->{$field->name}) ? $data->{$field->name} : null;
@@ -273,6 +275,7 @@ class ItemController extends Controller
                 $result .= '<div class="checkbox well well-sm"><b>'. $field->title .'</b>'. $options .'</div>';
             }
         }
+
         return $result;
     }
 }

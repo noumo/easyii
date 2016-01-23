@@ -1,4 +1,5 @@
 <?php
+
 use yii\db\Schema;
 use yii\easyii\models;
 
@@ -6,7 +7,7 @@ use \yii\easyii\modules\content\models\Item;
 use \yii\easyii\modules\content\models\ItemData;
 use yii\easyii\modules\content\models\Layout;
 
-class m000000_000000_install_content_module extends \yii\db\Migration
+class m000009_100001_install_content_module extends \yii\db\Migration
 {
     public $engine = 'ENGINE=MyISAM DEFAULT CHARSET=utf8';
     
@@ -15,7 +16,7 @@ class m000000_000000_install_content_module extends \yii\db\Migration
         $this->createTable(Layout::tableName(), [
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER,
@@ -32,7 +33,7 @@ class m000000_000000_install_content_module extends \yii\db\Migration
             'nav' => Schema::TYPE_BOOLEAN . " NOT NULL DEFAULT '1'",
             'content' => Schema::TYPE_TEXT . ' DEFAULT NULL',
             'data' => Schema::TYPE_TEXT . ' NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
 	        'tree' => Schema::TYPE_INTEGER,

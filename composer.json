@@ -7,7 +7,6 @@
     "type": "yii2-extension",
     "license": "GNU GPL V3",
     "minimum-stability": "dev",
-    "prefer-stable": true,
     "support": {
         "wiki": "http://easyiicms.com/docs",
         "source": "https://github.com/noumo/easyii.git",
@@ -32,7 +31,7 @@
         "2amigos/yii2-selectize-widget": "~1.0",
         "vova07/yii2-imperavi-widget": "*",
         "stojg/crop": "*",
-        "google/apiclient": "1.0.*@beta"
+        "google/apiclient": "1.0.*"
     },
     "autoload": {
         "psr-4": {
