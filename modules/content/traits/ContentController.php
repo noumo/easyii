@@ -1,6 +1,6 @@
 <?php
 
-namespace yii\easyii\modules\content\behaviors;
+namespace yii\easyii\modules\content\traits;
 
 use Yii;
 use yii\easyii\modules\content\api\Content;
