@@ -4,6 +4,7 @@ namespace yii\easyii\modules\content\api;
 use Yii;
 use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\content\models\Element;
 use yii\easyii\modules\content\models\Item;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -30,6 +31,7 @@ class ItemObject extends ApiObject
 	public $children;
 
 	private $_photos;
+	private $_elements;
 
 	public function getTitle(){
         if($this->model->isNewRecord){
@@ -83,6 +85,22 @@ class ItemObject extends ApiObject
         }
         return $this->_photos;
     }
+
+	/**
+	 * @return ElementObject[]
+	 */
+	public function getElements()
+	{
+		if(!$this->_elements){
+			$this->_elements = [];
+
+			foreach(Element::find()->where(['class' => Item::className(), 'item_id' => $this->id])->sort()->all() as $model){
+				$this->_elements[] = new ElementObject($model);
+			}
+		}
+
+		return $this->_elements;
+	}
 
 	public function getParents($where = null)
 	{

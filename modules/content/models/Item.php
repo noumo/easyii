@@ -118,7 +118,12 @@ class Item extends ItemModel
         return $this->hasOne(Layout::className(), ['category_id' => 'category_id']);
     }
 
-    private function parseData(){
+	public function getElements()
+	{
+		return $this->hasMany(Element::className(), ['item_id' => 'item_id']);
+	}
+
+	private function parseData(){
         $this->data = $this->data !== '' ? json_decode($this->data) : [];
     }
 }
