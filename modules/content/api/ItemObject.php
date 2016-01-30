@@ -4,7 +4,9 @@ namespace yii\easyii\modules\content\api;
 use Yii;
 use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\content\models\Element;
+use yii\easyii\modules\content\contentElements\ContentElementBase;
+use yii\easyii\modules\content\contentElements\ContentElementFactory;
+use yii\easyii\modules\content\contentElements\ContentElementWidget;
 use yii\easyii\modules\content\models\Item;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -15,6 +17,8 @@ class ItemObject extends ApiObject
     public $image;
 	/** @var array */
     public $data;
+	/** @var array */
+	public $elements;
 	public $category_id;
 	public $nav;
     public $available;
@@ -31,7 +35,7 @@ class ItemObject extends ApiObject
 	public $children;
 
 	private $_photos;
-	private $_elements;
+	private $_contentElements;
 
 	public function getTitle(){
         if($this->model->isNewRecord){
@@ -66,13 +70,15 @@ class ItemObject extends ApiObject
     /**
      * @return LayoutObject
      */
-    public function getLayout(){
-        return Content::cat($this->category_id);
-    }
+	public function getLayout()
+	{
+		return Content::cat($this->category_id);
+	}
 
-    public function getDate(){
-        return Yii::$app->formatter->asDate($this->time);
-    }
+	public function getDate()
+	{
+		return Yii::$app->formatter->asDate($this->time);
+	}
 
     public function getPhotos()
     {
@@ -87,19 +93,20 @@ class ItemObject extends ApiObject
     }
 
 	/**
-	 * @return ElementObject[]
+	 * @return ContentElementWidget[]
 	 */
-	public function getElements()
+	public function getContentElements()
 	{
-		if(!$this->_elements){
-			$this->_elements = [];
+		if(!$this->_contentElements){
+			$this->_contentElements = [];
 
-			foreach(Element::find()->where(['class' => Item::className(), 'item_id' => $this->id])->sort()->all() as $model){
-				$this->_elements[] = new ElementObject($model);
+			foreach(ContentElementBase::find()->where(['item_id' => $this->id])->sort()->all() as $model) {
+				echo "<pre>";
+				$this->_contentElements[] = ContentElementFactory::create($model);
 			}
 		}
 
-		return $this->_elements;
+		return $this->_contentElements;
 	}
 
 	public function getParents($where = null)

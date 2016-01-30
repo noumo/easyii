@@ -1,6 +1,6 @@
 <?php
 
-namespace yii\easyii\modules\content\traits;
+namespace yii\easyii\modules\content\api\controllers;
 
 use Yii;
 use yii\easyii\modules\content\api\Content;
@@ -77,7 +77,7 @@ trait ContentController
             return $view;
         }
 
-        return '@easyii/modules/content/views/content/default';
+        return '@easyii/modules/content/views/templates/contentView';
     }
 
     /**
@@ -101,7 +101,7 @@ trait ContentController
             return $layoutFile;
         }
 
-        $layoutFile = '@easyii/modules/content/views/layouts/default.php';
+        $layoutFile = '@easyii/modules/content/views/templates/layout.php';
         return $layoutFile;
     }
 

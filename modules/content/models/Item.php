@@ -3,7 +3,15 @@ namespace yii\easyii\modules\content\models;
 
 use Yii;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\content\contentElements\ContentElementBase;
 
+/**
+ * Class Item
+ *
+ * @property \yii\easyii\modules\content\contentElements\ContentElementBase[] $elements
+ *
+ * @author Bennet Klarhoelter <boehsermoe@me.com>
+ */
 class Item extends ItemModel
 {
     public static function tableName()
@@ -48,7 +56,6 @@ class Item extends ItemModel
             if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
                 $this->data = new \stdClass();
             }
-
             $this->data = json_encode($this->data);
 
             if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
@@ -64,7 +71,7 @@ class Item extends ItemModel
     public function afterSave($insert, $attributes){
         parent::afterSave($insert, $attributes);
 
-        $this->parseData();
+	    $this->parseData();
 
         ItemData::deleteAll(['item_id' => $this->primaryKey]);
 
@@ -90,7 +97,7 @@ class Item extends ItemModel
     public function afterFind()
     {
         parent::afterFind();
-        $this->parseData();
+	    $this->parseData();
     }
 
 	public function afterDelete()
@@ -120,7 +127,7 @@ class Item extends ItemModel
 
 	public function getElements()
 	{
-		return $this->hasMany(Element::className(), ['item_id' => 'item_id']);
+		return $this->hasMany(ContentElementBase::className(), ['item_id' => 'item_id']);
 	}
 
 	private function parseData(){

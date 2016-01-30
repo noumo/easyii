@@ -1,5 +1,5 @@
 $(function(){
-    var table = $('#layoutFields > tbody');
+    var table = $('#layoutElements > tbody');
 
     table.on('click', '.delete-field', function(){
         if(table.find('tr').length > 1) {
@@ -38,7 +38,7 @@ $(function(){
         }
     });
 
-    $('#addField').on('click', function(){
+    $('#addElement').on('click', function(){
         table.append(fieldTemplate);
     });
 
@@ -53,7 +53,7 @@ $(function(){
                 options : $this.find('.field-options').val()
             };
             if(data.name != '') {
-                form += '<input type="hidden" name="Field[' + i + ']" value=\'' + JSON.stringify(data) + '\'>';
+                form += '<input type="hidden" name="Element[' + i + ']" value=\'' + JSON.stringify(data) + '\'>';
             }
         });
         $('<form method="post">' + form + '</form>').appendTo('body').submit();

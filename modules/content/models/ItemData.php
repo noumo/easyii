@@ -9,7 +9,6 @@ use yii\easyii\models\Photo;
 
 class ItemData extends \yii\easyii\components\ActiveRecord
 {
-
     public static function tableName()
     {
         return 'easyii_content_item_data';

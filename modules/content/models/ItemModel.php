@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bk
- * Date: 13.11.15
- * Time: 21:12
- */
 
 namespace yii\easyii\modules\content\models;
 

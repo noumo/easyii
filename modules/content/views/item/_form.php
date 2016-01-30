@@ -44,7 +44,9 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 		<?php endif; ?>
 	</div>
 
-<?= $dataForm ?>
+<?php
+// Todo: Dont need layout fields more? -> Yes!
+#$dataForm ?>
 
 <?= $form->field($model, 'content')->widget(
 	Redactor::className(), [
@@ -57,6 +59,8 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 ]
 ) ?>
 
+
+<?= $this->render('_elements', ['model' => $model]) ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 

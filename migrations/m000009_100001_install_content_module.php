@@ -45,21 +45,12 @@ class m000009_100001_install_content_module extends \yii\db\Migration
         ], $this->engine);
         $this->createIndex('slug', Item::tableName(), 'slug', true);
 
-        $this->createTable(ItemData::tableName(), [
-            'data_id' => 'pk',
-            'item_id' => Schema::TYPE_INTEGER,
-            'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'value' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
-        ], $this->engine);
-        $this->createIndex('item_id_name', ItemData::tableName(), ['item_id', 'name']);
-        $this->createIndex('value', ItemData::tableName(), 'value(300)');
-
-
     }
 
     public function down()
     {
-        $this->dropTable(Layout::tableName());
+	    $this->dropTable(ItemData::tableName());
+	    $this->dropTable(Item::tableName());
         $this->dropTable(Layout::tableName());
     }
 }

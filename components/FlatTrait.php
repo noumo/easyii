@@ -7,6 +7,8 @@ use yii\easyii\models\SeoText;
 
 trait FlatTrait
 {
+	protected $withSeo = true;
+
 	static $FLAT = [];
 
 	/**

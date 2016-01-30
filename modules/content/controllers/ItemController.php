@@ -4,14 +4,13 @@ namespace yii\easyii\modules\content\controllers;
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
-use yii\easyii\actions\DeleteAction;
 use yii\easyii\actions\MoveAction;
 use yii\easyii\actions\SortAction;
 use yii\easyii\behaviors\SortableModel;
 use yii\easyii\components\Controller;
 use yii\easyii\helpers\Image;
 use yii\easyii\modules\content\api\Content;
-use yii\easyii\modules\content\api\ItemObject;
+use yii\easyii\modules\content\contentElements\ContentElementBase;
 use yii\easyii\modules\content\models\Item;
 use yii\easyii\modules\content\models\Layout;
 use yii\easyii\widgets\Redactor;
@@ -19,7 +18,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
-use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 class ItemController extends Controller
@@ -97,7 +95,9 @@ class ItemController extends Controller
 	            }
 
                 if ($model->save()) {
-                    $this->flash('success', Yii::t('easyii/content', 'Item created'));
+	                $this->saveElements($model, Yii::$app->request->post('Element'));
+
+	                $this->flash('success', Yii::t('easyii/content', 'Item created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/item/edit/', 'id' => $model->primaryKey]);
                 } else {
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -118,6 +118,7 @@ class ItemController extends Controller
 
     public function actionEdit($id)
     {
+        /** @var Item $model */
         if(!($model = Item::findOne($id))){
             return $this->redirect(['/admin/'.$this->module->id]);
         }
@@ -128,8 +129,6 @@ class ItemController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                $model->data = Yii::$app->request->post('Data');
-
                 if (isset($_FILES) && $this->module->settings['itemThumb']) {
 
                     $model->image_file = UploadedFile::getInstance($model, 'image_file');
@@ -140,7 +139,9 @@ class ItemController extends Controller
                     }
                 }
 
-                if ($model->save()) {
+	            $this->saveElements($model, Yii::$app->request->post('Element'));
+
+	            if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/content', 'Item updated'));
                     return $this->redirect(['/admin/'.$this->module->id.'/item/edit', 'id' => $model->primaryKey]);
                 } else {
@@ -278,4 +279,18 @@ class ItemController extends Controller
 
         return $result;
     }
+
+	/**
+	 * @param $model
+	 */
+	protected function saveElements(Item $model, $data)
+	{
+		foreach ($data as $elementKey => $attributes) {
+			$element = ContentElementBase::create($attributes['type']);
+			$element->item_id = $model->primaryKey;
+			$element->load($attributes, '');
+
+			$element->save();
+		}
+	}
 }
