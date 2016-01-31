@@ -6,22 +6,53 @@ use yii\base\Widget;
 use yii\bootstrap\Html;
 use yii\helpers\Url;
 
+/**
+ * Class ContentElementWidget
+ *
+ * @property ContentElementBase $element
+ *
+ * @author Bennet Klarhoelter <boehsermoe@me.com>
+ */
 abstract class ContentElementWidget extends Widget
 {
-	protected $model;
+	public $layout = false;
 
-	public function __construct(ContentElementBase $model, array $config = null)
-	{
-		parent::__construct($config);
+	private $_element;
 
-		$this->model = $model;
-	}
+	/**
+	 * @return ContentElementBase
+	 */
+	abstract function createElement();
 
 	public function run($view = 'view')
 	{
-		$content = $this->render($view, ['model' => $this->model]);
+		return $this->render($view);
+	}
 
-		return $content;
+	public function render($view = 'view', $params = [])
+	{
+		$params['element'] = $this->element;
+
+		$content = parent::render($view, $params);
+
+		return $this->renderContent($content);
+	}
+
+	public function renderContent($content)
+	{
+		if ($this->layout !== false) {
+			return $this->renderFile($this->getLayoutFile(), ['content' => $content, 'element' => $this->element]);
+		}
+		else {
+			return $content;
+		}
+	}
+
+	public function getLayoutFile()
+	{
+		$layoutFile = \Yii::$app->controller->module->getViewPath() . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . $this->layout . '.php';
+
+		return $layoutFile;
 	}
 
 	public function getEditLink()
@@ -34,5 +65,25 @@ abstract class ContentElementWidget extends Widget
 		return Html::a(\Yii::t('easyii/content/api', 'Create page'),
 			['/admin/content/element/new'],
 			['target' => '_blank']);
+	}
+
+	/**
+	 * @return ContentElementBase
+	 */
+	public function getElement()
+	{
+		if ($this->_element == null) {
+			$this->_element = $this->createElement();
+		}
+
+		return $this->_element;
+	}
+
+	/**
+	 * @param ContentElementBase $element
+	 */
+	public function setElement($element)
+	{
+		$this->_element = $element;
 	}
 }

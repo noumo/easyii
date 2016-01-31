@@ -12,9 +12,9 @@ class ActiveQueryNS extends ActiveQuery
         ];
     }
 
-    public function sort()
+    public function sort($order = SORT_DESC)
     {
-        $this->orderBy('order_num DESC, lft ASC');
+        $this->orderBy(['order_num' => $order, 'lft' => SORT_ASC]);
         return $this;
     }
 }

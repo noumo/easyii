@@ -139,26 +139,132 @@ class ItemController extends Controller
                     }
                 }
 
-	            $this->saveElements($model, Yii::$app->request->post('Element'));
+                $saved = $this->saveElements($model, Yii::$app->request->post('Element'));
 
-	            if ($model->save()) {
+	            if ($model->save() && $saved) {
                     $this->flash('success', Yii::t('easyii/content', 'Item updated'));
-                    return $this->redirect(['/admin/'.$this->module->id.'/item/edit', 'id' => $model->primaryKey]);
-                } else {
-                    $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-                    return $this->refresh();
+                }
+	            else {
+		            $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                 }
             }
         }
-        else {
-            return $this->render('edit', [
-                'model' => $model,
-                'dataForm' => $this->generateForm($model->layout->fields, $model->data)
-            ]);
-        }
+
+	    return $this->render('edit', [
+		    'model' => $model,
+		    'dataForm' => $this->generateForm($model->layout->fields, $model->data)
+	    ]);
     }
 
-    public function actionPhotos($id)
+	private function generateForm($fields, $data = null)
+	{
+		$result = '';
+
+		if (empty($fields)) {
+			return $result;
+		}
+
+		foreach($fields as $field)
+		{
+			$value = !empty($data->{$field->name}) ? $data->{$field->name} : null;
+			if ($field->type === 'string') {
+				$result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::input('text', "Data[{$field->name}]", $value, ['class' => 'form-control']) .'</div>';
+			}
+			elseif ($field->type === 'text') {
+				$result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::textarea("Data[{$field->name}]", $value, ['class' => 'form-control']) .'</div>';
+			}
+			elseif ($field->type === 'html') {
+				$result .= Html::beginTag('div', ['class' => 'form-group']);
+				$result .= Html::label($field->title);
+				$result .= Redactor::widget([
+						'name' => "Data[{$field->name}]",
+						'value' => $value,
+						'settings' => [
+							'minHeight' => 100,
+						],
+						'options' => [
+							'class' => 'form-control',
+							'minHeight' => 100,
+							'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
+							'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
+							'plugins' => ['fullscreen']
+						]
+					]
+				);
+				$result .= Html::endTag('div');
+			}
+			elseif ($field->type === 'boolean') {
+				$result .= '<div class="checkbox"><label>'. Html::checkbox("Data[{$field->name}]", $value, ['uncheck' => 0]) .' '. $field->title .'</label></div>';
+			}
+			elseif ($field->type === 'select') {
+				$options = ['' => Yii::t('easyii/content', 'Select')];
+				foreach($field->options as $option){
+					$options[$option] = $option;
+				}
+				$result .= '<div class="form-group"><label>'. $field->title .'</label><select name="Data['.$field->name.']" class="form-control">'. Html::renderSelectOptions($value, $options) .'</select></div>';
+			}
+			elseif ($field->type === 'checkbox') {
+				$options = '';
+				foreach($field->options as $option){
+					$checked = $value && in_array($option, $value);
+					$options .= '<br><label>'. Html::checkbox("Data[{$field->name}][]", $checked, ['value' => $option]) .' '. $option .'</label>';
+				}
+				$result .= '<div class="checkbox well well-sm"><b>'. $field->title .'</b>'. $options .'</div>';
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param $model
+	 */
+	protected function saveElements(Item $model, $data)
+	{
+		if (empty($data)) {
+			return true;
+		}
+
+		$error = false;
+		$elements = [];
+
+		foreach ($data as $elementKey => $attributes) {
+			/** @var ContentElementBase|false $element */
+			$element = false;
+
+			if ($attributes['scenario'] == 'delete') {
+				unset($attributes['scenario']);
+				ContentElementBase::deleteAll($attributes);
+			}
+			elseif ($attributes['scenario'] == 'insert') {
+				$element = ContentElementBase::create($attributes['type']);
+				$element->item_id = $model->primaryKey;
+				$element->load($attributes, '');
+
+				$element->insert();
+			}
+			elseif ($attributes['scenario'] == 'update') {
+				$element = ContentElementBase::findOne(['element_id' => $attributes['element_id']]);
+				$element->load($attributes, '');
+
+				$element->update();
+			}
+
+			if ($element) {
+				if ($element->hasErrors()) {
+					$error = true;
+				}
+
+				$elements[] = $element;
+			}
+		}
+
+		$model->populateRelation('elements', $elements);
+
+		return !$error;
+	}
+
+	public function actionPhotos($id)
     {
         if(!($model = Item::findOne($id))){
             return $this->redirect(['/admin/'.$this->module->id]);
@@ -169,7 +275,7 @@ class ItemController extends Controller
         ]);
     }
 
-    public function actionClearImage($id)
+	public function actionClearImage($id)
     {
         $model = Item::findOne($id);
 
@@ -188,7 +294,7 @@ class ItemController extends Controller
         return $this->back();
     }
 
-    public function actionDelete($id)
+	public function actionDelete($id)
     {
         $model = Item::findOne($id);
         $children = $model->children()->all();
@@ -200,97 +306,23 @@ class ItemController extends Controller
         return $this->formatResponse(Yii::t('easyii/content', 'Item deleted'));
     }
 
-    public function actionUp($id, $category_id)
+	public function actionUp($id, $category_id)
     {
         return $this->move($id, 'up', ['category_id' => $category_id]);
     }
 
-    public function actionDown($id, $category_id)
+	public function actionDown($id, $category_id)
     {
         return $this->move($id, 'down', ['category_id' => $category_id]);
     }
 
-    public function actionOn($id)
+	public function actionOn($id)
     {
         return $this->changeStatus($id, Item::STATUS_ON);
     }
 
-    public function actionOff($id)
+	public function actionOff($id)
     {
         return $this->changeStatus($id, Item::STATUS_OFF);
     }
-
-    private function generateForm($fields, $data = null)
-    {
-        $result = '';
-
-        if (empty($fields)) {
-            return $result;
-        }
-
-        foreach($fields as $field)
-        {
-            $value = !empty($data->{$field->name}) ? $data->{$field->name} : null;
-            if ($field->type === 'string') {
-                $result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::input('text', "Data[{$field->name}]", $value, ['class' => 'form-control']) .'</div>';
-            }
-            elseif ($field->type === 'text') {
-                $result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::textarea("Data[{$field->name}]", $value, ['class' => 'form-control']) .'</div>';
-            }
-            elseif ($field->type === 'html') {
-                $result .= Html::beginTag('div', ['class' => 'form-group']);
-                $result .= Html::label($field->title);
-                $result .= Redactor::widget([
-                        'name' => "Data[{$field->name}]",
-                        'value' => $value,
-                        'settings' => [
-                            'minHeight' => 100,
-                        ],
-                        'options' => [
-                            'class' => 'form-control',
-                            'minHeight' => 100,
-                            'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
-                            'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
-                            'plugins' => ['fullscreen']
-                        ]
-                    ]
-                );
-                $result .= Html::endTag('div');
-            }
-            elseif ($field->type === 'boolean') {
-                $result .= '<div class="checkbox"><label>'. Html::checkbox("Data[{$field->name}]", $value, ['uncheck' => 0]) .' '. $field->title .'</label></div>';
-            }
-            elseif ($field->type === 'select') {
-                $options = ['' => Yii::t('easyii/content', 'Select')];
-                foreach($field->options as $option){
-                    $options[$option] = $option;
-                }
-                $result .= '<div class="form-group"><label>'. $field->title .'</label><select name="Data['.$field->name.']" class="form-control">'. Html::renderSelectOptions($value, $options) .'</select></div>';
-            }
-            elseif ($field->type === 'checkbox') {
-                $options = '';
-                foreach($field->options as $option){
-                    $checked = $value && in_array($option, $value);
-                    $options .= '<br><label>'. Html::checkbox("Data[{$field->name}][]", $checked, ['value' => $option]) .' '. $option .'</label>';
-                }
-                $result .= '<div class="checkbox well well-sm"><b>'. $field->title .'</b>'. $options .'</div>';
-            }
-        }
-
-        return $result;
-    }
-
-	/**
-	 * @param $model
-	 */
-	protected function saveElements(Item $model, $data)
-	{
-		foreach ($data as $elementKey => $attributes) {
-			$element = ContentElementBase::create($attributes['type']);
-			$element->item_id = $model->primaryKey;
-			$element->load($attributes, '');
-
-			$element->save();
-		}
-	}
 }

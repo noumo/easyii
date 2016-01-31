@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \yii\easyii\modules\content\contentElements\dynamic\models\DynamicElementObject $model
+ * @var \yii\easyii\components\ApiObject $model
  */
 
-var_dump($model);
+echo $model->slug;

@@ -6,22 +6,23 @@
 
 use yii\helpers\Html;
 
-echo Html::activeHiddenInput($element, 'type');
+?>
 
-$template = 'tr>
-        <td>'. Html::input('text', null, $element->module, ['class' => 'form-control element-module']) .'</td>
-        <td>'. Html::input('text', null, $element->function, ['class' => 'form-control element-function']) .'</td>
+<?= Html::activeHiddenInput($element, 'type'); ?>
 
-        <td><textarea class="form-control element-options" placeholder="'.Yii::t('easyii/content', 'Type options with `comma` as delimiter').'" style="display: none;"></textarea></td>
-        <td class="text-right">
-            <div class="btn-group btn-group-sm" role="group">
-                <a href="#" class="btn btn-default move-up" title="'. Yii::t('easyii', 'Move up') .'"><span class="glyphicon glyphicon-arrow-up"></span></a>
-                <a href="#" class="btn btn-default move-down" title="'. Yii::t('easyii', 'Move down') .'"><span class="glyphicon glyphicon-arrow-down"></span></a>
-                <a href="#" class="btn btn-default color-red delete-element" title="'. Yii::t('easyii', 'Delete item') .'"><span class="glyphicon glyphicon-remove"></span></a>
-            </div>
-        </td>
-    </tr>';
+<div class="row">
+	<div class="col-lg-5">
+		<?= Html::activeLabel($element, 'module', ['class' => 'form-label']); ?>
+		<?= Html::activeTextInput($element, 'module', ['class' => 'form-control dynamic-module']); ?>
+	</div>
 
-$this->registerJs("var elementTemplate = '$template';");
+	<div class="col-lg-5">
+		<?= Html::activeLabel($element, 'function', ['class' => 'form-label']); ?>
+		<?= Html::activeTextInput($element, 'function', ['class' => 'form-control dynamic-function']); ?>
+	</div>
 
-echo $template;
+	<div class="col-lg-5">
+		<?= Html::activeLabel($element, 'widget', ['class' => 'form-label']); ?>
+		<?= Html::activeDropDownList($element, 'widget', $element::WIDGETS, ['class' => 'form-control dynamic-widget']); ?>
+	</div>
+</div>

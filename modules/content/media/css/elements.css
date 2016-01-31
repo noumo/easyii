@@ -1,2 +1,7 @@
-#layoutElements{margin-top: 20px;}
-#addElement, #saveLayoutBtn {margin-left: 8px;}
+#elementListView {
+    margin-top: 20px;
+}
+
+#addElement {
+    margin-left: 8px;
+}

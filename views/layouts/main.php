@@ -69,7 +69,13 @@ $moduleName = $this->context->module->id;
                     </div>
                     <div class="container-fluid">
                         <?php foreach(Yii::$app->session->getAllFlashes() as $key => $message) : ?>
-                            <div class="alert alert-<?= $key ?>"><?= $message ?></div>
+                            <?php if (is_array($message)) : ?>
+                                <?php Html::ul($message, ['item' => function ($message, $key) {
+                                    return Html::tag('div', $message, ['class' => "alert alert-$key"]);
+                                }])?>
+                            <?php else: ?>
+                                <div class="alert alert-<?= $key ?>"><?= $message ?></div>
+                            <?php endif ?>
                         <?php endforeach; ?>
                         <?= $content ?>
                     </div>

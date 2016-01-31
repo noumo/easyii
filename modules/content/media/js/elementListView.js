@@ -15,9 +15,15 @@
     };
 
     var defaults = {
+        modalSelector: '',
         deleteElementSelector: '.delete-element',
+        addElementSelector: '[data-content-element]',
         templateUrl: '',
         items: []
+    };
+
+    var contentElementEvents = {
+        itemAdded: 'itemAdded'
     };
 
     var contentElementData = {};
@@ -32,38 +38,26 @@
             var settings = $.extend({}, defaults, options || {});
             contentElementData[$e.attr('id')] = {settings: settings};
 
-            $(document)
-                .off('click.elementListView', settings.deleteElementSelector)
-                .on('click.elementListView', settings.deleteElementSelector, function(){
-                    if($e.find('tr').length > 1) {
-                        $(this).closest('tr').remove();
-                    }
-                    return false;
-                });
-
             $.ElementListView.prototype.applyEvents.apply($e);
-
-            $('#addElement').on('click', function(){
-                var $this = $(this);
-                $.ElementListView.prototype.addTemplateItem.apply($e, [$this.data('template')]);
-            });
         });
     };
 
     $.ElementListView.prototype.addItem = function(item) {
         var $e = $(this);
 
-        $e.append(item);
+        $e.find('tbody').append(item);
+
+        $e.trigger(contentElementEvents.itemAdded);
     };
 
-    $.ElementListView.prototype.addTemplateItem = function(template) {
+    $.ElementListView.prototype.addTemplateItem = function(type) {
         var $e = $(this),
             settings = contentElementData[$e.attr('id')].settings;
 
         $.ajax({
             method: 'POST',
             url: settings.templateUrl,
-            data: {id: template},
+            data: {type: type},
             context: $e,
             success: function(data) {
                 $.ElementListView.prototype.addItem.apply(this, [data]);
@@ -72,7 +66,50 @@
     };
 
     $.ElementListView.prototype.applyEvents = function() {
-        var $e = $(this);
+        var $e = $(this),
+            settings = contentElementData[$e.attr('id')].settings;
+
+        $(document)
+            .off('click.elementListView', settings.deleteElementSelector)
+            .on('click.elementListView', settings.deleteElementSelector, function(){
+                if($e.find('tr').length > 1) {
+                    var tr = $(this).closest('tr'),
+                        id = tr.data('element-id'),
+                        type = tr.data('element-type');
+
+                    var name = 'Element[' + type + ':' + id + ']';
+                    var scenarioInput = $('<input type="hidden" name="" value="">').attr('name', name + '[scenario]').val('delete');
+                    var idInput = $('<input type="hidden" name="" value="">').attr('name', name + '[element_id]').val(id);
+                    var typeInput = $('<input type="hidden" name="" value="">').attr('name', name + '[type]').val(type);
+
+                    scenarioInput.insertAfter($e);
+                    idInput.insertAfter($e);
+                    typeInput.insertAfter($e);
+
+                    tr.remove();
+                }
+                return false;
+            });
+
+        $(document)
+            .off('show.bs.modal', settings.modalSelector)
+            .on('show.bs.modal', settings.modalSelector, function(){
+                $('#mainContent').load($(this).data('modal-source'), '', function() {
+                    $.ElementListView.prototype.applyEvents.apply($e);
+
+                });
+            });
+
+        $e
+            .off(contentElementEvents.itemAdded)
+            .on(contentElementEvents.itemAdded, function(){
+                $(settings.modalSelector).modal('hide');
+            });
+
+        $(settings.addElementSelector).on('click', function(){
+            var $this = $(this);
+            $.ElementListView.prototype.addTemplateItem.apply($e, [$this.data('content-element')]);
+        });
 
         $e.on('click', '.move-up', function(){
             var current = $(this).closest('tr');
@@ -91,22 +128,6 @@
             }
             return false;
         });
-
-        $e.on('change', '.element-type', function(){
-            var $this = $(this);
-            var type = $this.val();
-            var options = $this.closest('tr').find('.element-options');
-
-            if(optionsIsNeeded(type)){
-                options.show();
-            }else{
-                options.hide();
-            }
-        });
     };
 
-    function optionsIsNeeded(type)
-    {
-        return type == 'select' || type == 'checkbox' || type == 'file';
-    }
 })(jQuery);

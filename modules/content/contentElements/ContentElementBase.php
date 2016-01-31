@@ -9,6 +9,7 @@ use yii\helpers\Json;
 /**
  * Class ContentElement
  *
+ * @property string $type
  * @property array $data
  * @property integer $order_num
  * @property integer $status
@@ -22,9 +23,11 @@ abstract class ContentElementBase extends ActiveRecord
 
 	public $layout = '@easyii/modules/content/views/layouts/contentElement';
 
+	public $scenario = 'insert';
+
 	public static $builtInElements = [
 		'dynamic' => 'yii\easyii\modules\content\contentElements\dynamic\models\DynamicElement',
-		'header' => 'yii\easyii\modules\content\contentElements\header\models\HeaderElement',
+		'heading' => 'yii\easyii\modules\content\contentElements\heading\models\HeadingElement',
 	];
 
 	public static function tableName()
@@ -39,6 +42,10 @@ abstract class ContentElementBase extends ActiveRecord
 	 */
 	public static function create($type)
 	{
+		if (!array_key_exists($type, self::$builtInElements)) {
+			throw new \InvalidArgumentException("The content element type of '$type' not found.");
+		}
+
 		$class = self::$builtInElements[$type];
 		$element = new $class;
 
@@ -60,21 +67,10 @@ abstract class ContentElementBase extends ActiveRecord
 
 	public function render(yii\web\View $view)
 	{
-		$content = $view->renderFile($this->getViewFile(), ['model' => $this]);
+		$widget = ContentElementFactory::create($this);
+		$widget->layout = 'contentElement';
 
-		return $view->render($this->layout, ['content' => $content], $this);
-	}
-
-	/**
-	 * Returns the directory containing the view files for this widget.
-	 * The default implementation returns the 'views' subdirectory under the directory containing the widget class file.
-	 * @return string the directory containing the view files for this widget.
-	 */
-	public function getViewFile()
-	{
-		$class = new \ReflectionClass($this);
-
-		return __DIR__ . DIRECTORY_SEPARATOR . $this->type . DIRECTORY_SEPARATOR . 'views'  . DIRECTORY_SEPARATOR . 'template.php';
+		return $widget->run('template');
 	}
 
 	public function rules()
@@ -139,13 +135,16 @@ abstract class ContentElementBase extends ActiveRecord
 
 	public function afterSave($insert, $attributes)
 	{
-		parent::afterSave($insert, $attributes);
+		$this->scenario = 'update';
 
+		parent::afterSave($insert, $attributes);
 		$this->parseData();
 	}
 
 	public function afterFind()
 	{
+		$this->scenario = 'update';
+
 		parent::afterFind();
 		$this->parseData();
 	}

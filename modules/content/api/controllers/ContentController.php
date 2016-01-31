@@ -58,7 +58,13 @@ trait ContentController
 		}
 	}
 
-	/**
+    /**
+     * Search for a custom view file.
+     *
+     * At first search the view file '{controller viewPath}/{content slug}.php'.
+     * Otherwise search the default layout '{controller viewPath}/default.php'.
+     * And when there is no custom layout, than return '@easyii/modules/content/views/templates/contentView.php'
+     *
      * @return string
      */
     protected function getContentViewPath()
@@ -81,12 +87,19 @@ trait ContentController
     }
 
     /**
+     * Search for a custom layout file.
+     *
+     * At first search the layout file '{module layout path}/content/{layout slug}.php'.
+     * Otherwise search the default layout '{module layout path}/content/default.php'.
+     * And when there is no custom layout, than return '@easyii/modules/content/views/templates/layout.php'
+     *
      * @return string
      */
     protected function getLayoutFile()
     {
         $layoutPath = $this->controller->module->layoutPath . DIRECTORY_SEPARATOR . 'content';
 
+        // Search the custom default layout
         $layout = $this->content->getLayout()->slug;
         if ($layout !== null) {
             if ($layoutFile = $this->findContentLayout($layoutPath, $layout)) {
@@ -96,6 +109,7 @@ trait ContentController
             Yii::warning("No file for the layout '$layout' found under '$layoutPath'", 'easyii/content');
         }
 
+        // Search the custom default layout
         $layout = 'default';
         if ($layoutFile = $this->findContentLayout($layoutPath, $layout)) {
             return $layoutFile;

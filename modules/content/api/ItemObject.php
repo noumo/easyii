@@ -100,8 +100,7 @@ class ItemObject extends ApiObject
 		if(!$this->_contentElements){
 			$this->_contentElements = [];
 
-			foreach(ContentElementBase::find()->where(['item_id' => $this->id])->sort()->all() as $model) {
-				echo "<pre>";
+			foreach(ContentElementBase::find()->where(['item_id' => $this->id])->sort(SORT_ASC)->all() as $model) {
 				$this->_contentElements[] = ContentElementFactory::create($model);
 			}
 		}
@@ -133,6 +132,17 @@ class ItemObject extends ApiObject
 		}
 
 		return $this->children;
+	}
+
+	public function render()
+	{
+		$output = '';
+
+		foreach ($this->getContentElements() as $element) {
+			$output .= $element->run();
+		}
+
+		return $output;
 	}
 
     public function getEditLink(){

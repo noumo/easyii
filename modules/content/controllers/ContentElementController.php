@@ -4,7 +4,8 @@ namespace yii\easyii\modules\content\controllers;
 
 use Yii;
 use yii\easyii\components\Controller;
-use yii\easyii\modules\content\contentElements\ContentElementBase;
+use yii\easyii\modules\content\contentElements\ContentElementFactory;
+use yii\helpers\Html;
 
 class ContentElementController extends Controller
 {
@@ -20,17 +21,34 @@ class ContentElementController extends Controller
 		];
 	}
 
-	public function actionTemplate($id = null)
+	public function actionTemplate($type = null)
 	{
-		$this->layout = 'templateLayout';
+		$type = $type ?: Yii::$app->request->post('type');
 
-		$id = $id ? : Yii::$app->request->post('id');
-		$view = $id . 'Template';
+		if (empty($type)) {
+			throw new \InvalidArgumentException('Missing argument "type".');
+		}
 
-		$element = ContentElementBase::create($id);
+		$widget = ContentElementFactory::createNew($type);
+		$widget->layout = 'contentElement';
 
-		$this->view->title = $id;
+		return $widget->run('template');
+	}
 
-		return $this->render($view, ['element' => $element]);
+	public function actionList()
+	{
+		$icon = '<i class="glyphicon glyphicon-plus font-12"></i> ';
+		$items = [];
+
+		$types = ['heading', 'dynamic'];
+		foreach ($types as $type) {
+			$text = $icon . Yii::t('easyii/content', '{name} element', ['name' => $type]);
+			$items[] = Html::button($text, ['class' => 'btn btn-default', 'data-content-element' => $type]);
+		}
+
+		echo Html::ul($items, [
+			'encode' => false,
+			'class' => 'list-inline'
+		]);
 	}
 }

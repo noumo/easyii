@@ -5,15 +5,7 @@
  */
 ?>
 
-<div class="container">
-	<div class="col-md-12 text-center">
-		<h1><?= $content->getHeader() ?></h1>
-
-		<?= $content->getContent() ?>
-
-		<?php foreach ($content->getContentElements() as $element) : ?>
-			<?= $element->run() ?>
-		<?php endforeach; ?>
-	</div>
+<div class="content">
+	<?= $content->render() ?>
 </div>
 
