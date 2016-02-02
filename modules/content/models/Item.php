@@ -72,26 +72,6 @@ class Item extends ItemModel
         parent::afterSave($insert, $attributes);
 
 	    $this->parseData();
-
-        ItemData::deleteAll(['item_id' => $this->primaryKey]);
-
-        foreach($this->data as $name => $value){
-            if(!is_array($value)){
-                $this->insertDataValue($name, $value);
-            } else {
-                foreach($value as $arrayItem){
-                    $this->insertDataValue($name, $arrayItem);
-                }
-            }
-        }
-    }
-
-    private function insertDataValue($name, $value){
-        Yii::$app->db->createCommand()->insert(ItemData::tableName(), [
-            'item_id' => $this->primaryKey,
-            'name' => $name,
-            'value' => $value
-        ])->execute();
     }
 
     public function afterFind()
@@ -111,8 +91,6 @@ class Item extends ItemModel
 		if($this->image_file) {
 			@unlink(Yii::getAlias('@webroot') . $this->image_file);
 		}
-
-		ItemData::deleteAll(['item_id' => $this->primaryKey]);
 	}
 
     public function getPhotos()

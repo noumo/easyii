@@ -6,7 +6,6 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\data\ActiveDataProvider;
 use yii\easyii\modules\content\models\Item;
-use yii\easyii\modules\content\models\ItemData;
 use yii\easyii\modules\content\models\Layout;
 use yii\easyii\widgets\Fancybox;
 use yii\widgets\LinkPager;
@@ -230,34 +229,6 @@ class Content extends \yii\easyii\components\API
 					}
 				}
 				unset($filters['price']);
-			}
-			if (count($filters)) {
-				$filtersApplied = 0;
-				$subQuery = ItemData::find()->select('item_id, COUNT(*) as filter_matched')->groupBy('item_id');
-				foreach ($filters as $field => $value) {
-					if (!is_array($value)) {
-						$subQuery->orFilterWhere(['and', ['name' => $field], ['value' => $value]]);
-						$filtersApplied++;
-					}
-					elseif (count($value) == 2) {
-						if (!$value[0]) {
-							$additionalCondition = ['<=', 'value', (int)$value[1]];
-						}
-						elseif (!$value[1]) {
-							$additionalCondition = ['>=', 'value', (int)$value[0]];
-						}
-						else {
-							$additionalCondition = ['between', 'value', (int)$value[0], (int)$value[1]];
-						}
-						$subQuery->orFilterWhere(['and', ['name' => $field], $additionalCondition]);
-
-						$filtersApplied++;
-					}
-				}
-				if ($filtersApplied) {
-					$query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = ' . Item::tableName() . '.item_id');
-					$query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
-				}
 			}
 		}
 		return $query;
