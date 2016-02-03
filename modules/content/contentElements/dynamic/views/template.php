@@ -22,7 +22,7 @@ use yii\helpers\Html;
 	</div>
 
 	<div class="col-lg-5">
-		<?= Html::activeLabel($element, 'widget', ['class' => 'form-label']); ?>
-		<?= Html::activeDropDownList($element, 'widget', $element::WIDGETS, ['class' => 'form-control dynamic-widget']); ?>
+		<?= Html::activeLabel($element, 'widgetClass', ['class' => 'form-label']); ?>
+		<?= Html::activeDropDownList($element, 'widgetClass', $element::WIDGETS, ['class' => 'form-control dynamic-widgetClass']); ?>
 	</div>
 </div>

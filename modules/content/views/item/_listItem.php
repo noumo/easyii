@@ -4,10 +4,11 @@
  * @var $module
  */
 
+use yii\easyii\modules\content\models\base\ItemModel;
 use yii\easyii\modules\content\models\Item;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\easyii\modules\content\models\ItemModel;
+
 ?>
 <tr data-id="<?= $item->primaryKey ?>">
 	<?php if(IS_ROOT) : ?>

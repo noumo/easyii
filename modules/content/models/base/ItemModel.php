@@ -1,15 +1,15 @@
 <?php
 
-namespace yii\easyii\modules\content\models;
+namespace yii\easyii\modules\content\models\base;
 
+use creocoder\nestedsets\NestedSetsBehavior;
 use yii;
-use yii\easyii\components\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\components\ActiveQueryNS;
-use creocoder\nestedsets\NestedSetsBehavior;
+use yii\easyii\components\ActiveRecord;
 
-class ItemModel extends ActiveRecord
+abstract class ItemModel extends ActiveRecord
 {
 	const NAV_OFF = 0;
 	const NAV_ON = 1;

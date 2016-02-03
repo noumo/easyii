@@ -16,7 +16,7 @@ class DynamicElement extends ContentElementBase
 
 	public $module;
 	public $function;
-	public $widget;
+	public $widgetClass;
 
 	public function rules()
 	{
@@ -24,8 +24,8 @@ class DynamicElement extends ContentElementBase
 			[
 				[['module', 'function'], 'string'],
 				[['item_id'], 'integer'],
-				['widget', 'in', 'range' => self::WIDGETS],
-				[['module', 'function', 'widget', 'item_id'], 'safe']
+				['widgetClass', 'in', 'range' => self::WIDGETS],
+				[['module', 'function', 'widgetClass', 'item_id'], 'safe']
 			]);
 	}
 

@@ -4,6 +4,7 @@ namespace yii\easyii\modules\content\models;
 use Yii;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\content\contentElements\ContentElementBase;
+use yii\easyii\modules\content\models\base\ItemModel;
 
 /**
  * Class Item
