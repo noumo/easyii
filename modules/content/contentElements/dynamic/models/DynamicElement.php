@@ -9,7 +9,7 @@ class DynamicElement extends ContentElementBase
 	const WIDGET_LIST = 'yii\widgets\ListView';
 	const WIDGET_DETAIL = 'yii\widgets\DetailView';
 
-	const WIDGETS = [
+	public static $widgets = [
 		'listView' => self::WIDGET_LIST,
 		'detailView' => self::WIDGET_DETAIL
 	];
@@ -24,7 +24,7 @@ class DynamicElement extends ContentElementBase
 			[
 				[['module', 'function'], 'string'],
 				[['item_id'], 'integer'],
-				['widgetClass', 'in', 'range' => self::WIDGETS],
+				['widgetClass', 'in', 'range' => self::$widgets],
 				[['module', 'function', 'widgetClass', 'item_id'], 'safe']
 			]);
 	}
