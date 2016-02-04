@@ -95,6 +95,6 @@ class Module extends \yii\base\Module
     public static function setting($name)
     {
         $settings = Yii::$app->getModule('admin')->activeModules[static::getSelfName()]->settings;
-        return $settings[$name] !== null ? $settings[$name] : null;
+        return isset($settings[$name]) ? $settings[$name] : null;
     }
 }

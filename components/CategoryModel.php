@@ -73,7 +73,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             ]
         ];
 
-        if($moduleSettings['categoryThumb']){
+        if(isset($moduleSettings['categoryThumb']) && $moduleSettings['categoryThumb']){
             $behaviors['imageFileBehavior'] = ImageFile::className();
         }
 
