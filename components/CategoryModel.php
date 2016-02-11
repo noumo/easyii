@@ -121,18 +121,22 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 $flat = static::generateFlat();
                 $cache->set($key, $flat, 3600);
             }
-            foreach($flat as $id => $cat){
-                $model = new static([
-                    'category_id' => $id,
-                    'parent' => $cat->parent,
-                    'children' => $cat->children
-                ]);
+            if(count($flat)) {
+                foreach ($flat as $id => $cat) {
+                    $model = new static([
+                        'category_id' => $id,
+                        'parent' => $cat->parent,
+                        'children' => $cat->children
+                    ]);
 
-                $model->load((array)$cat, '');
-                $model->populateRelation('seo', new SeoText($cat->seo));
-                $model->setTagNames($cat->tags);
-                $model->afterFind();
-                static::$FLAT[$key][] = $model;
+                    $model->load((array)$cat, '');
+                    $model->populateRelation('seo', new SeoText($cat->seo));
+                    $model->setTagNames($cat->tags);
+                    $model->afterFind();
+                    static::$FLAT[$key][] = $model;
+                }
+            } else {
+                static::$FLAT[$key] = [];
             }
         }
         return static::$FLAT[$key];
