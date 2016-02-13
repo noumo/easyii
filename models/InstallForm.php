@@ -37,6 +37,9 @@ class InstallForm extends Model
 
     public function init()
     {
-        $this->robot_email = 'noreply@'.Yii::$app->request->serverName;
+        $this->robot_email = 'noreply@' . Yii::$app->request->serverName;
+        if(strpos($this->robot_email, '.') === false){
+            $this->robot_email .= '.com';
+        }
     }
 }

@@ -11,7 +11,7 @@ class RedactorController extends \yii\easyii\components\Controller
 {
     public function actions()
     {
-        $uploadsUrl = Url::to([Upload::getPathUrl('redactor')], true);
+        $uploadsUrl = Url::to(Upload::getPathUrl('redactor'), true);
         return [
             'image-upload' => [
                 'class' => 'vova07\imperavi\actions\UploadAction',

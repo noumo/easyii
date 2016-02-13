@@ -19,7 +19,7 @@ class Module extends \yii\base\Module
     /** @var  @todo */
     public $i18n;
 
-    public static $NAME;
+    private static $NAMES = [];
 
     /**
      * Configuration for installation
@@ -41,10 +41,11 @@ class Module extends \yii\base\Module
 
     public static function getSelfName()
     {
-        if(!static::$NAME){
-            static::$NAME = static::getModuleName(static::className());
+        $className = static::className();
+        if(!isset(self::$NAMES[$className])){
+            self::$NAMES[$className] = self::getModuleName($className);
         }
-        return static::$NAME;
+        return self::$NAMES[$className];
     }
 
     /**
@@ -95,6 +96,6 @@ class Module extends \yii\base\Module
     public static function setting($name)
     {
         $settings = Yii::$app->getModule('admin')->activeModules[static::getSelfName()]->settings;
-        return $settings[$name] !== null ? $settings[$name] : null;
+        return isset($settings[$name]) ? $settings[$name] : null;
     }
 }
