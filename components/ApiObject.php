@@ -63,9 +63,6 @@ class ApiObject extends \yii\base\Object
 
     /**
      * Returns web path to image.
-     * @param int|null $width
-     * @param int|null $height
-     * @param bool $crop if false image will be resize instead of cropping
      * @return string
      */
     public function getImage()

@@ -77,7 +77,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             ]
         ];
 
-        if($moduleSettings['categoryThumb']){
+        if(isset($moduleSettings['categoryThumb']) && $moduleSettings['categoryThumb']){
             $behaviors['imageFileBehavior'] = ImageFile::className();
         }
 
@@ -90,6 +90,60 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     public static function find()
     {
         return new ActiveQueryNS(get_called_class());
+    }
+
+    /**
+     * Get cached tree structure of category objects
+     * @return array
+     */
+    public static function tree()
+    {
+        $cache = Yii::$app->cache;
+        $key = static::tableName().'_tree';
+
+        $tree = $cache->get($key);
+        if(!$tree){
+            $tree = static::generateTree();
+            $cache->set($key, $tree, 3600);
+        }
+        return $tree;
+    }
+
+    /**
+     * Get cached flat array of category objects
+     * @return array
+     */
+    public static function cats()
+    {
+        $cache = Yii::$app->cache;
+        $key = static::tableName().'_flat';
+
+        if(empty(static::$FLAT[$key])) {
+
+            $flat = $cache->get($key);
+            if (!$flat) {
+                $flat = static::generateFlat();
+                $cache->set($key, $flat, 3600);
+            }
+            if(count($flat)) {
+                foreach ($flat as $id => $cat) {
+                    $model = new static([
+                        'category_id' => $id,
+                        'parent' => $cat->parent,
+                        'children' => $cat->children
+                    ]);
+
+                    $model->load((array)$cat, '');
+                    $model->populateRelation('seo', new SeoText($cat->seo));
+                    $model->setTagNames($cat->tags);
+                    $model->afterFind();
+                    static::$FLAT[$key][] = $model;
+                }
+            } else {
+                static::$FLAT[$key] = [];
+            }
+        }
+        return static::$FLAT[$key];
     }
 
     public static function get($id_slug)
