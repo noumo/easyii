@@ -27,7 +27,7 @@ class AController extends CategoryController
             foreach($fields as $field){
                 $temp = json_decode($field);
 
-                if( $temp === null && json_last_error() !== JSON_ERROR_NONE ||
+                if($temp === null && json_last_error() !== JSON_ERROR_NONE ||
                     empty($temp->name) ||
                     empty($temp->title) ||
                     empty($temp->type) ||

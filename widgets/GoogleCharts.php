@@ -32,7 +32,14 @@ class GoogleCharts extends Widget
         $client->setClassConfig('Google_Cache_File', ['directory' => Yii::getAlias('@runtime')]);
         $client->setAssertionCredentials(new \Google_Auth_AssertionCredentials($this->email, ['https://www.googleapis.com/auth/analytics.readonly'], file_get_contents(Yii::getAlias($this->p12))));
         if($client->getAuth()->isAccessTokenExpired()) {
-            $client->getAuth()->refreshTokenWithAssertion();
+            try{
+                $client->getAuth()->refreshTokenWithAssertion();
+            } catch(\Exception $e){
+                if(IS_ROOT){
+                    echo $e->getMessage();
+                }
+                return;
+            }
         }
         $decodedTokenObject = json_decode($client->getAccessToken());
 
