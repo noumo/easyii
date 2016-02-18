@@ -107,7 +107,7 @@ abstract class ContentElementBase extends ActiveRecord
 			$unique = $this->primaryKey;
 		}
 
-		return "Element[$this->type:$unique]";
+		return "Element[$unique]";
 	}
 
 	public function getItem()

@@ -5,6 +5,8 @@ namespace yii\easyii\modules\content\contentElements;
 use yii\base\Widget;
 use yii\bootstrap\Html;
 use yii\helpers\Url;
+use yii;
+use yii\web\View;
 
 /**
  * Class ContentElementWidget
@@ -34,6 +36,12 @@ abstract class ContentElementWidget extends Widget
 		$params['element'] = $this->element;
 
 		$content = parent::render($view, $params);
+
+		$jsReady = $this->view->js[View::POS_READY];
+		unset($this->view->js[View::POS_READY]);
+		$this->view->js[View::POS_END] = array_merge($this->view->js[View::POS_END] ? : [], $jsReady ? : []);
+
+		#var_dump(Yii::$app->view->js);die;
 
 		return $this->renderContent($content);
 	}

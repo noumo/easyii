@@ -48,18 +48,6 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 // Todo: Dont need layout fields more? -> Yes!
 #$dataForm ?>
 
-<?= $form->field($model, 'content')->widget(
-	Redactor::className(), [
-	'options' => [
-		'minHeight' => 400,
-		'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
-		'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
-		'plugins' => ['fullscreen']
-	]
-]
-) ?>
-
-
 <?= $this->render('_elements', ['model' => $model]) ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>

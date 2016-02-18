@@ -6,6 +6,7 @@ use Yii;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\content\contentElements\ContentElementFactory;
 use yii\helpers\Html;
+use yii\web\View;
 
 class ContentElementController extends Controller
 {
@@ -32,7 +33,10 @@ class ContentElementController extends Controller
 		$widget = ContentElementFactory::createNew($type);
 		$widget->layout = 'contentElement';
 
-		return $widget->run('template');
+		$this->layout = false;
+		$content = $widget->run('template');
+
+		return $content;
 	}
 
 	public function actionList()
@@ -40,8 +44,9 @@ class ContentElementController extends Controller
 		$icon = '<i class="glyphicon glyphicon-plus font-12"></i> ';
 		$items = [];
 
-		$types = ['heading', 'dynamic'];
-		foreach ($types as $type) {
+		$dirs = glob(Yii::getAlias('@easyii/modules/content/contentElements/*'), GLOB_ONLYDIR);
+		foreach ($dirs as $dir) {
+			$type = basename($dir);
 			$text = $icon . Yii::t('easyii/content', '{name} element', ['name' => $type]);
 			$items[] = Html::button($text, ['class' => 'btn btn-default', 'data-content-element' => $type]);
 		}

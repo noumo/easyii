@@ -60,7 +60,18 @@
             data: {type: type},
             context: $e,
             success: function(data) {
+                var $data = $(data);
                 $.ElementListView.prototype.addItem.apply(this, [data]);
+
+                $data.filter('link[rel="stylesheet"]').appendTo("head");
+                /*
+                $data.find('script[src]').each(function (index, script) {
+                    $.getScript(script.getAttribute('src'));
+                });
+                */
+                setTimeout(function() {
+                    eval($data.find('script[type="text/javascript"]'));
+                }, 1000);
             }
         });
     };

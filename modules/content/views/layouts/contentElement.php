@@ -6,8 +6,16 @@
 use yii\helpers\Html;
 
 ?>
+<?php $this->beginPage() ?>
+
+<head>
+<?php $this->head() ?>
+</head>
 
 <tr data-element-id="<?= $element->primaryKey ?>" data-element-type="<?= $element->type ?>" data-element-scenario="<?= $element->scenario ?>" >
+
+	<?php $this->beginBody() ?>
+
 	<td>
 		<?= Html::errorSummary($element, ['class' => 'alert alert-danger']) ?>
 
@@ -24,4 +32,9 @@ use yii\helpers\Html;
 			<a href="#" class="btn btn-default color-red delete-element" title="'. Yii::t('easyii', 'Delete item') .'"><span class="glyphicon glyphicon-remove"></span></a>
 		</div>
 	</td>
+
+	<?php $this->endBody() ?>
+
 </tr>
+
+<?php $this->endPage() ?>
