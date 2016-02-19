@@ -12,6 +12,5 @@ class ElementsAsset extends \yii\web\AssetBundle
     ];
     public $depends = [
         'yii\web\JqueryAsset',
-        'yii\easyii\assets\AngularAsset'
     ];
 }
