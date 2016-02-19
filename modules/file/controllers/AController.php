@@ -45,13 +45,13 @@ class AController extends Controller
             else{
                 if(($fileInstanse = UploadedFile::getInstance($model, 'file')))
                 {
-                    if ($model->_filename){
+                    if ($model->slug){
                         $ext = explode('.', $fileInstanse->name);
                         $ext = array_pop($ext);
+                        $fileInstanse->name = $model->slug;
                         if ($ext){
-                            $model->_filename .= '.'.$ext;
+                            $fileInstanse->name .= '.'.$ext;
                         }
-                        $fileInstanse->name = $model->_filename;
                     }
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
