@@ -10,7 +10,9 @@ use yii\easyii\behaviors\SortableModel;
 use yii\easyii\components\Controller;
 use yii\easyii\helpers\Image;
 use yii\easyii\modules\content\api\Content;
-use yii\easyii\modules\content\contentElements\ContentElementBase;
+use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
+use yii\easyii\modules\content\modules\contentElements\Factory;
 use yii\easyii\modules\content\models\Item;
 use yii\easyii\modules\content\models\Layout;
 use yii\easyii\widgets\Redactor;
@@ -143,6 +145,7 @@ class ItemController extends Controller
 
 	            if ($model->save() && $saved) {
                     $this->flash('success', Yii::t('easyii/content', 'Item updated'));
+					$this->refresh();
                 }
 	            else {
 		            $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
@@ -228,26 +231,31 @@ class ItemController extends Controller
 		$error = false;
 		$elements = [];
 
+		$sortOrder = 1;
 		foreach ($data as $elementKey => $attributes) {
-			/** @var ContentElementBase|false $element */
+			/** @var BaseElement|false $element */
 			$element = false;
 
 			if ($attributes['scenario'] == 'delete') {
 				unset($attributes['scenario']);
-				ContentElementBase::deleteAll($attributes);
+				BaseElement::deleteAll($attributes);
 			}
-			elseif ($attributes['scenario'] == 'insert') {
-				$element = ContentElementBase::create($attributes['type']);
-				$element->item_id = $model->primaryKey;
-				$element->load($attributes, '');
+			else {
+				$attributes['order_num'] = $sortOrder++;
 
-				$element->insert();
-			}
-			elseif ($attributes['scenario'] == 'update') {
-				$element = ContentElementBase::findOne(['element_id' => $attributes['element_id']]);
-				$element->load($attributes, '');
+				if ($attributes['scenario'] == 'insert') {
+					$element = ContentElementModule::create($attributes['type']);
+					$element->item_id = $model->primaryKey;
+					$element->load($attributes, '');
 
-				$element->update();
+					$element->insert();
+				}
+				elseif ($attributes['scenario'] == 'update') {
+					$element = BaseElement::findOne(['element_id' => $attributes['element_id']]);
+					$element->load($attributes, '');
+
+					$element->update();
+				}
 			}
 
 			if ($element) {

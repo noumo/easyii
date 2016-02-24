@@ -1,0 +1,149 @@
+<?php
+namespace yii\easyii\modules\content\modules\contentElements;
+
+use yii;
+use yii\easyii\components\ActiveRecord;
+use yii\easyii\modules\content\models\Item;
+use yii\helpers\Json;
+
+/**
+ * Class ContentElement
+ *
+ * @property integer $element_id
+ * @property integer $parent_element_id
+ * @property string $type
+ * @property array $data
+ * @property integer $order_num
+ * @property integer $status
+ *
+ * @property BaseElement[] $elements
+ *
+ * @author Bennet Klarhoelter <boehsermoe@me.com>
+ */
+abstract class BaseElement extends ActiveRecord
+{
+	const STATUS_OFF = 0;
+	const STATUS_ON = 1;
+
+	public $scenario = 'insert';
+
+	public static function tableName()
+	{
+		return 'easyii_content_element';
+	}
+
+	public static function instantiate($row)
+	{
+		$type = $row['type'];
+
+		return ContentElementModule::create($type);
+	}
+
+	public static function elementId()
+	{
+		return ContentElementModule::getElementId(static::className());
+	}
+
+	public function init()
+	{
+		parent::init();
+
+		$this->type = static::elementId();
+	}
+
+	public function render(yii\web\View $view)
+	{
+		$widget = ContentElementModule::createWidget($this);
+
+		return $widget->runTemplate();
+	}
+
+	public function rules()
+	{
+		return [
+			[['type'], 'string'],
+			[['order_num'], 'integer'],
+			[['type', 'order_num'], 'safe'],
+		];
+	}
+
+	public function attributeLabels()
+	{
+		return [];
+	}
+
+	public function behaviors()
+	{
+		return [
+			[
+				'class' => yii\behaviors\TimestampBehavior::className(),
+				'createdAtAttribute' => 'time',
+				'updatedAtAttribute' => null,
+			],
+			yii\easyii\behaviors\SortableModel::className(),
+		];
+	}
+
+	public function formName()
+	{
+		if ($this->isNewRecord) {
+			// Todo: Not so really unique!
+			$unique = spl_object_hash($this);
+		}
+		else {
+			$unique = $this->primaryKey;
+		}
+
+		return "Element[$unique]";
+	}
+
+	public function getItem()
+	{
+		return $this->hasOne(Item::className(), ['item_id' => 'item_id']);
+	}
+
+	public function getElements()
+	{
+		return $this->hasMany(BaseElement::className(), ['parent_element_id' => 'element_id'])->orderBy('order_num');
+	}
+
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+			$data = $this->getAttributes($this->safeAttributes());
+
+			if (!$data || (!is_object($data) && !is_array($data))) {
+				$data = new \stdClass();
+			}
+
+			$this->data = Json::encode($data);
+
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function afterSave($insert, $attributes)
+	{
+		$this->scenario = 'update';
+
+		parent::afterSave($insert, $attributes);
+		$this->parseData();
+	}
+
+	public function afterFind()
+	{
+		$this->scenario = 'update';
+
+		parent::afterFind();
+		$this->parseData();
+	}
+
+	private function parseData()
+	{
+		$attributes = Json::decode($this->data);
+		$this->setAttributes($attributes);
+	}
+}

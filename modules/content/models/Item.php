@@ -3,13 +3,13 @@ namespace yii\easyii\modules\content\models;
 
 use Yii;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\content\contentElements\ContentElementBase;
+use yii\easyii\modules\content\modules\contentElements\BaseElement;
 use yii\easyii\modules\content\models\base\ItemModel;
 
 /**
  * Class Item
  *
- * @property \yii\easyii\modules\content\contentElements\ContentElementBase[] $elements
+ * @property \yii\easyii\modules\content\modules\contentElements\BaseElement $element
  *
  * @author Bennet Klarhoelter <boehsermoe@me.com>
  */
@@ -27,7 +27,7 @@ class Item extends ItemModel
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
             ['image_file', 'image'],
-            [['content', 'header'], 'safe'],
+            [['header'], 'safe'],
             [['nav', 'status', 'category_id', 'time'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
@@ -44,14 +44,23 @@ class Item extends ItemModel
 	        'category_id' => Yii::t('easyii', 'Layout'),
             'title' => Yii::t('easyii', 'Title'),
             'image_file' => Yii::t('easyii', 'Image'),
-            'content' => Yii::t('easyii', 'Content'),
             'header' => Yii::t('easyii', 'Header'),
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
         ];
     }
 
-    public function beforeSave($insert)
+	public function getPhotos()
+	{
+		return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
+	}
+
+	public function getLayout()
+	{
+		return $this->hasOne(Layout::className(), ['category_id' => 'category_id']);
+	}
+
+	public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
             if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
@@ -69,13 +78,13 @@ class Item extends ItemModel
         }
     }
 
-    public function afterSave($insert, $attributes){
+	public function afterSave($insert, $attributes){
         parent::afterSave($insert, $attributes);
 
 	    $this->parseData();
     }
 
-    public function afterFind()
+	public function afterFind()
     {
         parent::afterFind();
 	    $this->parseData();
@@ -94,22 +103,12 @@ class Item extends ItemModel
 		}
 	}
 
-    public function getPhotos()
-    {
-        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
-    }
-
-    public function getLayout()
-    {
-        return $this->hasOne(Layout::className(), ['category_id' => 'category_id']);
-    }
-
-	public function getElements()
-	{
-		return $this->hasMany(ContentElementBase::className(), ['item_id' => 'item_id']);
+	private function parseData(){
+		$this->data = $this->data !== '' ? json_decode($this->data) : [];
 	}
 
-	private function parseData(){
-        $this->data = $this->data !== '' ? json_decode($this->data) : [];
-    }
+	public function getElement()
+	{
+		return $this->hasOne(BaseElement::className(), ['element_id' => 'element_id']);
+	}
 }

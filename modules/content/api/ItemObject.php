@@ -4,9 +4,10 @@ namespace yii\easyii\modules\content\api;
 use Yii;
 use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\content\contentElements\ContentElementBase;
-use yii\easyii\modules\content\contentElements\ContentElementFactory;
-use yii\easyii\modules\content\contentElements\ContentElementWidget;
+use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
+use yii\easyii\modules\content\modules\contentElements\Factory;
+use yii\easyii\modules\content\modules\contentElements\BaseWidget;
 use yii\easyii\modules\content\models\Item;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -20,17 +21,15 @@ class ItemObject extends ApiObject
 	/** @var array */
 	public $elements;
 	public $category_id;
+	public $element_id;
 	public $nav;
-    public $available;
-    public $discount;
-	public $time;
 
+	public $time;
 	public $tree;
 	public $depth;
+
 	public $order_num;
 
-	/** @var  ItemObject */
-	public $parent;
 	/** @var  ItemObject[] */
 	public $children;
 
@@ -93,31 +92,19 @@ class ItemObject extends ApiObject
     }
 
 	/**
-	 * @return ContentElementWidget[]
+	 * @return BaseWidget[]
 	 */
 	public function getContentElements()
 	{
 		if(!$this->_contentElements){
 			$this->_contentElements = [];
 
-			foreach(ContentElementBase::find()->where(['item_id' => $this->id])->sort(SORT_ASC)->all() as $model) {
-				$this->_contentElements[] = ContentElementFactory::create($model);
+			foreach(BaseElement::find()->where(['element_id' => $this->element_id])->sort(SORT_ASC)->all() as $model) {
+				$this->_contentElements[] = ContentElementModule::createWidget($model);
 			}
 		}
 
 		return $this->_contentElements;
-	}
-
-	public function getParents($where = null)
-	{
-		if(!$this->parent)
-		{
-			if ($parent = $this->model->parents(1)->andWhere($where)->one())
-			{
-				$this->parent = new ItemObject($parent);
-			}
-		}
-		return $this->parent;
 	}
 
 	public function getChildren($where = null)

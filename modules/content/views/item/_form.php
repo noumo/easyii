@@ -45,10 +45,10 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 	</div>
 
 <?php
-// Todo: Dont need layout fields more? -> Yes!
+// Todo: Dont need layout fields more?
 #$dataForm ?>
 
-<?= $this->render('_elements', ['model' => $model]) ?>
+<?= $model->element->render($this) ?>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 
