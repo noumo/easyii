@@ -14,12 +14,4 @@ class Element extends BaseElement
 
 		return $widget->runTemplate();
 	}
-
-	public function rules()
-	{
-		return array_merge(parent::rules(),
-			[
-				[[], 'safe']
-			]);
-	}
 }

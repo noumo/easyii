@@ -61,9 +61,8 @@ abstract class BaseElement extends ActiveRecord
 	public function rules()
 	{
 		return [
-			[['type'], 'string'],
-			[['order_num'], 'integer'],
-			[['type', 'order_num'], 'safe'],
+			[['!type'], 'string'],
+			[['!order_num'], 'integer'],
 		];
 	}
 

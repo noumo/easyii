@@ -32,16 +32,16 @@ class Widget extends BaseWidget
 
 		$id = $this->getId();
 
+		$modalSelector = "#$id-elementModal";
 		$options = [
 			'templateUrl' => Url::to(['/admin/content/contentElements/content-element/template']),
-			'showModalSelector' => "#$id #addElement",
-			'modalSelector' => "#$id #elementModal",
+			'modalSelector' => $modalSelector,
 			'deleteElementSelector' => "#$id .delete-element",
-			'addElementSelector' => "#$id [data-content-element]",
+			'addElementSelector' => "$modalSelector [data-content-element]",
 			'parentId' => $this->element->primaryKey
 		];
 		$options = Json::encode($options);
-		$this->view->registerJs("$('#$id .elementListView').elementListView($options);", View::POS_READY);
+		$this->view->registerJs("$('#$id > .elementListView').elementListView($options);", View::POS_READY);
 
 		return $this->render('template');
 	}

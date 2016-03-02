@@ -25,16 +25,18 @@ class ContentElementController extends Controller
 		];
 	}
 
-	public function actionTemplate($type = null)
+	public function actionTemplate($type, $parentId)
 	{
-		$this->layout = false;
-		$type = $type ?: Yii::$app->request->post('type');
-
 		if (empty($type)) {
 			throw new \InvalidArgumentException('Missing argument "type".');
 		}
 
+		$this->layout = false;
+
 		$widget = ContentElementModule::createNewWidget($type);
+
+		$widget->element->parent_element_id = $parentId;
+		$widget->element->insert();
 
 		return $widget->runTemplate();
 	}

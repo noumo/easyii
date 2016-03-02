@@ -39,6 +39,21 @@
             contentElementData[$e.attr('id')] = {settings: settings};
 
             $.ElementListView.prototype.applyEvents.apply($e);
+
+            $(settings.modalSelector)
+                .off('show.bs.modal')
+                .on('show.bs.modal', function(){
+
+                    $(this).find('.content').load($(this).data('modal-source'), '', function() {
+                        $.ElementListView.prototype.applyEvents.apply($e);
+
+                        $(settings.addElementSelector).on('click', function(){
+                            var $this = $(this);
+                            $.ElementListView.prototype.addTemplateItem.apply($e, [$this.data('content-element')]);
+                        });
+                    });
+                });
+
         });
     };
 
@@ -55,19 +70,12 @@
             settings = contentElementData[$e.attr('id')].settings;
 
         $.ajax({
-            method: 'POST',
+            method: 'GET',
             url: settings.templateUrl,
             data: {type: type, parentId: settings.parentId},
             context: $e,
             success: function(data) {
-                var $data = $('<div />').html(data);
-
-                //var script = $data.find('script[type="text/javascript"]').html();
-
-               // $data.find('script[type="text/javascript"]').remove();
-
                 $.ElementListView.prototype.addItem.apply(this, [data]);
-               // $.ElementListView.prototype.applyEvents.apply($e);
             }
         });
     };
@@ -98,25 +106,11 @@
                 return false;
             });
 
-        $(document)
-            .off('show.bs.modal', settings.modalSelector)
-            .on('show.bs.modal', settings.modalSelector, function(){
-                $(settings.modalSelector + ' .content').load($(this).data('modal-source'), '', function() {
-                    $.ElementListView.prototype.applyEvents.apply($e);
-
-                });
-            });
-
         $e
             .off(contentElementEvents.itemAdded)
             .on(contentElementEvents.itemAdded, function(){
                 $(settings.modalSelector).modal('hide');
             });
-
-        $(settings.addElementSelector).on('click', function(){
-            var $this = $(this);
-            $.ElementListView.prototype.addTemplateItem.apply($e, [$this.data('content-element')]);
-        });
 
         $e.on('click', '.move-up', function(){
             var current = $(this).closest('tr');

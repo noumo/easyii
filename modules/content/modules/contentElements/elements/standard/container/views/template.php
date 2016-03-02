@@ -8,6 +8,7 @@
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use \yii\easyii\modules\content\modules\contentElements\elements\standard\container\ContainerAsset;
+use \yii\easyii\modules\content\modules\contentElements\BaseElement;
 
 ContainerAsset::register($this);
 ?>
@@ -16,17 +17,20 @@ ContainerAsset::register($this);
 	<h3>
 		<?= Yii::t('easyii/content', 'Content elements') ?>
 
+		<?php # \yii\helpers\Html::button('<i class="glyphicon glyphicon-plus font-12"></i> Add element', ['id' => $widgetId . '-addElement', 'class' => 'btn btn-default']); ?>
+
 		<?php Modal::begin([
-			'id' => 'elementModal',
+			'id' => "$widgetId-elementModal",
 			'header' => Yii::t('easyii/content', 'Select element type'),
 			'toggleButton' => [
 				'label' => '<i class="glyphicon glyphicon-plus font-12"></i> ' . Yii::t('easyii/content', 'Add element'),
 				'class' => 'btn btn-default',
-				'id' => 'addElement',
-				'data-target' => "#$widgetId #elementModal"
+				'id' => "$widgetId-addElement",
 			],
 			'options' => [
-				'data-modal-source' => Url::to(['/admin/content/contentElements/content-element/list']),
+				'data-parent-id' => $element->element_id,
+				'data-list-source' => Url::to(['/admin/content/contentElements/content-element/list']),
+				'data-template-source' => Url::to(['/admin/content/contentElements/content-element/template']),
 			],
 		]); ?>
 
@@ -37,15 +41,12 @@ ContainerAsset::register($this);
 		<?php Modal::end(); ?>
 	</h3>
 
-	<table class="table table-hover elementListView">
-		<thead>
-		<th></th>
-		<th width="120"></th>
-		</thead>
-		<tbody>
-		<?php foreach ($element->elements as $subElement) : ?>
-			<?= $subElement->render($this) ?>
-		<?php endforeach; ?>
-		</tbody>
-	</table>
+	<?= \yii\easyii\modules\content\modules\contentElements\widgets\EditableList::widget([
+		'items' => $element->elements,
+		'render' => function (BaseElement $item, $index) {
+			return $item->render($this);
+		},
+		'addButton' => "$widgetId-addElement",
+		'modalSelector' => "$widgetId-elementModal",
+	]) ?>
 </div>
