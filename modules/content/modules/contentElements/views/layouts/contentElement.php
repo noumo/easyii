@@ -14,16 +14,18 @@ use yii\helpers\Html;
 	data-element-type="<?= $element->type ?>"
 	data-element-scenario="<?= $element->scenario ?>">
 
-	<?= Html::tag('h4', $config['title']) ?>
+	<div class="">
+		<?= Html::tag('h4', $config['title']) ?>
 
-	<?= Html::errorSummary($element, ['class' => 'alert alert-danger']) ?>
+		<?= Html::errorSummary($element, ['class' => 'alert alert-danger']) ?>
 
-	<?= Html::activeHiddenInput($element, 'element_id'); ?>
-	<?= Html::activeHiddenInput($element, 'parent_element_id'); ?>
-	<?= Html::activeHiddenInput($element, 'type'); ?>
-	<?= Html::activeHiddenInput($element, 'scenario'); ?>
+		<?= Html::activeHiddenInput($element, 'element_id'); ?>
+		<?= Html::activeHiddenInput($element, 'parent_element_id'); ?>
+		<?= Html::activeHiddenInput($element, 'type'); ?>
+		<?= Html::activeHiddenInput($element, 'scenario'); ?>
 
-	<?= Html::tag('i', '✖', ['class' => 'js-remove']) ?>
+		<?= Html::tag('i', '✖', ['class' => 'js-remove']) ?>
+	</div>
 
 	<?= $content ?>
 </li>

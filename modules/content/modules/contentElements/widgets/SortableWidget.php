@@ -16,21 +16,21 @@ use yii\web\View;
 class SortableWidget extends \yii\base\Widget
 {
 	public $clientOptions = [
-		'handle' => '*',
+		'handle' => '> div',
 		'items' => 'li',
+		'maxLevels' => 1,
 		'toleranceElement' => '> div',
 
 		'forcePlaceholderSize' => true,
 		'placeholder' => 'placeholder',
 		'helper' =>	'clone',
 		'opacity' => .6,
-		'revert' => 250,
-		'tabSize' => 25,
-		'tolerance' => 'pointer',
-		#'maxLevels' => 4,
+		#'revert' => 250,
+		#'tabSize' => 25,
+		#'tolerance' => 'pointer',
 		'isTree' => false,
-		'expandOnHover' => 700,
-		'startCollapsed' => false
+		#'expandOnHover' => 700,
+		#'startCollapsed' => false
 	];
 
 	public $items;

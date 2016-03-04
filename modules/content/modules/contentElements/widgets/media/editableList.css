@@ -28,7 +28,7 @@
     position: absolute;
     top: 0;
     right: 5px;
-}
+}gits
 
 .editable-list li:hover .js-remove {
     display: inline-block;
@@ -43,8 +43,12 @@
     opacity: 1;
 }
 
-.placeholder {
+.sortable .placeholder {
     outline: 1px dashed #4183C4;
+}
+
+.sortable .mjs-nestedSortable-error {
+    display: none;
 }
 
 li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
