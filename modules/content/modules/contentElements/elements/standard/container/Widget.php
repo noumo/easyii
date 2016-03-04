@@ -30,6 +30,7 @@ class Widget extends BaseWidget
 			$this->layout = 'contentElementAjax';
 		}
 
+		/*
 		$id = $this->getId();
 
 		$modalSelector = "#$id-elementModal";
@@ -42,6 +43,7 @@ class Widget extends BaseWidget
 		];
 		$options = Json::encode($options);
 		$this->view->registerJs("$('#$id > .elementListView').elementListView($options);", View::POS_READY);
+		*/
 
 		return $this->render('template');
 	}

@@ -3,7 +3,7 @@
     background: #ffffff;
 }
 
-.editable-list ol {
+.editable-list {
     padding-left: 0;
     list-style: none;
 }
@@ -41,4 +41,27 @@
 
 .editable-list button:hover {
     opacity: 1;
+}
+
+.placeholder {
+    outline: 1px dashed #4183C4;
+}
+
+li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
+    border-color: #999;
+}
+
+li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
+    border-color: #999;
+}
+
+.editable-list li {
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    cursor: move;
+    border-color: #D4D4D4 #D4D4D4 #BCBCBC;
+    margin: 10px;
+    padding: 3px;
 }

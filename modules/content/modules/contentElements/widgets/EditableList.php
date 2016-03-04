@@ -2,7 +2,6 @@
 
 namespace yii\easyii\modules\content\modules\contentElements\widgets;
 
-use yii\helpers\Html;
 use yii\web\View;
 
 class EditableList extends SortableWidget
@@ -16,11 +15,6 @@ class EditableList extends SortableWidget
 	public function init()
 	{
 		parent::init();
-
-		$id = $this->id;
-
-		$this->clientOptions = [
-		];
 	}
 
 	protected function registerAssets(View $view)
@@ -30,7 +24,8 @@ class EditableList extends SortableWidget
 		$id = $this->id;
 		$modalSelector = $this->modalSelector;
 
-		$view->registerJs("$('#$modalSelector')
+		$view->registerJs("
+			$('#$modalSelector')
 				.off('show.bs.modal')
 				.on('show.bs.modal', function(){
 
@@ -55,9 +50,22 @@ class EditableList extends SortableWidget
 					});
 				});
 
-			$('.js-remove').on('click', function (evt) {
-				var el = $(evt.target).closest('.ui-sortable-handle'); // get dragged item
-				el && el.remove();
+			$('#$id').closest('form').on('submit', function() {
+				var childs = $('#$id').children('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
+				for (var i in childs) {
+					var child = childs[i],
+						id = child.id ? child.id : child.item_id
+					$('#element-' + id + '-parent_element_id').val(child.parent_id);
+				}
+			});
+
+			$('#$id .js-remove').on('click', function (evt) {
+				var el = $(evt.target).closest('li'); // get dragged item
+				if (el) {
+					var id = el.data('element-id');
+					$('#element-'+id+'-scenario').val('delete');
+					el.hide();
+				}
 			});");
 
 		parent::registerAssets($view);

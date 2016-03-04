@@ -237,8 +237,7 @@ class ItemController extends Controller
 			$element = false;
 
 			if ($attributes['scenario'] == 'delete') {
-				unset($attributes['scenario']);
-				BaseElement::deleteAll($attributes);
+				BaseElement::deleteAll(['element_id' => $attributes['element_id']]);
 			}
 			else {
 				$attributes['order_num'] = $sortOrder++;

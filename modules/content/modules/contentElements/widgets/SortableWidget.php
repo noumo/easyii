@@ -16,9 +16,21 @@ use yii\web\View;
 class SortableWidget extends \yii\base\Widget
 {
 	public $clientOptions = [
-		'handle' => 'div',
+		'handle' => '*',
 		'items' => 'li',
 		'toleranceElement' => '> div',
+
+		'forcePlaceholderSize' => true,
+		'placeholder' => 'placeholder',
+		'helper' =>	'clone',
+		'opacity' => .6,
+		'revert' => 250,
+		'tabSize' => 25,
+		'tolerance' => 'pointer',
+		#'maxLevels' => 4,
+		'isTree' => false,
+		'expandOnHover' => 700,
+		'startCollapsed' => false
 	];
 
 	public $items;
@@ -26,6 +38,8 @@ class SortableWidget extends \yii\base\Widget
 	public $render;
 
 	public $prefix = 'sortable';
+
+	public $rootId = null;
 
 	public function init()
 	{
@@ -36,16 +50,12 @@ class SortableWidget extends \yii\base\Widget
 	{
 		$this->registerAssets($this->view);
 
-		echo Html::beginTag('div', ['class' => "$this->prefix-list"]);
-
 		$this->renderItems();
-
-		echo Html::endTag('div');
 	}
 
 	protected function renderItems()
 	{
-		echo Html::ol($this->items, ['id' => $this->id, 'class' => 'sortable', 'item' => [$this, 'renderItem']]);
+		echo Html::ol($this->items, ['id' => $this->id, 'class' => "$this->prefix-list sortable", 'item' => [$this, 'renderItem']]);
 	}
 
 	public function renderItem($item, $index)
@@ -57,14 +67,14 @@ class SortableWidget extends \yii\base\Widget
 			$content = Html::encode($item);
 		}
 
-		$content .= Html::tag('i', '✖', ['class' => 'js-remove']);
-
-		$content = Html::tag('div', $content);
-		return Html::tag('li', $content);
+		return $content;
 	}
 
 	protected function registerAssets(View $view)
 	{
+		if ($this->rootId !== null) {
+			$this->clientOptions['rootID'] = $this->rootId;
+		}
 		$options = \yii\helpers\Json::htmlEncode($this->clientOptions);
 
 		$view->registerJs("$('#$this->id').nestedSortable($options);");

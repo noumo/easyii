@@ -9,9 +9,10 @@ use yii\helpers\Html;
 
 ?>
 
-<div data-element-id="<?= $element->primaryKey ?>"
-	 data-element-type="<?= $element->type ?>"
-	 data-element-scenario="<?= $element->scenario ?>">
+<li id="element_<?= $element->primaryKey ?>"
+	data-element-id="<?= $element->primaryKey ?>"
+	data-element-type="<?= $element->type ?>"
+	data-element-scenario="<?= $element->scenario ?>">
 
 	<?= Html::tag('h4', $config['title']) ?>
 
@@ -22,5 +23,9 @@ use yii\helpers\Html;
 	<?= Html::activeHiddenInput($element, 'type'); ?>
 	<?= Html::activeHiddenInput($element, 'scenario'); ?>
 
+	<?= Html::tag('i', '✖', ['class' => 'js-remove']) ?>
+
 	<?= $content ?>
-</div>
+</li>
+
+
