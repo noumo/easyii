@@ -1,6 +1,7 @@
 #Changelog
 
 ###0.9.1
+* New module Entity
 * File type in catalog fields added
 * Tags added to FAQ
 * Tags added to gallery albums
