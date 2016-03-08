@@ -58,6 +58,13 @@ abstract class BaseElement extends ActiveRecord
 		return $widget->runTemplate();
 	}
 
+	public function renderAsRoot(yii\web\View $view)
+	{
+		$widget = ContentElementModule::createWidget($this);
+
+		return $widget->run('template');
+	}
+
 	public function rules()
 	{
 		return [
