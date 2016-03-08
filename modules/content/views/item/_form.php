@@ -48,7 +48,7 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 // Todo: Dont need layout fields more?
 #$dataForm ?>
 
-<?= $model->element->render($this) ?>
+<ol class="sortable"><?= $model->element->render($this) ?></ol>
 
 <?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
 

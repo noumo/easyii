@@ -41,32 +41,53 @@ class EditableList extends SortableWidget
 								url: $('#$modalSelector').data('template-source'),
 								data: {type: type, parentId: parentId},
 								success: function(data) {
-									var el = document.createElement('li');
-									el.innerHTML = data + '<i class=\"js-remove\">✖</i>';
-									$('#$id').append(el);
+									$('#$id').append(data);
 								}
 							});
 						});
 					});
 				});
 
-			$('#$id').closest('form').on('submit', function() {
-				var childs = $('#$id').children('ol.sortable').nestedSortable('toArray', {startDepthCount: 0});
-				for (var i in childs) {
-					var child = childs[i],
-						id = child.id ? child.id : child.item_id
-					$('#element-' + id + '-parent_element_id').val(child.parent_id);
-				}
-			});
+			var list = $('#$id');
 
-			$('#$id .js-remove').on('click', function (evt) {
+			list.find('.js-remove').on('click', function (evt) {
 				var el = $(evt.target).closest('li'); // get dragged item
 				if (el) {
 					var id = el.data('element-id');
 					$('#element-'+id+'-scenario').val('delete');
 					el.hide();
 				}
-			});");
+			});
+
+			list.on('click', '.move-up', function(){
+				var current = $(this).closest('li');
+				var previos = current.prev();
+				if(previos.get(0)){
+					previos.before(current);
+				}
+				return false;
+			});
+
+			list.on('click', '.move-down', function(){
+				var current = $(this).closest('li');
+				var next = current.next();
+				if(next.get(0)){
+					next.after(current);
+				}
+				return false;
+			});
+			");
+
+		$listSelector = ".$this->prefix-list";
+		$view->registerJs("
+			$('$listSelector').parents('$listSelector:last').closest('form').on('submit', function() {
+				var childs = $(this).find('$listSelector:first').nestedSortable('toArray', {startDepthCount: 0});
+				for (var i in childs) {
+					var child = childs[i],
+						id = child.id ? child.id : child.item_id
+					$('#element-' + id + '-parent_element_id').val(child.parent_id);
+				}
+			});", View::POS_READY, 'saveList');
 
 		parent::registerAssets($view);
 	}

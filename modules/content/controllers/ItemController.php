@@ -246,15 +246,16 @@ class ItemController extends Controller
 					$element = ContentElementModule::create($attributes['type']);
 					$element->item_id = $model->primaryKey;
 					$element->load($attributes, '');
-
 					$element->insert();
 				}
 				elseif ($attributes['scenario'] == 'update') {
 					$element = BaseElement::findOne(['element_id' => $attributes['element_id']]);
 					$element->load($attributes, '');
+					$element->setAttributes($attributes, false);
 
 					$element->update();
 				}
+
 			}
 
 			if ($element) {

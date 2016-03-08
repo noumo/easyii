@@ -62,7 +62,7 @@ abstract class BaseElement extends ActiveRecord
 	{
 		return [
 			[['!type'], 'string'],
-			[['!order_num'], 'integer'],
+			[['!order_num', '!parent_element_id'], 'integer'],
 		];
 	}
 

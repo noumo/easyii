@@ -1,45 +1,51 @@
-.editable-list {
+.sortable {
     min-height: 50px;
     background: #ffffff;
 }
 
-.editable-list {
+.sortable {
     padding-left: 0;
     list-style: none;
 }
 
-.editable-list li {
-    padding: 10px;
+.ui-sortable li {
     position: relative;
     background-color: #ffffff;
 
-    border: #ffffff 1px solid;
+    border: 1px solid #d4d4d4;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    cursor: move;
+    margin: 10px;
+    padding: 3px;
 }
 
-.editable-list li:hover {
+.ui-sortable li:hover {
     background-color: #f5f5f5;
     border: #31708f 1px solid;
 }
 
-.editable-list li .js-remove {
+/*
+.sortable li .js-remove {
     display: none;
 
     cursor: pointer;
     position: absolute;
     top: 0;
     right: 5px;
-}gits
-
-.editable-list li:hover .js-remove {
-    display: inline-block;
 }
 
-.editable-list button {
+.sortable li:hover .js-remove {
+    display: inline-block;
+}
+*/
+.sortable button {
     transition: opacity .1s ease;
     cursor: pointer;
 }
 
-.editable-list button:hover {
+.sortable button:hover {
     opacity: 1;
 }
 
@@ -57,15 +63,4 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
 
 li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
     border-color: #999;
-}
-
-.editable-list li {
-    border: 1px solid #d4d4d4;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    cursor: move;
-    border-color: #D4D4D4 #D4D4D4 #BCBCBC;
-    margin: 10px;
-    padding: 3px;
 }
