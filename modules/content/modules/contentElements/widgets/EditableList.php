@@ -12,6 +12,9 @@ class EditableList extends SortableWidget
 
 	public $modalSelector;
 
+	public $templateUrl;
+	public $deleteUrl;
+
 	public function init()
 	{
 		parent::init();
@@ -23,6 +26,8 @@ class EditableList extends SortableWidget
 
 		$id = $this->id;
 		$modalSelector = $this->modalSelector;
+		$templateUrl = $this->templateUrl;
+		$deleteUrl = $this->deleteUrl;
 
 		$view->registerJs("
 			$('#$modalSelector')
@@ -34,14 +39,20 @@ class EditableList extends SortableWidget
 					$(this).find('.content').load($(this).data('list-source'), '', function() {
 
 						$(this).find('button[data-content-element]').on('click', function(){
-							var type = $(this).data('content-element');
+							var type = $(this).data('content-element'),
+								modal = $('#$modalSelector');
 
 							$.ajax({
 								method: 'GET',
-								url: $('#$modalSelector').data('template-source'),
+								url: '$templateUrl',
 								data: {type: type, parentId: parentId},
+								context: modal,
 								success: function(data) {
-									$('#$id').append(data);
+									var list = $('#$id');
+
+									list.append(data);
+									modal.modal('hide');
+									$('html, body').animate({ scrollTop: ($(list).find('li:last').offset().top)}, 'slow');
 								}
 							});
 						});
@@ -50,33 +61,51 @@ class EditableList extends SortableWidget
 
 			var list = $('#$id');
 
-			list.find('.js-remove').on('click', function (evt) {
-				var el = $(evt.target).closest('li'); // get dragged item
-				if (el) {
-					var id = el.data('element-id');
-					$('#element-'+id+'-scenario').val('delete');
-					el.hide();
-				}
-			});
+			list.find('.js-remove')
+				.off('click')
+				.on('click', function (evt) {
+					var el = $(evt.target).closest('li'); // get dragged item
+					if (el) {
+						var id = el.data('element-id');
 
-			list.on('click', '.move-up', function(){
-				var current = $(this).closest('li');
-				var previos = current.prev();
-				if(previos.get(0)){
-					previos.before(current);
-				}
-				return false;
-			});
+						$.ajax({
+							type: 'DELETE',
+							url: '$deleteUrl?' + jQuery.param({elementId: id}),
+							success: function(data) {
+								el.remove();
+								el.hide();
+							}
+						});
+					}
 
-			list.on('click', '.move-down', function(){
-				var current = $(this).closest('li');
-				var next = current.next();
-				if(next.get(0)){
-					next.after(current);
-				}
-				return false;
-			});
-			");
+					return false;
+				});
+
+			list
+				.off('click')
+				.on('click', '.move-up', function(){
+					var current = $(this).closest('li');
+					var previos = current.prev();
+
+					if(previos.get(0)){
+						previos.before(current);
+					}
+
+					return false;
+				});
+
+			list
+				.off('click')
+				.on('click', '.move-down', function(){
+					var current = $(this).closest('li');
+					var next = current.next();
+
+					if(next.get(0)){
+						next.after(current);
+					}
+
+					return false;
+				});");
 
 		$listSelector = ".$this->prefix-list";
 		$view->registerJs("

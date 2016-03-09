@@ -16,9 +16,12 @@
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    cursor: move;
     margin: 10px;
     padding: 3px;
+}
+
+.ui-sortable-handle {
+    cursor: move;
 }
 
 .ui-sortable li:hover {

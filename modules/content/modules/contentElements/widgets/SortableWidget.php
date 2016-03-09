@@ -16,7 +16,7 @@ use yii\web\View;
 class SortableWidget extends \yii\base\Widget
 {
 	public $clientOptions = [
-		'handle' => '> div',
+		'handle' => '> div:first',
 		'items' => 'li',
 		'maxLevels' => 1,
 		'toleranceElement' => '> div',

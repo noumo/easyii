@@ -1,5 +1,5 @@
 <?php
-namespace yii\easyii\modules\content\contentElements;
+namespace yii\easyii\modules\content\modules\contentElements;
 
 use yii;
 use yii\easyii\components\ActiveRecord;
@@ -33,7 +33,7 @@ abstract class ContentElementBase extends ActiveRecord
 	public static function instantiate($row)
 	{
 		$type = $row['type'];
-		return ContentElementFactory::create($type);
+		return ContentElementModule::create($type);
 	}
 
 	public function init()
@@ -48,7 +48,7 @@ abstract class ContentElementBase extends ActiveRecord
 
 	public function render(yii\web\View $view)
 	{
-		$widget = ContentElementFactory::createWidget($this);
+		$widget = ContentElementModule::createWidget($this);
 		$widget->layout = 'contentElement';
 
 		return $widget->run('template');

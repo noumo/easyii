@@ -2,10 +2,11 @@
 
 namespace yii\easyii\modules\content\contentElements;
 
+use yii;
 use yii\base\Widget;
 use yii\bootstrap\Html;
+use yii\easyii\modules\content\modules\contentElements\ContentElementBase;
 use yii\helpers\Url;
-use yii;
 use yii\web\View;
 
 /**

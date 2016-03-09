@@ -23,7 +23,6 @@ use \yii\easyii\modules\content\modules\contentElements\BaseElement;
 		'options' => [
 			'data-parent-id' => $element->element_id,
 			'data-list-source' => Url::to(['/admin/content/contentElements/content-element/list']),
-			'data-template-source' => Url::to(['/admin/content/contentElements/content-element/template']),
 		],
 	]); ?>
 
@@ -39,6 +38,8 @@ use \yii\easyii\modules\content\modules\contentElements\BaseElement;
 	'render' => function (BaseElement $item, $index) {
 		return $item->render($this);
 	},
+	'templateUrl' => Url::to(['/admin/content/contentElements/content-element/template']),
+	'deleteUrl' => Url::to(['/admin/content/contentElements/content-element/delete']),
 	'addButton' => "$widgetId-addElement",
 	'modalSelector' => "$widgetId-elementModal",
 	'rootId' => (is_null($element->parent_element_id) ? $element->element_id : $element->parent_element_id),

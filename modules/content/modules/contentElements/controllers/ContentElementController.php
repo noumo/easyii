@@ -4,12 +4,9 @@ namespace yii\easyii\modules\content\modules\contentElements\controllers;
 
 use Yii;
 use yii\easyii\components\Controller;
-use yii\easyii\modules\content\modules\contentElements\BaseWidget;
+use yii\easyii\modules\content\modules\contentElements\ContentElementBase;
 use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
-use yii\easyii\modules\content\modules\contentElements\Factory;
-use yii\helpers\Html;
-use yii\helpers\Inflector;
-use yii\web\View;
+use yii\web\NotFoundHttpException;
 
 class ContentElementController extends Controller
 {
@@ -19,7 +16,9 @@ class ContentElementController extends Controller
 			'verbs' => [
 				'class' => \yii\filters\VerbFilter::className(),
 				'actions' => [
-					#'template'  => ['post'],
+					'template' => ['post', 'get'],
+					'list' => ['get'],
+					'delete' => ['delete'],
 				],
 			],
 		];
@@ -63,8 +62,25 @@ class ContentElementController extends Controller
 			}
 		}
 
-		return $this->renderPartial('list', [
-			'groupItems' => $groupItems
-		]);
+		return $this->renderPartial('list',
+			[
+				'groupItems' => $groupItems,
+			]);
+	}
+
+	public function actionDelete($elementId)
+	{
+		/** @var \yii\easyii\modules\content\modules\contentElements\ContentElementBase $element */
+		$element = ContentElementBase::findOne(['element_id' => $elementId]);
+
+		if (!$element) {
+			throw new NotFoundHttpException('Element not exists');
+		}
+
+		if ($element->delete()) {
+			return 'success';
+		}
+
+		return 'error';
 	}
 }
