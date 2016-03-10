@@ -50,6 +50,9 @@ class Item extends ItemModel
         ];
     }
 
+	/**
+	 * @deprecated
+	 */
 	public function getPhotos()
 	{
 		return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
@@ -89,6 +92,19 @@ class Item extends ItemModel
         parent::afterFind();
 	    $this->parseData();
     }
+
+	public function beforeDelete()
+	{
+		if (parent::beforeDelete()) {
+			if ($this->element) {
+				$this->element->delete();
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 
 	public function afterDelete()
 	{

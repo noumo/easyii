@@ -84,7 +84,11 @@ abstract class ItemModel extends ActiveRecord
 			$flat = $cache->get($key);
 			if (!$flat) {
 				$flat = static::generateFlat();
-				$cache->set($key, $flat, 3600);
+
+				$dependency = new yii\caching\DbDependency([
+					'sql' => self::find()->select(['MAX(time)', 'COUNT(1)'])->createCommand()->rawSql
+				]);
+				$cache->set($key, $flat, 3600, $dependency);
 			}
 			$primaryKey = static::primaryKey()[0];
 			foreach($flat as $id => $item){

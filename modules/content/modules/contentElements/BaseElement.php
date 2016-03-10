@@ -147,6 +147,22 @@ abstract class BaseElement extends ActiveRecord
 		$this->parseData();
 	}
 
+	public function beforeDelete()
+	{
+		if (parent::beforeDelete()) {
+			$childs = $this->elements;
+			self::deleteAll(['parent_element_id' => $this->element_id]);
+
+			foreach ($childs as $child) {
+				$child->afterDelete();
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private function parseData()
 	{
 		$attributes = Json::decode($this->data);
