@@ -18,4 +18,18 @@ class Element extends BaseElement
 				[['source', 'altText', 'title'], 'safe']
 			]);
 	}
+
+	public function beforeDelete()
+	{
+		if (parent::beforeDelete()) {
+			if($this->source){
+				@unlink(\Yii::getAlias('@webroot').$this->source);
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
 }

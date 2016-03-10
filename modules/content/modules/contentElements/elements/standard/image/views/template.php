@@ -6,11 +6,22 @@
 
 use yii\helpers\Html;
 
-echo Html::activeLabel($element, 'source', ['class' => 'form-label']);
-echo Html::activeFileInput($element, 'source');
+$module = Yii::$app->controller->module->id;
+$settings =Yii::$app->controller->module->settings;
+?>
 
-echo Html::activeLabel($element, 'altText', ['class' => 'form-label']);
-echo Html::activeTextInput($element, 'altText', ['class' => 'form-control']);
+<?= Html::activeLabel($element, 'source', ['class' => 'form-label']); ?>
+<?php if ($settings['itemThumb']) : ?>
+	<?php if ($model->source) : ?>
+		<img src="<?= \yii\easyii\helpers\Image::thumb($model->source, 240) ?>">
+		<a href="<?= \yii\helpers\Url::to(['/admin/' . $module . '/item/clear-image', 'id' => $model->primaryKey]) ?>"
+		   class="text-danger confirm-delete"
+		   title="<?= Yii::t('easyii', 'Clear image') ?>"><?= Yii::t('easyii', 'Clear image') ?></a>
+	<?php endif; ?>
+<?php endif; ?>
+<?= Html::activeFileInput($element, 'source'); ?>
 
-echo Html::activeLabel($element, 'title', ['class' => 'form-label']);
-echo Html::activeTextInput($element, 'title', ['class' => 'form-control']);
+<?= Html::activeLabel($element, 'altText', ['class' => 'form-label']); ?>
+<?= Html::activeTextInput($element, 'altText', ['class' => 'form-control']); ?>
+<?= Html::activeLabel($element, 'title', ['class' => 'form-label']); ?>
+<?= Html::activeTextInput($element, 'title', ['class' => 'form-control']); ?>

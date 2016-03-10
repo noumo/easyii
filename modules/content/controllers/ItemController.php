@@ -131,16 +131,6 @@ class ItemController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
-
-                    $model->image_file = UploadedFile::getInstance($model, 'image_file');
-                    if ($model->image_file && $model->validate(['image_file'])) {
-                        $model->image_file = Image::upload($model->image_file, 'content');
-                    } else {
-                        $model->image_file = $model->oldAttributes['image_file'];
-                    }
-                }
-
                 $saved = $this->saveElements($model, Yii::$app->request->post('Element'));
 
 	            if ($model->save() && $saved) {
@@ -281,25 +271,6 @@ class ItemController extends Controller
         return $this->render('photos', [
             'model' => $model,
         ]);
-    }
-
-	public function actionClearImage($id)
-    {
-        $model = Item::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image_file){
-            $model->image_file = '';
-            if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->image_file);
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
     }
 
 	public function actionDelete($id)
