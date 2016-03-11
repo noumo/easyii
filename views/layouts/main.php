@@ -71,7 +71,7 @@ $moduleName = $this->context->module->id;
                             <?= $this->title ?>
                             <?php if ($this->context->module->showHelp) : ?>
                                 <?= Html::a('<i class="glyphicon glyphicon-question-sign"></i>',
-                                    $this->context->module->id . '/help',
+                                    ['/admin/' . $this->context->module->id . '/help'],
                                     ['class' => 'pull-right', 'title' => Yii::t('easyii', 'Show help')]) ?>
                             <?php endif ?>
                         </div>

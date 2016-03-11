@@ -12,7 +12,7 @@ At first create a new content item:
 Now go in your app directory and add following to your SiteController:
 
 ```
-use yii\easyii\modules\content\behaviors\ContentController;
+use yii\easyii\modules\content\api\controllers\ContentController;
 
 class SiteController extends Controller
 {

@@ -109,6 +109,9 @@ class Module extends \yii\base\Module
 
     public function getShowHelp()
     {
+        if (!IS_ROOT) {
+            return false;
+        }
         if (Yii::$app->controller instanceof HelpController) {
             return false;
         }
