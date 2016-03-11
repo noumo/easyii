@@ -82,4 +82,9 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
         }
         return $this->_installed;
     }
+
+    public function getShowHelp()
+    {
+        return false;
+    }
 }
