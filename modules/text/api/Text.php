@@ -49,7 +49,7 @@ class Text extends API
     {
         $text = '';
 
-        if(!Yii::$app->user->isGuest && preg_match(TextModel::$SLUG_PATTERN, $id_slug)){
+        if(IS_ROOT && preg_match(TextModel::$SLUG_PATTERN, $id_slug)){
             $text = Html::a(Yii::t('easyii/text/api', 'Create text'), ['/admin/text/a/create', 'slug' => $id_slug], ['target' => '_blank']);
         }
 

@@ -33,9 +33,10 @@ class Page extends \yii\easyii\components\API
 
     private function notFound($id_slug)
     {
-        $page = new PageModel([
-            'slug' => $id_slug
-        ]);
-        return new PageObject($page);
+        $config = ['slug' => $id_slug];
+        if(IS_ROOT && preg_match(PageModel::$SLUG_PATTERN, $id_slug)){
+            $config['title'] = $config['text'] = Html::a(Yii::t('easyii/page/api', 'Create text'), ['/admin/page/a/create', 'slug' => $id_slug], ['target' => '_blank']);
+        }
+        return new PageObject(new PageModel($config));
     }
 }
