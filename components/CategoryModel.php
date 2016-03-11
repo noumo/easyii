@@ -24,7 +24,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     static $TREE = [];
 
     public $parent;
-    public $children;
+    public $children = [];
 
     public function rules()
     {

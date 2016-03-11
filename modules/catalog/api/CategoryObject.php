@@ -16,6 +16,7 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     public $depth;
 
     private $_adp;
+    private $_children = [];
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
@@ -27,6 +28,14 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function pagination(){
         return $this->_adp ? $this->_adp->pagination : null;
+    }
+
+    public function getChildren()
+    {
+        foreach($this->model->children as $child) {
+            $this->_children[] = Catalog::cat($child);
+        }
+        return $this->_children;
     }
 
     public function items($options = [])
