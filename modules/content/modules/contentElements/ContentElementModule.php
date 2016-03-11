@@ -42,6 +42,19 @@ class ContentElementModule extends \yii\base\Module
 	}
 
 	/**
+	 * @param BaseElement $model
+	 *
+	 * @return BaseWidget
+	 */
+	public static function createWidgetByType($type)
+	{
+		$element = self::create($type);
+		$widget = self::createWidget($element);
+
+		return $widget;
+	}
+
+	/**
 	 * @param $id
 	 *
 	 * @return BaseWidget

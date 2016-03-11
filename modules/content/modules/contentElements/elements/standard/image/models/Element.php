@@ -14,7 +14,8 @@ class Element extends BaseElement
 	{
 		return array_merge(parent::rules(),
 			[
-				[['source', 'altText', 'title'], 'string'],
+				[['altText', 'title'], 'string'],
+				[['source'], 'image'],
 				[['source', 'altText', 'title'], 'safe']
 			]);
 	}

@@ -26,7 +26,6 @@ class Item extends ItemModel
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image_file', 'image'],
             [['header'], 'safe'],
             [['nav', 'status', 'category_id', 'time'], 'integer'],
             ['time', 'default', 'value' => time()],
@@ -43,7 +42,6 @@ class Item extends ItemModel
         return [
 	        'category_id' => Yii::t('easyii', 'Layout'),
             'title' => Yii::t('easyii', 'Title'),
-            'image_file' => Yii::t('easyii', 'Image'),
             'header' => Yii::t('easyii', 'Header'),
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
@@ -70,10 +68,6 @@ class Item extends ItemModel
                 $this->data = new \stdClass();
             }
             $this->data = json_encode($this->data);
-
-            if(!$insert && $this->image_file != $this->oldAttributes['image_file'] && $this->oldAttributes['image_file']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image_file']);
-            }
 
             return true;
         } else {
@@ -112,10 +106,6 @@ class Item extends ItemModel
 
 		foreach($this->getPhotos()->all() as $photo){
 			$photo->delete();
-		}
-
-		if($this->image_file) {
-			@unlink(Yii::getAlias('@webroot') . $this->image_file);
 		}
 	}
 

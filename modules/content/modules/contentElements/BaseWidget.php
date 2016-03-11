@@ -81,6 +81,23 @@ abstract class BaseWidget extends Widget
 		}
 	}
 
+	public function load($attributes)
+	{
+		$this->element->setAttributes($attributes, false);
+
+		return $this->element->validate();
+	}
+
+	public function save()
+	{
+		if (method_exists($this, 'beforeSave')) {
+			$this->element->on(yii\db\ActiveRecord::EVENT_BEFORE_UPDATE, [$this, 'beforeSave']);
+			$this->element->on(yii\db\ActiveRecord::EVENT_BEFORE_INSERT, [$this, 'beforeSave']);
+		}
+
+		return $this->element->save();
+	}
+
 	public function getLayoutFile()
 	{
 		return $this->layoutPath . DIRECTORY_SEPARATOR . $this->layout . '.php';

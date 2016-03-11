@@ -231,21 +231,19 @@ class ItemController extends Controller
 			}
 			else {
 				$attributes['order_num'] = $sortOrder++;
+				$attributes['item_id'] = $model->primaryKey;
 
 				if ($attributes['scenario'] == 'insert') {
-					$element = ContentElementModule::create($attributes['type']);
-					$element->item_id = $model->primaryKey;
-					$element->load($attributes, '');
-					$element->insert();
+					$widget = ContentElementModule::createWidgetByType($attributes['type']);
+					$widget->load($attributes);
+					$widget->save();
 				}
 				elseif ($attributes['scenario'] == 'update') {
 					$element = BaseElement::findOne(['element_id' => $attributes['element_id']]);
-					$element->load($attributes, '');
-					$element->setAttributes($attributes, false);
-
-					$element->update();
+					$widget = ContentElementModule::createWidget($element);
+					$widget->load($attributes);
+					$widget->save();
 				}
-
 			}
 
 			if ($element) {
