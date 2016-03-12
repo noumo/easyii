@@ -57,6 +57,11 @@ class InstallController extends \yii\web\Controller
         }
     }
 
+    public function actionUpdate()
+    {
+        echo WebConsole::migrate();
+    }
+
     public function actionFinish()
     {
         $root_password = Yii::$app->session->getFlash(InstallForm::ROOT_PASSWORD_KEY, true);
