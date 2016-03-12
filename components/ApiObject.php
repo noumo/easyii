@@ -80,7 +80,6 @@ class ApiObject extends \yii\base\Object
         return !empty($this->model->seo->{$attribute}) ? $this->model->seo->{$attribute} : $default;
     }
 
-
     /**
      * @param $value
      * @return string
