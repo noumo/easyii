@@ -80,6 +80,7 @@ If you don't have a layout, you can overwrite the default layout, just create th
 <?php
 /**
  * @var \yii\web\View $this
+ * @var \yii\easyii\modules\content\api\LayoutObject $layout
  * @var string $content
  */
 ?>

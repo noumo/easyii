@@ -31,10 +31,13 @@ trait ContentController
             throw new \yii\web\NotFoundHttpException(\Yii::t('easyii', 'Not found'));
         }
 
-	    return $this->renderContentView();
+        $viewContent = $this->renderViewContent();
+        $content = $this->renderLayoutContent($viewContent);
+
+        return $this->controller->renderContent($content);
     }
 
-	public function renderContentView(array $params = [])
+	protected function renderViewContent(array $params = [])
     {
 	    $this->viewTitle();
 
@@ -43,13 +46,24 @@ trait ContentController
         $viewFile = $this->getContentViewPath();
         $viewContent = $this->controller->view->render($viewFile, $params, $this);
 
-        $layoutFile = $this->getLayoutFile();
-        $content = $this->controller->view->renderFile($layoutFile, ['content' => $viewContent], $this);
-
-        return $this->controller->renderContent($content);
+        return $viewContent;
     }
 
-	public function viewTitle()
+    protected function renderLayoutContent($viewContent, array $params = [])
+    {
+        $params = array_merge($params,
+            [
+                'layout' => $this->content->getLayout(),
+                'content' => $viewContent,
+            ]);
+
+        $layoutFile = $this->getLayoutFile();
+        $content = $this->controller->view->renderFile($layoutFile, $params, $this);
+
+        return $content;
+    }
+
+	protected function viewTitle()
 	{
 		if ($this->content->model) {
 			/** @var \yii\web\View $view */
@@ -169,7 +183,7 @@ trait ContentController
         $this->_slug = $slug;
     }
 
-    public function getController()
+    private function getController()
     {
         return $this;
     }
