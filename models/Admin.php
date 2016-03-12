@@ -81,7 +81,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
 
     public static function findByEmail($email)
     {
-        if ($email === Setting::get('admin_email')) {
+        if ($email === Setting::get('root_email')) {
             return static::createRootUser();
         }
         return static::findOne(['email' => $email]);

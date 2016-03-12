@@ -19,10 +19,6 @@ class PasswordResetRequestForm extends Model
 			['email', 'filter', 'filter' => 'trim'],
 			['email', 'required'],
 			['email', 'email'],
-			['email', 'exist',
-				'targetClass' => Admin::className(),
-				'message' => Yii::t('easyii', 'There is no user with such email.')
-			],
 		];
 	}
 
