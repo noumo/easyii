@@ -15,13 +15,17 @@ class m000009_100001_install_content_module extends \yii\db\Migration
         $this->createTable(Layout::tableName(), [
             'category_id' => 'pk',
             'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image_file' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'fields' => Schema::TYPE_TEXT . ' NOT NULL',
             'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'order_num' => Schema::TYPE_INTEGER,
             'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
         ], $this->engine);
         $this->createIndex('slug', Layout::tableName(), 'slug', true);
+
+		$this->insert(Layout::tableName(), [
+			'title' => 'Default',
+			'slug' => 'default'
+		]);
 
         $this->createTable(Item::tableName(), [
             'item_id' => 'pk',
