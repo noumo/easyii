@@ -6,6 +6,7 @@ use Yii;
 use yii\easyii\components\Controller;
 use yii\easyii\modules\content\modules\contentElements\ContentElementBase;
 use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
 class ContentElementController extends Controller
@@ -81,6 +82,6 @@ class ContentElementController extends Controller
 			return 'success';
 		}
 
-		return 'error';
+		throw new BadRequestHttpException(json_encode($element->firstErrors));
 	}
 }

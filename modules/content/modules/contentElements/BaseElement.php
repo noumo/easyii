@@ -90,6 +90,28 @@ abstract class BaseElement extends ActiveRecord
 		];
 	}
 
+	/**
+	 * Sets the attribute values in a massive way.
+	 * @param array $values attribute values (name => value) to be assigned to the model.
+	 * @param boolean $safeOnly whether the assignments should only be done to the safe attributes.
+	 * A safe attribute is one that is associated with a validation rule in the current [[scenario]].
+	 * @see safeAttributes()
+	 * @see attributes()
+	 */
+	public function setActiveAttributes($values, $safeOnly = true)
+	{
+		if (is_array($values)) {
+			$attributes = array_flip($safeOnly ? $this->safeAttributes() : $this->activeAttributes());
+			foreach ($values as $name => $value) {
+				if (isset($attributes[$name])) {
+					$this->$name = $value;
+				} elseif ($safeOnly) {
+					$this->onUnsafeAttribute($name, $value);
+				}
+			}
+		}
+	}
+
 	public function formName()
 	{
 		if ($this->isNewRecord) {

@@ -83,7 +83,7 @@ abstract class BaseWidget extends Widget
 
 	public function load($attributes)
 	{
-		$this->element->setAttributes($attributes, false);
+		$this->element->setActiveAttributes($attributes, false);
 
 		return $this->element->validate();
 	}

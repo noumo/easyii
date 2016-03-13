@@ -183,7 +183,7 @@ trait ContentController
         $this->_slug = $slug;
     }
 
-    private function getController()
+    protected function getController()
     {
         return $this;
     }
