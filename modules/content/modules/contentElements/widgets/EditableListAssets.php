@@ -9,6 +9,7 @@ class EditableListAssets extends \yii\web\AssetBundle
 		'editableList.css',
 	];
 	public $js = [
+		'editableList.js',
 	];
 	public $depends = [
 	];

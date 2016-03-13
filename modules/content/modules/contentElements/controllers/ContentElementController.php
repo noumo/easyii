@@ -69,6 +69,22 @@ class ContentElementController extends Controller
 			]);
 	}
 
+	public function actionMode($elementId)
+	{
+		/** @var \yii\easyii\modules\content\modules\contentElements\ContentElementBase $element */
+		$element = ContentElementBase::findOne(['element_id' => $elementId]);
+
+		if (!$element) {
+			throw new NotFoundHttpException('Element not exists');
+		}
+
+		if ($element->delete()) {
+			return 'success';
+		}
+
+		throw new BadRequestHttpException(json_encode($element->firstErrors));
+	}
+
 	public function actionDelete($elementId)
 	{
 		/** @var \yii\easyii\modules\content\modules\contentElements\ContentElementBase $element */

@@ -10,9 +10,12 @@ use yii\helpers\Html;
 <?php $this->beginPage() ?>
 
 <li id="element_<?= $element->primaryKey ?>"
+	data-name="<?= $element->type ?>"
 	data-element-id="<?= $element->primaryKey ?>"
 	data-element-type="<?= $element->type ?>"
 	data-element-scenario="<?= $element->scenario ?>">
+
+	<?php $this->beginBody() ?>
 
 	<div class="">
 		<div class="btn-group">
@@ -24,7 +27,9 @@ use yii\helpers\Html;
 		<div class="btn-group btn-group-sm pull-right" role="group">
 			<a href="#" class="btn btn-default move-up" title="<?= Yii::t('easyii', 'Move up') ?>"><span class="glyphicon glyphicon-arrow-up"></span></a>
 			<a href="#" class="btn btn-default move-down" title="<?= Yii::t('easyii', 'Move down') ?>"><span class="glyphicon glyphicon-arrow-down"></span></a>
-			<a href="#" class="btn btn-default color-red js-remove" title="<?= Yii::t('easyii', 'Delete item') ?>"><span class="glyphicon glyphicon-remove"></span></a>
+			<a href="#" class="btn btn-default color-red js-remove confirm-delete" data-reload="1" title="<?= Yii::t('easyii', 'Delete item') ?>">
+				<span class="glyphicon glyphicon-remove"></span>
+			</a>
 		</div>
 
 		<?= Html::activeHiddenInput($element, 'element_id'); ?>

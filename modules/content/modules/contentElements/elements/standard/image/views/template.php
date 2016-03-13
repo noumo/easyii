@@ -5,9 +5,8 @@
  */
 
 use yii\helpers\Html;
-
 $module = Yii::$app->controller->module->id;
-$settings =Yii::$app->controller->module->settings;
+$settings = Yii::$app->controller->module->settings;
 ?>
 
 <div class="form-inline">
@@ -23,6 +22,7 @@ $settings =Yii::$app->controller->module->settings;
 		<?php endif; ?>
 
 		<?= Html::activeFileInput($element, 'source', ['class' => 'form-control-static']); ?>
+		<?= Html::activeHiddenInput($element, 'source'); ?>
 	</div>
 </div>
 

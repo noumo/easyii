@@ -105,4 +105,9 @@ class ContentElementModule extends \yii\base\Module
 
 		parent::init();
 	}
+
+	public function getSettings()
+	{
+		return $this->module->settings;
+	}
 }

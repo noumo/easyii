@@ -2,7 +2,9 @@
 
 namespace yii\easyii\modules\content\modules\contentElements\elements\standard\image\models;
 
+use yii\easyii\helpers\Upload;
 use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\helpers\Json;
 
 class Element extends BaseElement
 {
@@ -16,8 +18,13 @@ class Element extends BaseElement
 			[
 				[['altText', 'title'], 'string'],
 				[['source'], 'image'],
-				[['source', 'altText', 'title'], 'safe']
+				[['altText', 'title'], 'safe']
 			]);
+	}
+
+	public function getImageSource()
+	{
+		return Upload::getPathUrl($this->source);
 	}
 
 	public function beforeDelete()
@@ -33,4 +40,9 @@ class Element extends BaseElement
 		return false;
 	}
 
+	protected function parseData()
+	{
+		$attributes = Json::decode($this->data);
+		\Yii::configure($this, $attributes);
+	}
 }

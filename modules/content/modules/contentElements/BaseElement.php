@@ -98,15 +98,13 @@ abstract class BaseElement extends ActiveRecord
 	 * @see safeAttributes()
 	 * @see attributes()
 	 */
-	public function setActiveAttributes($values, $safeOnly = true)
+	public function setActiveAttributes($values)
 	{
 		if (is_array($values)) {
-			$attributes = array_flip($safeOnly ? $this->safeAttributes() : $this->activeAttributes());
+			$attributes = array_flip($this->activeAttributes());
 			foreach ($values as $name => $value) {
 				if (isset($attributes[$name])) {
 					$this->$name = $value;
-				} elseif ($safeOnly) {
-					$this->onUnsafeAttribute($name, $value);
 				}
 			}
 		}
@@ -185,9 +183,9 @@ abstract class BaseElement extends ActiveRecord
 		return false;
 	}
 
-	private function parseData()
+	protected function parseData()
 	{
 		$attributes = Json::decode($this->data);
-		$this->setAttributes($attributes);
+		$this->setActiveAttributes($attributes);
 	}
 }
