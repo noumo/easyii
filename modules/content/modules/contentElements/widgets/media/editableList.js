@@ -131,6 +131,7 @@
 
                 if(previos.get(0)){
                     previos.before(current);
+                    $.EditableList.prototype.sort.apply(list, [this]);
                 }
 
                 return false;
@@ -144,10 +145,21 @@
 
                 if(next.get(0)){
                     next.after(current);
+                    $.EditableList.prototype.sort.apply(list, [this]);
                 }
 
                 return false;
             });
+    };
+
+    $.EditableList.prototype.sort = function() {
+        var data =$('.editable-list:first').nestedSortable('serialize', {startDepthCount: 0});
+        $.ajax({
+            url: "http://kbetreuer.localhost/admin/content/content-element/sort",
+            method: 'post',
+            data: data
+        });
+
     };
 
 })(jQuery);

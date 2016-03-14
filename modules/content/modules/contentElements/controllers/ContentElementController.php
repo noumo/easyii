@@ -71,20 +71,17 @@ class ContentElementController extends Controller
 			]);
 	}
 
-	public function actionMove($elementId)
+	public function actionSort()
 	{
-		/** @var \yii\easyii\modules\content\modules\contentElements\ContentElementBase $element */
-		$element = ContentElementBase::findOne(['element_id' => $elementId]);
+		$data = Yii::$app->request->post('element');
 
-		if (!$element) {
-			throw new NotFoundHttpException('Element not exists');
+		$sortOrder = 1;
+		foreach ($data as $elementId => $parentId) {
+			/** @var BaseElement|false $element */
+			$element = BaseElement::findOne(['element_id' => $elementId]);
+			$element->order_num = $sortOrder++;
+			$element->update(false, ['order_num']);
 		}
-
-		if ($element->delete()) {
-			return 'success';
-		}
-
-		throw new BadRequestHttpException(json_encode($element->firstErrors));
 	}
 
 	public function actionRun($id, $action)
