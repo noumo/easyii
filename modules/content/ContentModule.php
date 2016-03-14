@@ -26,6 +26,10 @@ class ContentModule extends \yii\easyii\components\Module
         'order_num' => 110,
     ];
 
+    public $controllerMap = [
+        'content-element' => 'yii\easyii\modules\content\modules\contentElements\controllers\ContentElementController',
+    ];
+
     public function init()
     {
         parent::init();

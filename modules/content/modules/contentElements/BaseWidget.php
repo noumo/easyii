@@ -40,6 +40,35 @@ abstract class BaseWidget extends Widget
 		return ContentElementModule::getElementId(static::className(), true);
 	}
 
+	public function runAction($id, $params)
+	{
+		$action = $this->createAction($id);
+		if ($action === null) {
+			throw new yii\base\InvalidRouteException('Unable to resolve the request: ' . get_class($this) . '/' . $id);
+		}
+
+		// run the action
+		$result = $action->runWithParams($params);
+
+		return $result;
+	}
+
+	public function createAction($id)
+	{
+		$methodName = 'action' . str_replace(' ', '', ucwords(implode(' ', explode('-', $id))));
+		if (method_exists($this, $methodName)) {
+			$method = new \ReflectionMethod($this, $methodName);
+			if ($method->isPublic() && $method->getName() === $methodName) {
+				return new yii\base\InlineAction($id, $this, $methodName);
+			}
+		}
+	}
+
+	public function bindActionParams($action, $params)
+	{
+		return [];
+	}
+
 	public function run($view = 'view')
 	{
 		return $this->render($view);

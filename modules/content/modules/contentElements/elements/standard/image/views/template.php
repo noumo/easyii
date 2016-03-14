@@ -15,7 +15,7 @@ $settings = Yii::$app->controller->module->settings;
 		<?php if ($settings['itemThumb']) : ?>
 			<?php if ($element->source) : ?>
 				<img src="<?= \yii\easyii\helpers\Image::thumb($element->source, 240) ?>">
-				<a href="<?= \yii\helpers\Url::to(['/admin/' . $module . '/item/clear-image', 'id' => $model->primaryKey]) ?>"
+				<a href="<?= \yii\helpers\Url::to(['/admin/' . $module . '/content-element/run', 'id' => $element->primaryKey, 'action' => 'clear-image']) ?>"
 				   class="text-danger confirm-delete"
 				   title="<?= Yii::t('easyii', 'Clear image') ?>"><?= Yii::t('easyii', 'Clear image') ?></a>
 			<?php endif; ?>

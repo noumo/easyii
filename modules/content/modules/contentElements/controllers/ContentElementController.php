@@ -4,8 +4,10 @@ namespace yii\easyii\modules\content\modules\contentElements\controllers;
 
 use Yii;
 use yii\easyii\components\Controller;
+use yii\easyii\modules\content\modules\contentElements\BaseElement;
 use yii\easyii\modules\content\modules\contentElements\ContentElementBase;
 use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -69,7 +71,7 @@ class ContentElementController extends Controller
 			]);
 	}
 
-	public function actionMode($elementId)
+	public function actionMove($elementId)
 	{
 		/** @var \yii\easyii\modules\content\modules\contentElements\ContentElementBase $element */
 		$element = ContentElementBase::findOne(['element_id' => $elementId]);
@@ -85,10 +87,30 @@ class ContentElementController extends Controller
 		throw new BadRequestHttpException(json_encode($element->firstErrors));
 	}
 
+	public function actionRun($id, $action)
+	{
+		/** @var \yii\easyii\modules\content\modules\contentElements\BaseElement $element */
+		$element = BaseElement::findOne(['element_id' => $id]);
+		if (!$element) {
+			throw new NotFoundHttpException('Element not exists');
+		}
+
+		$widget = ContentElementModule::createWidget($element);
+
+		$params = Yii::$app->request->queryParams;
+		unset($params['id'], $params['action']);
+
+		if ($result = $widget->runAction($action, $params)) {
+			return $result;
+		}
+
+		throw new BadRequestHttpException(json_encode($element->firstErrors));
+	}
+
 	public function actionDelete($elementId)
 	{
-		/** @var \yii\easyii\modules\content\modules\contentElements\ContentElementBase $element */
-		$element = ContentElementBase::findOne(['element_id' => $elementId]);
+		/** @var \yii\easyii\modules\content\modules\contentElements\BaseElement $element */
+		$element = BaseElement::findOne(['element_id' => $elementId]);
 
 		if (!$element) {
 			throw new NotFoundHttpException('Element not exists');

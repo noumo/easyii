@@ -90,7 +90,7 @@ class ContentElementModule extends \yii\base\Module
 
 		list($group, $id) = explode('\\', $class);
 
-		$id	 = Inflector::camel2id($id);
+		$id = Inflector::camel2id($id);
 
 		if ($asArray) {
 			return [$group, $id];
