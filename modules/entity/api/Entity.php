@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\entity\models\Category;
 use yii\easyii\modules\entity\models\Item;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 
 /**
@@ -126,7 +127,7 @@ class Entity extends \yii\easyii\components\API
     private function findItem($id)
     {
         if(!($item = Item::find()->where(['item_id' => ':id'], [':id' => $id])->status(Item::STATUS_ON)->one())){
-            return null;
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
 
         return new ItemObject($item);

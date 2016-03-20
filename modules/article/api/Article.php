@@ -9,6 +9,7 @@ use yii\easyii\modules\article\ArticleModule;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
 use yii\easyii\widgets\Fancybox;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 
 /**
@@ -145,12 +146,10 @@ class Article extends \yii\easyii\components\API
 
     private function findItem($id_slug)
     {
-        $article = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-        if($article) {
-            $article->updateCounters(['views' => 1]);
-            return new ArticleObject($article);
-        } else {
-            return null;
+        if(!($article = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())) {
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
+        $article->updateCounters(['views' => 1]);
+        return new ArticleObject($article);
     }
 }

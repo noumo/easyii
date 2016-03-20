@@ -5,6 +5,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\modules\guestbook\GuestbookModule;
 use yii\helpers\Url;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -28,6 +29,7 @@ class Guestbook extends \yii\easyii\components\API
     const SENT_VAR = 'guestbook_sent';
 
     private $_adp;
+    private $_item = [];
 
     private $_defaultFormOptions = [
         'errorUrl' => '',
@@ -53,6 +55,14 @@ class Guestbook extends \yii\easyii\components\API
             $result[] = new PostObject($model);
         }
         return $result;
+    }
+
+    public function api_get($id)
+    {
+        if(!isset($this->_item[$id])) {
+            $this->_item[$id] = $this->findPost($id);
+        }
+        return $this->_item[$id];
     }
 
     public function api_last($limit = 1)
@@ -112,5 +122,13 @@ class Guestbook extends \yii\easyii\components\API
     public function api_pages()
     {
         return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
+    }
+
+    private function findPost($id)
+    {
+        if(!($file = GuestbookModel::find()->where(['guestbook_id' => ':id'], [':id' => $id])->status(GuestbookModel::STATUS_ON)->one())){
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
+        }
+        return new PostObject($file);
     }
 }

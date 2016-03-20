@@ -8,6 +8,7 @@ use yii\easyii\modules\catalog\models\ItemData;
 use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 
 /**
@@ -180,9 +181,8 @@ class Catalog extends \yii\easyii\components\API
     private function findItem($id_slug)
     {
         if(!($item = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())){
-            return null;
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
-
         return new ItemObject($item);
     }
 }

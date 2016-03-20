@@ -6,6 +6,7 @@ use Yii;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\gallery\models\Category;
 use yii\easyii\widgets\Fancybox;
+use yii\web\NotFoundHttpException;
 
 /**
  * Gallery module API
@@ -91,6 +92,9 @@ class Gallery extends \yii\easyii\components\API
 
     private function findPhoto($id)
     {
-        return Photo::findOne($id);
+        if(!($photo = Photo::findOne($id))) {
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
+        }
+        return new PhotoObject($photo);
     }
 }

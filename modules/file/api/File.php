@@ -4,6 +4,7 @@ namespace yii\easyii\modules\file\api;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\modules\file\models\File as FileModel;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 
 /**
@@ -82,8 +83,9 @@ class File extends \yii\easyii\components\API
 
     private function findFile($id_slug)
     {
-        $file = FileModel::find()->where(['or', 'file_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
-
-        return $file ? new FileObject($file) : null;
+        if(!($file = FileModel::find()->where(['or', 'file_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one())){
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
+        }
+        return new FileObject($file);
     }
 }
