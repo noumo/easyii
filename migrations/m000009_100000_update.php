@@ -123,6 +123,12 @@ class m000009_100000_update extends \yii\db\Migration
             'itemSlugImmutable' => false
         ]);
         MigrationHelper::appendModuleSettings('faq', [
+            'questionHtmlEditor' => true
+        ]);
+        MigrationHelper::appendModuleSettings('faq', [
+            'answerHtmlEditor' => true
+        ]);
+        MigrationHelper::appendModuleSettings('faq', [
             'enableTags' => true
         ]);
         MigrationHelper::appendModuleSettings('file', [

@@ -6,6 +6,8 @@ use Yii;
 class FaqModule extends \yii\easyii\components\Module
 {
     public $settings = [
+        'questionHtmlEditor' => true,
+        'answerHtmlEditor' => true,
         'enableTags' => true
     ];
 
