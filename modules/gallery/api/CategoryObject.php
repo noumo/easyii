@@ -14,9 +14,9 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     public $tree;
     public $depth;
     public $parent;
-    public $children;
 
     private $_adp;
+    private $_children;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
@@ -32,6 +32,14 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function getPagination(){
         return $this->_adp ? $this->_adp->pagination : null;
+    }
+
+    public function getChildren()
+    {
+        foreach($this->model->children as $child) {
+            $this->_children[] = Entity::cat($child);
+        }
+        return $this->_children;
     }
 
     public function photos($options = [])
