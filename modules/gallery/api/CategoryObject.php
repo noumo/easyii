@@ -27,7 +27,7 @@ class CategoryObject extends \yii\easyii\components\ApiObject
         return $this->model->tagsArray;
     }
 
-    public function pages($options = []){
+    public function getPages($options = []){
         return $this->_adp ? LinkPager::widget(array_merge($options, ['pagination' => $this->_adp->pagination])) : '';
     }
 
@@ -43,7 +43,7 @@ class CategoryObject extends \yii\easyii\components\ApiObject
         return $this->_children;
     }
 
-    public function photos($options = [])
+    public function getPhotos($options = [])
     {
         $result = [];
 
