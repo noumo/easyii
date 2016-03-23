@@ -5,15 +5,16 @@ class ArticleModule extends \yii\easyii\components\Module
 {
     public $settings = [
         'categoryThumb' => true,
+        'categorySlugImmutable' => false,
+        'categoryDescription' => true,
+        
         'articleThumb' => true,
         'enablePhotos' => true,
-
+        'enableTags' => true,
         'enableShort' => true,
         'shortMaxLength' => 255,
-        'enableTags' => true,
 
         'itemsInFolder' => false,
-        'categorySlugImmutable' => false,
         'itemSlugImmutable' => false
     ];
 

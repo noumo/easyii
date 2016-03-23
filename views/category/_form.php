@@ -31,6 +31,10 @@ $settings = $this->context->module->settings;
     </div>
 <?php endif; ?>
 
+<?php if(!empty($settings['categoryDescription'])) : ?>
+    <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
+<?php endif; ?>
+
 <?php if(!empty($settings['categoryThumb'])) : ?>
     <?php if($model->image_file) : ?>
         <a href="<?= $model->image ?>" class="fancybox"><img src="<?= Image::thumb($model->image_file, 240, 180) ?>"></a>

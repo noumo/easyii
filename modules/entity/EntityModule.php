@@ -5,13 +5,9 @@ class EntityModule extends \yii\easyii\components\Module
 {
     public $settings = [
         'categoryThumb' => true,
-        'itemsInFolder' => false,
-
-        'itemThumb' => true,
-        'itemPhotos' => true,
-
         'categorySlugImmutable' => false,
-        'itemSlugImmutable' => false
+        'categoryDescription' => true,
+        'itemsInFolder' => false,
     ];
 
     public static $installConfig = [

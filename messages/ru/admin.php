@@ -123,6 +123,7 @@ return [
     'Category deleted' => 'Категория удалена',
     'Category image cleared' => 'Изображение очищено',
     'Category not found' => 'Категория не найдена',
+    'Parent category' => 'Родительская категория',
 
     'Clear image' => 'Очистить изображение',
     'Image cleared' => 'Изображение очищено',

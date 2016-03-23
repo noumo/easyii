@@ -25,6 +25,7 @@ class m000009_100000_update extends \yii\db\Migration
         $this->createTable(entity\models\Category::tableName(), [
             'category_id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
+            'description' => $this->string(1024),
             'image_file' => $this->string(128),
             'fields' => $this->text()->notNull(),
             'slug' => $this->string(128),
@@ -54,10 +55,14 @@ class m000009_100000_update extends \yii\db\Migration
             'title' => (!empty(EntityModule::$installConfig['title'][$language]) ? EntityModule::$installConfig['title'][$language] : EntityModule::$installConfig['title']['en']),
             'class' => EntityModule::className(),
             'icon' => 'asterisk',
-            'settings' => '[]',
+            'settings' => json_encode((new EntityModule(100))->settings),
             'order_num' => 95,
             'status' => models\Module::STATUS_ON
         ]);
+
+        $this->addColumn(yii\easyii\modules\catalog\models\Category::tableName(), 'description', $this->string(1024) . ' AFTER title');
+        $this->addColumn(yii\easyii\modules\article\models\Category::tableName(), 'description', $this->string(1024) . ' AFTER title');
+        $this->addColumn(yii\easyii\modules\gallery\models\Category::tableName(), 'description', $this->string(1024) . ' AFTER title');
 
         $this->renameColumn(catalog\models\Category::tableName(), 'image', 'image_file');
         $this->renameColumn(catalog\models\Item::tableName(), 'image', 'image_file');
@@ -116,10 +121,12 @@ class m000009_100000_update extends \yii\db\Migration
 
         MigrationHelper::appendModuleSettings('article', [
             'categorySlugImmutable' => false,
+            'categoryDescription' => true,
             'itemSlugImmutable' => false
         ]);
         MigrationHelper::appendModuleSettings('catalog', [
             'categorySlugImmutable' => false,
+            'categoryDescription' => true,
             'itemSlugImmutable' => false
         ]);
         MigrationHelper::appendModuleSettings('faq', [
@@ -137,6 +144,7 @@ class m000009_100000_update extends \yii\db\Migration
         MigrationHelper::appendModuleSettings('gallery', [
             'categoryTags' => true,
             'categorySlugImmutable' => false,
+            'categoryDescription' => true,
         ]);
         MigrationHelper::appendModuleSettings('news', [
             'slugImmutable' => false,

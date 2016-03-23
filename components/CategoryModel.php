@@ -33,6 +33,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             [['title', 'slug'], 'string', 'max' => 128],
+            ['description', 'string', 'max' => 1024],
             ['image_file', 'image'],
             ['slug', 'match', 'pattern' => static::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
@@ -46,6 +47,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
+            'description' => Yii::t('easyii', 'Description'),
             'image_file' => Yii::t('easyii', 'Image'),
             'slug' => Yii::t('easyii', 'Slug'),
             'tagNames' => Yii::t('easyii', 'Tags'),

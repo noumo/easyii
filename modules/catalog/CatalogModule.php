@@ -5,13 +5,13 @@ class CatalogModule extends \yii\easyii\components\Module
 {
     public $settings = [
         'categoryThumb' => true,
+        'categorySlugImmutable' => false,
+        'categoryDescription' => true,
+        
         'itemsInFolder' => false,
-
         'itemThumb' => true,
         'itemPhotos' => true,
         'itemDescription' => true,
-
-        'categorySlugImmutable' => false,
         'itemSlugImmutable' => false
     ];
 
