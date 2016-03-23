@@ -37,8 +37,11 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function getChildren()
     {
-        foreach($this->model->children as $child) {
-            $this->_children[] = Entity::cat($child);
+        if($this->_children === null) {
+            $this->_children = [];
+            foreach ($this->model->children as $child) {
+                $this->_children[] = Gallery::cat($child);
+            }
         }
         return $this->_children;
     }
