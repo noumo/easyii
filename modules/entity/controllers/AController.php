@@ -68,7 +68,7 @@ class AController extends CategoryController
                     Category::updateAll(['fields' => json_encode($model->fields)], ['in', 'category_id', $ids]);
                 }
 
-                $this->flash('success', Yii::t('easyii/entity', 'Category updated'));
+                $this->flash('success', Yii::t('easyii', 'Category updated'));
             }
             else{
                 $this->flash('error', Yii::t('easyii','Update error. {0}', $model->formatErrors()));
