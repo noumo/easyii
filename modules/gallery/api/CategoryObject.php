@@ -11,6 +11,7 @@ use yii\widgets\LinkPager;
 class CategoryObject extends \yii\easyii\components\ApiObject
 {
     public $slug;
+    public $description;
     public $tree;
     public $depth;
     public $parent;
