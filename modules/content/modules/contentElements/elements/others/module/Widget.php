@@ -3,8 +3,11 @@
 namespace yii\easyii\modules\content\modules\contentElements\elements\others\module;
 
 use yii\data\ArrayDataProvider;
+use yii\easyii\AdminModule;
 use yii\easyii\modules\content\modules\contentElements\BaseWidget;
 use yii\easyii\modules\content\modules\contentElements\elements\others\module\models\Element;
+use yii\helpers\ArrayHelper;
+use yii\helpers\StringHelper;
 
 /**
  * Class Widget
@@ -15,24 +18,61 @@ use yii\easyii\modules\content\modules\contentElements\elements\others\module\mo
  */
 class Widget extends BaseWidget
 {
-	public function run($view = 'view', $params = [])
+	public function actionModuleFunctions($module)
 	{
-		if ($view === 'view') {
-			$data = $this->element->fetchData();
+		$moduleClass = AdminModule::getInstance()->activeModules[$module]->class;
+		$namespace = StringHelper::dirname($moduleClass);
 
-			if (is_array($data) ) {
-				$view = 'listView';
-				$dataProvider = new ArrayDataProvider();
-				$dataProvider->allModels = $data;
-				$data = $dataProvider;
-			}
-			else {
-				$view = 'detailView';
-			}
+		$api = $namespace . '\\api\\' . ucfirst($module);
+		$apiClass = new \ReflectionClass($api);
+		$methods = $apiClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-			$params['data'] = $data;
+		$apiMethods = [];
+		foreach ($methods as $method) {
+			if (strpos($method->name, 'api_') === 0) {
+				$apiMethods[$method->name] = str_replace('api_', '', $method->name);
+			}
 		}
 
-		return parent::run($view, $params);
+		return $apiMethods;
+	}
+
+	public function onBeforeRender($view, &$params)
+	{
+		if ($view === 'view') {
+			list($view, $params) = $this->onViewRender($view, $params);
+		}
+		elseif ($view === 'template') {
+			list($view, $params) = $this->onTemplateRender($view, $params);
+		}
+
+		parent::onBeforeRender($view, $params);
+	}
+
+	private function onViewRender($view, array $params)
+	{
+		$data = $this->element->fetchData();
+
+		if (is_array($data) ) {
+			$view = 'listView';
+			$dataProvider = new ArrayDataProvider();
+			$dataProvider->allModels = $data;
+			$data = $dataProvider;
+		}
+		else {
+			$view = 'detailView';
+		}
+
+		$params['data'] = $data;
+
+		return [$view, $params];
+	}
+
+	private function onTemplateRender($view, array $params)
+	{
+		$activeModules = AdminModule::getInstance()->activeModules;
+		$params['modules'] = ArrayHelper::getColumn($activeModules, 'title');
+
+		return [$view, $params];
 	}
 }

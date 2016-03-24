@@ -20,6 +20,10 @@ use yii\easyii\modules\content\modules\contentElements\models\ElementOption;
  */
 abstract class BaseWidget extends Widget
 {
+	use WidgetActionTrait;
+
+	const EVENT_BEFORE_RENDER = 'beforeRender';
+
 	public $layout = 'view';
 
 	public $layoutPath = '@contentElements/views/layouts';
@@ -49,35 +53,6 @@ abstract class BaseWidget extends Widget
 		parent::init();
 	}
 
-	public function runAction($id, $params)
-	{
-		$action = $this->createAction($id);
-		if ($action === null) {
-			throw new yii\base\InvalidRouteException('Unable to resolve the request: ' . get_class($this) . '/' . $id);
-		}
-
-		// run the action
-		$result = $action->runWithParams($params);
-
-		return $result;
-	}
-
-	public function createAction($id)
-	{
-		$methodName = 'action' . str_replace(' ', '', ucwords(implode(' ', explode('-', $id))));
-		if (method_exists($this, $methodName)) {
-			$method = new \ReflectionMethod($this, $methodName);
-			if ($method->isPublic() && $method->getName() === $methodName) {
-				return new yii\base\InlineAction($id, $this, $methodName);
-			}
-		}
-	}
-
-	public function bindActionParams($action, $params)
-	{
-		return [];
-	}
-
 	public function run($view = 'view', $params = [])
 	{
 		return $this->render($view, $params);
@@ -100,6 +75,7 @@ abstract class BaseWidget extends Widget
 		$params['element'] = $this->element;
 		$params['widgetId'] = $this->id;
 
+		$this->onBeforeRender($view, $params);
 		$content = parent::render($view, $params);
 
 		$jsReady = $this->view->js[View::POS_READY];
@@ -107,6 +83,17 @@ abstract class BaseWidget extends Widget
 		$this->view->js[View::POS_END] = array_merge($this->view->js[View::POS_END] ? : [], $jsReady ? : []);
 
 		return $this->renderContent($content);
+	}
+
+	public function onBeforeRender($view, &$params)
+	{
+		$event = new yii\base\Event();
+		$event->data = [
+			'view' => $view,
+			'params' => &$params,
+		];
+
+		$this->trigger(self::EVENT_BEFORE_RENDER, $event);
 	}
 
 	public function renderContent($content)

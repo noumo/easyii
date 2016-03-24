@@ -31,7 +31,8 @@
         "2amigos/yii2-selectize-widget": "~1.0",
         "vova07/yii2-imperavi-widget": "*",
         "stojg/crop": "*",
-        "google/apiclient": "1.0.*"
+        "google/apiclient": "1.0.*",
+        "yiisoft/yii2-jui": "*"
     },
     "autoload": {
         "psr-4": {

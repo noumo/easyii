@@ -95,11 +95,7 @@ class ContentElementController extends Controller
 		$params = Yii::$app->request->queryParams;
 		unset($params['id'], $params['action']);
 
-		if ($result = $widget->runAction($action, $params)) {
-			return $result;
-		}
-
-		throw new BadRequestHttpException(json_encode($element->firstErrors));
+		return $widget->runAction($action, $params);
 	}
 
 	public function actionDelete($elementId)
