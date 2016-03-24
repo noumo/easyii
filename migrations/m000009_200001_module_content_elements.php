@@ -2,10 +2,11 @@
 
 use yii\db\Schema;
 use yii\easyii\models;
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use \yii\easyii\modules\content\models\Item;
+use \yii\easyii\modules\content\modules\contentElements\models\ElementOption;
 
-class m000009_100002_module_content_elements extends \yii\db\Migration
+class m000009_200001_module_content_elements extends \yii\db\Migration
 {
     public $engine = 'ENGINE=MyISAM DEFAULT CHARSET=utf8';
     
@@ -27,11 +28,22 @@ class m000009_100002_module_content_elements extends \yii\db\Migration
 
 		$this->addColumn(Item::tableName(), 'element_id', Schema::TYPE_INTEGER . ' NOT NULL AFTER data');
 		$this->createIndex('IDX_element_id', Item::tableName(), 'element_id');
+
+		$this->createTable(ElementOption::tableName(), [
+			'option_id' => 'pk',
+			'element_id' => Schema::TYPE_INTEGER,
+			'type' => 'ENUM("html", "meta") NOT NULL',
+			'name' => $this->string(100),
+			'value' => Schema::TYPE_TEXT,
+			'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
+		], $this->engine);
+		$this->createIndex('IDX_option_element_id', BaseElement::tableName(), 'element_id');
 	}
 
     public function down()
     {
-        $this->dropTable(BaseElement::tableName());
+		$this->dropTable(ElementOption::tableName());
+		$this->dropTable(BaseElement::tableName());
 
 		$this->dropColumn(Item::tableName(), 'element_id');
 		$this->dropIndex('IDX_element_id', Item::tableName());

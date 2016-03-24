@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\modules\content\modules\contentElements;
 
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use yii\helpers\Inflector;
 
 class ContentElementModule extends \yii\base\Module
@@ -8,7 +9,7 @@ class ContentElementModule extends \yii\base\Module
 	/**
 	 * @param string $type
 	 *
-	 * @return static
+	 * @return BaseElement
 	 */
 	public static function create($type)
 	{
@@ -19,7 +20,9 @@ class ContentElementModule extends \yii\base\Module
 			throw new \InvalidArgumentException("The content element type of '$type' not found. ($class)");
 		}
 
+		/** @var BaseElement $element */
 		$element = new $class;
+		$element->setDefaultOptions();
 
 		return $element;
 	}
@@ -99,9 +102,14 @@ class ContentElementModule extends \yii\base\Module
 		return $group . '\\' . $id;
 	}
 
-	public function init()
+	public static function initAliases()
 	{
 		\Yii::setAlias('contentElements', '@easyii/modules/content/modules/contentElements');
+	}
+
+	public function init()
+	{
+		self::initAliases();
 
 		parent::init();
 	}

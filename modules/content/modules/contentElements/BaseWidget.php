@@ -8,6 +8,8 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\web\View;
 use yii\helpers\Inflector;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\ElementOption;
 
 /**
  * Class ContentElementWidget
@@ -18,7 +20,7 @@ use yii\helpers\Inflector;
  */
 abstract class BaseWidget extends Widget
 {
-	public $layout = false;
+	public $layout = 'view';
 
 	public $layoutPath = '@contentElements/views/layouts';
 
@@ -38,6 +40,13 @@ abstract class BaseWidget extends Widget
 	protected static function elementId()
 	{
 		return ContentElementModule::getElementId(static::className(), true);
+	}
+
+	public function init()
+	{
+		ContentElementModule::initAliases();
+
+		parent::init();
 	}
 
 	public function runAction($id, $params)
@@ -69,18 +78,18 @@ abstract class BaseWidget extends Widget
 		return [];
 	}
 
-	public function run($view = 'view')
+	public function run($view = 'view', $params = [])
 	{
-		return $this->render($view);
+		return $this->render($view, $params);
 	}
 
 	public function runTemplate()
 	{
-		$this->layout = 'contentElement';
+		$this->layout = 'template';
 
 		if (Yii::$app->request->isAjax) {
 			$this->view->clear();
-			$this->layout = 'contentElementAjax';
+			$this->layout = 'templateAjax';
 		}
 
 		return $this->render('template');
@@ -110,9 +119,23 @@ abstract class BaseWidget extends Widget
 		}
 	}
 
-	public function load($attributes)
+	public function load($data)
 	{
-		$this->element->setActiveAttributes($attributes, false);
+		$this->element->load($data, '');
+
+		foreach ($data['options'] as $optionData) {
+			$optionData['element_id'] = $this->element->primaryKey;
+
+			if ($optionData['scenario'] == 'update') {
+				$option = ElementOption::findOne(['option_id' => $optionData['option_id']]);
+			}
+			else {
+				$option = new ElementOption();
+			}
+
+			$option->load($optionData, '');
+			$option->save();
+		}
 
 		return $this->element->validate();
 	}
@@ -153,7 +176,12 @@ abstract class BaseWidget extends Widget
 
 		$elementClass = str_replace('\Widget', '\models\Element', $widgetClass);
 
-		return new $elementClass();
+		/** @var BaseElement $element */
+		$element = new $elementClass();
+
+		$element->setDefaultOptions();
+
+		return $element;
 	}
 
 	/**

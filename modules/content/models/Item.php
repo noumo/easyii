@@ -3,13 +3,13 @@ namespace yii\easyii\modules\content\models;
 
 use Yii;
 use yii\easyii\models\Photo;
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use yii\easyii\modules\content\models\base\ItemModel;
 
 /**
  * Class Item
  *
- * @property \yii\easyii\modules\content\modules\contentElements\BaseElement $element
+ * @property \yii\easyii\modules\content\modules\contentElements\models\BaseElement $element
  *
  * @author Bennet Klarhoelter <boehsermoe@me.com>
  */

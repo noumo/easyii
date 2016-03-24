@@ -8,6 +8,7 @@ use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\easyii\behaviors\Taggable;
+use yii\easyii\models\SeoText;
 
 /**
  * Base CategoryModel. Shared by categories

@@ -3,7 +3,7 @@
 namespace yii\easyii\modules\content\modules\contentElements\elements\standard\image\models;
 
 use yii\easyii\helpers\Upload;
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use yii\helpers\Json;
 
 class Element extends BaseElement

@@ -2,7 +2,7 @@
 
 namespace yii\easyii\modules\content\modules\contentElements\elements\others\module\models;
 
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 
 class Element extends BaseElement
 {
@@ -24,7 +24,7 @@ class Element extends BaseElement
 			[
 				[['module', 'function'], 'string'],
 				[['item_id'], 'integer'],
-				['widgetClass', 'in', 'range' => self::$widgets],
+				['widgetClass', 'in', 'range' => array_keys(self::$widgets)],
 				[['module', 'function', 'widgetClass', 'item_id'], 'safe']
 			]);
 	}

@@ -4,7 +4,7 @@ namespace yii\easyii\modules\content\modules\contentElements\elements\others\mod
 
 use yii\data\ArrayDataProvider;
 use yii\easyii\modules\content\modules\contentElements\BaseWidget;
-use yii\easyii\modules\content\modules\contentElements\elements\dynamic\models\Element;
+use yii\easyii\modules\content\modules\contentElements\elements\others\module\models\Element;
 
 /**
  * Class Widget
@@ -15,15 +15,8 @@ use yii\easyii\modules\content\modules\contentElements\elements\dynamic\models\E
  */
 class Widget extends BaseWidget
 {
-	public function createElement()
+	public function run($view = 'view', $params = [])
 	{
-		return new Element();
-	}
-
-	public function run($view = 'view')
-	{
-		$params = [];
-
 		if ($view === 'view') {
 			$data = $this->element->fetchData();
 
@@ -40,6 +33,6 @@ class Widget extends BaseWidget
 			$params['data'] = $data;
 		}
 
-		return $this->render($view, $params);
+		return parent::run($view, $params);
 	}
 }

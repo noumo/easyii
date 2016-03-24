@@ -4,10 +4,8 @@ namespace yii\easyii\modules\content\modules\contentElements\controllers;
 
 use Yii;
 use yii\easyii\components\Controller;
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
-use yii\easyii\modules\content\modules\contentElements\ContentElementBase;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
@@ -86,7 +84,7 @@ class ContentElementController extends Controller
 
 	public function actionRun($id, $action)
 	{
-		/** @var \yii\easyii\modules\content\modules\contentElements\BaseElement $element */
+		/** @var \yii\easyii\modules\content\modules\contentElements\models\BaseElement $element */
 		$element = BaseElement::findOne(['element_id' => $id]);
 		if (!$element) {
 			throw new NotFoundHttpException('Element not exists');
@@ -106,7 +104,7 @@ class ContentElementController extends Controller
 
 	public function actionDelete($elementId)
 	{
-		/** @var \yii\easyii\modules\content\modules\contentElements\BaseElement $element */
+		/** @var \yii\easyii\modules\content\modules\contentElements\models\BaseElement $element */
 		$element = BaseElement::findOne(['element_id' => $elementId]);
 
 		if (!$element) {

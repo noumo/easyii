@@ -3,7 +3,7 @@
 namespace yii\easyii\modules\content\modules\contentElements\elements\standard\heading\models;
 
 use Yii;
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 
 class Element extends BaseElement
 {

@@ -17,34 +17,7 @@ class Widget extends BaseWidget
 		parent::init();
 
 		if (!$this->element->isNewRecord) {
-			$this->id = 'container' . $this->element->primaryKey;
+			$this->id = 'containser' . $this->element->primaryKey;
 		}
-	}
-
-	public function runTemplate()
-	{
-		$this->layout = 'contentElement';
-
-		if (Yii::$app->request->isAjax) {
-			$this->view->clear();
-			$this->layout = 'contentElementAjax';
-		}
-
-		/*
-		$id = $this->getId();
-
-		$modalSelector = "#$id-elementModal";
-		$options = [
-			'templateUrl' => Url::to(['/admin/content/contentElements/content-element/template']),
-			'modalSelector' => $modalSelector,
-			'deleteElementSelector' => "#$id .delete-element",
-			'addElementSelector' => "$modalSelector [data-content-element]",
-			'parentId' => $this->element->primaryKey
-		];
-		$options = Json::encode($options);
-		$this->view->registerJs("$('#$id > .elementListView').elementListView($options);", View::POS_READY);
-		*/
-
-		return $this->render('template');
 	}
 }

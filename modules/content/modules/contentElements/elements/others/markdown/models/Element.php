@@ -2,7 +2,7 @@
 
 namespace yii\easyii\modules\content\modules\contentElements\elements\others\markdown\models;
 
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 
 class Element extends BaseElement
 {

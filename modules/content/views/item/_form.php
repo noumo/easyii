@@ -25,26 +25,30 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 <?= $form->field($model, 'title') ?>
 <?= $form->field($model, 'header') ?>
 
+<?php if (IS_ROOT) : ?>
+
 	<div class="row">
-		<?php if (IS_ROOT) : ?>
 			<div class="col-md-3">
 				<?= $form->field($model, 'category_id')->dropDownList($categories) ?>
 			</div>
-		<?php endif; ?>
+
+			<div class="col-md-3">
+				<?= $form->field($model, 'slug') ?>
+			</div>
 	</div>
+
+	<div>
+		<?= SeoForm::widget(['model' => $model]) ?>
+	</div>
+<?php endif; ?>
+
 
 <?php
 // Todo: Dont need layout fields more?
 #$dataForm ?>
 
-<ol class="sortable"><?= $model->element->renderAsRoot($this) ?></ol>
+<h2><?= Yii::t('easyii/content', 'Content elements')?></h2>
+<?= $model->element->renderAsRoot($this) ?>
 
-<?= $form->field($model, 'time')->widget(DateTimePicker::className()); ?>
-
-<?php if (IS_ROOT) : ?>
-	<?= $form->field($model, 'slug') ?>
-	<?= SeoForm::widget(['model' => $model]) ?>
-<?php endif; ?>
-
-<?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary']) ?>
+<?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary pull-right']) ?>
 <?php ActiveForm::end(); ?>

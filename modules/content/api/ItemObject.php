@@ -5,10 +5,9 @@ use Yii;
 use yii\easyii\components\ApiObject;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\content\models\Item;
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use yii\easyii\modules\content\modules\contentElements\BaseWidget;
 use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
-use yii\easyii\modules\content\modules\contentElements\Factory;
 use yii\helpers\Html;
 use yii\helpers\Url;
 

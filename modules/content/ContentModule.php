@@ -36,7 +36,7 @@ class ContentModule extends \yii\easyii\components\Module
 
         $id = 'contentElements';
         $module = new ContentElementModule($id, $this);
-        $module->setInstance($module);
+        ContentElementModule::setInstance($module);
 
         $this->setModule($id, $module);
     }

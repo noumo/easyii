@@ -1,10 +1,11 @@
 <?php
-namespace yii\easyii\modules\content\modules\contentElements;
+namespace yii\easyii\modules\content\modules\contentElements\models;
 
 use yii;
 use yii\easyii\components\ActiveRecord;
 use yii\easyii\modules\content\models\Item;
 use yii\helpers\Json;
+use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
 
 /**
  * Class ContentElement
@@ -17,6 +18,7 @@ use yii\helpers\Json;
  * @property integer $status
  *
  * @property BaseElement[] $elements
+ * @property ElementOption[] $options
  *
  * @author Bennet Klarhoelter <boehsermoe@me.com>
  */
@@ -26,6 +28,8 @@ abstract class BaseElement extends ActiveRecord
 	const STATUS_ON = 1;
 
 	public $scenario = 'insert';
+
+	public $isRoot = false;
 
 	public static function tableName()
 	{
@@ -61,6 +65,7 @@ abstract class BaseElement extends ActiveRecord
 	public function renderAsRoot(yii\web\View $view)
 	{
 		$widget = ContentElementModule::createWidget($this);
+		$this->isRoot = true;
 
 		return $widget->run('template');
 	}
@@ -110,6 +115,25 @@ abstract class BaseElement extends ActiveRecord
 		}
 	}
 
+	/**
+	 * @inheritdoc
+	 */
+	public function load($data, $formName = null)
+	{
+		$scope = $formName === null ? $this->formName() : $formName;
+		if ($scope === '' && !empty($data)) {
+			$this->setActiveAttributes($data);
+
+			return true;
+		} elseif (isset($data[$scope])) {
+			$this->setActiveAttributes($data[$scope]);
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function formName()
 	{
 		if ($this->isNewRecord) {
@@ -132,6 +156,31 @@ abstract class BaseElement extends ActiveRecord
 	{
 		return $this->hasMany(BaseElement::className(), ['parent_element_id' => 'element_id'])->orderBy('order_num');
 	}
+
+	/**
+	 * @return yii\easyii\components\ActiveQuery
+	 */
+	public function getOptions()
+	{
+		return $this->hasMany(ElementOption::className(), ['element_id' => 'element_id'])->indexBy('type');
+	}
+
+	public function setDefaultOptions()
+	{
+		$options = [
+			ElementOption::create(ElementOption::TYPE_HTML_CLASS),
+			ElementOption::create(ElementOption::TYPE_HTML_STYLE),
+		];
+
+		$this->on(ActiveRecord::EVENT_AFTER_INSERT, function(yii\db\AfterSaveEvent $event) use ($options) {
+			$model = $event->sender;
+			foreach ($options as $option) {
+				$model->link('options', $option);
+				$option->save();
+			}
+		});
+	}
+
 
 	public function beforeSave($insert)
 	{

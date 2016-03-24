@@ -60,6 +60,11 @@
     display: none;
 }
 
+.model-form > .sortable li {
+    margin-left: 0;
+    margin-right: 0;
+}
+
 li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
     border-color: #999;
 }

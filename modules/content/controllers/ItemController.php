@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\content\controllers;
 
 use Yii;
+use yii\base\Exception;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
 use yii\easyii\actions\MoveAction;
@@ -10,7 +11,7 @@ use yii\easyii\behaviors\SortableModel;
 use yii\easyii\components\Controller;
 use yii\easyii\helpers\Image;
 use yii\easyii\modules\content\api\Content;
-use yii\easyii\modules\content\modules\contentElements\BaseElement;
+use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
 use yii\easyii\modules\content\modules\contentElements\Factory;
 use yii\easyii\modules\content\models\Item;
@@ -131,15 +132,27 @@ class ItemController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                $saved = $this->saveElements($model, Yii::$app->request->post('Element'));
 
-	            if ($model->save() && $saved) {
-                    $this->flash('success', Yii::t('easyii/content', 'Item updated'));
-					$this->refresh();
-                }
-	            else {
-		            $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-                }
+				$transaction = Yii::$app->db->beginTransaction();
+
+               try {
+				   $saved = $this->saveElements($model, Yii::$app->request->post('Element'));
+
+				   if ($model->save() && $saved) {
+					   $transaction->commit();
+
+					   $this->flash('success', Yii::t('easyii/content', 'Item updated'));
+					   $this->refresh();
+				   }
+				   else {
+					   $transaction->rollBack();
+					   $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
+				   }
+			   }
+			   catch (Exception $ex) {
+				   $transaction->rollBack();
+				   throw $ex;
+			   }
             }
         }
 
@@ -214,6 +227,13 @@ class ItemController extends Controller
 	 */
 	protected function saveElements(Item $model, $data)
 	{
+		if (!$model->element) {
+			$element = ContentElementModule::create('standard\container');
+			$element->save();
+
+			$model->link('element', $element);
+		}
+
 		if (empty($data)) {
 			return true;
 		}
@@ -235,6 +255,7 @@ class ItemController extends Controller
 
 				if ($attributes['scenario'] == 'insert') {
 					$widget = ContentElementModule::createWidgetByType($attributes['type']);
+					$element = $widget->element;
 					$widget->load($attributes);
 					$widget->save();
 				}

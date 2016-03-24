@@ -3,4 +3,12 @@
  * @var \yii\easyii\components\ApiObject $model
  */
 
-echo $model->slug;
+if ($model->hasProperty('title')) {
+	echo $model->title;
+}
+elseif ($model->hasProperty('slug')) {
+	echo $model->slug;
+}
+else {
+	echo json_encode($model);
+}

@@ -6,4 +6,4 @@
 
 use \yii\helpers\Html;
 
-echo Html::activeTextInput($element, 'content', ['class' => 'form-control']);
+echo Html::activeTextarea($element, 'content', ['class' => 'form-control', 'style' => 'min-height: 150px;']);

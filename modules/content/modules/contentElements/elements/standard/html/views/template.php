@@ -6,4 +6,4 @@
 
 use yii\helpers\Html;
 
-echo Html::activeTextarea($element, 'content', ['class' => 'form-control', 'style' => 'min-height: 150px; resize: vertical']);
+echo Html::activeTextarea($element, 'content', ['class' => 'form-control', 'style' => 'min-height: 150px;']);

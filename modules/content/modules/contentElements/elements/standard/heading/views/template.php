@@ -5,9 +5,16 @@
  */
 
 use yii\helpers\Html;
+?>
 
-echo Html::activeLabel($element, 'number', ['class' => 'form-label']);
-echo Html::activeDropDownList($element, 'number', $element::getHeadings(), ['class' => 'form-control header-number']);
+<div class="row form-group">
+	<div class="col-md-2">
+		<?= Html::activeLabel($element, 'number', ['class' => 'form-label']); ?>
+		<?= Html::activeDropDownList($element, 'number', $element::getHeadings(), ['class' => 'form-control header-number']); ?>
+	</div>
 
-echo Html::activeLabel($element, 'content', ['class' => 'form-label']);
-echo Html::activeTextInput($element, 'content', ['class' => 'form-control header-content']);
+	<div class="col-md-10">
+		<?= Html::activeLabel($element, 'content', ['class' => 'form-label']); ?>
+		<?= Html::activeTextInput($element, 'content', ['class' => 'form-control header-content']); ?>
+	</div>
+</div>
