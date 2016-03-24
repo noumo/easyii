@@ -6,7 +6,4 @@
  * @var string                                                                    $itemView
  */
 
-echo \yii\widgets\ListView::widget([
-	'dataProvider' => $dataProvider,
-	'itemView' => $itemView
-]);
+echo $data;

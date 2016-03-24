@@ -21,17 +21,26 @@ use \yii\easyii\modules\content\modules\contentElements\elements\others\module\m
 	<div class="col-lg-5">
 		<?= Html::activeLabel($element, 'function', ['class' => 'form-label']); ?>
 		<?= \yii\jui\AutoComplete::widget([
-			'model' => $model,
-			'attribute' => 'country',
+			'model' => $element,
+			'attribute' => 'function',
 			'clientOptions' => [
-				'source' => ['USA', 'RUS'],
+				'source' => \yii\helpers\Url::to(['content-element/run', 'id' => $element->primaryKey, 'action' => 'module-functions', 'module' => 'entity']),
+				'select' => new \yii\web\JsExpression('
+					function(event, ui) {
+						$(this).siblings("input:hidden").val(ui.item.value);
+						event.preventDefault();
+						$(this).val(ui.item.label);
+					}'),
 			],
+
+			'options' => [
+				'class' => 'form-control header-content'
+			]
 		]); ?>
-		<?= Html::activeTextInput($element, 'function', ['class' => 'form-control dynamic-function']); ?>
 	</div>
 
 	<div class="col-lg-5">
-		<?= Html::activeLabel($element, 'widgetClass', ['class' => 'form-label']); ?>
-		<?= Html::activeDropDownList($element, 'widgetClass', Element::$widgets, ['class' => 'form-control dynamic-widgetClass']); ?>
+		<?= Html::activeLabel($element, 'format', ['class' => 'form-label']); ?>
+		<?= Html::activeDropDownList($element, 'format', Element::$formats, ['class' => 'form-control dynamic-widgetClass']); ?>
 	</div>
 </div>

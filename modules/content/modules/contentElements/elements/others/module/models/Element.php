@@ -2,21 +2,25 @@
 
 namespace yii\easyii\modules\content\modules\contentElements\elements\others\module\models;
 
+use yii\easyii\AdminModule;
 use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
+use yii\helpers\StringHelper;
 
 class Element extends BaseElement
 {
-	const WIDGET_LIST = 'yii\widgets\ListView';
-	const WIDGET_DETAIL = 'yii\widgets\DetailView';
+	const FORMAT_RAW = 'raw';
+	const FORMAT_LIST = 'list';
+	const FORMAT_DETAIL = 'detail';
 
-	public static $widgets = [
-		'listView' => self::WIDGET_LIST,
-		'detailView' => self::WIDGET_DETAIL
+	public static $formats = [
+		self::FORMAT_RAW => 'Raw',
+		self::FORMAT_LIST => 'List',
+		self::FORMAT_DETAIL => 'Detail'
 	];
 
 	public $module;
 	public $function;
-	public $widgetClass;
+	public $format;
 
 	public function rules()
 	{
@@ -24,17 +28,20 @@ class Element extends BaseElement
 			[
 				[['module', 'function'], 'string'],
 				[['item_id'], 'integer'],
-				['widgetClass', 'in', 'range' => array_keys(self::$widgets)],
-				[['module', 'function', 'widgetClass', 'item_id'], 'safe']
+				['format', 'in', 'range' => array_keys(self::$formats)],
+				[['module', 'function', 'format', 'item_id'], 'safe']
 			]);
 	}
 
 	public function fetchData()
 	{
-		$module = $this->module;
+		$moduleClass = AdminModule::getInstance()->activeModules[$this->module]->class;
+		$namespace = StringHelper::dirname($moduleClass);
+
+		$api = $namespace . '\\api\\' . ucfirst($this->module);
 		$function = $this->function;
 
-		$data = call_user_func([$module, $function]);
+		$data = call_user_func([$api, $function]);
 
 		return $data;
 	}

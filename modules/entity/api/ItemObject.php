@@ -5,6 +5,7 @@ use Yii;
 use yii\easyii\components\API;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\entity\models\Item;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 class ItemObject extends \yii\easyii\components\ApiObject
@@ -14,7 +15,14 @@ class ItemObject extends \yii\easyii\components\ApiObject
 
     private $_photos;
 
-    public function getTitle(){
+	public function fields()
+	{
+		$fields = ArrayHelper::getColumn($this->getCat()->fields, 'name');
+
+		return array_combine($fields, $fields);
+	}
+
+	public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
     }
 
@@ -40,7 +48,7 @@ class ItemObject extends \yii\easyii\components\ApiObject
 
     public function __get($name)
     {
-        if(!empty($this->data->{$name})){
+        if(property_exists($this->data, $name)){
             return $this->data->{$name};
         }
         return parent::__get($name);

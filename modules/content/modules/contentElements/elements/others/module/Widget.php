@@ -7,6 +7,7 @@ use yii\easyii\AdminModule;
 use yii\easyii\modules\content\modules\contentElements\BaseWidget;
 use yii\easyii\modules\content\modules\contentElements\elements\others\module\models\Element;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
 /**
@@ -30,7 +31,11 @@ class Widget extends BaseWidget
 		$apiMethods = [];
 		foreach ($methods as $method) {
 			if (strpos($method->name, 'api_') === 0) {
-				$apiMethods[$method->name] = str_replace('api_', '', $method->name);
+				$name = str_replace('api_', '', $method->name);
+				$apiMethods[$method->name] = [
+					'label' => ucfirst($name),
+					'value' => $method->name,
+				];
 			}
 		}
 
@@ -46,7 +51,7 @@ class Widget extends BaseWidget
 			list($view, $params) = $this->onTemplateRender($view, $params);
 		}
 
-		parent::onBeforeRender($view, $params);
+		return parent::onBeforeRender($view, $params);
 	}
 
 	private function onViewRender($view, array $params)

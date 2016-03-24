@@ -2,6 +2,8 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\base\Arrayable;
+use yii\base\ArrayableTrait;
 use yii\easyii\helpers\Image;
 use yii\easyii\models\Setting;
 
@@ -11,8 +13,10 @@ use yii\easyii\models\Setting;
  * @var integer $id
  * @var string $image
  */
-class ApiObject extends \yii\base\Object
+class ApiObject extends \yii\base\Object implements Arrayable
 {
+    use ArrayableTrait;
+
     /** @var \yii\base\Model  */
     public $model;
 

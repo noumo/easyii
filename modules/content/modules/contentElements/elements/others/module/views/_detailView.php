@@ -4,5 +4,5 @@
  */
 
 echo \yii\widgets\DetailView::widget([
-	'model' => $model->toArray(),
+	'model' => new \yii\easyii\modules\content\models\Item(),
 ]);

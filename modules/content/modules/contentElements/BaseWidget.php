@@ -75,7 +75,7 @@ abstract class BaseWidget extends Widget
 		$params['element'] = $this->element;
 		$params['widgetId'] = $this->id;
 
-		$this->onBeforeRender($view, $params);
+		list($view, $params) = $this->onBeforeRender($view, $params);
 		$content = parent::render($view, $params);
 
 		$jsReady = $this->view->js[View::POS_READY];
@@ -90,10 +90,12 @@ abstract class BaseWidget extends Widget
 		$event = new yii\base\Event();
 		$event->data = [
 			'view' => $view,
-			'params' => &$params,
+			'params' => $params,
 		];
 
 		$this->trigger(self::EVENT_BEFORE_RENDER, $event);
+
+		return [$event->data['view'], $event->data['params']];
 	}
 
 	public function renderContent($content)

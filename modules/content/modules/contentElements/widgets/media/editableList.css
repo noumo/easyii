@@ -60,7 +60,7 @@
     display: none;
 }
 
-.model-form > .sortable li {
+.model-form .sortable:first-of-type li {
     margin-left: 0;
     margin-right: 0;
 }
