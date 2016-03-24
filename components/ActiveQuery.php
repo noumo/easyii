@@ -42,21 +42,23 @@ class ActiveQuery extends \yii\db\ActiveQuery
 
     /**
      * Order by order_num
+     * @param $order
      * @return $this
      */
-    public function sort()
+    public function sort($order = SORT_DESC)
     {
-        $this->orderBy(['order_num' => SORT_DESC]);
+        $this->orderBy(['order_num' => $order]);
         return $this;
     }
 
     /**
      * Order by date
+     * @param $order
      * @return $this
      */
-    public function sortDate()
+    public function sortDate($order = SORT_DESC)
     {
-        $this->orderBy(['time' => SORT_DESC]);
+        $this->orderBy(['time' => $order]);
         return $this;
     }
 }

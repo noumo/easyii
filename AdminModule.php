@@ -2,6 +2,7 @@
 namespace yii\easyii;
 
 use Yii;
+use yii\base\ActionEvent;
 use yii\web\View;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
@@ -26,6 +27,15 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
 
         if(Yii::$app->cache === null){
             throw new \yii\web\ServerErrorHttpException('Please configure Cache component.');
+        }
+
+        if (!$this->installed) {
+            // Redirect to install process
+            $this->on(Application::EVENT_BEFORE_ACTION, function (ActionEvent $event) {
+                if ($event->action->controller->id != 'install') {
+                    $event->action->controller->redirect(['/admin/install/index']);
+                }
+            });
         }
 
         $this->activeModules = Module::findAllActive();
@@ -71,5 +81,10 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
             }
         }
         return $this->_installed;
+    }
+
+    public function getShowHelp()
+    {
+        return false;
     }
 }

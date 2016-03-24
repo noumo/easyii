@@ -33,22 +33,23 @@ class Image
 
     static function thumb($filename, $width = null, $height = null)
     {
-        $filename = Upload::getAbsolutePath($filename);
-        if(!is_file($filename)) {
-            return '';
+        $filePath = Upload::getAbsolutePath($filename);
+        if(!is_file($filePath)) {
+            return $filename;
         }
 
-        $info = pathinfo($filename);
-        $thumbName = $info['filename'] . '-' . md5( filemtime($filename) . (int)$width . (int)$height) . '.' . $info['extension'];
+        $info = pathinfo($filePath);
+        $thumbName = $info['filename'] . '-' . md5( filemtime($filePath) . (int)$width . (int)$height) . '.' . $info['extension'];
         $thumbFile = Upload::getUploadPath('thumbs') . DIRECTORY_SEPARATOR . $thumbName;
         $thumbWebFile = Upload::getFileUrl('thumbs/' . $thumbName);
+
         if(file_exists($thumbFile)){
             return $thumbWebFile;
         }
         if($width && $height){
-            $success = self::crop($filename, $thumbFile, $width, $height);
+            $success = self::crop($filePath, $thumbFile, $width, $height);
         } else {
-            $success = self::resize($filename, $thumbFile, $width, $height);
+            $success = self::resize($filePath, $thumbFile, $width, $height);
         }
         return  $success ? $thumbWebFile : '';
     }

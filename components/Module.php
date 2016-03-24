@@ -2,10 +2,14 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\easyii\controllers\HelpController;
 use yii\easyii\models\Module as ModuleModel;
 
 /**
  * Base module class. Inherit from this if you are creating your own modules manually
+ *
+ * @property bool $showHelp
+ *
  * @package yii\easyii\components
  */
 class Module extends \yii\base\Module
@@ -20,6 +24,10 @@ class Module extends \yii\base\Module
     public $i18n;
 
     private static $NAMES = [];
+    
+    public $controllerMap = [
+        'help' => 'yii\easyii\controllers\HelpController'
+    ];
 
     /**
      * Configuration for installation
@@ -97,5 +105,23 @@ class Module extends \yii\base\Module
     {
         $settings = Yii::$app->getModule('admin')->activeModules[static::getSelfName()]->settings;
         return isset($settings[$name]) ? $settings[$name] : null;
+    }
+
+    public function getShowHelp()
+    {
+        if (!IS_ROOT) {
+            return false;
+        }
+        if (Yii::$app->controller instanceof HelpController) {
+            return false;
+        }
+
+        list($helpController, $route) = $this->createController('help');
+
+        if ($helpController instanceof HelpController) {
+            return is_file($helpController->readmeFile);
+        }
+
+        return false;
     }
 }

@@ -285,3 +285,6 @@ hr.margin-30{
 .glyphicon-menu-hamburger:before {
   content: "\e055";
 }
+textarea {
+    resize: vertical
+}

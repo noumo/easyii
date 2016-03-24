@@ -2,7 +2,10 @@
 namespace yii\easyii\components;
 
 use Yii;
+use yii\base\Arrayable;
+use yii\base\ArrayableTrait;
 use yii\easyii\helpers\Image;
+use yii\easyii\models\Setting;
 
 /**
  * Class ApiObject
@@ -10,8 +13,10 @@ use yii\easyii\helpers\Image;
  * @var integer $id
  * @var string $image
  */
-class ApiObject extends \yii\base\Object
+class ApiObject extends \yii\base\Object implements Arrayable
 {
+    use ArrayableTrait;
+
     /** @var \yii\base\Model  */
     public $model;
 
@@ -77,5 +82,44 @@ class ApiObject extends \yii\base\Object
      */
     public function seo($attribute, $default = ''){
         return !empty($this->model->seo->{$attribute}) ? $this->model->seo->{$attribute} : $default;
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function liveEdit($value)
+    {
+        return LIVE_EDIT ? API::liveEdit($value, $this->editLink) : $value;
+    }
+
+    protected function placeholder($value)
+    {
+        if (is_string($value))
+        {
+            $value = preg_replace_callback(
+                '/{{([a-zA-Z][\w_-]*)}}/',
+                function ($matches)
+                {
+                    $key = strtolower($matches[1]);
+
+                    if ($setting = Setting::get($key))
+                    {
+                        $result = $setting;
+                    }
+                    else
+                    {
+                        $result = $matches[0];
+                    }
+
+                    return $result;
+                },
+
+                // the input string
+                $value
+            );
+        }
+
+        return $value;
     }
 }

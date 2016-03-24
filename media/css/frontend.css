@@ -4,11 +4,9 @@
     border-width: 0 0 1px;
     border-radius: 0;
     position: fixed;
-    top: 0;
     left: 0;
     right: 0;
     z-index: 1030;
-    margin-bottom: 20px;
     height: 50px;
     display: block;
     font-size: 14px;
@@ -23,6 +21,13 @@
 }
 #easyii-navbar::after{
     clear: both;
+}
+#easyii-navbar.bottom {
+    bottom: 0;
+}
+#easyii-navbar.top {
+    top: 0;
+    margin-bottom: 20px;
 }
 #easyii-navbar .easyii-container {
     padding-right: 15px;

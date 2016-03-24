@@ -8,6 +8,7 @@ use yii\easyii\actions\DeleteAction;
 use yii\easyii\actions\SortByNumAction;
 use yii\easyii\models\CopyModuleForm;
 use yii\helpers\FileHelper;
+use yii\web\NotFoundHttpException;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\Module;
 
@@ -236,6 +237,74 @@ class ModulesController extends \yii\easyii\components\Controller
         }
 
         return $this->render('copy', [
+            'model' => $module,
+            'formModel' => $formModel
+        ]);
+    }
+
+    public function actionExtend($id)
+    {
+        $module = Module::findOne($id);
+        $formModel = new CopyModuleForm();
+
+        if ($module === null) {
+            $this->flash('error', Yii::t('easyii', 'Not found'));
+            return $this->redirect('/admin/modules');
+        }
+
+        if (Yii::$app->request->isPost ||$formModel->load(Yii::$app->request->post())) {
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return ActiveForm::validate($formModel);
+            }
+            else {
+                $reflector = new \ReflectionClass($module->class);
+                $oldModuleFolder = dirname($reflector->getFileName());
+                $oldNameSpace = $reflector->getNamespaceName();
+                $oldModuleClass = $reflector->getShortName();
+
+                $newModulesFolder = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'modules';
+                $newModuleFolder = Yii::getAlias('@app') . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $formModel->name;
+                $newNameSpace = 'app\modules\\' . $formModel->name;
+                $newModuleClass = ucfirst($formModel->name) . 'Module';
+
+                if (!FileHelper::createDirectory($newModulesFolder, 0755)) {
+                    $this->flash('error', 'Cannot create `' . $newModulesFolder . '`. Please check write permissions.');
+                    return $this->refresh();
+                }
+
+                /** @var \yii\gii\Module $gii */
+                $gii = Yii::$app->getModule('gii');
+                $gii->generators = $gii->coreGenerato
+                $generator = $gii->generators['module'];
+                var_dump($generator);die;
+                if ($generator->validate()) {
+                    $generator->saveStickyAttributes();
+                    $files = $generator->generate();
+                    var_dump($files);die;
+                }
+
+                $newModule = new Module([
+                    'name' => $formModel->name,
+                    'class' => $newNameSpace . '\\' . $newModuleClass,
+                    'title' => $formModel->title,
+                    'icon' => $module->icon,
+                    'settings' => $module->settings,
+                    'status' => Module::STATUS_ON,
+                ]);
+
+                if ($newModule->save()) {
+                    $this->flash('success', 'New module created');
+                    return $this->redirect(['/admin/modules/edit', 'id' => $newModule->primaryKey]);
+                } else {
+                    $this->flash('error', 'Module create error. ' . $newModule->formatErrors());
+                    FileHelper::removeDirectory($newModuleFolder);
+                    return $this->refresh();
+                }
+            }
+        }
+
+        return $this->render('extend', [
             'model' => $module,
             'formModel' => $formModel
         ]);

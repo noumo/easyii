@@ -4,6 +4,7 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
+use yii\easyii\actions\MoveAction;
 use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
 
@@ -13,11 +14,13 @@ use yii\widgets\ActiveForm;
  */
 class CategoryController extends Controller
 {
+    //Todo: Better $this->module->id
     /** @var  string */
     public $moduleName;
 
-    /** @var string */
-    public $viewRoute = '/items';
+    //Todo: Remove the slash!
+    /** @var string  */
+	public $viewRoute = '/items';
 
     public function actions()
     {
@@ -35,6 +38,16 @@ class CategoryController extends Controller
                 'class' => ChangeStatusAction::className(),
                 'model' => $className,
             ],
+	        'up' => [
+		        'class' => MoveAction::className(),
+		        'model' => $className,
+		        'direction' => 'up'
+	        ],
+	        'down' => [
+		        'class' => MoveAction::className(),
+		        'model' => $className,
+		        'direction' => 'down'
+	        ],
         ];
     }
 
@@ -81,17 +94,19 @@ class CategoryController extends Controller
 
                 if (!$model->hasErrors()) {
                     $this->flash('success', Yii::t('easyii', 'Category created'));
-                    return $this->redirect(['/admin/' . $this->moduleName, 'id' => $model->primaryKey]);
-                } else {
+                    return $this->redirect(['/admin/'.$this->module->id, 'id' => $model->primaryKey]);
+                }
+                else{
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
                     return $this->refresh();
                 }
             }
-        } else {
-            return $this->render('@easyii/views/category/create', [
-                'model' => $model,
-                'parent' => $parent
-            ]);
+        }
+        else {
+	        return $this->render('@easyii/views/category/create', [
+		        'model' => $model,
+		        'parent' => $parent
+	        ]);
         }
     }
 
@@ -141,76 +156,6 @@ class CategoryController extends Controller
         }
 
         return $this->formatResponse(Yii::t('easyii', 'Category deleted'));
-    }
-
-    /**
-     * Move category one level up up
-     *
-     * @param $id
-     * @return \yii\web\Response
-     */
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    /**
-     * Move category one level down
-     *
-     * @param $id
-     * @return \yii\web\Response
-     */
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
-    }
-
-    /**
-     * Move category up/down
-     *
-     * @param $id
-     * @param $direction
-     * @return \yii\web\Response
-     * @throws \Exception
-     */
-    private function move($id, $direction)
-    {
-        $model = $this->findCategory($id);
-        $modelClass = $this->categoryClass;
-
-        $up = $direction == 'up';
-        $orderDir = $up ? SORT_ASC : SORT_DESC;
-
-        if ($model->depth == 0) {
-
-            $swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
-            if ($swapCat) {
-                $modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
-                $modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
-                $modelClass::updateAll(['order_num' => $model->order_num], ['order_num' => '-1']);
-                $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
-            }
-        } else {
-            $where = [
-                'and',
-                ['tree' => $model->tree],
-                ['depth' => $model->depth],
-                [($up ? '<' : '>'), 'lft', $model->lft]
-            ];
-
-            $swapCat = $modelClass::find()->where($where)->orderBy(['lft' => ($up ? SORT_DESC : SORT_ASC)])->one();
-            if ($swapCat) {
-                if ($up) {
-                    $model->insertBefore($swapCat);
-                } else {
-                    $model->insertAfter($swapCat);
-                }
-
-                $swapCat->update();
-                $model->update();
-            }
-        }
-        return $this->back();
     }
 
     /**
