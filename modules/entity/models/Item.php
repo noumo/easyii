@@ -82,6 +82,10 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
+        if($this->category && !empty($this->category->cache)) {
+            Yii::$app->cache->delete(Category::getCacheName($this->category_id));
+        }
+
         foreach($this->getPhotos()->all() as $photo){
             $photo->delete();
         }

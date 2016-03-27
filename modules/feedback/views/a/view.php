@@ -39,11 +39,13 @@ if($model->status == Feedback::STATUS_ANSWERED) {
     <dd><?= nl2br($model->text) ?></dd>
 </dl>
 
-<hr>
-<h2><small><?= Yii::t('easyii/feedback', 'Answer') ?></small></h2>
+<?php if($model->email) : ?>
+    <hr>
+    <h2><small><?= Yii::t('easyii/feedback', 'Answer') ?></small></h2>
 
-<?php $form = ActiveForm::begin() ?>
-    <?= $form->field($model, 'answer_subject') ?>
-    <?= $form->field($model, 'answer_text')->textarea(['style' => 'height: 250px']) ?>
-    <?= Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-success send-answer']) ?>
-<?php ActiveForm::end() ?>
+    <?php $form = ActiveForm::begin() ?>
+        <?= $form->field($model, 'answer_subject') ?>
+        <?= $form->field($model, 'answer_text')->textarea(['style' => 'height: 250px']) ?>
+        <?= Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-success send-answer']) ?>
+    <?php ActiveForm::end() ?>
+<?php endif; ?>
