@@ -269,6 +269,9 @@ hr.margin-30{
 .smooth {
     color: #aaa;
 }
+.cursor-pointer {
+    cursor: pointer;
+}
 .dashed-link:before{
     font-family: 'Glyphicons Halflings';
     content: "\e252";

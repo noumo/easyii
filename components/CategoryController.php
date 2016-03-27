@@ -150,7 +150,7 @@ class CategoryController extends Controller
                     continue;
                 }
                 $options = trim($temp->options);
-                if($temp->type == 'select' || $temp->type == 'checkbox'){
+                if($temp->type == CategoryWithFieldsModel::FIELD_TYPE_SELECT || $temp->type == CategoryWithFieldsModel::FIELD_TYPE_CHECKBOX){
                     if($options == ''){
                         continue;
                     }
