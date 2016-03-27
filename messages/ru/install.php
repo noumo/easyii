@@ -23,4 +23,5 @@ return [
     'Google analytics service account email' => 'E-mail сервис аккаунта Google Analytics',
     'Google analytics profile id' => 'Номер профиля Google Analytics',
     'Path to Google analytics service account p12 key file' => 'Путь к файлу ключей p12 сервис аккаунта Google Analytics',
+    'Google Maps API key' => 'Google Maps API ключ',
 ];

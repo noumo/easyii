@@ -12,6 +12,7 @@ class GooglePlacesAutoComplete extends InputWidget {
 
     public $libraries = 'places';
     public $sensor = true;
+    public $key;
 
     public $language;
     public $autocompleteOptions = [];
@@ -22,6 +23,9 @@ class GooglePlacesAutoComplete extends InputWidget {
     {
         if ($this->name === null && !$this->hasModel()) {
             throw new InvalidConfigException("Either 'name', or 'model' and 'attribute' properties must be specified.");
+        }
+        if(!$this->key && !($this->key = Setting::get('gm_api_key'))) {
+            throw new InvalidConfigException("You cannot use Google places autocomplete. Setting 'gm_api_key' empty or not found.");
         }
         $this->language = $this->language ? $this->language : \Yii::$app->language;
 

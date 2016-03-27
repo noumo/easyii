@@ -115,6 +115,13 @@ class m000009_100000_update extends \yii\db\Migration
         $this->insert(Setting::tableName(), [
             'name' => 'ga_p12_file',
             'value' => '',
+            'title' => Yii::t('easyii/install', 'Google Maps API key'),
+            'visibility' => Setting::VISIBLE_ROOT
+        ]);
+
+        $this->insert(Setting::tableName(), [
+            'name' => 'gm_api_key',
+            'value' => '',
             'title' => Yii::t('easyii/install', 'Path to Google analytics service account p12 key file'),
             'visibility' => Setting::VISIBLE_ROOT
         ]);
