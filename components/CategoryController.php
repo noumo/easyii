@@ -4,6 +4,7 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
+use yii\easyii\actions\FieldsAction;
 use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
 
@@ -19,10 +20,16 @@ class CategoryController extends Controller
     /** @var string */
     public $viewRoute = '/items';
 
+    public $rootActions = ['fields'];
+
     public function actions()
     {
         $className = $this->categoryClass;
         return [
+            'fields' => [
+                'class' => FieldsAction::className(),
+                'model' => $className
+            ],
             'clear-image' => [
                 'class' => ClearImageAction::className(),
                 'model' => $className

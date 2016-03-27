@@ -128,6 +128,15 @@ return [
     'Clear image' => 'Очистить изображение',
     'Image cleared' => 'Изображение очищено',
 
+    'Category fields' => 'Поля категории',
+    'Manage fields' => 'Редактировать поля',
+    'Add field' => 'Добавить поле',
+    'Save fields' => 'Сохранить поля',
+    'Type options with `comma` as delimiter' => 'Элементы списка через запятую',
+    'Fields' => 'Поля',
+    'Type' => 'Тип поля',
+    'Options' => 'Опции',
+    'Select' => 'Выбрать',
 
     'New on website' => 'Новое на сайте',
     'Statistics' => 'Статистика',

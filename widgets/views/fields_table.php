@@ -1,11 +1,9 @@
 <?php
+use yii\easyii\assets\FieldsTableAsset;
+use yii\easyii\components\CategoryWithFieldsModel;
 use yii\helpers\Html;
-use yii\easyii\modules\catalog\assets\FieldsAsset;
-use yii\easyii\modules\catalog\models\Category;
 
-$this->title = Yii::t('easyii/catalog', 'Category fields');
-
-$this->registerAssetBundle(FieldsAsset::className());
+$this->registerAssetBundle(FieldsTableAsset::className());
 
 $this->registerJs('
 var fieldTemplate = \'\
@@ -13,9 +11,9 @@ var fieldTemplate = \'\
         <td>'. Html::input('text', null, null, ['class' => 'form-control field-name']) .'</td>\
         <td>'. Html::input('text', null, null, ['class' => 'form-control field-title']) .'</td>\
         <td>\
-            <select class="form-control field-type">'.str_replace("\n", "", Html::renderSelectOptions('', Category::$fieldTypes)).'</select>\
+            <select class="form-control field-type">'.str_replace("\n", "", Html::renderSelectOptions('', CategoryWithFieldsModel::$FIELD_TYPES)).'</select>\
         </td>\
-        <td><textarea class="form-control field-options" placeholder="'.Yii::t('easyii/catalog', 'Type options with `comma` as delimiter').'" style="display: none;"></textarea></td>\
+        <td><textarea class="form-control field-options" placeholder="'.Yii::t('easyii', 'Type options with `comma` as delimiter').'" style="display: none;"></textarea></td>\
         <td class="text-right">\
             <div class="btn-group btn-group-sm" role="group">\
                 <a href="#" class="btn btn-default move-up" title="'. Yii::t('easyii', 'Move up') .'"><span class="glyphicon glyphicon-arrow-up"></span></a>\
@@ -27,19 +25,15 @@ var fieldTemplate = \'\
 ', \yii\web\View::POS_HEAD);
 
 ?>
-<?= $this->render('@easyii/views/category/_menu') ?>
-<?= $this->render('_submenu', ['model' => $model]) ?>
-<br>
-
-<?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii/catalog', 'Add field'), ['class' => 'btn btn-default', 'id' => 'addField']) ?>
+<?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii', 'Add field'), ['class' => 'btn btn-default', 'id' => 'addField']) ?>
 
 <table id="categoryFields" class="table table-hover">
     <thead>
-        <th>Name</th>
-        <th><?= Yii::t('easyii', 'Title') ?></th>
-        <th><?= Yii::t('easyii/catalog', 'Type') ?></th>
-        <th><?= Yii::t('easyii/catalog', 'Options') ?></th>
-        <th width="120"></th>
+    <th>Name</th>
+    <th><?= Yii::t('easyii', 'Title') ?></th>
+    <th><?= Yii::t('easyii', 'Type') ?></th>
+    <th><?= Yii::t('easyii', 'Options') ?></th>
+    <th width="120"></th>
     </thead>
     <tbody>
     <?php foreach($model->fields as $field) : ?>
@@ -48,11 +42,11 @@ var fieldTemplate = \'\
             <td><?= Html::input('text', null, $field->title, ['class' => 'form-control field-title']) ?></td>
             <td>
                 <select class="form-control field-type">
-                    <?= Html::renderSelectOptions($field->type, Category::$fieldTypes) ?>
+                    <?= Html::renderSelectOptions($field->type, CategoryWithFieldsModel::$FIELD_TYPES) ?>
                 </select>
             </td>
             <td>
-                <textarea class="form-control field-options" placeholder="<?= Yii::t('easyii/catalog', 'Type options with `comma` as delimiter') ?>" <?= (!$field->options && $field->type != 'file') ? 'style="display: none;"' : '' ?> ><?= is_array($field->options) ? implode(',', $field->options) : $field->options ?></textarea>
+                <textarea class="form-control field-options" placeholder="<?= Yii::t('easyii', 'Type options with `comma` as delimiter') ?>" <?= (!$field->options && $field->type != 'file') ? 'style="display: none;"' : '' ?> ><?= is_array($field->options) ? implode(',', $field->options) : $field->options ?></textarea>
             </td>
             <td class="text-right">
                 <div class="btn-group btn-group-sm" role="group">
@@ -65,4 +59,4 @@ var fieldTemplate = \'\
     <?php endforeach; ?>
     </tbody>
 </table>
-<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('easyii/catalog', 'Save fields'), ['class' => 'btn btn-primary', 'id' => 'saveCategoryBtn']) ?>
+<?= Html::button('<i class="glyphicon glyphicon-ok"></i> '.Yii::t('easyii', 'Save fields'), ['class' => 'btn btn-primary', 'id' => 'saveCategoryBtn']) ?>
