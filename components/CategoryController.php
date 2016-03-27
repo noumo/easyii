@@ -4,7 +4,6 @@ namespace yii\easyii\components;
 use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
-use yii\easyii\actions\FieldsAction;
 use yii\easyii\behaviors\SortableModel;
 use yii\widgets\ActiveForm;
 
@@ -26,10 +25,6 @@ class CategoryController extends Controller
     {
         $className = $this->categoryClass;
         return [
-            'fields' => [
-                'class' => FieldsAction::className(),
-                'model' => $className
-            ],
             'clear-image' => [
                 'class' => ClearImageAction::className(),
                 'model' => $className
@@ -130,6 +125,73 @@ class CategoryController extends Controller
                 'model' => $model
             ]);
         }
+    }
+    
+    public function actionFields($id) 
+    {
+        $model = $this->findCategory($id);
+
+        if (Yii::$app->request->post('save'))
+        {
+            $fields = Yii::$app->request->post('Field') ?: [];
+            $result = [];
+
+            foreach($fields as $field){
+                $temp = json_decode($field);
+
+                if( $temp === null && json_last_error() !== JSON_ERROR_NONE ||
+                    empty($temp->name) ||
+                    empty($temp->title) ||
+                    empty($temp->type) ||
+                    !($temp->name = trim($temp->name)) ||
+                    !($temp->title = trim($temp->title)) ||
+                    !array_key_exists($temp->type, CategoryWithFieldsModel::$FIELD_TYPES)
+                ){
+                    continue;
+                }
+                $options = trim($temp->options);
+                if($temp->type == 'select' || $temp->type == 'checkbox'){
+                    if($options == ''){
+                        continue;
+                    }
+                    $optionsArray = [];
+                    foreach(explode(',', $options) as $option){
+                        $optionsArray[] = trim($option);
+                    }
+                    $options = $optionsArray;
+                }
+
+                $result[] = [
+                    'name' => \yii\helpers\Inflector::slug($temp->name),
+                    'title' => $temp->title,
+                    'type' => $temp->type,
+                    'options' => $options
+                ];
+            }
+
+            $model->fields = $result;
+
+            if($model->save()){
+                $ids = [];
+                foreach($model->children()->all() as $child){
+                    $ids[] = $child->primaryKey;
+                }
+                if(count($ids)){
+                    $model::updateAll(['fields' => json_encode($model->fields)], ['in', 'category_id', $ids]);
+                }
+
+                $this->flash('success', Yii::t('easyii', 'Category updated'));
+            }
+            else{
+                $this->flash('error', Yii::t('easyii','Update error. {0}', $model->formatErrors()));
+            }
+            return $this->refresh();
+        }
+        else {
+            return $this->render('@easyii/views/category/fields', [
+                'model' => $model
+            ]);
+        }    
     }
 
     /**
