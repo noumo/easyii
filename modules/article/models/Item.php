@@ -71,12 +71,12 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+        return Category::get($this->category_id);
     }
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
+        return $this->hasMany(Photo::className(), ['id' => 'item_id'])->where(['class' => self::className()])->sort();
     }
 
     public function beforeSave($insert)

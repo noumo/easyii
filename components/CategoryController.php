@@ -177,7 +177,7 @@ class CategoryController extends Controller
                     $ids[] = $child->primaryKey;
                 }
                 if(count($ids)){
-                    $model::updateAll(['fields' => json_encode($model->fields)], ['in', 'category_id', $ids]);
+                    $model::updateAll(['fields' => json_encode($model->fields)], ['in', 'id', $ids]);
                 }
 
                 $this->flash('success', Yii::t('easyii', 'Category updated'));
@@ -298,7 +298,7 @@ class CategoryController extends Controller
         foreach ($model->children()->all() as $child) {
             $ids[] = $child->primaryKey;
         }
-        $modelClass::updateAll(['status' => $status], ['in', 'category_id', $ids]);
+        $modelClass::updateAll(['status' => $status], ['in', 'id', $ids]);
         $model->trigger(\yii\db\ActiveRecord::EVENT_AFTER_UPDATE);
 
         return $this->formatResponse(Yii::t('easyii', 'Status successfully changed'));

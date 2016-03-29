@@ -3,6 +3,7 @@ namespace yii\easyii\modules\page\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\DeleteAction;
 use yii\widgets\ActiveForm;
 use yii\easyii\components\Controller;
@@ -16,6 +17,8 @@ class AController extends Controller
     public function actions()
     {
         return [
+            'on' => ChangeStatusAction::className(),
+            'off' => ChangeStatusAction::className(),
             'delete' => [
                 'class' => DeleteAction::className(),
                 'successMessage' => Yii::t('easyii/page', 'Page deleted')
@@ -25,11 +28,8 @@ class AController extends Controller
 
     public function actionIndex()
     {
-        $data = new ActiveDataProvider([
-            'query' => Page::find()->desc()
-        ]);
         return $this->render('index', [
-            'data' => $data
+            'pages' => Page::cats()
         ]);
     }
 

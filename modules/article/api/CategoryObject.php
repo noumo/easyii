@@ -62,7 +62,7 @@ class CategoryObject extends \yii\easyii\components\ApiObject
             $query
                 ->innerJoinWith('tags', false)
                 ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
-                ->addGroupBy('item_id');
+                ->addGroupBy('id');
         }
         if(!empty($options['orderBy'])){
             $query->orderBy($options['orderBy']);

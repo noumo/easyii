@@ -23,7 +23,7 @@ class m000009_100000_update extends \yii\db\Migration
     {
         //ENTITY MODULE
         $this->createTable(entity\models\Category::tableName(), [
-            'category_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
             'description' => $this->string(1024),
             'image_file' => $this->string(128),
@@ -40,7 +40,7 @@ class m000009_100000_update extends \yii\db\Migration
         $this->createIndex('slug', entity\models\Category::tableName(), 'slug', true);
 
         $this->createTable(entity\models\Item::tableName(), [
-            'item_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'category_id' => $this->integer()->notNull(),
             'title' => $this->string(128)->notNull(),
             'data' => $this->text()->notNull(),

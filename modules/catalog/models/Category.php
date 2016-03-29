@@ -12,7 +12,7 @@ class Category extends CategoryWithFieldsModel
 
     public function getItems()
     {
-        return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sortDate();
+        return $this->hasMany(Item::className(), ['category_id' => 'id'])->sortDate();
     }
 
     public function afterDelete()

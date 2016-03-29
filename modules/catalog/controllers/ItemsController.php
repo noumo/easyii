@@ -79,7 +79,7 @@ class ItemsController extends ItemsWithFieldsController
             }
             else {
                 $model->data = $this->parseData($model);
-
+                
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);

@@ -126,7 +126,7 @@ class Entity extends \yii\easyii\components\API
 
     private function findItem($id)
     {
-        if(!($item = Item::find()->where(['item_id' => ':id'], [':id' => $id])->status(Item::STATUS_ON)->one())){
+        if(!($item = Item::find()->where(['id' => ':id'], [':id' => $id])->status(Item::STATUS_ON)->one())){
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
 

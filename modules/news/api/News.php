@@ -45,7 +45,7 @@ class News extends \yii\easyii\components\API
             $query
                 ->innerJoinWith('tags', false)
                 ->andWhere([Tag::tableName() . '.name' => (new NewsModel)->filterTagValues($options['tags'])])
-                ->addGroupBy('news_id');
+                ->addGroupBy('id');
         }
         if(!empty($options['orderBy'])){
             $query->orderBy($options['orderBy']);
@@ -106,7 +106,7 @@ class News extends \yii\easyii\components\API
 
     private function findNews($id_slug)
     {
-        if(!($news = NewsModel::find()->where(['or', 'news_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(NewsModel::STATUS_ON)->one())) {
+        if(!($news = NewsModel::find()->where(['or', 'id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(NewsModel::STATUS_ON)->one())) {
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
         $news->updateCounters(['views' => 1]);

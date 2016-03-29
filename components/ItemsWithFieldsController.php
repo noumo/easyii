@@ -150,7 +150,7 @@ class ItemsWithFieldsController extends Controller
         $fieldsHash = md5(json_encode($cat->fields));
         foreach(Category::cats() as $cat){
             if(md5(json_encode($cat->fields)) == $fieldsHash && (!count($cat->children) || EntityModule::setting('itemsInFolder'))) {
-                $result[$cat->category_id] = $cat->title;
+                $result[$cat->id] = $cat->title;
             }
         }
         return $result;

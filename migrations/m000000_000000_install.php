@@ -27,7 +27,7 @@ class m000000_000000_install extends \yii\db\Migration
     {
         //ADMINS
         $this->createTable(models\Admin::tableName(), [
-            'admin_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'username' => $this->string(32)->notNull(),
             'password' => $this->string(64)->notNull(),
             'auth_key' => $this->string(128),
@@ -37,7 +37,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //LOGINFORM
         $this->createTable(models\LoginForm::tableName(), [
-            'log_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'username' => $this->string(128),
             'password' => $this->string(128),
             'ip' => $this->string(16),
@@ -48,7 +48,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //MODULES
         $this->createTable(models\Module::tableName(), [
-            'module_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'name' => $this->string(64)->notNull(),
             'class' => $this->string(128)->notNull(),
             'title' => $this->string(128)->notNull(),
@@ -62,7 +62,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //PHOTOS
         $this->createTable(models\Photo::tableName(), [
-            'photo_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'class' => $this->string(128)->notNull(),
             'item_id' => $this->integer()->notNull(),
             'image' => $this->string(128)->notNull(),
@@ -73,7 +73,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //SEOTEXT
         $this->createTable(models\SeoText::tableName(), [
-            'seotext_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'class' => $this->string(128)->notNull(),
             'item_id' => $this->integer()->notNull(),
             'h1' => $this->string(255),
@@ -85,7 +85,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //SETTINGS
         $this->createTable(models\Setting::tableName(), [
-            'setting_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'name' => $this->string(64)->notNull(),
             'title' => $this->string(128)->notNull(),
             'value' => $this->string(1024),
@@ -95,7 +95,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //CAROUSEL MODULE
         $this->createTable(Carousel::tableName(), [
-            'carousel_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'image' => $this->string(128)->notNull(),
             'link' => $this->string(255),
             'title' => $this->string(255),
@@ -106,7 +106,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //CATALOG MODULE
         $this->createTable(catalog\models\Category::tableName(), [
-            'category_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
             'image' => $this->string(128),
             'fields' => $this->text(),
@@ -121,7 +121,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createIndex('slug', catalog\models\Category::tableName(), 'slug', true);
 
         $this->createTable(catalog\models\Item::tableName(), [
-            'item_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'category_id' => $this->integer(),
             'title' => $this->string(128)->notNull(),
             'description' => $this->text(),
@@ -137,7 +137,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createIndex('slug', catalog\models\Item::tableName(), 'slug', true);
 
         $this->createTable(catalog\models\ItemData::tableName(), [
-            'data_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'item_id' => $this->integer(),
             'name' => $this->string(128)->notNull(),
             'value' => $this->string(1024),
@@ -147,7 +147,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //SHOPCART MODULE
         $this->createTable(shopcart\models\Order::tableName(), [
-            'order_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'name' => $this->string(64),
             'address' => $this->string(1024),
             'phone' => $this->string(64),
@@ -162,7 +162,7 @@ class m000000_000000_install extends \yii\db\Migration
         ], $this->engine);
 
         $this->createTable(shopcart\models\Good::tableName(), [
-            'good_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'order_id' => $this->integer(),
             'item_id' => $this->integer(),
             'count' => $this->integer(),
@@ -173,7 +173,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //FEEDBACK MODULE
         $this->createTable(Feedback::tableName(), [
-            'feedback_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'name' => Schema::TYPE_STRING,
             'email' => $this->string(128)->notNull(),
             'phone' => $this->string(64),
@@ -188,7 +188,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //FILE MODULE
         $this->createTable(File::tableName(), [
-            'file_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
             'file' => $this->string(255)->notNull(),
             'size' => $this->integer()->defaultValue(0),
@@ -201,7 +201,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //GALLERY MODULE
         $this->createTable(gallery\models\Category::tableName(), [
-            'category_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
             'image' => $this->string(128),
             'slug' => $this->string(128),
@@ -216,7 +216,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //GUESTBOOK MODULE
         $this->createTable(Guestbook::tableName(), [
-            'guestbook_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'name' => $this->string(128)->notNull(),
             'title' => $this->string(128),
             'text' => $this->text()->notNull(),
@@ -230,7 +230,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //NEWS MODULE
         $this->createTable(News::tableName(), [
-            'news_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
             'image' => $this->string(128),
             'short' => $this->string(1024),
@@ -244,7 +244,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //ARTICLE MODULE
         $this->createTable(article\models\Category::tableName(), [
-            'category_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
             'image' => $this->string(128),
             'order_num' => $this->integer(),
@@ -258,7 +258,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createIndex('slug', article\models\Category::tableName(), 'slug', true);
 
         $this->createTable(article\models\Item::tableName(), [
-            'item_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'category_id' => $this->integer(),
             'title' => $this->string(128)->notNull(),
             'image' => $this->string(128),
@@ -273,7 +273,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //PAGE MODULE
         $this->createTable(Page::tableName(), [
-            'page_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'title' => $this->string(128)->notNull(),
             'text' => $this->text(),
             'slug' => $this->string(128)
@@ -282,7 +282,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //FAQ MODULE
         $this->createTable(Faq::tableName(), [
-            'faq_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'question' => $this->text()->notNull(),
             'answer' => $this->text()->notNull(),
             'order_num' => $this->integer()->defaultValue(0),
@@ -291,7 +291,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //SUBSCRIBE MODULE
         $this->createTable(Subscriber::tableName(), [
-            'subscriber_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'email' => $this->string(128)->notNull(),
             'ip' => $this->string(16),
             'time' => $this->integer()->defaultValue(0)
@@ -299,7 +299,7 @@ class m000000_000000_install extends \yii\db\Migration
         $this->createIndex('email', Subscriber::tableName(), 'email', true);
 
         $this->createTable(History::tableName(), [
-            'history_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'subject' => $this->string(128)->notNull(),
             'body' => $this->text(),
             'sent' => $this->integer()->defaultValue(0),
@@ -308,7 +308,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //TEXT MODULE
         $this->createTable(Text::tableName(), [
-            'text_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'text' => $this->text()->notNull(),
             'slug' => $this->string(128)
         ], $this->engine);
@@ -316,7 +316,7 @@ class m000000_000000_install extends \yii\db\Migration
 
         //Tags
         $this->createTable(models\Tag::tableName(), [
-            'tag_id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'name' => $this->string(128)->notNull(),
             'frequency' => $this->integer()->defaultValue(0)
         ], $this->engine);

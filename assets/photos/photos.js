@@ -36,7 +36,7 @@ $(function(){
                     success: function(response){
                         if(response.result === 'success'){
                             var html = $(photoTemplate
-                                .replace(/\{\{photo_id\}\}/g, response.photo.id)
+                                .replace(/\{\{id\}\}/g, response.photo.id)
                                 .replace(/\{\{photo_thumb\}\}/g, response.photo.thumb)
                                 .replace(/\{\{photo_image\}\}/g, response.photo.image)
                                 .replace(/\{\{photo_description\}\}/g, ''))

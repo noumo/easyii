@@ -16,7 +16,6 @@ class Text extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            ['text_id', 'number', 'integerOnly' => true],
             ['text', 'required'],
             ['text', 'trim'],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],

@@ -126,7 +126,7 @@ class Guestbook extends \yii\easyii\components\API
 
     private function findPost($id)
     {
-        if(!($file = GuestbookModel::find()->where(['guestbook_id' => ':id'], [':id' => $id])->status(GuestbookModel::STATUS_ON)->one())){
+        if(!($file = GuestbookModel::find()->where(['id' => ':id'], [':id' => $id])->status(GuestbookModel::STATUS_ON)->one())){
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
         return new PostObject($file);

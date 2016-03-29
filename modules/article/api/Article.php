@@ -80,7 +80,7 @@ class Article extends \yii\easyii\components\API
             $query
                 ->innerJoinWith('tags', false)
                 ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
-                ->addGroupBy('item_id');
+                ->addGroupBy('id');
         }
         if(!empty($options['orderBy'])){
             $query->orderBy($options['orderBy']);
@@ -146,7 +146,7 @@ class Article extends \yii\easyii\components\API
 
     private function findItem($id_slug)
     {
-        if(!($article = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())) {
+        if(!($article = Item::find()->where(['or', 'id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())) {
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
         $article->updateCounters(['views' => 1]);

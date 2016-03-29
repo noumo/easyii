@@ -111,7 +111,7 @@ class ItemsController extends Controller
         $result = [];
         foreach(Category::cats() as $cat){
             if(!count($cat->children) || ArticleModule::setting('itemsInFolder')) {
-                $result[$cat->category_id] = $cat->title;
+                $result[$cat->id] = $cat->title;
             }
         }
         return $result;

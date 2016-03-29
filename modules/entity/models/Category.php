@@ -24,7 +24,7 @@ class Category extends CategoryWithFieldsModel
 
     public function getItems()
     {
-        return $this->hasMany(Item::className(), ['category_id' => 'category_id'])->sort();
+        return $this->hasMany(Item::className(), ['category_id' => 'id'])->sort();
     }
 
     public function afterDelete()

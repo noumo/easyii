@@ -6,7 +6,7 @@ use yii\easyii\behaviors\SortableModel;
 use yii\easyii\helpers\Upload;
 
 /**
- * @property integer $photo_id
+ * @property integer $id
  * @property integer $item_id
  * @property string $image_file
  * @property string $description

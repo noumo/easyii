@@ -32,13 +32,13 @@ class Text extends API
         if(($text = $this->findText($id_slug)) === null){
             return $this->notFound($id_slug);
         }
-        return LIVE_EDIT ? API::liveEdit($text['text'], Url::to(['/admin/text/a/edit/', 'id' => $text['text_id']])) : $text['text'];
+        return LIVE_EDIT ? API::liveEdit($text['text'], Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $text['text'];
     }
 
     private function findText($id_slug)
     {
         foreach ($this->_texts as $item) {
-            if($item['slug'] == $id_slug || $item['text_id'] == $id_slug){
+            if($item['slug'] == $id_slug || $item['id'] == $id_slug){
                 return $item;
             }
         }

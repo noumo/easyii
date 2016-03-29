@@ -23,6 +23,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
     static $FLAT = [];
     static $TREE = [];
+    static $RELATIONS = ['seo'];
 
     public $parent;
     public $children = [];
@@ -127,14 +128,18 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             if(count($flat)) {
                 foreach ($flat as $id => $cat) {
                     $model = new static([
-                        'category_id' => $id,
+                        'id' => $id,
                         'parent' => $cat->parent,
                         'children' => $cat->children
                     ]);
 
                     $model->load((array)$cat, '');
-                    $model->populateRelation('seo', new SeoText($cat->seo));
-                    $model->setTagNames($cat->tags);
+                    if(in_array('seo', static::$RELATIONS)) {
+                        $model->populateRelation('seo', new SeoText($cat->seo));
+                    }
+                    if(in_array('tags', static::$RELATIONS)) {
+                        $model->setTagNames($cat->tags);
+                    }
                     $model->afterFind();
                     static::$FLAT[$key][] = $model;
                 }
@@ -148,7 +153,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
     public static function get($id_slug)
     {
         foreach(static::cats() as $cat){
-            if($cat->category_id == $id_slug || $cat->slug == $id_slug){
+            if($cat->id == $id_slug || $cat->slug == $id_slug){
                 return $cat;
             }
         }
@@ -161,7 +166,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      */
     public static function generateTree()
     {
-        $collection = static::find()->with('seo')->sort()->asArray()->all();
+        $collection = static::find()->with(static::$RELATIONS)->sort()->asArray()->all();
         $trees = array();
         $l = 0;
 
@@ -192,7 +197,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
                 } else {
                     // Add node to parent
-                    $item['parent'] = $stack[$l - 1]->category_id;
+                    $item['parent'] = $stack[$l - 1]->id;
                     $i = count($stack[$l - 1]->children);
                     $stack[$l - 1]->children[$i] = (object)$item;
                     $stack[] = & $stack[$l - 1]->children[$i];
@@ -207,9 +212,9 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      * Generates flat array of categories
      * @return array
      */
-    public static function generateFlat()
+    public function generateFlat()
     {
-        $collection = static::find()->with(['seo', 'tags'])->sort()->asArray()->all();
+        $collection = static::find()->with(static::$RELATIONS)->sort()->asArray()->all();
         $flat = [];
 
         if (count($collection) > 0) {
@@ -217,11 +222,11 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             $lastId = 0;
             foreach ($collection as $node) {
                 $node = (object)$node;
-                $id = $node->category_id;
+                $id = $node->id;
                 $node->parent = '';
 
                 if($node->depth > $depth){
-                    $node->parent = $flat[$lastId]->category_id;
+                    $node->parent = $flat[$lastId]->id;
                     $depth = $node->depth;
                 } elseif($node->depth == 0){
                     $depth = 0;
@@ -247,11 +252,11 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         foreach($flat as &$node){
             $node->children = [];
             foreach($flat as $temp){
-                if($temp->parent == $node->category_id){
-                    $node->children[] = $temp->category_id;
+                if($temp->parent == $node->id){
+                    $node->children[] = $temp->id;
                 }
             }
-            if(is_array($node->tags) && count($node->tags)){
+            if(!empty($node->tags) && is_array($node->tags) && count($node->tags)){
                 $tags = [];
                 foreach($node->tags as $tag){
                     $tags[] = $tag['name'];

@@ -11,7 +11,7 @@ use yii\easyii\modules\news\NewsModule;
 use yii\helpers\StringHelper;
 
 /**
- * @property integer $news_id
+ * @property integer $id
  * @property string $title
  * @property string $short
  * @property string $text
@@ -85,7 +85,7 @@ class News extends \yii\easyii\components\ActiveRecord
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'news_id'])->where(['class' => self::className()])->sort();
+        return $this->hasMany(Photo::className(), ['id' => 'item_id'])->where(['class' => self::className()])->sort();
     }
 
     public function beforeSave($insert)

@@ -96,7 +96,7 @@ class Order extends \yii\easyii\components\ActiveRecord
 
     public function getGoods()
     {
-        return $this->hasMany(Good::className(), ['order_id' => 'order_id']);
+        return $this->hasMany(Good::className(), ['id' => 'order_id']);
     }
 
     public function getCost()

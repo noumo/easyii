@@ -21,7 +21,7 @@ class Faq extends \yii\easyii\components\API
         $items = Data::cache(FaqModel::CACHE_KEY, 3600, function(){
             $items = [];
 
-            $query = FaqModel::find()->select(['faq_id', 'question', 'answer'])->status(FaqModel::STATUS_ON)->sort();
+            $query = FaqModel::find()->select(['id', 'question', 'answer'])->status(FaqModel::STATUS_ON)->sort();
             if(FaqModule::setting('enableTags')){
                 $query->with('tags');
             }
