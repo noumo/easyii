@@ -128,12 +128,11 @@ return [
     'Clear image' => 'Очистить изображение',
     'Image cleared' => 'Изображение очищено',
 
-    'Category fields' => 'Поля категории',
+    'Fields' => 'Дополнительные поля',
     'Manage fields' => 'Редактировать поля',
     'Add field' => 'Добавить поле',
     'Save fields' => 'Сохранить поля',
     'Type options with `comma` as delimiter' => 'Элементы списка через запятую',
-    'Fields' => 'Поля',
     'Type' => 'Тип поля',
     'Options' => 'Опции',
     'Select' => 'Выбрать',

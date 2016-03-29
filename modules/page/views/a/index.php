@@ -2,6 +2,8 @@
 use yii\easyii\components\CategoryModel;
 use yii\helpers\Url;
 
+\yii\bootstrap\BootstrapPluginAsset::register($this);
+
 $this->title = Yii::t('easyii/page', 'Pages');
 
 $module = $this->context->module->id;

@@ -26,7 +26,9 @@ $module = $this->context->module->id;
     <?php endif; ?>
     <?= $form->field($model, 'image_file')->fileInput() ?>
 <?php endif; ?>
+
 <?= $dataForm ?>
+
 <?php if($settings['itemDescription']) : ?>
     <?= $form->field($model, 'description')->widget(\yii\easyii\widgets\Redactor::className()) ?>
 <?php endif; ?>

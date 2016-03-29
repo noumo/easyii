@@ -1,49 +1,18 @@
 <?php
-namespace yii\easyii\components;
+namespace yii\easyii\behaviors;
 
-use Yii;
+use yii\base\Behavior;
+use yii\easyii\components\CategoryWithFieldsModel;
 use yii\easyii\helpers\Image;
 use yii\easyii\helpers\Upload;
-use yii\easyii\modules\entity\EntityModule;
 use yii\easyii\widgets\DateTimePicker;
 use yii\easyii\widgets\GooglePlacesAutoComplete;
+use yii\helpers\Html;
 use yii\validators\FileValidator;
 use yii\web\UploadedFile;
-use yii\helpers\Html;
-use yii\easyii\modules\entity\models\Category;
-use yii\easyii\modules\entity\models\Item;
 
-class ItemsWithFieldsController extends Controller
+class Fields extends Behavior
 {
-    public function actionIndex($id)
-    {
-        return $this->render('index', [
-            'category' => $this->findCategory($id)
-        ]);
-    }
-
-    public function actionPhotos($id)
-    {
-        return $this->render('photos', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    public function actionDeleteDataFile($file)
-    {
-        foreach(Item::find()->where(['like', 'data', $file])->all() as $model) {
-
-            foreach ($model->data as $name => $value) {
-                if (!is_array($value) && strpos($value, '/' . $file) !== false) {
-                    Upload::delete($value);
-                    $model->data->{$name} = '';
-                }
-            }
-            $model->update();
-        }
-        return $this->formatResponse(Yii::t('easyii', 'Deleted'));
-    }
-
     public function generateForm($fields, $data = null)
     {
         $result = '';
@@ -68,7 +37,7 @@ class ItemsWithFieldsController extends Controller
                 $result .= '<div class="checkbox"><label>'. Html::checkbox("Data[{$field->name}]", $value, ['uncheck' => 0]) .' '. $field->title .'</label></div>';
             }
             elseif ($field->type === CategoryWithFieldsModel::FIELD_TYPE_SELECT) {
-                $options = ['' => Yii::t('easyii/entity', 'Select')];
+                $options = ['' => \Yii::t('easyii', 'Select')];
                 foreach($field->options as $option){
                     $options[$option] = $option;
                 }
@@ -93,7 +62,7 @@ class ItemsWithFieldsController extends Controller
                     } else {
                         $result .= Html::a($basename, [$value], ['target' => 'blank']);
                     }
-                    $result .= ' ' . Html::a($isImage ? Yii::t('easyii', 'Delete') : '<i class="glyphicon glyphicon-remove"></i>', ['/admin/' . $this->module->id . '/items/delete-data-file', 'file' => $basename], ['class' => 'confirm-delete', 'data-reload' => 1, 'title' => Yii::t('easyii', 'Delete')]);
+                    $result .= ' ' . Html::a($isImage ? \Yii::t('easyii', 'Delete') : '<i class="glyphicon glyphicon-remove"></i>', ['/admin/' . $this->owner->module->id . '/a/delete-data-file', 'file' => $basename], ['class' => 'confirm-delete', 'data-reload' => 1, 'title' => \Yii::t('easyii', 'Delete')]);
                 }
                 $result .= '</p>' . Html::fileInput("Data[{$field->name}]"). '</div>';
             }
@@ -122,7 +91,7 @@ class ItemsWithFieldsController extends Controller
 
     public function parseData($model)
     {
-        $data = Yii::$app->request->post('Data');
+        $data = \Yii::$app->request->post('Data');
 
         if(isset($_FILES['Data']))
         {
@@ -142,17 +111,5 @@ class ItemsWithFieldsController extends Controller
         }
 
         return $data;
-    }
-
-    public function getSameCats($cat)
-    {
-        $result = [];
-        $fieldsHash = md5(json_encode($cat->fields));
-        foreach(Category::cats() as $cat){
-            if(md5(json_encode($cat->fields)) == $fieldsHash && (!count($cat->children) || EntityModule::setting('itemsInFolder'))) {
-                $result[$cat->id] = $cat->title;
-            }
-        }
-        return $result;
     }
 }

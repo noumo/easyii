@@ -6,7 +6,10 @@ use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
 use yii\easyii\actions\DeleteAction;
 use yii\easyii\actions\SortByDateAction;
+use yii\easyii\behaviors\Fields;
 use yii\easyii\components\ItemsWithFieldsController;
+use yii\easyii\modules\catalog\CatalogModule;
+use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
 use yii\widgets\ActiveForm;
 
@@ -32,6 +35,20 @@ class ItemsController extends ItemsWithFieldsController
         ];
     }
 
+    public function behaviors()
+    {
+        return [
+            'fields' => Fields::className()
+        ];
+    }
+
+    public function actionIndex($id)
+    {
+        return $this->render('index', [
+            'category' => $this->findCategory($id)
+        ]);
+    }
+
     public function actionCreate($id)
     {
         $category = $this->findCategory($id);
@@ -47,7 +64,7 @@ class ItemsController extends ItemsWithFieldsController
                 return ActiveForm::validate($model);
             }
             else {
-                $model->data = $this->parseData($model);
+                $model->data = $this->fields->parseData($model);
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
@@ -62,7 +79,7 @@ class ItemsController extends ItemsWithFieldsController
             return $this->render('create', [
                 'model' => $model,
                 'category' => $category,
-                'dataForm' => $this->generateForm($category->fields),
+                'dataForm' => $this->fields->generateForm($category->fields),
                 'cats' => $this->getSameCats($category)
             ]);
         }
@@ -78,7 +95,7 @@ class ItemsController extends ItemsWithFieldsController
                 return ActiveForm::validate($model);
             }
             else {
-                $model->data = $this->parseData($model);
+                $model->data = $this->fields->parseData($model);
                 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
@@ -92,9 +109,28 @@ class ItemsController extends ItemsWithFieldsController
         else {
             return $this->render('edit', [
                 'model' => $model,
-                'dataForm' => $this->generateForm($model->category->fields, $model->data),
+                'dataForm' => $this->fields->generateForm($model->category->fields, $model->data),
                 'cats' => $this->getSameCats($model->category)
             ]);
         }
+    }
+
+    public function actionPhotos($id)
+    {
+        return $this->render('photos', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function getSameCats($cat)
+    {
+        $result = [];
+        $fieldsHash = md5(json_encode($cat->fields));
+        foreach(Category::cats() as $cat){
+            if(md5(json_encode($cat->fields)) == $fieldsHash && (!count($cat->children) || CatalogModule::setting('itemsInFolder'))) {
+                $result[$cat->id] = $cat->title;
+            }
+        }
+        return $result;
     }
 }
