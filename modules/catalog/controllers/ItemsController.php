@@ -7,13 +7,13 @@ use yii\easyii\actions\ClearImageAction;
 use yii\easyii\actions\DeleteAction;
 use yii\easyii\actions\SortByDateAction;
 use yii\easyii\behaviors\Fields;
-use yii\easyii\components\ItemsWithFieldsController;
+use yii\easyii\components\Controller;
 use yii\easyii\modules\catalog\CatalogModule;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
 use yii\widgets\ActiveForm;
 
-class ItemsController extends ItemsWithFieldsController
+class ItemsController extends Controller
 {
     public $modelClass = 'yii\easyii\modules\catalog\models\Item';
     public $categoryClass = 'yii\easyii\modules\catalog\models\Category';
@@ -64,7 +64,7 @@ class ItemsController extends ItemsWithFieldsController
                 return ActiveForm::validate($model);
             }
             else {
-                $model->data = $this->fields->parseData($model);
+                $model->data = $this->parseData($model);
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
@@ -79,7 +79,7 @@ class ItemsController extends ItemsWithFieldsController
             return $this->render('create', [
                 'model' => $model,
                 'category' => $category,
-                'dataForm' => $this->fields->generateForm($category->fields),
+                'dataForm' => $this->generateForm($category->fields),
                 'cats' => $this->getSameCats($category)
             ]);
         }
@@ -95,7 +95,7 @@ class ItemsController extends ItemsWithFieldsController
                 return ActiveForm::validate($model);
             }
             else {
-                $model->data = $this->fields->parseData($model);
+                $model->data = $this->parseData($model);
                 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
@@ -109,7 +109,7 @@ class ItemsController extends ItemsWithFieldsController
         else {
             return $this->render('edit', [
                 'model' => $model,
-                'dataForm' => $this->fields->generateForm($model->category->fields, $model->data),
+                'dataForm' => $this->generateForm($model->category->fields, $model->data),
                 'cats' => $this->getSameCats($model->category)
             ]);
         }

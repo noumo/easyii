@@ -4,6 +4,7 @@ namespace yii\easyii\modules\catalog\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\ImageFile;
+use yii\easyii\behaviors\JsonColumns;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\CatalogModule;
@@ -60,7 +61,11 @@ class Item extends \yii\easyii\components\ActiveRecord
                 'attribute' => 'title',
                 'ensureUnique' => true,
                 'immutable' => CatalogModule::setting('itemSlugImmutable')
-            ]
+            ],
+            'jsonColumns' => [
+                'class' => JsonColumns::className(),
+                'columns' => ['fields', 'data']
+            ],
         ];
         if(CatalogModule::setting('itemThumb')){
             $behaviors['imageFileBehavior'] = ImageFile::className();
@@ -68,23 +73,8 @@ class Item extends \yii\easyii\components\ActiveRecord
         return $behaviors;
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
-                $this->data = new \stdClass();
-            }
-            $this->data = json_encode($this->data);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function afterSave($insert, $attributes){
         parent::afterSave($insert, $attributes);
-
-        $this->parseData();
 
         ItemData::deleteAll(['item_id' => $this->primaryKey]);
 
@@ -105,12 +95,6 @@ class Item extends \yii\easyii\components\ActiveRecord
             'name' => $name,
             'value' => $value
         ])->execute();
-    }
-
-    public function afterFind()
-    {
-        parent::afterFind();
-        $this->parseData();
     }
 
     public function getPhotos()
@@ -134,7 +118,4 @@ class Item extends \yii\easyii\components\ActiveRecord
         ItemData::deleteAll(['item_id' => $this->primaryKey]);
     }
 
-    private function parseData(){
-        $this->data = $this->data !== '' ? json_decode($this->data) : [];
-    }
 }

@@ -4,6 +4,7 @@ namespace yii\easyii\modules\page\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
+use yii\easyii\behaviors\JsonColumns;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\components\CategoryWithFieldsModel;
 use creocoder\nestedsets\NestedSetsBehavior;
@@ -57,7 +58,11 @@ class Page extends CategoryWithFieldsModel
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
-            ]
+            ],
+            'jsonColumns' => [
+                'class' => JsonColumns::className(),
+                'columns' => ['fields', 'data']
+            ],
         ];
     }
 }

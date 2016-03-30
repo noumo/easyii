@@ -1,5 +1,6 @@
 <?php
 namespace yii\easyii\components;
+use yii\easyii\behaviors\JsonColumns;
 
 /**
  * Extended CategoryModel with fields. Shared by categories
@@ -37,6 +38,16 @@ class CategoryWithFieldsModel extends CategoryModel
         ], parent::rules());
     }
 
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            'jsonColumns' => [
+                'class' => JsonColumns::className(),
+                'columns' => ['fields']
+            ]
+        ]);
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -44,27 +55,10 @@ class CategoryWithFieldsModel extends CategoryModel
                 $this->fields = $parent->fields;
             }
 
-            if(!$this->fields || !is_array($this->fields)){
-                $this->fields = [];
-            }
-            $this->fields = json_encode($this->fields);
-
             return true;
         } else {
             return false;
         }
-    }
-
-    public function afterSave($insert, $attributes)
-    {
-        parent::afterSave($insert, $attributes);
-        $this->parseFields();
-    }
-
-    public function afterFind()
-    {
-        parent::afterFind();
-        $this->parseFields();
     }
 
     public function getFieldByName($name)
@@ -75,10 +69,5 @@ class CategoryWithFieldsModel extends CategoryModel
             }
         }
         return null;
-    }
-
-    private function parseFields()
-    {
-        $this->fields = $this->fields !== '' ? json_decode($this->fields) : [];
     }
 }

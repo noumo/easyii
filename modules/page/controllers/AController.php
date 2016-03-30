@@ -52,7 +52,7 @@ class AController extends CategoryController
                 return ActiveForm::validate($model);
             } else {
                 $model->status = Page::STATUS_ON;
-                $model->data = $this->fields->parseData($model);
+                $model->data = $this->parseData($model);
 
                 $parent = (int)Yii::$app->request->post('parent', null);
                 if ($parent > 0 && ($parentCategory = Page::findOne($parent))) {
@@ -74,7 +74,7 @@ class AController extends CategoryController
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'dataForm' => $this->fields->generateForm($model->fields),
+                'dataForm' => $this->generateForm($model->fields),
                 'parent' => $parent
             ]);
         }
@@ -90,13 +90,14 @@ class AController extends CategoryController
     public function actionEdit($id)
     {
         $model = $this->findModel($id);
+        var_dump($model->data);
 
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
             } else {
-                $model->data = $this->fields->parseData($model);
+                $model->data = $this->parseData($model);
 
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/page', 'Page updated'));
@@ -108,7 +109,7 @@ class AController extends CategoryController
         } else {
             return $this->render('edit', [
                 'model' => $model,
-                'dataForm' => $this->fields->generateForm($model->fields, $model->data),
+                'dataForm' => $this->generateForm($model->fields, $model->data),
             ]);
         }
     }

@@ -74,7 +74,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
-            ]
+            ],
         ];
 
         if(isset($moduleSettings['categoryThumb']) && $moduleSettings['categoryThumb']){
