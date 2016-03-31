@@ -28,7 +28,7 @@ class JsonColumns extends \yii\base\Behavior
     public function encodeJson()
     {
         foreach($this->columns as $attribute) {
-            if(isset($this->owner->{$attribute})) {
+            if(array_key_exists($attribute, $this->owner->attributes)) {
                 $data = $this->owner->{$attribute};
                 if (!$data || (!is_array($data) && !is_object($data))) {
                     $data = new \stdClass();

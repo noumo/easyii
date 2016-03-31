@@ -1,6 +1,7 @@
 <?php
 namespace yii\easyii\components;
 use yii\easyii\behaviors\JsonColumns;
+use yii\easyii\behaviors\SortableModel;
 
 /**
  * Extended CategoryModel with fields. Shared by categories
@@ -30,7 +31,9 @@ class CategoryWithFieldsModel extends CategoryModel
         self::FIELD_TYPE_DATE => 'Date',
         self::FIELD_TYPE_ADDRESS => 'Address'
     ];
-    
+
+    public $parent_id;
+
     public function rules()
     {
         return array_merge([
@@ -46,19 +49,6 @@ class CategoryWithFieldsModel extends CategoryModel
                 'columns' => ['fields']
             ]
         ]);
-    }
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if($insert && ($parent = $this->parents(1)->one())){
-                $this->fields = $parent->fields;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function getFieldByName($name)

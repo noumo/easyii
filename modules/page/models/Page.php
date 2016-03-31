@@ -55,7 +55,7 @@ class Page extends CategoryWithFieldsModel
                 'ensureUnique' => true,
                 'immutable' => !empty($moduleSettings['slugImmutable']) ? $moduleSettings['slugImmutable'] : false
             ],
-            'tree' => [
+            'nesterSets' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
             ],

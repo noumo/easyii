@@ -19,6 +19,11 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return new ActiveQuery(get_called_class());
     }
 
+    public function save($runValidation = true, $attributeNames = null){
+        $result = parent::save($runValidation, $attributeNames);
+
+    }
+
     /**
      * Formats all model errors into a single string
      * @return string

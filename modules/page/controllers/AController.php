@@ -42,9 +42,8 @@ class AController extends CategoryController
         $fields = [];
         if($parent && ($parentPage = Page::findOne($parent))) {
             $fields = $parentPage->fields;
-        } elseif (PageModule::setting('defaultFields')) {
-            $fields = PageModule::setting('defaultFields');
         }
+        $model->fields = $fields;
 
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
@@ -57,6 +56,7 @@ class AController extends CategoryController
                 $parent = (int)Yii::$app->request->post('parent', null);
                 if ($parent > 0 && ($parentCategory = Page::findOne($parent))) {
                     $model->order_num = $parentCategory->order_num;
+
                     $model->appendTo($parentCategory);
                 } else {
                     $model->attachBehavior('sortable', SortableModel::className());
@@ -90,7 +90,6 @@ class AController extends CategoryController
     public function actionEdit($id)
     {
         $model = $this->findModel($id);
-        var_dump($model->data);
 
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {

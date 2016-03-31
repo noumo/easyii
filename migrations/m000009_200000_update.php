@@ -24,12 +24,12 @@ class m000009_200000_update extends \yii\db\Migration
     {
         $this->addColumn(Page::tableName(), 'fields', $this->text());
         $this->addColumn(Page::tableName(), 'data', $this->text());
-        $this->addColumn(Page::tableName(), 'tree', $this->integer());
-        $this->addColumn(Page::tableName(), 'lft', $this->integer());
-        $this->addColumn(Page::tableName(), 'rgt', $this->integer());
-        $this->addColumn(Page::tableName(), 'depth', $this->integer());
-        $this->addColumn(Page::tableName(), 'order_num', $this->integer());
-        $this->addColumn(Page::tableName(), 'status', $this->boolean()->defaultValue(0));
+        $this->addColumn(Page::tableName(), 'tree', $this->integer()->defaultValue(0));
+        $this->addColumn(Page::tableName(), 'lft', $this->integer()->defaultValue(0));
+        $this->addColumn(Page::tableName(), 'rgt', $this->integer()->defaultValue(0));
+        $this->addColumn(Page::tableName(), 'depth', $this->integer()->defaultValue(0));
+        $this->addColumn(Page::tableName(), 'order_num', $this->integer()->defaultValue(0));
+        $this->addColumn(Page::tableName(), 'status', $this->boolean()->defaultValue(1));
 
     }
 

@@ -71,7 +71,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 'ensureUnique' => true,
                 'immutable' => !empty($moduleSettings['categorySlugImmutable']) ? $moduleSettings['categorySlugImmutable'] : false
             ],
-            'tree' => [
+            'nesterSets' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
             ],
