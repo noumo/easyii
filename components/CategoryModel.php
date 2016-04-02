@@ -2,11 +2,11 @@
 namespace yii\easyii\components;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\behaviors\Taggable;
 use yii\easyii\models\SeoText;
 use yii\web\NotFoundHttpException;
@@ -66,9 +66,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             'seoBehavior' => SeoBehavior::className(),
             'taggabble' => Taggable::className(),
             'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true,
+                'class' => SlugBehavior::className(),
                 'immutable' => !empty($moduleSettings['categorySlugImmutable']) ? $moduleSettings['categorySlugImmutable'] : false
             ],
             'nesterSets' => [

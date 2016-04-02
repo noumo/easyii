@@ -2,10 +2,10 @@
 namespace yii\easyii\modules\page\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\JsonColumns;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\components\CategoryWithFieldsModel;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\easyii\components\Module;
@@ -50,9 +50,7 @@ class Page extends CategoryWithFieldsModel
             ],
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true,
+                'class' => SlugBehavior::className(),
                 'immutable' => !empty($moduleSettings['slugImmutable']) ? $moduleSettings['slugImmutable'] : false
             ],
             'nesterSets' => [
