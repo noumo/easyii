@@ -35,15 +35,21 @@ class AController extends CategoryController
      * @return array|string|\yii\web\Response
      * @throws \yii\web\HttpException
      */
-    public function actionCreate($parent = null)
+    public function actionCreate($slug = null, $parent = null)
     {
         $model = new Page;
 
         $fields = [];
         if($parent && ($parentPage = Page::findOne($parent))) {
             $fields = $parentPage->fields;
+        } elseif(PageModule::setting('defaultFields')) {
+            $settingFields = json_decode(PageModule::setting('defaultFields'));
+            if(!json_last_error() && $settingFields && is_array($settingFields) && count($settingFields)){
+                $fields = $settingFields;
+            }
         }
         $model->fields = $fields;
+        $model->slug = $slug;
 
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->isAjax) {
@@ -52,10 +58,9 @@ class AController extends CategoryController
             } else {
                 $model->status = Page::STATUS_ON;
                 $model->data = $this->parseData($model);
-                $model->create(Yii::$app->request->post('parent', null));
 
-                if (!$model->hasErrors()) {
-                    $this->flash('success', Yii::t('easyii', 'Category created'));
+                if ($model->create(Yii::$app->request->post('parent', null))) {
+                    $this->flash('success', Yii::t('easyii/page', 'Page created'));
                     return $this->redirect(['/admin/page', 'id' => $model->primaryKey]);
                 } else {
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
@@ -102,6 +107,27 @@ class AController extends CategoryController
                 'dataForm' => $this->generateForm($model->fields, $model->data),
             ]);
         }
+    }
+
+    /**
+     * Copy page
+     *
+     * @param $id
+     * @return array|string|\yii\web\Response
+     * @throws \yii\web\HttpException
+     */
+    public function actionCopy($id)
+    {
+        $model = new Page();
+        $model->load($this->findModel($id)->attributes, '');
+        $model->slug = null;
+
+        if ($model->create()) {
+            $this->flash('success', Yii::t('easyii/page', 'Page copied'));
+        } else {
+            $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
+        }
+        return $this->back();
     }
 
     /**

@@ -71,5 +71,6 @@ class CategoryWithFieldsModel extends CategoryModel
             $this->attachBehavior('sortable', SortableModel::className());
             $this->makeRoot();
         }
+        return $this->hasErrors() ? false : true;
     }
 }

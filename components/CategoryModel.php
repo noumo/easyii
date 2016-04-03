@@ -40,7 +40,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             ['slug', 'match', 'pattern' => static::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['tagNames', 'safe'],
-            [['status', 'depth', 'tree', 'lft', 'rgt'], 'integer'],
+            ['status', 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON]
         ];
     }
@@ -276,5 +276,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
             $this->attachBehavior('sortable', SortableModel::className());
             $this->makeRoot();
         }
+
+        return $this->hasErrors() ? false : true;
     }
 }

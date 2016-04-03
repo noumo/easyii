@@ -6,7 +6,8 @@ use Yii;
 class PageModule extends \yii\easyii\components\Module
 {
     public $settings = [
-        'slugImmutable' => false
+        'slugImmutable' => false,
+        'defaultFields' => '[]'
     ];
 
     public static $installConfig = [

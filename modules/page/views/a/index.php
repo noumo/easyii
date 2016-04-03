@@ -29,6 +29,7 @@ $baseUrl = '/admin/' . $module;
                         <i id="dropdownMenu<?= $page->id ?>" data-toggle="dropdown" aria-expanded="true" title="<?= Yii::t('easyii', 'Actions') ?>" class="glyphicon glyphicon-menu-hamburger"></i>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu<?= $page->id ?>">
                             <li><a href="<?= Url::to(['/admin/page/a/create', 'parent' => $page->id]) ?>"><i class="glyphicon glyphicon-plus font-12"></i> <?= Yii::t('easyii/page', 'Add subpage') ?></a></li>
+                            <li><a href="<?= Url::to(['/admin/page/a/copy', 'id' => $page->id]) ?>"><i class="glyphicon glyphicon-duplicate font-12"></i> <?= Yii::t('easyii/page', 'Copy page') ?></a></li>
                             <li role="presentation" class="divider"></li>
                             <li><a href="<?= Url::to(['/admin/page/a/up', 'id' => $page->id]) ?>"><i class="glyphicon glyphicon-arrow-up font-12"></i> <?= Yii::t('easyii', 'Move up') ?></a></li>
                             <li><a href="<?= Url::to(['/admin/page/a/down', 'id' => $page->id]) ?>"><i class="glyphicon glyphicon-arrow-down font-12"></i> <?= Yii::t('easyii', 'Move down') ?></a></li>

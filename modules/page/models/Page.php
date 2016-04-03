@@ -25,7 +25,7 @@ class Page extends CategoryWithFieldsModel
             ['title', 'string', 'max' => 128],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            [['status', 'depth', 'tree', 'lft', 'rgt'], 'integer'],
+            ['status', 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON],
             [['fields', 'data'], 'safe'],
         ];
@@ -52,7 +52,7 @@ class Page extends CategoryWithFieldsModel
                 'class' => SlugBehavior::className(),
                 'immutable' => PageModule::setting('slugImmutable')
             ],
-            'nesterSets' => [
+            'nestedSets' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
             ],

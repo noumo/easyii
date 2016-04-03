@@ -78,9 +78,8 @@ class CategoryController extends Controller
                 return ActiveForm::validate($model);
             } else {
                 $model->status = $class::STATUS_ON;
-                $model->create(Yii::$app->request->post('parent', null));
 
-                if (!$model->hasErrors()) {
+                if ($model->create(Yii::$app->request->post('parent', null))) {
                     $this->flash('success', Yii::t('easyii', 'Category created'));
                     return $this->redirect(['/admin/' . $this->moduleName, 'id' => $model->primaryKey]);
                 } else {

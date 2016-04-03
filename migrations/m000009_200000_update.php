@@ -34,6 +34,9 @@ class m000009_200000_update extends \yii\db\Migration
         MigrationHelper::appendModuleSettings('page', [
             'slugImmutable' => false,
         ]);
+        MigrationHelper::appendModuleSettings('page', [
+            'defaultFields' => '[]',
+        ]);
     }
 
     public function down()
