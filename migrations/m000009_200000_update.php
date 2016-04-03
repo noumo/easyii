@@ -31,6 +31,15 @@ class m000009_200000_update extends \yii\db\Migration
         $this->addColumn(Page::tableName(), 'order_num', $this->integer()->defaultValue(0));
         $this->addColumn(Page::tableName(), 'status', $this->boolean()->defaultValue(1));
 
+        $i = 1;
+        foreach(Page::find()->all() as $page) {
+            $page->tree = $i;
+            $page->lft = 1;
+            $page->rgt = 2;
+            $page->order_num = $i++;
+            $page->update(false, ['tree', 'lft', 'rgt', 'order_num']);
+        }
+
         MigrationHelper::appendModuleSettings('page', [
             'slugImmutable' => false,
         ]);
