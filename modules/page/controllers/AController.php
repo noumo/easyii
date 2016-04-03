@@ -52,16 +52,7 @@ class AController extends CategoryController
             } else {
                 $model->status = Page::STATUS_ON;
                 $model->data = $this->parseData($model);
-
-                $parent = (int)Yii::$app->request->post('parent', null);
-                if ($parent > 0 && ($parentCategory = Page::findOne($parent))) {
-                    $model->order_num = $parentCategory->order_num;
-
-                    $model->appendTo($parentCategory);
-                } else {
-                    $model->attachBehavior('sortable', SortableModel::className());
-                    $model->makeRoot();
-                }
+                $model->create(Yii::$app->request->post('parent', null));
 
                 if (!$model->hasErrors()) {
                     $this->flash('success', Yii::t('easyii', 'Category created'));

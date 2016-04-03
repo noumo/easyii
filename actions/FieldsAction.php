@@ -57,7 +57,7 @@ class FieldsAction extends \yii\base\Action
 
             $model->fields = $result;
 
-            if($model->save()){
+            if($model->update(false, ['fields'])){
                 $ids = [];
                 foreach($model->children()->all() as $child){
                     $ids[] = $child->primaryKey;
@@ -67,8 +67,7 @@ class FieldsAction extends \yii\base\Action
                 }
 
                 $this->controller->flash('success', Yii::t('easyii', 'Category updated'));
-            }
-            else{
+            } elseif($model->hasErrors()) {
                 $this->controller->flash('error', Yii::t('easyii','Update error. {0}', $model->formatErrors()));
             }
             return $this->controller->refresh();

@@ -7,6 +7,7 @@ use yii\easyii\behaviors\CacheFlush;
 use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\easyii\behaviors\SortableModel;
 use yii\easyii\behaviors\Taggable;
 use yii\easyii\models\SeoText;
 use yii\web\NotFoundHttpException;
@@ -71,7 +72,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 'ensureUnique' => true,
                 'immutable' => !empty($moduleSettings['categorySlugImmutable']) ? $moduleSettings['categorySlugImmutable'] : false
             ],
-            'nesterSets' => [
+            'nestedSets' => [
                 'class' => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
             ],
@@ -212,7 +213,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
      * Generates flat array of categories
      * @return array
      */
-    public function generateFlat()
+    public static function generateFlat()
     {
         $collection = static::find()->with(static::$RELATIONS)->sort()->asArray()->all();
         $flat = [];
@@ -266,5 +267,16 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         }
 
         return $flat;
+    }
+
+    public function create($parent_id = null)
+    {
+        if ($parent_id && ($parentCategory = static::findOne($parent_id))) {
+            $this->order_num = $parentCategory->order_num;
+            $this->appendTo($parentCategory);
+        } else {
+            $this->attachBehavior('sortable', SortableModel::className());
+            $this->makeRoot();
+        }
     }
 }

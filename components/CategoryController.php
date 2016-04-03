@@ -68,6 +68,7 @@ class CategoryController extends Controller
      */
     public function actionCreate($parent = null)
     {
+        /** @var CategoryModel $model */
         $class = $this->categoryClass;
         $model = new $class;
 
@@ -77,16 +78,7 @@ class CategoryController extends Controller
                 return ActiveForm::validate($model);
             } else {
                 $model->status = $class::STATUS_ON;
-
-                $parent = (int)Yii::$app->request->post('parent', null);
-                if ($parent > 0 && ($parentCategory = $class::findOne($parent))) {
-                    $model->fields = $parentCategory->fields;
-                    $model->order_num = $parentCategory->order_num;
-                    $model->appendTo($parentCategory);
-                } else {
-                    $model->attachBehavior('sortable', SortableModel::className());
-                    $model->makeRoot();
-                }
+                $model->create(Yii::$app->request->post('parent', null));
 
                 if (!$model->hasErrors()) {
                     $this->flash('success', Yii::t('easyii', 'Category created'));

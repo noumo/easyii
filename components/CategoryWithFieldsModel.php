@@ -60,4 +60,16 @@ class CategoryWithFieldsModel extends CategoryModel
         }
         return null;
     }
+
+    public function create($parent_id = null)
+    {
+        if ($parent_id && ($parentCategory = static::findOne($parent_id))) {
+            $this->fields = $parentCategory->fields;
+            $this->order_num = $parentCategory->order_num;
+            $this->appendTo($parentCategory);
+        } else {
+            $this->attachBehavior('sortable', SortableModel::className());
+            $this->makeRoot();
+        }
+    }
 }
