@@ -55,7 +55,8 @@ class ItemsController extends Controller
 
         $model = new Item([
             'category_id' => $id,
-            'time' => time()
+            'time' => time(),
+            'available' => 1
         ]);
 
         if ($model->load(Yii::$app->request->post())) {

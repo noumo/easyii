@@ -63,7 +63,7 @@ class FieldsAction extends \yii\base\Action
                     $ids[] = $child->primaryKey;
                 }
                 if(count($ids)){
-                    $modelClass::updateAll(['fields' => json_encode($model->fields)], ['in', 'category_id', $ids]);
+                    $modelClass::updateAll(['fields' => json_encode($model->fields)], ['in', 'id', $ids]);
                 }
 
                 $this->controller->flash('success', Yii::t('easyii', 'Category updated'));

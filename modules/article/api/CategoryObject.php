@@ -53,7 +53,7 @@ class CategoryObject extends \yii\easyii\components\ApiObject
             $with[] = 'tags';
         }
 
-        $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sortDate();
+        $query = Item::find()->with(['seo'])->where(['category_id' => $this->id])->status(Item::STATUS_ON)->sortDate();
 
         if(!empty($options['where'])){
             $query->andFilterWhere($options['where']);

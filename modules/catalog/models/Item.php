@@ -33,6 +33,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
+            ['available', 'default', 'value' => 1],
             ['status', 'default', 'value' => self::STATUS_ON],
         ];
     }

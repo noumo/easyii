@@ -66,7 +66,7 @@ class Catalog extends \yii\easyii\components\API
     {
         $result = [];
 
-        $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
+        $query = Item::find()->with(['seo'])->status(Item::STATUS_ON);
 
         if(!empty($options['where'])){
             $query->andFilterWhere($options['where']);
