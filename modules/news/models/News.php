@@ -2,9 +2,9 @@
 namespace yii\easyii\modules\news\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\behaviors\Taggable;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\news\NewsModule;
@@ -69,9 +69,7 @@ class News extends \yii\easyii\components\ActiveRecord
             'seoBehavior' => SeoBehavior::className(),
             'taggabble' => Taggable::className(),
             'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true,
+                'class' => SlugBehavior::className(),
                 'immutable' => NewsModule::setting('slugImmutable')
             ],
         ];

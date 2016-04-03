@@ -8,7 +8,7 @@ use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\components\CategoryWithFieldsModel;
 use creocoder\nestedsets\NestedSetsBehavior;
-use yii\easyii\components\Module;
+use yii\easyii\modules\page\PageModule;
 
 class Page extends CategoryWithFieldsModel
 {
@@ -42,7 +42,6 @@ class Page extends CategoryWithFieldsModel
 
     public function behaviors()
     {
-        $moduleSettings = Yii::$app->getModule('admin')->activeModules[Module::getModuleName(static::className())]->settings;
         return [
             'cacheflush' => [
                 'class' => CacheFlush::className(),
@@ -51,7 +50,7 @@ class Page extends CategoryWithFieldsModel
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
                 'class' => SlugBehavior::className(),
-                'immutable' => !empty($moduleSettings['slugImmutable']) ? $moduleSettings['slugImmutable'] : false
+                'immutable' => PageModule::setting('slugImmutable')
             ],
             'nesterSets' => [
                 'class' => NestedSetsBehavior::className(),

@@ -2,10 +2,11 @@
 namespace yii\easyii\modules\file\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\behaviors\SortableModel;
 use yii\easyii\helpers\Upload;
+use yii\easyii\modules\file\FileModule;
 
 class File extends \yii\easyii\components\ActiveRecord
 {
@@ -43,9 +44,8 @@ class File extends \yii\easyii\components\ActiveRecord
             SortableModel::className(),
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
+                'class' => SlugBehavior::className(),
+                'immutable' => FileModule::setting('slugImmutable')
             ]
         ];
     }

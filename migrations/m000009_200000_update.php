@@ -31,6 +31,9 @@ class m000009_200000_update extends \yii\db\Migration
         $this->addColumn(Page::tableName(), 'order_num', $this->integer()->defaultValue(0));
         $this->addColumn(Page::tableName(), 'status', $this->boolean()->defaultValue(1));
 
+        MigrationHelper::appendModuleSettings('page', [
+            'slugImmutable' => false,
+        ]);
     }
 
     public function down()

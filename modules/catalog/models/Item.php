@@ -2,10 +2,10 @@
 namespace yii\easyii\modules\catalog\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
 use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\JsonColumns;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\CatalogModule;
 
@@ -57,9 +57,7 @@ class Item extends \yii\easyii\components\ActiveRecord
         $behaviors = [
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true,
+                'class' => SlugBehavior::className(),
                 'immutable' => CatalogModule::setting('itemSlugImmutable')
             ],
             'jsonColumns' => [

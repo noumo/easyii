@@ -18,12 +18,8 @@ class SlugBehavior extends SluggableBehavior
     {
         if($this->isEnteredManually()) {
             $slug = $this->owner->{$this->slugAttribute};
-            if(!preg_match(ActiveRecord::$SLUG_PATTERN, $slug)){
-                $this->owner->addError($this->slugAttribute, 'Entered slug is not valid.');
-                return null;
-            }
             if(!$this->validateSlug($slug)) {
-                $this->owner->addError($this->slugAttribute, 'Entered slug is not unique.');
+                $this->owner->addError($this->slugAttribute, \Yii::t('yii', '{attribute} "{value}" has already been taken.', ['attribute' => \Yii::t('easyii', 'Slug'), 'value' => $slug]));
                 return null;
             }
             return $slug;
