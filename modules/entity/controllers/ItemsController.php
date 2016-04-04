@@ -24,8 +24,14 @@ class ItemsController extends Controller
                 'class' => DeleteAction::className(),
                 'successMessage' => Yii::t('easyii/entity', 'Item deleted')
             ],
-            'up' => SortByNumAction::className(),
-            'down' => SortByNumAction::className(),
+            'up' => [
+                'class' => SortByNumAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
+            'down' => [
+                'class' => SortByNumAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
             'on' => ChangeStatusAction::className(),
             'off' => ChangeStatusAction::className(),
         ];

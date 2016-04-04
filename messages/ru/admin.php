@@ -147,6 +147,6 @@ return [
     'Countries' => 'Страны',
     'Sources' => 'Источники',
     'chart is loading' => 'график загружается',
-
+    'Show on map' => 'На карте'
 
 ];

@@ -25,8 +25,14 @@ class ItemsController extends Controller
                 'successMessage' => Yii::t('easyii/article', 'Article deleted')
             ],
             'clear-image' => ClearImageAction::className(),
-            'up' => SortByDateAction::className(),
-            'down' => SortByDateAction::className(),
+            'up' => [
+                'class' => SortByDateAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
+            'down' => [
+                'class' => SortByDateAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
             'on' => ChangeStatusAction::className(),
             'off' => ChangeStatusAction::className(),
         ];
