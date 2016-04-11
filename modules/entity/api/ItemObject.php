@@ -48,9 +48,14 @@ class ItemObject extends \yii\easyii\components\ApiObject
 
     public function __get($name)
     {
-        if(property_exists($this->data, $name)){
-            return $this->data->{$name};
+        if (array_key_exists($name, $this->fields())) {
+            if(property_exists($this->data, $name)){
+                return $this->data->{$name};
+            }
+
+            return null;
         }
+
         return parent::__get($name);
     }
 }

@@ -10,8 +10,11 @@ use \yii\easyii\modules\content\modules\contentElements\elements\others\module\m
 if ($element->format === Element::FORMAT_RAW) {
 	$itemView = '_listView';
 }
-else {
+elseif ($element->format) {
 	$itemView = '_' . $element->format . 'View';
+}
+else {
+	$itemView = 'view';
 }
 
 echo \yii\widgets\ListView::widget([

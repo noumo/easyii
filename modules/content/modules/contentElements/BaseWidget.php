@@ -112,7 +112,8 @@ abstract class BaseWidget extends Widget
 	{
 		$this->element->load($data, '');
 
-		foreach ($data['options'] as $optionData) {
+		$options = (array)$data['options'];
+		foreach ($options as $optionData) {
 			$optionData['element_id'] = $this->element->primaryKey;
 
 			if ($optionData['scenario'] == 'update') {
