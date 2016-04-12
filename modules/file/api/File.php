@@ -83,7 +83,12 @@ class File extends \yii\easyii\components\API
 
     private function findFile($id_slug)
     {
-        if(!($file = FileModel::find()->where(['or', 'id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one())){
+        if(is_numeric($id_slug)) {
+            $condition = ['or', 'id=:id_slug', 'slug=:id_slug'];
+        } else {
+            $condition = 'slug=:id_slug';
+        }
+        if(!($file = FileModel::find()->where($condition, [':id_slug' => $id_slug])->one())){
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
         return new FileObject($file);

@@ -106,7 +106,12 @@ class News extends \yii\easyii\components\API
 
     private function findNews($id_slug)
     {
-        if(!($news = NewsModel::find()->where(['or', 'id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(NewsModel::STATUS_ON)->one())) {
+        if(is_numeric($id_slug)) {
+            $condition = ['or', 'id=:id_slug', 'slug=:id_slug'];
+        } else {
+            $condition = 'slug=:id_slug';
+        }
+        if(!($news = NewsModel::find()->where($condition, [':id_slug' => $id_slug])->status(NewsModel::STATUS_ON)->one())) {
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
         $news->updateCounters(['views' => 1]);
