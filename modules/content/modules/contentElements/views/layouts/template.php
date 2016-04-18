@@ -14,7 +14,7 @@
 	data-element-type="<?= $element->type ?>"
 	data-element-scenario="<?= $element->scenario ?>">
 
-	<? require '_header.php' ?>
+	<?php require '_header.php' ?>
 
 	<?= $content ?>
 </li>
