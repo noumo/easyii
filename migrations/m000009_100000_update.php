@@ -156,6 +156,10 @@ class m000009_100000_update extends \yii\db\Migration
         MigrationHelper::appendModuleSettings('news', [
             'slugImmutable' => false,
         ]);
+        MigrationHelper::appendModuleSettings('feedback', [
+            'enableEmail' => true,
+            'enableText' => true,
+        ]);
 
         //UPDATE VERSION
         $this->update(models\Setting::tableName(), ['value' => self::VERSION], ['name' => 'easyii_version']);

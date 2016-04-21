@@ -43,12 +43,12 @@ class Feedback extends \yii\easyii\components\API
         echo Html::hiddenInput('successUrl', $options['successUrl'] ? $options['successUrl'] : Url::current([self::SENT_VAR => 1]));
 
         echo $form->field($model, 'name');
-        echo $form->field($model, 'email')->input('email');
 
+        if(FeedbackModule::setting('enableEmail')) echo $form->field($model, 'email')->input('email');
         if(FeedbackModule::setting('enablePhone')) echo $form->field($model, 'phone');
         if(FeedbackModule::setting('enableTitle')) echo $form->field($model, 'title');
 
-        echo $form->field($model, 'text')->textarea();
+        if(FeedbackModule::setting('enableText')) echo $form->field($model, 'text')->textarea();
 
         if(FeedbackModule::setting('enableCaptcha')) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 
