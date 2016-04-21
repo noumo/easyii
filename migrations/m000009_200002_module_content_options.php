@@ -22,7 +22,7 @@ class m000009_200002_module_content_options extends \yii\db\Migration
 		$this->createIndex('IDX_option_element_id', ElementOption::tableName(), 'element_id');
 		$this->createIndex('UNQ_option_element', ElementOption::tableName(), ['element_id', 'type'], true);
 
-		$types = [ElementOption::TYPE_HTML, ElementOption::TYPE_STYLE, ElementOption::TYPE_META];
+		$types = [ElementOption::TYPE_HTML_CLASS, ElementOption::TYPE_HTML_STYLE];
 		foreach ($types as $type) {
 			$this->execute("
 				INSERT INTO easyii_content_element_option (element_id, type)
