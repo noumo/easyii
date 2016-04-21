@@ -32,7 +32,7 @@ use \yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 
 	<?php Modal::end(); ?>
 </div>
-<?php# var_dump($element->elements);die;?>
+
 <?= \yii\easyii\modules\content\modules\contentElements\widgets\EditableList::widget([
 	'items' => $element->elements,
 	'render' => function (BaseElement $item, $index) {
