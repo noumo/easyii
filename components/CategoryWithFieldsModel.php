@@ -32,6 +32,13 @@ class CategoryWithFieldsModel extends CategoryModel
         self::FIELD_TYPE_ADDRESS => 'Address'
     ];
 
+    public static $FIELDS_WITH_OPTIONS = [
+        self::FIELD_TYPE_SELECT,
+        self::FIELD_TYPE_CHECKBOX,
+        self::FIELD_TYPE_FILE,
+        self::FIELD_TYPE_ADDRESS
+    ];
+
     public $parent_id;
 
     public function rules()

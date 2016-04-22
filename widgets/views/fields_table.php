@@ -21,7 +21,9 @@ var fieldTemplate = \'\
             </div>\
         </td>\
     </tr>\';
+var fieldsWithOptions = ["' . implode('","', CategoryWithFieldsModel::$FIELDS_WITH_OPTIONS) . '"];
 ', \yii\web\View::POS_HEAD);
+
 ?>
 <?= Html::button('<i class="glyphicon glyphicon-plus font-12"></i> '.Yii::t('easyii', 'Add field'), ['class' => 'btn btn-default', 'id' => 'addField']) ?>
 
@@ -44,7 +46,7 @@ var fieldTemplate = \'\
                 </select>
             </td>
             <td>
-                <textarea class="form-control field-options" placeholder="<?= Yii::t('easyii', 'Type options with `comma` as delimiter') ?>" <?= (!$field->options && $field->type != 'file') ? 'style="display: none;"' : '' ?> ><?= is_array($field->options) ? implode(',', $field->options) : $field->options ?></textarea>
+                <textarea class="form-control field-options" placeholder="<?= Yii::t('easyii', 'Type options with `comma` as delimiter') ?>" <?= (!in_array($field->type, CategoryWithFieldsModel::$FIELDS_WITH_OPTIONS)) ? 'style="display: none;"' : '' ?> ><?= is_array($field->options) ? implode(',', $field->options) : $field->options ?></textarea>
             </td>
             <td class="text-right">
                 <div class="btn-group btn-group-sm" role="group">

@@ -32,6 +32,7 @@ return [
     'File' => 'Файл',
     'Views' => 'Просмотры',
     'Description' => 'Описание',
+    'Create item' => 'Добавить запись',
     'Delete item' => 'Удалить запись',
     'No records found' => 'Здесь пока пусто',
     'Save' => 'Сохранить',
@@ -147,6 +148,6 @@ return [
     'Countries' => 'Страны',
     'Sources' => 'Источники',
     'chart is loading' => 'график загружается',
-
+    'Show on map' => 'На карте'
 
 ];

@@ -28,8 +28,14 @@ class ItemsController extends Controller
                 'successMessage' => Yii::t('easyii/catalog', 'Item deleted')
             ],
             'clear-image' => ClearImageAction::className(),
-            'up' => SortByDateAction::className(),
-            'down' => SortByDateAction::className(),
+            'up' => [
+                'class' => SortByDateAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
+            'down' => [
+                'class' => SortByDateAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
             'on' => ChangeStatusAction::className(),
             'off' => ChangeStatusAction::className(),
         ];
@@ -55,7 +61,8 @@ class ItemsController extends Controller
 
         $model = new Item([
             'category_id' => $id,
-            'time' => time()
+            'time' => time(),
+            'available' => 1
         ]);
 
         if ($model->load(Yii::$app->request->post())) {

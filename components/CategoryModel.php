@@ -129,6 +129,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                     $model = new static([
                         'id' => $id,
                         'parent' => $cat->parent,
+                        'depth' => $cat->depth,
                         'children' => $cat->children
                     ]);
 

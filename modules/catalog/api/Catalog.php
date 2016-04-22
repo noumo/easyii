@@ -66,7 +66,7 @@ class Catalog extends \yii\easyii\components\API
     {
         $result = [];
 
-        $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
+        $query = Item::find()->with(['seo'])->status(Item::STATUS_ON);
 
         if(!empty($options['where'])){
             $query->andFilterWhere($options['where']);
@@ -180,7 +180,12 @@ class Catalog extends \yii\easyii\components\API
 
     private function findItem($id_slug)
     {
-        if(!($item = Item::find()->where(['or', 'id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())){
+        if(is_numeric($id_slug)) {
+            $condition = ['or', 'id=:id_slug', 'slug=:id_slug'];
+        } else {
+            $condition = 'slug=:id_slug';
+        }
+        if(!($item = Item::find()->where($condition, [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())){
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
         return new ItemObject($item);

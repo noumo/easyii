@@ -6,6 +6,7 @@ use yii\helpers\Url;
 
 class PageObject extends \yii\easyii\components\ApiObject
 {
+    public $data;
     public $slug;
     private $_children;
 
@@ -30,5 +31,21 @@ class PageObject extends \yii\easyii\components\ApiObject
 
     public function getEditLink(){
         return Url::to(['/admin/page/a/edit/', 'id' => $this->id]);
+    }
+
+    public function __get($name)
+    {
+        if(is_object($this->data) && property_exists($this->data, $name)){
+            return $this->data->{$name};
+        }
+        return parent::__get($name);
+    }
+
+    public function __isset($name)
+    {
+        if(is_object($this->data) && property_exists($this->data, $name)){
+            return true;
+        }
+        return parent::__isset($name);
     }
 }
