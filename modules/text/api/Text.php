@@ -32,7 +32,8 @@ class Text extends API
         if(($text = $this->findText($id_slug)) === null){
             return $this->notFound($id_slug);
         }
-        return LIVE_EDIT ? API::liveEdit($text['text'], Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $text['text'];
+        $textContent = nl2br($text['text']);
+        return LIVE_EDIT ? API::liveEdit($textContent, Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $textContent;
     }
 
     private function findText($id_slug)

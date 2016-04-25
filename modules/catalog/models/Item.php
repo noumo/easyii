@@ -98,7 +98,7 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['id' => 'item_id'])->where(['class' => self::className()])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'id'])->where(['class' => self::className()])->sort();
     }
 
     public function getCategory()

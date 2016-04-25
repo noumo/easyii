@@ -28,8 +28,10 @@ class Feedback extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'text'], 'required'],
+            ['name', 'required'],
             ['email', 'required', 'when' => function($model) { return (!FeedbackModule::setting('enablePhone') || !$model->phone); }],
+            ['phone', 'required', 'when' => function($model) { return (!FeedbackModule::setting('enableEmail') || !$model->email); }],
+            ['text', 'required', 'when' => function($model) { return FeedbackModule::setting('enableText'); }],
             [['name', 'email', 'phone', 'title', 'text'], 'trim'],
             [['name','title', 'text'], EscapeValidator::className()],
             ['title', 'string', 'max' => 128],
