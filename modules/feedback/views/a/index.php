@@ -13,9 +13,7 @@ $module = $this->context->module->id;
     <table class="table table-hover">
         <thead>
             <tr>
-                <?php if(IS_ROOT) : ?>
-                    <th width="50">#</th>
-                <?php endif; ?>
+                <th width="50">#</th>
                 <th><?= Yii::t('easyii', $this->context->module->settings['enableTitle'] ? 'Title' : 'Text') ?></th>
                 <th width="150"><?= Yii::t('easyii', 'Date') ?></th>
                 <th width="100"><?= Yii::t('easyii/feedback', 'Answer') ?></th>
@@ -25,9 +23,7 @@ $module = $this->context->module->id;
         <tbody>
         <?php foreach($data->models as $item) : ?>
             <tr>
-                <?php if(IS_ROOT) : ?>
-                    <td><?= $item->primaryKey ?></td>
-                <?php endif; ?>
+                <td><?= $item->primaryKey ?></td>
                 <td><a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>"><?= $item->name . ' ' . ($item->phone ? $item->phone : $item->email) ?></a></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
                 <td>

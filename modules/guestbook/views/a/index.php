@@ -15,9 +15,7 @@ $module = $this->context->module->id;
     <table class="table table-hover">
         <thead>
             <tr>
-                <?php if(IS_ROOT) : ?>
-                    <th width="50">#</th>
-                <?php endif; ?>
+                <th width="50">#</th>
                 <th><?= Yii::t('easyii', $this->context->module->settings['enableTitle'] ? 'Title' : 'Text') ?></th>
                 <th width="150"><?= Yii::t('easyii', 'Date') ?></th>
                 <th width="100"><?= Yii::t('easyii/guestbook', 'Answer') ?></th>
@@ -28,9 +26,7 @@ $module = $this->context->module->id;
         <tbody>
     <?php foreach($data->models as $item) : ?>
             <tr>
-                <?php if(IS_ROOT) : ?>
-                    <td><?= $item->primaryKey ?></td>
-                <?php endif; ?>
+                <td><?= $item->primaryKey ?></td>
                 <td>
                     <?php if($item->new) : ?>
                         <span class="label label-warning">NEW</span>
