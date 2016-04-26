@@ -131,52 +131,6 @@ class Catalog extends \yii\easyii\components\API
             'options' => $options
         ]);
     }
-    
-    public static function applyFilters($filters, $query)
-    {
-        if(is_array($filters)){
-
-            if(!empty($filters['price'])){
-                $price = $filters['price'];
-                if(is_array($price) && count($price) == 2) {
-                    if(!$price[0]){
-                        $query->andFilterWhere(['<=', 'price * ( 1 - discount / 100 )', (int)$price[1]]);
-                    } elseif(!$price[1]) {
-                        $query->andFilterWhere(['>=', 'price * ( 1 - discount / 100 )', (int)$price[0]]);
-                    } else {
-                        $query->andFilterWhere(['between', 'price * ( 1 - discount / 100 )', (int)$price[0], (int)$price[1]]);
-                    }
-                }
-                unset($filters['price']);
-            }
-            if(count($filters)){
-                $filtersApplied = 0;
-                $subQuery = ItemData::find()->select('item_id, COUNT(*) as filter_matched')->groupBy('item_id');
-                foreach($filters as $field => $value){
-                    if(!is_array($value)) {
-                        $subQuery->orFilterWhere(['and', ['name' => $field], ['value' => $value]]);
-                        $filtersApplied++;
-                    } elseif(count($value) == 2){
-                        if(!$value[0]){
-                            $additionalCondition = ['<=', 'value', (int)$value[1]];
-                        } elseif(!$value[1]) {
-                            $additionalCondition = ['>=', 'value', (int)$value[0]];
-                        } else {
-                            $additionalCondition = ['between', 'value', (int)$value[0], (int)$value[1]];
-                        }
-                        $subQuery->orFilterWhere(['and', ['name' => $field], $additionalCondition]);
-
-                        $filtersApplied++;
-                    }
-                }
-                if($filtersApplied) {
-                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '.Item::tableName().'.item_id');
-                    $query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
-                }
-            }
-        }
-        return $query;
-    }
 
     private function findItem($id_slug)
     {
@@ -189,5 +143,50 @@ class Catalog extends \yii\easyii\components\API
             throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
         }
         return new ItemObject($item);
+    }
+    
+    public static function applyFilters($filters, $query)
+    {
+        if(is_array($filters)){
+
+            if(!empty($filters['price']) && ($priceCondition = self::buildConditionArray($filters['price'], 'price * ( 1 - discount / 100 )'))){
+                $query->andFilterWhere($priceCondition);
+                unset($filters['price']);
+            }
+            if(count($filters)){
+                $filtersApplied = 0;
+                $subQuery = ItemData::find()->select('item_id, COUNT(*) as filter_matched')->groupBy('item_id');
+                foreach($filters as $field => $value){
+                    if(!is_array($value)) {
+                        $subQuery->orFilterWhere(['and', ['name' => $field], ['value' => $value]]);
+                        $filtersApplied++;
+                    } elseif(($additionalCondition = self::buildConditionArray($value, 'value'))){
+                        $subQuery->orFilterWhere(['and', ['name' => $field], $additionalCondition]);
+                        $filtersApplied++;
+                    }
+                }
+                if($filtersApplied) {
+                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = ' . Item::tableName() . '.id');
+                    $query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
+                }
+            }
+        }
+        return $query;
+    }
+
+    private static function buildConditionArray($data, $fieldName)
+    {
+        if(empty($data) || !is_array($data) || count($data) < 2 || !in_array($data[0], ['>', '>=', '<', '<=', 'between', 'in'])) {
+            return null;
+        }
+        $result = [
+            $data[0],
+            $fieldName,
+            $data[1]
+        ];
+        if(!empty($data[2])) {
+            $result[] = $data[2];
+        }
+        return $result;
     }
 }
