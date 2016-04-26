@@ -25,9 +25,10 @@ class Page extends CategoryWithFieldsModel
             ['title', 'string', 'max' => 128],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
-            ['status', 'integer'],
+            [['status', 'show_in_menu'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_ON],
             [['fields', 'data'], 'safe'],
+            ['show_in_menu', 'default', 'value' => 0],
         ];
     }
 
@@ -37,6 +38,7 @@ class Page extends CategoryWithFieldsModel
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
             'slug' => Yii::t('easyii', 'Slug'),
+            'show_in_menu' => Yii::t('easyii/page', 'Show in menu'),
         ];
     }
 

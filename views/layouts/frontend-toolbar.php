@@ -17,7 +17,7 @@ $this->registerCss('body {padding-'.$position.': 50px;}');
             <?= Yii::t('easyii', 'Live edit') ?>
         </div>
         <div class="live-edit-checkbox pull-left">
-            <?= Html::checkbox('', LIVE_EDIT, ['data-link' => Url::to(['/admin/default/live-edit'])]) ?>
+            <?= Html::checkbox('', LIVE_EDIT_ENABLED, ['data-link' => Url::to(['/admin/default/live-edit'])]) ?>
         </div>
         <a href="<?= Url::to(['/admin/sign/out']) ?>" class="pull-right"><span class="glyphicon glyphicon-log-out"></span> <?= Yii::t('easyii', 'Logout') ?></a></li>
     </div>

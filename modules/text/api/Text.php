@@ -27,13 +27,13 @@ class Text extends API
         });
     }
 
-    public function api_get($id_slug)
+    public function api_get($id_slug, $liveEditable = true)
     {
         if(($text = $this->findText($id_slug)) === null){
             return $this->notFound($id_slug);
         }
         $textContent = nl2br($text['text']);
-        return LIVE_EDIT ? API::liveEdit($textContent, Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $textContent;
+        return ($liveEditable && LIVE_EDIT_ENABLED) ? API::liveEdit($textContent, Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $textContent;
     }
 
     private function findText($id_slug)

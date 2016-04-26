@@ -22,6 +22,7 @@ class m000009_200000_update extends \yii\db\Migration
     
     public function up()
     {
+        $this->addColumn(Page::tableName(), 'show_in_menu', $this->boolean()->defaultValue(0));
         $this->addColumn(Page::tableName(), 'fields', $this->text());
         $this->addColumn(Page::tableName(), 'data', $this->text());
         $this->addColumn(Page::tableName(), 'tree', $this->integer()->defaultValue(0));
@@ -41,7 +42,7 @@ class m000009_200000_update extends \yii\db\Migration
         }
 
         MigrationHelper::appendModuleSettings('page', [
-            'slugImmutable' => false,
+            'slugImmutable' => true,
         ]);
         MigrationHelper::appendModuleSettings('page', [
             'defaultFields' => '[]',

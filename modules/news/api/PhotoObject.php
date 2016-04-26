@@ -17,7 +17,7 @@ class PhotoObject extends \yii\easyii\components\ApiObject
             'rel' => 'news-'.$this->model->item_id,
             'title' => $this->description
         ]);
-        return LIVE_EDIT ? API::liveEdit($a, $this->editLink) : $a;
+        return LIVE_EDIT_ENABLED ? API::liveEdit($a, $this->editLink) : $a;
     }
 
     public function getEditLink(){

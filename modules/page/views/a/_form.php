@@ -30,6 +30,8 @@ use yii\easyii\widgets\SeoForm;
 
 <?= $dataForm ?>
 
+<?= $form->field($model, 'show_in_menu')->checkbox() ?>
+
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>
     <?= SeoForm::widget(['model' => $model]) ?>

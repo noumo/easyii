@@ -100,12 +100,22 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         $cache = Yii::$app->cache;
         $key = static::tableName().'_tree';
 
-        $tree = $cache->get($key);
-        if(!$tree){
-            $tree = static::generateTree();
-            $cache->set($key, $tree, 3600);
+        if(empty(static::$TREE[$key])) {
+
+            $tree = $cache->get($key);
+            if (!$tree) {
+                $tree = static::generateTree();
+                $cache->set($key, $tree, 3600);
+            }
+            if(count($tree)) {
+                foreach ($tree as $cat) {
+                    static::$TREE[$key][] = self::buildCategoryModel($cat);
+                }
+            } else {
+                static::$TREE[$key] = [];
+            }
         }
-        return $tree;
+        return static::$TREE[$key];
     }
 
     /**
@@ -125,23 +135,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
                 $cache->set($key, $flat, 3600);
             }
             if(count($flat)) {
-                foreach ($flat as $id => $cat) {
-                    $model = new static([
-                        'id' => $id,
-                        'parent' => $cat->parent,
-                        'depth' => $cat->depth,
-                        'children' => $cat->children
-                    ]);
-
-                    $model->load((array)$cat, '');
-                    if(in_array('seo', static::$RELATIONS)) {
-                        $model->populateRelation('seo', new SeoText($cat->seo));
-                    }
-                    if(in_array('tags', static::$RELATIONS)) {
-                        $model->setTagNames($cat->tags);
-                    }
-                    $model->afterFind();
-                    static::$FLAT[$key][] = $model;
+                foreach ($flat as $cat) {
+                    static::$FLAT[$key][] = self::buildCategoryModel($cat);
                 }
             } else {
                 static::$FLAT[$key] = [];
@@ -150,6 +145,42 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
         return static::$FLAT[$key];
     }
 
+    private static function buildCategoryModel($data)
+    {
+        $model = new static([
+            'id' => $data->id,
+            'parent' => $data->parent,
+            'depth' => $data->depth,
+        ]);
+
+        $model->load((array)$data, '');
+        if(in_array('seo', static::$RELATIONS)) {
+            $model->populateRelation('seo', new SeoText($data->seo));
+        }
+        if(in_array('tags', static::$RELATIONS)) {
+            $model->setTagNames($data->tags);
+        }
+        $model->afterFind();
+
+        if(!empty($data->children) && is_array($data->children)){
+            if(is_object($data->children[0])) {
+                $model->children = [];
+                foreach($data->children as $child) {
+                    $model->children[] = self::buildCategoryModel($child);
+                }
+            } else {
+                $model->children = $data->children;
+            }
+        }
+
+        return $model;
+    }
+
+    /**
+     * @param $id_slug
+     * @return CategoryModel
+     * @throws NotFoundHttpException
+     */
     public static function get($id_slug)
     {
         foreach(static::cats() as $cat){
@@ -176,8 +207,8 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
             foreach ($collection as $node) {
                 $item = $node;
-                unset($item['lft'], $item['rgt'], $item['order_num']);
-                $item['children'] = array();
+                $item['parent'] = '';
+                $item['children'] = [];
 
                 // Number of stack items
                 $l = count($stack);

@@ -10,20 +10,20 @@ class PostObject extends \yii\easyii\components\ApiObject
     public $image;
     public $time;
 
-    public function getName(){
-        return LIVE_EDIT ? API::liveEdit($this->model->name, $this->editLink) : $this->model->name;
+    public function getTitle($liveEditable = true){
+        return ($liveEditable && LIVE_EDIT_ENABLED) ? API::liveEdit($this->model->title, $this->getEditLink()) : $this->model->title;
     }
 
-    public function getTitle(){
-        return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
+    public function getName(){
+        return LIVE_EDIT_ENABLED ? API::liveEdit($this->model->name, $this->getEditLink()) : $this->model->name;
     }
 
     public function getText(){
-        return LIVE_EDIT ? API::liveEdit($this->model->text, $this->editLink, 'div') : $this->model->text;
+        return LIVE_EDIT_ENABLED ? API::liveEdit($this->model->text, $this->getEditLink(), 'div') : $this->model->text;
     }
 
     public function getAnswer(){
-        return LIVE_EDIT ? API::liveEdit($this->model->answer, $this->editLink, 'div') : $this->model->answer;
+        return LIVE_EDIT_ENABLED ? API::liveEdit($this->model->answer, $this->getEditLink(), 'div') : $this->model->answer;
     }
 
     public function getDate(){

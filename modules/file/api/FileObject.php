@@ -12,8 +12,8 @@ class FileObject extends \yii\easyii\components\ApiObject
     public $downloads;
     public $time;
 
-    public function getTitle(){
-        return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
+    public function getTitle($liveEditable = true){
+        return ($liveEditable && LIVE_EDIT_ENABLED) ? API::liveEdit($this->model->title, $this->getEditLink()) : $this->model->title;
     }
 
     public function getFile(){

@@ -9,13 +9,22 @@ class PageObject extends \yii\easyii\components\ApiObject
     public $data;
     public $slug;
     private $_children;
+    private $_parent;
 
-    public function getTitle(){
-        return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
+    public function getTitle($liveEditable = true){
+        return ($liveEditable && LIVE_EDIT_ENABLED) ? API::liveEdit($this->model->title, $this->getEditLink()) : $this->model->title;
     }
 
     public function getText(){
-        return LIVE_EDIT ? API::liveEdit($this->model->text, $this->editLink, 'div') : $this->model->text;
+        return LIVE_EDIT_ENABLED ? API::liveEdit($this->model->text, $this->getEditLink(), 'div') : $this->model->text;
+    }
+
+    public function getParent()
+    {
+        if($this->_parent === null) {
+            $this->_parent = $this->model->parent ? Page::get($this->model->parent) : false;
+        }
+        return $this->_parent;
     }
 
     public function getChildren()
