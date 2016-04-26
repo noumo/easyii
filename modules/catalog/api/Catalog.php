@@ -176,7 +176,7 @@ class Catalog extends \yii\easyii\components\API
 
     private static function buildConditionArray($data, $fieldName)
     {
-        if(empty($data) || !is_array($data) || count($data) < 2 || !in_array($data[0], ['>', '>=', '<', '<=', 'between', 'in'])) {
+        if(empty($data) || !is_array($data) || count($data) < 2 || !in_array($data[0], ['>', '>=', '<', '<=', '!=', '<>', 'between', 'in', 'not in'])) {
             return null;
         }
         $result = [
