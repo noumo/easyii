@@ -84,11 +84,11 @@ class Page extends \yii\easyii\components\API
         } else {
             if($page->depth == 0) {
                 $result['url'] = \yii\helpers\Url::to(['/' . $page->slug]);
-                if($controller->id == $page->slug && $controller->action->id == 'index') {
+                if($controller->id == $page->slug) {
                     $result['active'] = true;
                 }
             } else {
-                $result['url'] = \yii\helpers\Url::to(['/' . PageModel::get($page->parent)->slug, 'subpage' => $page->slug]);
+                $result['url'] = \yii\helpers\Url::to(['/' . PageModel::get($page->parent)->slug . '/' . $page->slug]);
             }
         }
         return $result;
