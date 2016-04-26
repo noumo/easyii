@@ -194,11 +194,11 @@ class CategoryController extends Controller
         $modelClass = $this->categoryClass;
 
         $up = $direction == 'up';
-        $orderDir = $up ? SORT_ASC : SORT_DESC;
+        $orderDir = $up ? SORT_DESC : SORT_ASC;
 
         if ($model->depth == 0) {
 
-            $swapCat = $modelClass::find()->where([$up ? '>' : '<', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
+            $swapCat = $modelClass::find()->where([$up ? '<' : '>', 'order_num', $model->order_num])->orderBy(['order_num' => $orderDir])->one();
             if ($swapCat) {
                 $modelClass::updateAll(['order_num' => '-1'], ['order_num' => $swapCat->order_num]);
                 $modelClass::updateAll(['order_num' => $swapCat->order_num], ['order_num' => $model->order_num]);
