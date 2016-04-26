@@ -13,4 +13,10 @@ class DefaultController extends \yii\easyii\components\Controller
             'notifications' => $notifications
         ]);
     }
+
+    public function actionLiveEdit($id)
+    {
+        \Yii::$app->session->set('easyii_live_edit', $id);
+        $this->back();
+    }
 }
