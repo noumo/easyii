@@ -23,12 +23,12 @@ $module = $this->context->module->id;
             </tr>
         </thead>
         <tbody>
-    <?php foreach($data->models as $item) : ?>
+        <?php foreach($data->models as $item) : ?>
             <tr>
                 <?php if(IS_ROOT) : ?>
                     <td><?= $item->primaryKey ?></td>
                 <?php endif; ?>
-                <td><a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>"><?= ($this->context->module->settings['enableTitle'] && $item->title != '') ? $item->title : StringHelper::truncate($item->text, 64, '...')?></a></td>
+                <td><a href="<?= Url::to(['/admin/'.$module.'/a/view', 'id' => $item->primaryKey]) ?>"><?= $item->name . ' ' . ($item->phone ? $item->phone : $item->email) ?></a></td>
                 <td><?= Yii::$app->formatter->asDatetime($item->time, 'short') ?></td>
                 <td>
                     <?php if($item->status == Feedback::STATUS_ANSWERED) : ?>
@@ -39,7 +39,7 @@ $module = $this->context->module->id;
                 </td>
                 <td><a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
             </tr>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
         </tbody>
     </table>
     <?= yii\widgets\LinkPager::widget([

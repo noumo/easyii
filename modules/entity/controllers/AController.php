@@ -2,6 +2,8 @@
 namespace yii\easyii\modules\entity\controllers;
 
 use yii\easyii\components\CategoryController;
+use yii\easyii\modules\entity\EntityModule;
+use yii\easyii\modules\entity\models\Category;
 
 class AController extends CategoryController
 {

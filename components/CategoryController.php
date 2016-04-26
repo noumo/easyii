@@ -5,7 +5,6 @@ use Yii;
 use yii\easyii\actions\ChangeStatusAction;
 use yii\easyii\actions\ClearImageAction;
 use yii\easyii\actions\FieldsAction;
-use yii\easyii\behaviors\SortableModel;
 use yii\easyii\helpers\Upload;
 use yii\widgets\ActiveForm;
 

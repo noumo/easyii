@@ -14,7 +14,9 @@ class FeedbackModule extends \yii\easyii\components\Module
         'answerFooter' => 'Best regards.',
 
         'enableTitle' => false,
+        'enableEmail' => true,
         'enablePhone' => true,
+        'enableText' => true,
         'enableCaptcha' => false,
     ];
 
