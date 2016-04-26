@@ -33,7 +33,7 @@ class Text extends API
             return $this->notFound($id_slug);
         }
         $textContent = nl2br($text['text']);
-        return ($liveEditable && LIVE_EDIT_ENABLED) ? API::liveEdit($textContent, Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $textContent;
+        return ($liveEditable && LIVE_EDIT_ENABLED) ? API::liveEdit($textContent ? $textContent : '[' . Yii::t('easyii/text/api', 'Empty text') . ']', Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $textContent;
     }
 
     private function findText($id_slug)
