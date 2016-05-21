@@ -8,7 +8,7 @@ class NestedSortableAsset extends \yii\web\AssetBundle
     public $css = [
     ];
     public $js = [
-        'jquery.mjs.nestedSortable.js',
+        'jquery.ui.nestedSortable.js',
     ];
 
     public $depends = ['yii\easyii\assets\JqueryUiAsset'];
