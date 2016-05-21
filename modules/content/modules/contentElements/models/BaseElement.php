@@ -172,13 +172,16 @@ abstract class BaseElement extends ActiveRecord
 			ElementOption::create(ElementOption::TYPE_HTML_STYLE),
 		];
 
-		$this->on(ActiveRecord::EVENT_AFTER_INSERT, function(yii\db\AfterSaveEvent $event) use ($options) {
+		$callback = function(yii\db\AfterSaveEvent $event) use ($options) {
 			$model = $event->sender;
 			foreach ($options as $option) {
 				$model->link('options', $option);
 				$option->save();
 			}
-		});
+		};
+
+		$this->off(ActiveRecord::EVENT_AFTER_INSERT, $callback);
+		$this->on(ActiveRecord::EVENT_AFTER_INSERT, $callback);
 	}
 
 
