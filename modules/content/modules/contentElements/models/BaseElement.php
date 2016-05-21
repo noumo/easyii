@@ -165,7 +165,7 @@ abstract class BaseElement extends ActiveRecord
 		return $this->hasMany(ElementOption::className(), ['element_id' => 'element_id'])->indexBy('type');
 	}
 
-	public function setDefaultOptions()
+	public function defaultOptions()
 	{
 		$options = [
 			ElementOption::create(ElementOption::TYPE_HTML_CLASS),
