@@ -275,7 +275,7 @@ class ModulesController extends \yii\easyii\components\Controller
 
                 /** @var \yii\gii\Module $gii */
                 $gii = Yii::$app->getModule('gii');
-                $gii->generators = $gii->coreGenerato
+                $gii->generators = $gii->coreGenerators;
                 $generator = $gii->generators['module'];
                 var_dump($generator);die;
                 if ($generator->validate()) {
