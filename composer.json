@@ -29,6 +29,7 @@
         "bower-asset/fancybox": "*",
         "bower-asset/jquery.switcher": "*",
         "bower-asset/eonasdan-bootstrap-datetimepicker": "4.7.14",
+        "bower-asset/nestedSortable": "^1.3",
         "2amigos/yii2-selectize-widget": "~1.0",
         "vova07/yii2-imperavi-widget": "*",
         "stojg/crop": "*",

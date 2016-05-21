@@ -9,6 +9,10 @@ return [
             'class' => 'kartik\markdown\Module',
         ]
     ],
+    'aliases' => [
+        'views' => $basePath . '/views',
+        'uploads' => $webroot . DIRECTORY_SEPARATOR . 'uploads',
+    ],
     'components' => [
         'urlManager' => [
             'enablePrettyUrl' => true,

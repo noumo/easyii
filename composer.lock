@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d158d05a0e0aba6da3a5e657b56145f7",
-    "content-hash": "88d62ac7088b51dac9dac5661c6f3874",
+    "hash": "1cab9b5735953a4d2b122b5824e89585",
+    "content-hash": "dd80c98548944e00bf6aca6404bc19a4",
     "packages": [
         {
             "name": "2amigos/yii2-selectize-widget",
@@ -490,6 +490,22 @@
                 ]
             },
             "time": "2015-05-13 07:42:12"
+        },
+        {
+            "name": "bower-asset/nestedSortable",
+            "version": "v1.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mjsarfatti/nestedSortable.git",
+                "reference": "22cdadd599b2798c304628ac797fca61b0264d02"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mjsarfatti/nestedSortable/zipball/22cdadd599b2798c304628ac797fca61b0264d02",
+                "reference": "22cdadd599b2798c304628ac797fca61b0264d02",
+                "shasum": ""
+            },
+            "type": "bower-asset-library"
         },
         {
             "name": "bower-asset/punycode",
@@ -1110,12 +1126,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-bootstrap.git",
-                "reference": "e64170ffa5678be6cb8c3decf92feac8142aa523"
+                "reference": "61ff14445779b225baa8e60cf4eddbc46cc14504"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/e64170ffa5678be6cb8c3decf92feac8142aa523",
-                "reference": "e64170ffa5678be6cb8c3decf92feac8142aa523",
+                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/61ff14445779b225baa8e60cf4eddbc46cc14504",
+                "reference": "61ff14445779b225baa8e60cf4eddbc46cc14504",
                 "shasum": ""
             },
             "require": {
@@ -1152,7 +1168,7 @@
                 "bootstrap",
                 "yii2"
             ],
-            "time": "2016-03-21 19:11:20"
+            "time": "2016-04-18 20:34:24"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -1257,12 +1273,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-swiftmailer.git",
-                "reference": "20775fef1047cd927908270a8d7983580304eb57"
+                "reference": "163b9c6273e133c43a596aef46a9f5b1537731f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/20775fef1047cd927908270a8d7983580304eb57",
-                "reference": "20775fef1047cd927908270a8d7983580304eb57",
+                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/163b9c6273e133c43a596aef46a9f5b1537731f9",
+                "reference": "163b9c6273e133c43a596aef46a9f5b1537731f9",
                 "shasum": ""
             },
             "require": {
@@ -1299,7 +1315,7 @@
                 "swiftmailer",
                 "yii2"
             ],
-            "time": "2016-03-21 19:16:09"
+            "time": "2016-04-14 08:50:13"
         }
     ],
     "packages-dev": [],
