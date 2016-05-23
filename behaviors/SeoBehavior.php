@@ -49,7 +49,7 @@ class SeoBehavior extends \yii\base\Behavior
 
     public function getSeo()
     {
-        return $this->owner->hasOne(SeoText::className(), ['item_id' => $this->owner->primaryKey()[0]])->where(['class' => get_class($this->owner)]);
+        return $this->owner->hasOne(SeoText::className(), ['item_id' => $this->owner->primaryKey()[0]])->where(['table' => $this->owner->tableName()]);
     }
 
     public function getSeoText()
@@ -59,7 +59,7 @@ class SeoBehavior extends \yii\base\Behavior
             $this->_model = $this->owner->seo;
             if(!$this->_model){
                 $this->_model = new SeoText([
-                    'class' => get_class($this->owner),
+                    'table' => $this->owner->tableName(),
                     'item_id' => $this->owner->primaryKey
                 ]);
             }
