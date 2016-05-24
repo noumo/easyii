@@ -240,7 +240,7 @@ class ItemController extends Controller
 
 		$error = false;
 		$elements = [];
-
+var_dump($data);die;
 		$sortOrder = 1;
 		foreach ($data as $elementKey => $attributes) {
 			/** @var BaseElement|false $element */
