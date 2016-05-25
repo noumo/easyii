@@ -78,8 +78,5 @@ class SortableWidget extends \yii\base\Widget
 		$options = \yii\helpers\Json::htmlEncode($this->clientOptions);
 
 		$view->registerJs("$('#$this->id').nestedSortable($options);");
-
-		//$view->registerJsFile('http://code.jquery.com/ui/1.11.4/jquery-ui.min.js');
-		//$view->registerJsFile('https://cdn.rawgit.com/ilikenwf/nestedSortable/2.0alpha/jquery.mjs.nestedSortable.js');
 	}
 }

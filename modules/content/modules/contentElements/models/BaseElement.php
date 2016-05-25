@@ -29,6 +29,8 @@ abstract class BaseElement extends ActiveRecord
 
 	public $scenario = 'insert';
 
+	public $readOnly = false;
+
 	public static function tableName()
 	{
 		return 'easyii_content_element';
@@ -63,8 +65,9 @@ abstract class BaseElement extends ActiveRecord
 	public function renderAsRoot(yii\web\View $view)
 	{
 		$widget = ContentElementModule::createWidget($this);
+		$this->readOnly = true;
 
-		return $widget->run('template');
+		return $widget->run('root');
 	}
 
 	public function rules()

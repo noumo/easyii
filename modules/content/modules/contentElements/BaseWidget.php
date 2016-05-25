@@ -28,6 +28,8 @@ abstract class BaseWidget extends Widget
 
 	public $layoutPath = '@contentElements/views/layouts';
 
+	public $readOnly = false;
+
 	private $_element;
 
 	public static function config()

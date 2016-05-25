@@ -34,7 +34,7 @@ use \yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 </div>
 
 <?= \yii\easyii\modules\content\modules\contentElements\widgets\EditableList::widget([
-	'items' => $element->elements ,
+	'items' => [$element],
 	'render' => function (BaseElement $item, $index) {
 		return $item->render($this);
 	},
