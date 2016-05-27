@@ -32,11 +32,19 @@ $module = $this->context->module->id;
                 <td><a href="<?= Url::to(['/admin/'.$module.'/a/edit/', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
                 <td><?= $item->views ?></td>
                 <td class="status">
-                    <?= Html::checkbox('', $item->status == News::STATUS_ON, [
-                        'class' => 'switch',
-                        'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/a']),
-                    ]) ?>
+                    <label class="switch-light">
+                        <?= Html::checkbox('', $item->status == News::STATUS_ON, [
+                            'class' => 'switch',
+                            'data-id' => $item->primaryKey,
+                            'data-link' => Url::to(['/admin/'.$module.'/a']),
+                        ]) ?>
+
+                        <span class="progress">
+                          <span aria-label="Off" title="Off">O</span>
+                          <span aria-label="On" title="On">I</span>
+                          <a class="progress-bar"></a>
+                        </span>
+                    </label>
                 </td>
                 <td>
                     <div class="btn-group btn-group-sm" role="group">

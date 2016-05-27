@@ -32,12 +32,20 @@ $this->title = Yii::t('easyii', 'Modules');
                     <?php endif; ?>
                 </td>
                 <td class="status">
-                    <?= Html::checkbox('', $module->status == Module::STATUS_ON, [
-                        'class' => 'switch',
-                        'data-id' => $module->primaryKey,
-                        'data-link' => Url::to(['/admin/modules/']),
-                        'data-reload' => '1'
-                    ]) ?>
+                    <label class="switch-light">
+                        <?= Html::checkbox('', $module->status == Module::STATUS_ON, [
+                            'class' => 'switch',
+                            'data-id' => $module->primaryKey,
+                            'data-link' => Url::to(['/admin/modules/'])
+                        ]) ?>
+
+
+                        <span class="progress">
+                          <span aria-label="Off" title="Off">O</span>
+                          <span aria-label="On" title="On">I</span>
+                          <a class="progress-bar"></a>
+                        </span>
+                    </label>
                 </td>
                 <td class="control">
                     <div class="btn-group btn-group-sm" role="group">

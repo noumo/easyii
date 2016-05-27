@@ -14,8 +14,17 @@ $this->registerCss('body {padding-'.$position.': 50px;}');
         <ul class="nav navbar-nav navbar-left">
             <li><a href="<?= Url::to(['/admin']) ?>"><span class="glyphicon glyphicon-arrow-left"></span> <?= Yii::t('easyii', 'Control Panel') ?></a></li>
         </ul>
-        <p class="navbar-text"><i class="glyphicon glyphicon-pencil"></i> <?= Yii::t('easyii', 'Live edit') ?></p>
-        <?= Html::checkbox('', LIVE_EDIT, ['data-link' => Url::to(['/admin/system/live-edit'])]) ?>
+
+        <label class="switch-light navbar-text col-sm-3">
+            <?= Html::checkbox('', LIVE_EDIT, ['data-link' => Url::to(['/admin/system/live-edit'])]) ?>
+            <span class="col-sm-8"><i class="glyphicon glyphicon-pencil"></i> <?= Yii::t('easyii', 'Live edit') ?></span>
+
+        <span class="progress col-sm-4">
+          <span aria-label="Off" title="Off">O</span>
+          <span aria-label="On" title="On">I</span>
+          <a class="progress-bar"></a>
+        </span>
+        </label>
 
         <ul class="nav navbar-nav navbar-right">
             <li><a href="<?= Url::to(['/admin/sign/out']) ?>"><span class="glyphicon glyphicon-log-out"></span> <?= Yii::t('easyii', 'Logout') ?></a></li>
