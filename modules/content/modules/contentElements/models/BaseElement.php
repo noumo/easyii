@@ -168,6 +168,7 @@ abstract class BaseElement extends ActiveRecord
 	public function defaultOptions()
 	{
 		$options = [
+			ElementOption::create(ElementOption::TYPE_ID),
 			ElementOption::create(ElementOption::TYPE_CLASS),
 			ElementOption::create(ElementOption::TYPE_STYLE),
 		];
