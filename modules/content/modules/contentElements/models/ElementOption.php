@@ -39,8 +39,8 @@ class ElementOption extends ActiveRecord
 	public static function getTypes()
 	{
 		return [
-			self::TYPE_CLASS => Yii::t('easyii/content', 'Html Class'),
-			self::TYPE_STYLE => Yii::t('easyii/content', 'Html Style'),
+			self::TYPE_CLASS => Yii::t('easyii/content', 'Class'),
+			self::TYPE_STYLE => Yii::t('easyii/content', 'Style'),
 		];
 	}
 
