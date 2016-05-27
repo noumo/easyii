@@ -20,13 +20,22 @@
     padding: 3px;
 }
 
+.ui-sortable li:hover {
+    background-color: #f5f5f5;
+    border: #31708f 1px solid;
+}
+
 .ui-sortable-handle {
     cursor: move;
 }
 
-.ui-sortable li:hover {
-    background-color: #f5f5f5;
-    border: #31708f 1px solid;
+.root.ui-sortable > li {
+    border: none;
+}
+
+.root.ui-sortable > li:hover {
+    border: inherit;
+    background-color: inherit;
 }
 
 /*

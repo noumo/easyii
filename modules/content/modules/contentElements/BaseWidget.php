@@ -28,7 +28,11 @@ abstract class BaseWidget extends Widget
 
 	public $layoutPath = '@contentElements/views/layouts';
 
+	public $readOnly = false;
+
 	private $_element;
+
+	private $_config = null;
 
 	public static function config()
 	{
@@ -44,6 +48,20 @@ abstract class BaseWidget extends Widget
 	protected static function elementId()
 	{
 		return ContentElementModule::getElementId(static::className(), true);
+	}
+
+	public function getConfig()
+	{
+		if ($this->_config === null) {
+			$this->_config = self::config();
+		}
+
+		return $this->_config;
+	}
+
+	public function setConfig($value)
+	{
+		$this->_config = $value;
 	}
 
 	public function init()
@@ -101,7 +119,7 @@ abstract class BaseWidget extends Widget
 	public function renderContent($content)
 	{
 		if ($this->layout !== false) {
-			return $this->renderFile($this->getLayoutFile(), ['content' => $content, 'element' => $this->element, 'config' => static::config()]);
+			return $this->renderFile($this->getLayoutFile(), ['content' => $content, 'element' => $this->element, 'config' => $this->getConfig()]);
 		}
 		else {
 			return $content;

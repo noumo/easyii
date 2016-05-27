@@ -17,7 +17,7 @@ class Widget extends BaseWidget
 		parent::init();
 
 		if (!$this->element->isNewRecord) {
-			$this->id = 'containser' . $this->element->primaryKey;
+			$this->id = 'container' . $this->element->primaryKey;
 		}
 	}
 }

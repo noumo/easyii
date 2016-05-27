@@ -36,7 +36,6 @@ class ContentElementController extends Controller
 		$widget = ContentElementModule::createNewWidget($type);
 
 		$widget->element->parent_element_id = $parentId;
-		$widget->element->defaultOptions();
 		$widget->element->insert();
 
 		return $widget->runTemplate();
