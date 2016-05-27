@@ -240,7 +240,7 @@ class ItemController extends Controller
 
 		$error = false;
 		$elements = [];
-var_dump($data);die;
+
 		$sortOrder = 1;
 		foreach ($data as $elementKey => $attributes) {
 			/** @var BaseElement|false $element */
@@ -250,6 +250,10 @@ var_dump($data);die;
 				BaseElement::deleteAll(['element_id' => $attributes['element_id']]);
 			}
 			else {
+				if ($attributes['parent_element_id'] === 'root') {
+					$attributes['parent_element_id'] = $model->element->primaryKey;
+				}
+
 				$attributes['order_num'] = $sortOrder++;
 				$attributes['item_id'] = $model->primaryKey;
 

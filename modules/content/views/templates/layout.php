@@ -6,6 +6,6 @@
  */
 ?>
 
-<div class="container text-center">
+<div>
 	<?= $content ?>
 </div>
