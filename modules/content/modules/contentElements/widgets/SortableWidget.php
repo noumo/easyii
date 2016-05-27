@@ -33,6 +33,8 @@ class SortableWidget extends \yii\base\Widget
 		#'startCollapsed' => false
 	];
 
+	public $htmlOptions = [];
+
 	public $items;
 
 	public $render;
@@ -55,7 +57,21 @@ class SortableWidget extends \yii\base\Widget
 
 	protected function renderItems()
 	{
-		echo Html::ol($this->items, ['id' => $this->id, 'class' => "$this->prefix-list sortable", 'item' => [$this, 'renderItem']]);
+		$options = ['id' => $this->id, 'class' => "$this->prefix-list sortable", 'item' => [$this, 'renderItem']];
+
+		if (isset($this->htmlOptions['class'])) {
+			Html::addCssClass($options, $this->htmlOptions['class']);
+			unset($this->htmlOptions['class']);
+		}
+
+		if (isset($this->htmlOptions['style'])) {
+			Html::addCssClass($options, $this->htmlOptions['style']);
+			unset($this->htmlOptions['style']);
+		}
+
+		$options = array_merge($options, $this->htmlOptions);
+
+		echo Html::ol($this->items, $options);
 	}
 
 	public function renderItem($item, $index)
