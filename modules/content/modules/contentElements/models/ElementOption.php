@@ -17,6 +17,7 @@ use yii\easyii\components\ActiveRecord;
  */
 class ElementOption extends ActiveRecord
 {
+	const TYPE_ID = 'id';
 	const TYPE_CLASS = 'class';
 	const TYPE_STYLE = 'style';
 
@@ -39,6 +40,7 @@ class ElementOption extends ActiveRecord
 	public static function getTypes()
 	{
 		return [
+			self::TYPE_ID => Yii::t('easyii/content', 'Id'),
 			self::TYPE_CLASS => Yii::t('easyii/content', 'Class'),
 			self::TYPE_STYLE => Yii::t('easyii/content', 'Style'),
 		];
