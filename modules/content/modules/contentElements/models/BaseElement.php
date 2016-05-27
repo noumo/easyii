@@ -65,10 +65,9 @@ abstract class BaseElement extends ActiveRecord
 	public function renderAsRoot(yii\web\View $view)
 	{
 		$widget = ContentElementModule::createWidget($this);
-		$widget->readOnly = true;
 		$this->readOnly = true;
 
-		return $widget->run('root');
+		return $widget->run('template');
 	}
 
 	public function rules()
@@ -169,8 +168,8 @@ abstract class BaseElement extends ActiveRecord
 	public function defaultOptions()
 	{
 		$options = [
-			ElementOption::create(ElementOption::TYPE_HTML_CLASS),
-			ElementOption::create(ElementOption::TYPE_HTML_STYLE),
+			ElementOption::create(ElementOption::TYPE_CLASS),
+			ElementOption::create(ElementOption::TYPE_STYLE),
 		];
 
 		$callback = function(yii\db\AfterSaveEvent $event) use ($options) {
