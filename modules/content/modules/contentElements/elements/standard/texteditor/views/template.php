@@ -12,8 +12,8 @@ echo \yii\easyii\widgets\Redactor::widget([
 		'attribute' => 'content',
 		'settings' => [
 			'minHeight' => 200,
-			'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
-			'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'content'], true),
+			'imageUpload' => Url::to(['/admin/redactor/image-upload', 'dir' => 'content'], true),
+			'fileUpload' => Url::to(['/admin/redactor/file-upload', 'dir' => 'content'], true),
 			'plugins' => ['fullscreen']
 		]
 	]
