@@ -8,6 +8,6 @@
 use yii\easyii\modules\content\modules\contentElements\models\ElementOption;
 
 echo \yii\helpers\Html::tag('div', $content, [
-	'class' => $element->options[ElementOption::TYPE_HTML_CLASS]->value,
-	'style' => $element->options[ElementOption::TYPE_HTML_STYLE]->value,
+	'class' => $element->options[ElementOption::TYPE_CLASS]->value,
+	'style' => $element->options[ElementOption::TYPE_STYLE]->value,
 ]);

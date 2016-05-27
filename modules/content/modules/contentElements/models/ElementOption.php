@@ -17,8 +17,8 @@ use yii\easyii\components\ActiveRecord;
  */
 class ElementOption extends ActiveRecord
 {
-	const TYPE_HTML_CLASS = 'html-class';
-	const TYPE_HTML_STYLE = 'html-style';
+	const TYPE_CLASS = 'class';
+	const TYPE_STYLE = 'style';
 
 	public $scenario = 'insert';
 
@@ -39,8 +39,8 @@ class ElementOption extends ActiveRecord
 	public static function getTypes()
 	{
 		return [
-			self::TYPE_HTML_CLASS => Yii::t('easyii/content', 'Html Class'),
-			self::TYPE_HTML_STYLE => Yii::t('easyii/content', 'Html Style'),
+			self::TYPE_CLASS => Yii::t('easyii/content', 'Html Class'),
+			self::TYPE_STYLE => Yii::t('easyii/content', 'Html Style'),
 		];
 	}
 
