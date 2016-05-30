@@ -17,7 +17,7 @@ class SortableWidget extends \yii\base\Widget
 {
 	public $clientOptions = [
 		'handle' => '> div:first',
-		'items' => 'li',
+		'items' => 'li.sortable-item',
 		'maxLevels' => 1,
 		'toleranceElement' => '> div',
 
@@ -70,6 +70,10 @@ class SortableWidget extends \yii\base\Widget
 		}
 
 		$options = array_merge($options, $this->htmlOptions);
+
+		$options['itemOptions'] = [
+			'class' => 'sortable-item'
+		];
 
 		echo Html::ol($this->items, $options);
 	}

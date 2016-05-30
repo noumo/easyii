@@ -172,7 +172,6 @@ abstract class BaseElement extends ActiveRecord
 			ElementOption::create(ElementOption::TYPE_CLASS),
 			ElementOption::create(ElementOption::TYPE_STYLE),
 		];
-
 		$callback = function(yii\db\AfterSaveEvent $event) use ($options) {
 			$model = $event->sender;
 			foreach ($options as $option) {

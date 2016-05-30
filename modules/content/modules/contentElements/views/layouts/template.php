@@ -9,6 +9,7 @@
 ?>
 
 <li id="element_<?= $element->primaryKey ?>"
+	class="sortable-item"
 	data-name="<?= $element->type ?>"
 	data-element-id="<?= $element->primaryKey ?>"
 	data-element-type="<?= $element->type ?>"

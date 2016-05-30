@@ -187,7 +187,7 @@ abstract class BaseWidget extends Widget
 		/** @var BaseElement $element */
 		$element = new $elementClass();
 
-		$element->defaultOptions();
+		//$element->defaultOptions();
 
 		return $element;
 	}

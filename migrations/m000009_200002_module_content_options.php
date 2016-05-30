@@ -2,8 +2,6 @@
 
 use yii\db\Schema;
 use yii\easyii\models;
-use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
-use \yii\easyii\modules\content\models\Item;
 use \yii\easyii\modules\content\modules\contentElements\models\ElementOption;
 
 class m000009_200002_module_content_options extends \yii\db\Migration
