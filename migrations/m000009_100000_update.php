@@ -56,7 +56,7 @@ class m000009_100000_update extends \yii\db\Migration
             'icon' => 'asterisk',
             'settings' => '[]',
             'order_num' => 95,
-            'status' => models\Module::STATUS_ON
+            'status' => models\Module::STATUS_OFF
         ]);
 
         $this->renameColumn(catalog\models\Category::tableName(), 'image', 'image_file');
