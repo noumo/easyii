@@ -82,3 +82,10 @@ li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
 li.mjs-nestedSortable-collapsed.mjs-nestedSortable-hovering div {
     border-color: #999;
 }
+
+.content-element-header .btn.glyphicon[aria-expanded=true]:before {
+    content: "\e114";
+}
+.content-element-header .btn.glyphicon[aria-expanded=false]:before {
+    content: "\e080";
+}

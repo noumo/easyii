@@ -9,6 +9,11 @@ use yii\helpers\Html;
 
 ?>
 <div class="content-element-header">
+	<?php if ($element->collapsible): ?>
+		<a class="btn glyphicon" role="button" data-toggle="collapse" href="#element_content_<?= $element->primaryKey ?>" aria-expanded="false" aria-controls="collapseExample">
+		</a>
+	<?php endif ?>
+
 	<div class="btn-group">
 		<?= Html::tag('h4', $config['title']) ?>
 

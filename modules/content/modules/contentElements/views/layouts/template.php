@@ -17,7 +17,9 @@
 
 	<?php require '_header.php' ?>
 
-	<?= $content ?>
+	<?= \yii\helpers\Html::tag('div',
+		$content,
+		['id' => "element_content_{$element->primaryKey}", 'class' => $element->collapsible ? 'collapse' : '']) ?>
 </li>
 
 

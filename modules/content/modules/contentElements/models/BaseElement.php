@@ -31,6 +31,8 @@ abstract class BaseElement extends ActiveRecord
 
 	public $readOnly = false;
 
+	public $collapsible = true;
+
 	public static function tableName()
 	{
 		return 'easyii_content_element';

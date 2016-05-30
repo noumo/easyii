@@ -8,6 +8,8 @@ use yii\web\View;
 
 class Element extends BaseElement
 {
+	public $collapsible = false;
+
 	public function render(View $view)
 	{
 		$widget = ContentElementModule::createWidget($this);

@@ -20,7 +20,9 @@ use yii\helpers\Html;
 
 	<?php require '_header.php' ?>
 
-	<?= $content ?>
+	<div id="element_content_<?= $element->primaryKey ?>" class="collapse">
+		<?= $content ?>
+	</div>
 
 	<?php $this->endBody() ?>
 
