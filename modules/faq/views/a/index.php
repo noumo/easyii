@@ -30,11 +30,19 @@ $module = $this->context->module->id;
                 <?php endif; ?>
                 <td><a href="<?= Url::to(['/admin/'.$module.'/a/edit', 'id' => $item->primaryKey]) ?>"><?= StringHelper::truncate(strip_tags($item->question), 128) ?></a></td>
                 <td class="status vtop">
-                    <?= Html::checkbox('', $item->status == Faq::STATUS_ON, [
-                        'class' => 'switch',
-                        'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/a']),
-                    ]) ?>
+                    <label class="switch-light">
+                        <?= Html::checkbox('', $item->status == Faq::STATUS_ON, [
+                            'class' => 'switch',
+                            'data-id' => $item->primaryKey,
+                            'data-link' => Url::to(['/admin/'.$module.'/a']),
+                        ]) ?>
+
+                        <span class="progress">
+                          <span aria-label="Off" title="Off">O</span>
+                          <span aria-label="On" title="On">I</span>
+                          <a class="progress-bar"></a>
+                        </span>
+                    </label>
                 </td>
                 <td>
                     <div class="btn-group btn-group-sm" role="group">

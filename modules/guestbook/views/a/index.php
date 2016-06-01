@@ -48,11 +48,19 @@ $module = $this->context->module->id;
                     <?php endif; ?>
                 </td>
                 <td class="status">
-                    <?= Html::checkbox('', $item->status == Guestbook::STATUS_ON, [
-                        'class' => 'switch',
-                        'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/a']),
-                    ]) ?>
+                    <label class="switch-light">
+                        <?= Html::checkbox('', $item->status == Guestbook::STATUS_ON, [
+                            'class' => 'switch',
+                            'data-id' => $item->primaryKey,
+                            'data-link' => Url::to(['/admin/'.$module.'/a']),
+                        ]) ?>
+
+                        <span class="progress">
+                          <span aria-label="Off" title="Off">O</span>
+                          <span aria-label="On" title="On">I</span>
+                          <a class="progress-bar"></a>
+                        </span>
+                    </label>
                 </td>
                 <td class="control"><a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>
             </tr>
