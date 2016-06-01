@@ -22,7 +22,7 @@ $moduleName = $this->context->module->id;
 <body>
 <?php $this->beginBody() ?>
 <div id="admin-body">
-    <div class="container">
+    <div class="">
         <div class="wrapper">
             <div class="header">
                 <a href="<?= Url::to(['/admin']) ?>" class="logo">
