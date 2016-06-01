@@ -74,7 +74,7 @@ class m000000_000000_install extends \yii\db\Migration
         //SEOTEXT
         $this->createTable(models\SeoText::tableName(), [
             'seotext_id' => 'pk',
-            'class' => Schema::TYPE_STRING . '(128) NOT NULL',
+            'table' => Schema::TYPE_STRING . '(128) NOT NULL',
             'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
             'h1' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
             'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
