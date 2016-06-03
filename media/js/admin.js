@@ -54,7 +54,8 @@ $(function(){
         var checkbox = $(this);
         checkbox.switcher('setDisabled', true);
 
-        $.getJSON(checkbox.data('link') + '/' + (checkbox.is(':checked') ? 'on' : 'off') + '/' + checkbox.data('id'), function(response){
+        var url = checkbox.is(':checked') ? checkbox.data('link-on') : checkbox.data('link-off');
+        $.getJSON(url, function(response){
             if(response.result === 'error'){
                 alert(response.error);
             }

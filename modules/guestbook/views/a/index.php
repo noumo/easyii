@@ -51,7 +51,8 @@ $module = $this->context->module->id;
                     <?= Html::checkbox('', $item->status == Guestbook::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $item->primaryKey,
-                        'data-link' => Url::to(['/admin/'.$module.'/a']),
+                        'data-link-on' => Url::to(['/admin/'.$module.'/a/on', 'id'=>$item->primaryKey]),
+                        'data-link-off' => Url::to(['/admin/'.$module.'/a/off', 'id'=>$item->primaryKey]),
                     ]) ?>
                 </td>
                 <td class="control"><a href="<?= Url::to(['/admin/'.$module.'/a/delete', 'id' => $item->primaryKey]) ?>" class="glyphicon glyphicon-remove confirm-delete" title="<?= Yii::t('easyii', 'Delete item') ?>"></a></td>

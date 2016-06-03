@@ -35,7 +35,8 @@ $this->title = Yii::t('easyii', 'Modules');
                     <?= Html::checkbox('', $module->status == Module::STATUS_ON, [
                         'class' => 'switch',
                         'data-id' => $module->primaryKey,
-                        'data-link' => Url::to(['/admin/modules/']),
+                        'data-link-on' => Url::to(['/admin/modules/on', 'id'=>$module->primaryKey]),
+                        'data-link-off' => Url::to(['/admin/modules/off', 'id'=>$module->primaryKey]),
                         'data-reload' => '1'
                     ]) ?>
                 </td>
