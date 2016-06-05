@@ -20,6 +20,7 @@ class ElementOption extends ActiveRecord
 	const TYPE_ID = 'id';
 	const TYPE_CLASS = 'class';
 	const TYPE_STYLE = 'style';
+	const TYPE_TAG = 'tag';
 
 	public $scenario = 'insert';
 
@@ -43,6 +44,7 @@ class ElementOption extends ActiveRecord
 			self::TYPE_ID => Yii::t('easyii/content', 'Id'),
 			self::TYPE_CLASS => Yii::t('easyii/content', 'Class'),
 			self::TYPE_STYLE => Yii::t('easyii/content', 'Style'),
+			self::TYPE_TAG => Yii::t('easyii/content', 'Html-Tag'),
 		];
 	}
 

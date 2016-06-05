@@ -55,6 +55,8 @@ abstract class BaseElement extends ActiveRecord
 		parent::init();
 
 		$this->type = static::elementId();
+
+		$this->defaultOptions();
 	}
 
 	public function render(yii\web\View $view)
@@ -174,18 +176,29 @@ abstract class BaseElement extends ActiveRecord
 			ElementOption::create(ElementOption::TYPE_CLASS),
 			ElementOption::create(ElementOption::TYPE_STYLE),
 		];
+
+		$this->addOptionsAfterSave($options);
+	}
+
+	/**
+	 * @param ElementOption[] $options
+	 */
+	protected function addOptionsAfterSave(array $options)
+	{
 		$callback = function(yii\db\AfterSaveEvent $event) use ($options) {
 			$model = $event->sender;
 			foreach ($options as $option) {
-				$model->link('options', $option);
-				$option->save();
+				$exists = $option->find()->where(['element_id' => $option->element_id, 'type' => $option->type])->exists();
+				if (!$exists) {
+					$model->link('options', $option);
+					$option->insert();
+				}
 			}
 		};
 
 		$this->off(ActiveRecord::EVENT_AFTER_INSERT, $callback);
 		$this->on(ActiveRecord::EVENT_AFTER_INSERT, $callback);
 	}
-
 
 	public function beforeSave($insert)
 	{

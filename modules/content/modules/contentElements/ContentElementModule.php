@@ -22,7 +22,7 @@ class ContentElementModule extends \yii\base\Module
 
 		/** @var BaseElement $element */
 		$element = new $class;
-		$element->defaultOptions();
+		//$element->defaultOptions();
 
 		return $element;
 	}
