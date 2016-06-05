@@ -171,7 +171,7 @@ class Catalog extends \yii\easyii\components\API
                     }
                 }
                 if($filtersApplied) {
-                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '.Item::tableName().'.item_id');
+                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '.Item::tableName().'.id');
                     $query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
                 }
             }
