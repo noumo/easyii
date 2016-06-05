@@ -4,7 +4,6 @@
  * @var                                                                 $content
  * @var \yii\easyii\modules\content\modules\contentElements\models\BaseElement $element
  */
-use yii\helpers\Html;
 
 ?>
 <?php $this->beginPage() ?>
@@ -20,9 +19,12 @@ use yii\helpers\Html;
 
 	<?php require '_header.php' ?>
 
-	<div id="element_content_<?= $element->primaryKey ?>" class="collapse">
-		<?= $content ?>
-	</div>
+	<?= \yii\helpers\Html::tag('div',
+		$content,
+		[
+			'id' => "element_content_{$element->primaryKey}",
+			'class' => $element->collapsible ? 'collapse' : '',
+		]) ?>
 
 	<?php $this->endBody() ?>
 
