@@ -20,6 +20,7 @@ class Element extends BaseElement
 
 	public $module;
 	public $function;
+	public $parameters = [];
 	public $format;
 
 	public function rules()
@@ -29,8 +30,14 @@ class Element extends BaseElement
 				[['module', 'function'], 'string'],
 				[['item_id'], 'integer'],
 				['format', 'in', 'range' => array_keys(self::$formats)],
-				[['module', 'function', 'format', 'item_id'], 'safe']
+				['parameters', 'validateList'],
+				[['module', 'function', 'parameters', 'format', 'item_id'], 'safe']
 			]);
+	}
+
+	public function validateList($attribute, $options)
+	{
+		$this->$attribute = explode(',', $this->$attribute);
 	}
 
 	public function fetchData()
@@ -41,7 +48,7 @@ class Element extends BaseElement
 		$api = $namespace . '\\api\\' . ucfirst($this->module);
 		$function = $this->function;
 
-		$data = call_user_func([$api, $function]);
+		$data = call_user_func_array([$api, $function], $this->parameters);
 
 		return $data;
 	}

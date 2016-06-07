@@ -21,7 +21,12 @@ class Widget extends BaseWidget
 {
 	public function actionModuleFunctions($module)
 	{
-		$moduleClass = AdminModule::getInstance()->activeModules[$module]->class;
+		$activeModule = AdminModule::getInstance()->activeModules[$module];
+		if (!$activeModule) {
+			return;
+		}
+
+		$moduleClass = $activeModule->class;
 		$namespace = StringHelper::dirname($moduleClass);
 
 		$api = $namespace . '\\api\\' . ucfirst($module);
