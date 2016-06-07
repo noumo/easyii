@@ -43,7 +43,7 @@ class Element extends BaseElement
 		$function = $this->function;
 		$parameters = explode(',', $this->parameters);
 
-		$data = call_user_func_array([$api, $function], $this->parameters);
+		$data = call_user_func_array([$api, $function], $parameters);
 
 		return $data;
 	}
