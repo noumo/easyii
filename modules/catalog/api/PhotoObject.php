@@ -8,7 +8,6 @@ use yii\helpers\Url;
 
 class PhotoObject extends \yii\easyii\components\ApiObject
 {
-    public $image;
     public $description;
 
     public function box($width, $height){

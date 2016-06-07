@@ -3,26 +3,28 @@ namespace yii\easyii\modules\faq\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortByNumAction;
 use yii\widgets\ActiveForm;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\faq\models\Faq;
-use yii\easyii\behaviors\SortableController;
-use yii\easyii\behaviors\StatusController;
 
 class AController extends Controller
 {
-    public function behaviors()
+    public $modelClass = 'yii\easyii\modules\faq\models\Faq';
+
+    public function actions()
     {
         return [
-            [
-                'class' => SortableController::className(),
-                'model' => Faq::className()
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'successMessage' => Yii::t('easyii/faq', 'Entry deleted')
             ],
-            [
-                'class' => StatusController::className(),
-                'model' => Faq::className()
-            ]
+            'up' => SortByNumAction::className(),
+            'down' => SortByNumAction::className(),
+            'on' => ChangeStatusAction::className(),
+            'off' => ChangeStatusAction::className(),
         ];
     }
 
@@ -67,12 +69,7 @@ class AController extends Controller
 
     public function actionEdit($id)
     {
-        $model = Faq::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -94,35 +91,5 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Faq::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/faq', 'Entry deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Faq::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Faq::STATUS_OFF);
     }
 }

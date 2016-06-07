@@ -22,6 +22,7 @@ $this->title = Yii::t('easyii', 'Sign in');
                         <?= $form->field($model, 'username')->textInput(['class'=>'form-control', 'placeholder'=>Yii::t('easyii', 'Username')]) ?>
                         <?= $form->field($model, 'password')->passwordInput(['class'=>'form-control', 'placeholder'=>Yii::t('easyii', 'Password')]) ?>
                         <?=Html::submitButton(Yii::t('easyii', 'Login'), ['class'=>'btn btn-lg btn-primary btn-block']) ?>
+                        <i><?= Html::a(Yii::t('easyii', 'Forgotten your password?'), ['request-password-reset']) ?></i>
                     <?php ActiveForm::end(); ?>
                 </div>
             </div>

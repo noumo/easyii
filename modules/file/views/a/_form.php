@@ -10,7 +10,7 @@ use yii\easyii\widgets\SeoForm;
 <?= $form->field($model, 'title') ?>
 <?= $form->field($model, 'file')->fileInput() ?>
 <?php if(!$model->isNewRecord) : ?>
-    <div><a href="<?= $model->file ?>" target="_blank"><?= basename($model->file) ?></a> (<?= Yii::$app->formatter->asShortSize($model->size, 2) ?>)</div>
+    <div><a href="<?= $model->link ?>" target="_blank"><?= basename($model->file) ?></a> (<?= Yii::$app->formatter->asShortSize($model->size, 2) ?>)</div>
     <br>
 <?php endif; ?>
 

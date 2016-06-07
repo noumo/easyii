@@ -58,6 +58,7 @@ return [
     'Add subcategory' => 'Добавить подкатегорию',
     'Anti-spam check' => 'Проверка на спам',
     'Actions' => 'Действия',
+    'Category' => 'Категория',
 
     'Not found' => 'Не найдено',
     'Create error. {0}' => 'Ошибка при создании. {0}',
@@ -111,6 +112,7 @@ return [
     'Assets cleared' => 'Assets очищены',
     'Cache flushed' => 'Кэш успешно сброшен',
     'Logs' => 'Логи',
+    'Tools' => 'Инструменты',
     'Seo texts' => 'Seo тексты',
 
     'Categories' => 'Категории',
@@ -123,6 +125,18 @@ return [
 
     'Clear image' => 'Очистить изображение',
     'Image cleared' => 'Изображение очищено',
+
+
+    'New on website' => 'Новое на сайте',
+    'Statistics' => 'Статистика',
+    'Month' => 'Месяц',
+    'Week' => 'Неделя',
+    'Today' => 'Сегодня',
+    'Active users' => 'На сайте',
+    'Sessions and views' => 'Сессии и просмотры',
+    'Countries' => 'Страны',
+    'Sources' => 'Источники',
+    'chart is loading' => 'график загружается',
 
 
 ];

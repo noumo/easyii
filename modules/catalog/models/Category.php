@@ -6,14 +6,24 @@ class Category extends \yii\easyii\components\CategoryModel
     static $fieldTypes = [
         'string' => 'String',
         'text' => 'Text',
+        'html' => 'Html',
         'boolean' => 'Boolean',
         'select' => 'Select',
-        'checkbox' => 'Checkbox'
+        'checkbox' => 'Checkbox',
+        'file' => 'File',
+        'date' => 'Date'
     ];
 
     public static function tableName()
     {
         return 'easyii_catalog_categories';
+    }
+
+    public function rules()
+    {
+        return array_merge([
+            ['fields', 'safe'],
+        ], parent::rules());
     }
 
     public function beforeSave($insert)
@@ -60,7 +70,18 @@ class Category extends \yii\easyii\components\CategoryModel
         }
     }
 
-    private function parseFields(){
+    public function getFieldByName($name)
+    {
+        foreach($this->fields as $field){
+            if($field->name == $name){
+                return $field;
+            }
+        }
+        return null;
+    }
+
+    private function parseFields()
+    {
         $this->fields = $this->fields !== '' ? json_decode($this->fields) : [];
     }
 }

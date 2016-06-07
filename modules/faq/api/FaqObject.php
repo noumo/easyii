@@ -14,6 +14,10 @@ class FaqObject extends \yii\easyii\components\ApiObject
         return LIVE_EDIT ? API::liveEdit($this->model->answer, $this->editLink) : $this->model->answer;
     }
 
+    public function getTags(){
+        return $this->model->tagsArray;
+    }
+
     public function  getEditLink(){
         return Url::to(['/admin/faq/a/edit/', 'id' => $this->id]);
     }

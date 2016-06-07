@@ -1,8 +1,6 @@
 <?php
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
 ?>
 <?php $form = ActiveForm::begin([
@@ -10,14 +8,7 @@ use yii\easyii\widgets\SeoForm;
     'options' => ['class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
-<?= $form->field($model, 'text')->widget(Redactor::className(),[
-    'options' => [
-        'minHeight' => 400,
-        'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'pages']),
-        'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'pages']),
-        'plugins' => ['fullscreen']
-    ]
-]) ?>
+<?= $form->field($model, 'text')->widget(\yii\easyii\widgets\Redactor::className()) ?>
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>

@@ -8,7 +8,8 @@ class NewsModule extends \yii\easyii\components\Module
         'enablePhotos' => true,
         'enableShort' => true,
         'shortMaxLength' => 256,
-        'enableTags' => true
+        'enableTags' => true,
+        'slugImmutable' => false
     ];
 
     public static $installConfig = [

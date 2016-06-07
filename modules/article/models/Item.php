@@ -3,9 +3,11 @@ namespace yii\easyii\modules\article\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
 use yii\easyii\behaviors\Taggable;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\article\ArticleModule;
 use yii\helpers\StringHelper;
 
 class Item extends \yii\easyii\components\ActiveRecord
@@ -24,7 +26,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             [['text', 'title'], 'required'],
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['image_file', 'image'],
             [['category_id', 'views', 'time', 'status'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
@@ -38,9 +40,10 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
+            'category_id' => Yii::t('easyii', 'Category'),
             'text' => Yii::t('easyii', 'Text'),
             'short' => Yii::t('easyii/article', 'Short'),
-            'image' => Yii::t('easyii', 'Image'),
+            'image_file' => Yii::t('easyii', 'Image'),
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
             'tagNames' => Yii::t('easyii', 'Tags'),
@@ -49,15 +52,21 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function behaviors()
     {
-        return [
+        $behaviors = [
             'seoBehavior' => SeoBehavior::className(),
             'taggabble' => Taggable::className(),
             'sluggable' => [
                 'class' => SluggableBehavior::className(),
                 'attribute' => 'title',
-                'ensureUnique' => true
+                'ensureUnique' => true,
+                'immutable' => ArticleModule::setting('itemSlugImmutable')
             ]
         ];
+        if(ArticleModule::setting('articleThumb')){
+            $behaviors['imageFileBehavior'] = ImageFile::className();
+        }
+
+        return $behaviors;
     }
 
     public function getCategory()
@@ -73,12 +82,7 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            $settings = Yii::$app->getModule('admin')->activeModules['article']->settings;
-            $this->short = StringHelper::truncate($settings['enableShort'] ? $this->short : strip_tags($this->text), $settings['shortMaxLength']);
-
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
-            }
+            $this->short = StringHelper::truncate(ArticleModule::setting('enableShort') ? $this->short : strip_tags($this->text), ArticleModule::setting('shortMaxLength'));
 
             return true;
         } else {
@@ -89,10 +93,6 @@ class Item extends \yii\easyii\components\ActiveRecord
     public function afterDelete()
     {
         parent::afterDelete();
-
-        if($this->image){
-            @unlink(Yii::getAlias('@webroot').$this->image);
-        }
 
         foreach($this->getPhotos()->all() as $photo){
             $photo->delete();

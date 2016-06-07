@@ -5,6 +5,7 @@ use Yii;
 use yii\easyii\modules\catalog\models\Item;
 use yii\easyii\modules\shopcart\models\Good;
 use yii\easyii\modules\shopcart\models\Order;
+use yii\easyii\modules\shopcart\ShopcartModule;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -57,7 +58,6 @@ class Shopcart extends \yii\easyii\components\API
     {
         $model = new Order;
         $model->scenario = 'confirm';
-        $settings = Yii::$app->getModule('admin')->activeModules['shopcart']->settings;
         $options = array_merge($this->_defaultFormOptions, $options);
 
         ob_start();
@@ -71,8 +71,8 @@ class Shopcart extends \yii\easyii\components\API
         echo $form->field($model, 'name');
         echo $form->field($model, 'address');
 
-        if($settings['enableEmail']) echo $form->field($model, 'email');
-        if($settings['enablePhone']) echo $form->field($model, 'phone');
+        if(ShopcartModule::setting('enableEmail')) echo $form->field($model, 'email');
+        if(ShopcartModule::setting('enablePhone')) echo $form->field($model, 'phone');
 
         echo $form->field($model, 'comment')->textarea();
 

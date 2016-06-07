@@ -3,9 +3,9 @@ namespace yii\easyii\modules\subscribe\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\DeleteAction;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
 use yii\easyii\components\Controller;
 use yii\easyii\models\Setting;
 use yii\easyii\modules\subscribe\models\Subscriber;
@@ -13,6 +13,19 @@ use yii\easyii\modules\subscribe\models\History;
 
 class AController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\subscribe\models\History';
+
+    public function actions()
+    {
+        return [
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => Subscriber::className(),
+                'successMessage' => Yii::t('easyii/subscribe', 'Subscriber deleted')
+            ]
+        ];
+    }
+
     public function actionIndex()
     {
         $data = new ActiveDataProvider([
@@ -37,12 +50,7 @@ class AController extends Controller
 
     public function actionView($id)
     {
-        $model = History::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id.'/history']);
-        }
+        $model = $this->findModel($id);
 
         return $this->render('view', [
             'model' => $model
@@ -75,16 +83,6 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Subscriber::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/subscribe', 'Subscriber deleted'));
     }
 
     private function send($model)

@@ -27,7 +27,7 @@ class AController extends CategoryController
             foreach($fields as $field){
                 $temp = json_decode($field);
 
-                if( $temp === null && json_last_error() !== JSON_ERROR_NONE ||
+                if($temp === null && json_last_error() !== JSON_ERROR_NONE ||
                     empty($temp->name) ||
                     empty($temp->title) ||
                     empty($temp->type) ||
@@ -37,15 +37,16 @@ class AController extends CategoryController
                 ){
                     continue;
                 }
-                $options = '';
+                $options = trim($temp->options);
                 if($temp->type == 'select' || $temp->type == 'checkbox'){
-                    if(empty($temp->options) || !($temp->options = trim($temp->options))){
+                    if($options == ''){
                         continue;
                     }
-                    $options = [];
-                    foreach(explode(',', $temp->options) as $option){
-                        $options[] = trim($option);
+                    $optionsArray = [];
+                    foreach(explode(',', $options) as $option){
+                        $optionsArray[] = trim($option);
                     }
+                    $options = $optionsArray;
                 }
 
                 $result[] = [

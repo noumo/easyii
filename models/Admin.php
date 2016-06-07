@@ -25,7 +25,8 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
             ['username', 'unique'],
             ['password', 'required', 'on' => 'create'],
             ['password', 'safe'],
-            ['access_token', 'default', 'value' => null]
+            ['email', 'email'],
+            [['access_token', 'email'], 'default', 'value' => null]
         ];
     }
 
@@ -34,6 +35,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
         return [
             'username' => Yii::t('easyii', 'Username'),
             'password' => Yii::t('easyii', 'Password'),
+            'email' => Yii::t('easyii', 'Email'),
         ];
     }
 
@@ -77,6 +79,14 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
         return static::findOne(['username' => $username]);
     }
 
+    public static function findByEmail($email)
+    {
+        if ($email === Setting::get('root_email')) {
+            return static::createRootUser();
+        }
+        return static::findOne(['email' => $email]);
+    }
+
     public function getId()
     {
         return $this->admin_id;
@@ -111,7 +121,8 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
     {
         return new static(array_merge(self::$rootUser, [
             'password' => Setting::get('root_password'),
-            'auth_key' => Setting::get('root_auth_key')
+            'auth_key' => Setting::get('root_auth_key'),
+            'email' => Setting::get('root_email'),
         ]));
     }
 

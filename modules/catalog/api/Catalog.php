@@ -28,15 +28,13 @@ use yii\widgets\LinkPager;
 class Catalog extends \yii\easyii\components\API
 {
     private $_cats;
-    private $_items;
     private $_adp;
     private $_item = [];
-    private $_last;
 
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -46,48 +44,54 @@ class Catalog extends \yii\easyii\components\API
         return Category::tree();
     }
 
-    public function api_cats()
+    public function api_cats($options = [])
     {
-        return Category::cats();
+        $result = [];
+        foreach(Category::cats() as $model){
+            $result[] = new CategoryObject($model);
+        }
+        if(!empty($options['tags'])){
+            foreach($result as $i => $item){
+                if(!in_array($options['tags'], $item->tags)){
+                    unset($result[$i]);
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
+        $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
 
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-            if(!empty($options['orderBy'])){
-                $query->orderBy($options['orderBy']);
-            } else {
-                $query->sortDate();
-            }
-            if(!empty($options['filters'])){
-                $query = self::applyFilters($options['filters'], $query);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new ItemObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
         }
-        return $this->_items;
+        if(!empty($options['orderBy'])){
+            $query->orderBy($options['orderBy']);
+        } else {
+            $query->sortDate();
+        }
+        if(!empty($options['filters'])){
+            $query = self::applyFilters($options['filters'], $query);
+        }
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new ItemObject($model);
+        }
+        return $result;
     }
 
     public function api_last($limit = 1, $where = null)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
 
         $query = Item::find()->with('seo')->sortDate()->status(Item::STATUS_ON)->limit($limit);
@@ -98,13 +102,7 @@ class Catalog extends \yii\easyii\components\API
         foreach($query->all() as $item){
             $result[] = new ItemObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        }else{
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_get($id_slug)
@@ -141,11 +139,11 @@ class Catalog extends \yii\easyii\components\API
                 $price = $filters['price'];
                 if(is_array($price) && count($price) == 2) {
                     if(!$price[0]){
-                        $query->andFilterWhere(['<=', 'price', (int)$price[1]]);
+                        $query->andFilterWhere(['<=', 'price * ( 1 - discount / 100 )', (int)$price[1]]);
                     } elseif(!$price[1]) {
-                        $query->andFilterWhere(['>=', 'price', (int)$price[0]]);
+                        $query->andFilterWhere(['>=', 'price * ( 1 - discount / 100 )', (int)$price[0]]);
                     } else {
-                        $query->andFilterWhere(['between', 'price', (int)$price[0], (int)$price[1]]);
+                        $query->andFilterWhere(['between', 'price * ( 1 - discount / 100 )', (int)$price[0], (int)$price[1]]);
                     }
                 }
                 unset($filters['price']);
@@ -177,14 +175,6 @@ class Catalog extends \yii\easyii\components\API
             }
         }
         return $query;
-    }
-    
-
-    private function findCategory($id_slug)
-    {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
     }
 
     private function findItem($id_slug)

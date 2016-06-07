@@ -5,6 +5,10 @@ use Yii;
 
 class FaqModule extends \yii\easyii\components\Module
 {
+    public $settings = [
+        'enableTags' => true
+    ];
+
     public static $installConfig = [
         'title' => [
             'en' => 'FAQ',

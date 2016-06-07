@@ -16,7 +16,6 @@ class CategoryObject extends \yii\easyii\components\ApiObject
     public $depth;
 
     private $_adp;
-    private $_items;
 
     public function getTitle(){
         return LIVE_EDIT ? API::liveEdit($this->model->title, $this->editLink) : $this->model->title;
@@ -32,33 +31,30 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
+        $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON);
 
-            $query = Item::find()->with('seo')->where(['category_id' => $this->id])->status(Item::STATUS_ON);
-
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-            if(!empty($options['orderBy'])){
-                $query->orderBy($options['orderBy']);
-            } else {
-                $query->sortDate();
-            }
-            if(!empty($options['filters'])){
-                $query = Catalog::applyFilters($options['filters'], $query);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new ItemObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
         }
-        return $this->_items;
+        if(!empty($options['orderBy'])){
+            $query->orderBy($options['orderBy']);
+        } else {
+            $query->sortDate();
+        }
+        if(!empty($options['filters'])){
+            $query = Catalog::applyFilters($options['filters'], $query);
+        }
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new ItemObject($model);
+        }
+        return $result;
     }
 
     public function fieldOptions($name, $firstOption = '')

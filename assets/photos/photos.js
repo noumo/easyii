@@ -23,7 +23,7 @@ $(function(){
             if(/^image\/(jpeg|png|gif)$/.test(file.type))
             {
                 var formData = new FormData();
-                formData.append('Photo[image]', file);
+                formData.append('Photo[image_file]', file);
 
                 $.ajax({
                     url: $this.closest('form').attr('action'),
@@ -107,7 +107,7 @@ $(function(){
         var fileData = $this.prop('files')[0];
         var formData = new FormData();
         var changeButton = $this.siblings('.change-image-button').addClass('disabled');
-        formData.append('Photo[image]', fileData);
+        formData.append('Photo[image_file]', fileData);
         $.ajax({
             url: $this.siblings('.change-image-button').attr('href'),
             dataType: 'json',

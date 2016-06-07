@@ -10,7 +10,9 @@ class CatalogModule extends \yii\easyii\components\Module
         'itemThumb' => true,
         'itemPhotos' => true,
         'itemDescription' => true,
-        'itemSale' => true,
+
+        'categorySlugImmutable' => false,
+        'itemSlugImmutable' => false
     ];
 
     public static $installConfig = [

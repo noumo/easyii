@@ -25,12 +25,11 @@ class Gallery extends \yii\easyii\components\API
 {
     private $_cats;
     private $_photos;
-    private $_last;
 
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -40,18 +39,25 @@ class Gallery extends \yii\easyii\components\API
         return Category::tree();
     }
 
-    public function api_cats()
+    public function api_cats($options = [])
     {
-        return Category::cats();
-    }
+        $result = [];
+        foreach(Category::cats() as $model){
+            $result[] = new CategoryObject($model);
+        }
+        if(!empty($options['tags'])){
+            foreach($result as $i => $item){
+                if(!in_array($options['tags'], $item->tags)){
+                    unset($result[$i]);
+                }
+            }
+        }
 
+        return $result;
+    }
 
     public function api_last($limit = 1, $where = null)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
 
         $query = Photo::find()->where(['class' => Category::className()])->sort()->limit($limit);
@@ -64,13 +70,7 @@ class Gallery extends \yii\easyii\components\API
             $photoObject->rel = 'last';
             $result[] = $photoObject;
         }
-
-        if($limit > 1){
-            return $result;
-        }else{
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_get($id)
@@ -87,13 +87,6 @@ class Gallery extends \yii\easyii\components\API
             'selector' => '.easyii-box',
             'options' => $options
         ]);
-    }
-
-    private function findCategory($id_slug)
-    {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Category::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
     }
 
     private function findPhoto($id)
