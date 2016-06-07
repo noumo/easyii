@@ -16,6 +16,9 @@ use \yii\easyii\modules\content\modules\contentElements\elements\others\module\m
 	<div class="col-lg-5">
 		<?= Html::activeLabel($element, 'module', ['class' => 'form-label']); ?>
 		<?= Html::activeDropDownList($element, 'module', $modules, ['class' => 'form-control dynamic-module']); ?>
+
+		<?= Html::activeLabel($element, 'format', ['class' => 'form-label']); ?>
+		<?= Html::activeDropDownList($element, 'format', Element::$formats, ['class' => 'form-control dynamic-widgetClass']); ?>
 	</div>
 
 	<div class="col-lg-5">
@@ -24,23 +27,27 @@ use \yii\easyii\modules\content\modules\contentElements\elements\others\module\m
 			'model' => $element,
 			'attribute' => 'function',
 			'clientOptions' => [
-				'source' => \yii\helpers\Url::to(['content-element/run', 'id' => $element->primaryKey, 'action' => 'module-functions', 'module' => 'entity']),
+				'source' => \yii\helpers\Url::to(['content-element/run', 'id' => $element->primaryKey, 'action' => 'module-functions']),
 				'select' => new \yii\web\JsExpression('
 					function(event, ui) {
 						$(this).siblings("input:hidden").val(ui.item.value);
 						event.preventDefault();
 						$(this).val(ui.item.label);
 					}'),
+				'search' => new \yii\web\JsExpression('function( event, ui ) {
+					var source = $(this).autocomplete("option", "source");
+					source += "&module=" + $(".dynamic-module").val();
+
+					$(this).autocomplete("option", "source", source)
+				}'),
 			],
 
 			'options' => [
 				'class' => 'form-control header-content'
 			]
 		]); ?>
-	</div>
 
-	<div class="col-lg-5">
-		<?= Html::activeLabel($element, 'format', ['class' => 'form-label']); ?>
-		<?= Html::activeDropDownList($element, 'format', Element::$formats, ['class' => 'form-control dynamic-widgetClass']); ?>
+		<?= Html::activeLabel($element, 'parameters', ['class' => 'form-label']); ?>
+		<?= Html::activeTextInput($element, 'parameters', ['class' => 'form-control dynamic-parameters']); ?>
 	</div>
 </div>
