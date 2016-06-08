@@ -15,7 +15,7 @@
 	data-element-type="<?= $element->type ?>"
 	data-element-scenario="<?= $element->scenario ?>">
 
-	<?php require '_header.php' ?>
+	<?php require 'template/_header.php' ?>
 
 
 	<?= \yii\helpers\Html::tag('div',

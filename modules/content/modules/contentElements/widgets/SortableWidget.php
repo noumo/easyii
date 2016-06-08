@@ -19,7 +19,7 @@ class SortableWidget extends \yii\base\Widget
 		'handle' => '> div:first',
 		'items' => 'li.sortable-item',
 		'maxLevels' => 1,
-		'toleranceElement' => '> div',
+		'toleranceElement' => '',
 
 		'forcePlaceholderSize' => true,
 		'placeholder' => 'placeholder',

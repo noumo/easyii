@@ -288,3 +288,6 @@ hr.margin-30{
 textarea {
     resize: vertical
 }
+.yii-debug-toolbar {
+    left: 0;
+}

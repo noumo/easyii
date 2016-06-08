@@ -15,7 +15,9 @@ use yii\easyii\models\Setting;
  */
 class ApiObject extends \yii\base\Object implements Arrayable
 {
-    use ArrayableTrait;
+    use ArrayableTrait {
+        fields as defaultFields;
+    }
 
     /** @var \yii\base\Model  */
     public $model;
@@ -37,6 +39,16 @@ class ApiObject extends \yii\base\Object implements Arrayable
             $this->model = new \stdClass();
         }
         $this->init();
+    }
+
+    public function fields()
+    {
+        $fields = array_keys(Yii::getObjectVars($this));
+        unset($fields['model']);
+
+        $fields[] = 'id';
+var_dump($fields);die;
+        return array_combine($fields, $fields);
     }
 
     /**

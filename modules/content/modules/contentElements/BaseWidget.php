@@ -5,11 +5,11 @@ namespace yii\easyii\modules\content\modules\contentElements;
 use yii;
 use yii\base\Widget;
 use yii\bootstrap\Html;
-use yii\helpers\Url;
-use yii\web\View;
-use yii\helpers\Inflector;
 use yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 use yii\easyii\modules\content\modules\contentElements\models\ElementOption;
+use yii\helpers\Inflector;
+use yii\helpers\Url;
+use yii\web\View;
 
 /**
  * Class ContentElementWidget
@@ -24,9 +24,9 @@ abstract class BaseWidget extends Widget
 
 	const EVENT_BEFORE_RENDER = 'beforeRender';
 
-	public $layout = 'view';
+	public $wrapper = '/default';
 
-	public $layoutPath = '@contentElements/views/layouts';
+	public $wrapperPath = '@contentElements/views/wrappers';
 
 	public $readOnly = false;
 
@@ -73,16 +73,18 @@ abstract class BaseWidget extends Widget
 
 	public function run($view = 'view', $params = [])
 	{
+		$this->wrapper = $this->element->wrapper;
+
 		return $this->render($view, $params);
 	}
 
 	public function runTemplate()
 	{
-		$this->layout = 'template';
+		$this->wrapper = 'template';
 
 		if (Yii::$app->request->isAjax) {
 			$this->view->clear();
-			$this->layout = 'templateAjax';
+			$this->wrapper = 'templateAjax';
 		}
 
 		return $this->render('template');
@@ -118,8 +120,9 @@ abstract class BaseWidget extends Widget
 
 	public function renderContent($content)
 	{
-		if ($this->layout !== false) {
-			return $this->renderFile($this->getLayoutFile(), ['content' => $content, 'element' => $this->element, 'config' => $this->getConfig()]);
+		$wrapperPath = $this->findWrapperFile();
+		if ($wrapperPath !== false) {
+			return $this->renderFile($wrapperPath, ['content' => $content, 'element' => $this->element, 'config' => $this->getConfig()]);
 		}
 		else {
 			return $content;
@@ -158,9 +161,57 @@ abstract class BaseWidget extends Widget
 		return $this->element->save();
 	}
 
-	public function getLayoutFile()
+	protected function findWrapperFile()
 	{
-		return $this->layoutPath . DIRECTORY_SEPARATOR . $this->layout . '.php';
+		if (is_string($this->wrapper) && !empty($this->wrapper)) {
+			$wrapper = $this->wrapper;
+		}
+		else {
+			return false;
+		}
+
+		if (strncmp($wrapper, '/', 1) === 0) {
+			$wrapperFile = Yii::$app->basePath . DIRECTORY_SEPARATOR . 'wrappers' . DIRECTORY_SEPARATOR . substr($wrapper, 1);
+		}
+		else {
+			$wrapperFile = $wrapper;
+		}
+
+		$file = Yii::getAlias($wrapperFile);
+		if (pathinfo($file, PATHINFO_EXTENSION) !== '') {
+			return $file;
+		}
+
+		$path = $this->getViewFilePath($file);
+
+		if (!is_file($path)) {
+			$file = Yii::getAlias($this->wrapperPath) . DIRECTORY_SEPARATOR;
+
+			if (strncmp($wrapper, '/', 1) === 0) {
+				$file .= substr($wrapper, 1);
+			}
+			else {
+				$file .= $wrapper;
+			}
+		}
+
+		return $this->getViewFilePath($file);
+	}
+
+	/**
+	 * @param $file
+	 *
+	 * @return string
+	 */
+	private function getViewFilePath($file)
+	{
+		$view = $this->getView();
+		$path = $file . '.' . $view->defaultExtension;
+		if ($view->defaultExtension !== 'php' && !is_file($path)) {
+			$path = $file . '.php';
+		}
+
+		return $path;
 	}
 
 	public function getEditLink()

@@ -17,7 +17,7 @@
 
 	<?php $this->beginBody() ?>
 
-	<?php require '_header.php' ?>
+	<?php require 'template/_header.php' ?>
 
 	<?= \yii\helpers\Html::tag('div',
 		$content,

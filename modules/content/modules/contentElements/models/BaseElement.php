@@ -13,6 +13,7 @@ use yii\easyii\modules\content\modules\contentElements\ContentElementModule;
  * @property integer $element_id
  * @property integer $parent_element_id
  * @property string $type
+ * @property string $wrapper
  * @property array $data
  * @property integer $order_num
  * @property integer $status
@@ -50,6 +51,20 @@ abstract class BaseElement extends ActiveRecord
 		return ContentElementModule::getElementId(static::className());
 	}
 
+	public static function wrappers()
+	{
+		$wrapperDir = Yii::$app->basePath . DIRECTORY_SEPARATOR . 'wrappers' . DIRECTORY_SEPARATOR;
+
+		$wrappers = [];
+		$paths = glob($wrapperDir . '*.php');
+		foreach ($paths as $path) {
+			$filename = pathinfo($path, PATHINFO_FILENAME);
+			$wrappers[DIRECTORY_SEPARATOR . $filename] = $filename;
+		}
+
+		return $wrappers;
+	}
+
 	public function init()
 	{
 		parent::init();
@@ -59,25 +74,26 @@ abstract class BaseElement extends ActiveRecord
 		$this->defaultOptions();
 	}
 
-	public function render(yii\web\View $view)
+	public function render()
 	{
 		$widget = ContentElementModule::createWidget($this);
 
 		return $widget->runTemplate();
 	}
 
-	public function renderAsRoot(yii\web\View $view)
+	public function renderAsRoot()
 	{
 		$widget = ContentElementModule::createWidget($this);
 		$this->readOnly = true;
 
-		return $widget->run('template');
+		return $widget->runTemplate();
 	}
 
 	public function rules()
 	{
 		return [
-			[['!type'], 'string'],
+			[['!type', '!wrapper'], 'string'],
+			['wrapper', 'default', 'value' => 'default'],
 			[['!order_num', '!parent_element_id'], 'integer'],
 		];
 	}

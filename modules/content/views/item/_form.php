@@ -47,7 +47,7 @@ $categories = \yii\helpers\ArrayHelper::map(\yii\easyii\modules\content\api\Cont
 // Todo: Dont need layout fields more?
 #$dataForm ?>
 
-<?= $model->element->renderAsRoot($this) ?>
+<?= $model->element->renderAsRoot() ?>
 
 <?= Html::submitButton(Yii::t('easyii', 'Save'), ['class' => 'btn btn-primary pull-right']) ?>
 <?php ActiveForm::end(); ?>

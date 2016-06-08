@@ -6,6 +6,7 @@
  * @var \yii\easyii\modules\content\modules\contentElements\models\BaseElement $element
  */
 use yii\helpers\Html;
+use \yii\easyii\modules\content\modules\contentElements\models\BaseElement;
 
 $inputId = Html::getInputId($element, 'options');
 $inputName = Html::getInputName($element, 'options');
@@ -22,6 +23,10 @@ $inputName = Html::getInputName($element, 'options');
 			<?= Html::activeHiddenInput($option, 'option_id', ['name' => $inputName . "[$key][option_id]"]) ?>
 			<?= Html::activeHiddenInput($option, 'scenario', ['name' => $inputName . "[$key][scenario]"]) ?>
 		<?php endforeach; ?>
+
+		<?= Html::activeLabel($option, 'wrapper') ?>
+		<?= Html::activeDropDownList($element, 'wrapper', BaseElement::wrappers(), ['prompt' => Yii::t('easyii/content', 'Default')]); ?>
 	</div>
+
 
 <?= Html::endTag('div'); ?>
