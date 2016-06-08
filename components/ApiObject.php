@@ -6,6 +6,7 @@ use yii\base\Arrayable;
 use yii\base\ArrayableTrait;
 use yii\easyii\helpers\Image;
 use yii\easyii\models\Setting;
+use yii\helpers\StringHelper;
 
 /**
  * Class ApiObject
@@ -13,7 +14,7 @@ use yii\easyii\models\Setting;
  * @var integer $id
  * @var string $image
  */
-class ApiObject extends \yii\base\Object implements Arrayable
+abstract class ApiObject extends \yii\base\Object implements Arrayable
 {
     use ArrayableTrait {
         fields as defaultFields;
@@ -21,6 +22,18 @@ class ApiObject extends \yii\base\Object implements Arrayable
 
     /** @var \yii\base\Model  */
     public $model;
+
+    public static function getModuleName()
+    {
+        return Module::getModuleName(self::className());
+    }
+
+    public static function getShortName()
+    {
+        $reflection = new \ReflectionClass(self::className());
+
+        return lcfirst($reflection->getShortName());
+    }
 
     /**
      * Generates ApiObject, attaching all settable properties to the child object
@@ -43,12 +56,13 @@ class ApiObject extends \yii\base\Object implements Arrayable
 
     public function fields()
     {
-        $fields = array_keys(Yii::getObjectVars($this));
+        $vars = array_keys(Yii::getObjectVars($this));
+        $vars[] = 'id';
+
+        $fields = array_combine($vars, $vars);
         unset($fields['model']);
 
-        $fields[] = 'id';
-var_dump($fields);die;
-        return array_combine($fields, $fields);
+        return $fields;
     }
 
     /**
@@ -60,7 +74,7 @@ var_dump($fields);die;
      * Returns object id
      * @return int
      */
-    public function getId($debug = false){
+    public function getId(){
 
         return $this->model->primaryKey;
     }

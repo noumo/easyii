@@ -7,7 +7,7 @@ use yii\easyii\models\Photo;
 use yii\easyii\modules\news\models\News as NewsModel;
 use yii\helpers\Url;
 
-class NewsObject extends \yii\easyii\components\ApiObject
+class NewsObject extends \yii\easyii\components\ApiObject implements \yii\easyii\components\IApiHtml
 {
     public $slug;
     public $views;
@@ -49,5 +49,10 @@ class NewsObject extends \yii\easyii\components\ApiObject
 
     public function  getEditLink(){
         return Url::to(['/admin/news/a/edit/', 'id' => $this->id]);
+    }
+
+    public function toHtml()
+    {
+        return $this->getTitle();
     }
 }

@@ -6,7 +6,7 @@ use yii\easyii\components\API;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class PhotoObject extends \yii\easyii\components\ApiObject
+class PhotoObject extends \yii\easyii\components\ApiObject implements \yii\easyii\components\IApiHtml
 {
     public $description;
 
@@ -22,5 +22,10 @@ class PhotoObject extends \yii\easyii\components\ApiObject
 
     public function getEditLink(){
         return Url::to(['/admin/news/a/photos', 'id' => $this->model->item_id]).'#photo-'.$this->id;
+    }
+
+    public function toHtml()
+    {
+        return $this->box(null, null);
     }
 }

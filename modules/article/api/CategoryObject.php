@@ -10,7 +10,7 @@ use yii\easyii\modules\article\models\Item;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 
-class CategoryObject extends \yii\easyii\components\ApiObject
+class CategoryObject extends \yii\easyii\components\ApiObject implements \yii\easyii\components\IApiHtml
 {
     public $slug;
     public $image;
@@ -70,5 +70,10 @@ class CategoryObject extends \yii\easyii\components\ApiObject
 
     public function getEditLink(){
         return Url::to(['/admin/article/a/edit/', 'id' => $this->id]);
+    }
+
+    public function toHtml()
+    {
+        return $this->getTitle();
     }
 }

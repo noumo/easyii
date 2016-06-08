@@ -8,7 +8,7 @@ use yii\easyii\modules\entity\models\Item;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
-class ItemObject extends \yii\easyii\components\ApiObject
+class ItemObject extends \yii\easyii\components\ApiObject implements \yii\easyii\components\IApiHtml
 {
     public $data;
     public $category_id;
@@ -58,4 +58,10 @@ class ItemObject extends \yii\easyii\components\ApiObject
 
         return parent::__get($name);
     }
+
+    public function toHtml()
+    {
+        return $this->getTitle();
+    }
+
 }
