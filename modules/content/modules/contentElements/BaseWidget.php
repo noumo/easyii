@@ -24,7 +24,7 @@ abstract class BaseWidget extends Widget
 
 	const EVENT_BEFORE_RENDER = 'beforeRender';
 
-	public $wrapper = '/default';
+	public $wrapper;
 
 	public $wrapperPath = '@contentElements/views/wrappers';
 
@@ -167,7 +167,7 @@ abstract class BaseWidget extends Widget
 			$wrapper = $this->wrapper;
 		}
 		else {
-			return false;
+			$wrapper = '/default';
 		}
 
 		if (strncmp($wrapper, '/', 1) === 0) {

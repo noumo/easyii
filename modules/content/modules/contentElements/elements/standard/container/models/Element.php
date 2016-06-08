@@ -11,7 +11,7 @@ class Element extends BaseElement
 {
 	public $collapsible = false;
 
-	public function render(View $view)
+	public function render()
 	{
 		$widget = ContentElementModule::createWidget($this);
 

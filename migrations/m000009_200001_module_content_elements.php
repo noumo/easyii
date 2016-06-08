@@ -16,7 +16,7 @@ class m000009_200001_module_content_elements extends \yii\db\Migration
 		    'element_id' => 'pk',
 		    'parent_element_id' => Schema::TYPE_INTEGER,
 			'type' => Schema::TYPE_STRING . ' NOT NULL',
-			'wrapper' => Schema::TYPE_STRING . ' NOT NULL',
+			'wrapper' => Schema::TYPE_STRING . ' DEFAULT NULL',
 		    'data' => Schema::TYPE_TEXT . ' NOT NULL',
 		    'order_num' => Schema::TYPE_INTEGER,
 		    'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'",
