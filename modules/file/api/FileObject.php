@@ -6,7 +6,7 @@ use yii\easyii\components\API;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class FileObject extends \yii\easyii\components\ApiObject
+class FileObject extends \yii\easyii\components\ApiObject implements \yii\easyii\components\IApiHtml
 {
     public $slug;
     public $downloads;
@@ -38,5 +38,10 @@ class FileObject extends \yii\easyii\components\ApiObject
 
     public function  getEditLink(){
         return Url::to(['/admin/file/a/edit/', 'id' => $this->id]);
+    }
+
+    public function toHtml()
+    {
+        return $this->getLink();
     }
 }

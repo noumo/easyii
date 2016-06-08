@@ -7,7 +7,7 @@ use yii\easyii\models\Photo;
 use yii\easyii\modules\catalog\models\Item;
 use yii\helpers\Url;
 
-class ItemObject extends \yii\easyii\components\ApiObject
+class ItemObject extends \yii\easyii\components\ApiObject implements \yii\easyii\components\IApiHtml
 {
     public $slug;
     public $data;
@@ -56,5 +56,10 @@ class ItemObject extends \yii\easyii\components\ApiObject
 
     public function getEditLink(){
         return Url::to(['/admin/catalog/items/edit/', 'id' => $this->id]);
+    }
+
+    public function toHtml()
+    {
+        return $this->getTitle();
     }
 }

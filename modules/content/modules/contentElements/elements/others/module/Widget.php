@@ -4,6 +4,7 @@ namespace yii\easyii\modules\content\modules\contentElements\elements\others\mod
 
 use yii\data\ArrayDataProvider;
 use yii\easyii\AdminModule;
+use yii\easyii\components\IApiHtml;
 use yii\easyii\modules\content\modules\contentElements\BaseWidget;
 use yii\easyii\modules\content\modules\contentElements\elements\others\module\models\Element;
 use yii\helpers\ArrayHelper;
@@ -63,7 +64,10 @@ class Widget extends BaseWidget
 	{
 		$data = $this->element->fetchData();
 
-		if (is_array($data) ) {
+		if ($this->element->format == Element::FORMAT_HTML || $data instanceof IApiHtml) {
+			$data = $data->toHtml();
+		}
+		elseif (is_array($data) ) {
 			$view = 'listView';
 			$dataProvider = new ArrayDataProvider();
 			$dataProvider->allModels = $data;

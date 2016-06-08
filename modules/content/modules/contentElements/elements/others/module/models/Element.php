@@ -8,12 +8,12 @@ use yii\helpers\StringHelper;
 
 class Element extends BaseElement
 {
-	const FORMAT_RAW = 'raw';
+	const FORMAT_HTML = 'htlm';
 	const FORMAT_LIST = 'list';
 	const FORMAT_DETAIL = 'detail';
 
 	public static $formats = [
-		self::FORMAT_RAW => 'Raw',
+		self::FORMAT_HTML => 'Html',
 		self::FORMAT_LIST => 'List',
 		self::FORMAT_DETAIL => 'Detail'
 	];

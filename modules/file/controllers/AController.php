@@ -91,12 +91,12 @@ class AController extends Controller
                 return ActiveForm::validate($model);
             }
             else{
-                if(($fileInstanse = UploadedFile::getInstance($model, 'file')))
+                if(($fileInstance= UploadedFile::getInstance($model, 'file')))
                 {
-                    $model->file = $fileInstanse;
+                    $model->file = $fileInstance;
                     if($model->validate(['file'])){
-                        $model->file = Upload::file($fileInstanse, 'file', false);
-                        $model->size = $fileInstanse->size;
+                        $model->file = Upload::file($fileInstance, 'file', false);
+                        $model->size = $fileInstance->size;
                         $model->time = time();
                     }
                     else {
@@ -114,6 +114,7 @@ class AController extends Controller
                 else {
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                 }
+
                 return $this->refresh();
             }
         }

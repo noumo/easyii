@@ -24,7 +24,8 @@ class Upload
         if(!$fileInstance->saveAs($fileName)){
             throw new HttpException(500, 'Cannot upload file "'.$fileName.'". Please check write permissions.');
         }
-        return $dir ? $dir . '/' . basename($fileName) : basename($fileName);
+        $path = ($dir ? $dir . DIRECTORY_SEPARATOR : '');
+        return $path . basename($fileName);
     }
 
     static function getUploadPath($dir = null)
@@ -38,7 +39,9 @@ class Upload
             $uploadPath .= DIRECTORY_SEPARATOR . $dir;
         }
 
-        $uploadPath = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . $uploadPath;
+        $webroot = Yii::getAlias('@webroot');
+
+        $uploadPath = $webroot . str_replace('\\', '/', $uploadPath);
 
         if(!FileHelper::createDirectory($uploadPath)){
             throw new HttpException(500, 'Cannot create "'.$uploadPath.'". Please check write permissions.');
@@ -59,7 +62,7 @@ class Upload
         $path = str_replace($webroot, '', str_replace('\\', '/', $uploads));
 
         if ($dir) {
-            $path .= '/' . $dir;
+            $path .= DIRECTORY_SEPARATOR . $dir;
         }
 
         return Yii::getAlias('@web') . $path;
