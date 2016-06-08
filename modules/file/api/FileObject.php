@@ -6,6 +6,11 @@ use yii\easyii\components\API;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+/**
+ * Class FileObject
+ *
+ * @property \yii\easyii\modules\file\models\File $model
+ */
 class FileObject extends \yii\easyii\components\ApiObject implements \yii\easyii\components\IApiHtml
 {
     public $slug;
@@ -18,6 +23,10 @@ class FileObject extends \yii\easyii\components\ApiObject implements \yii\easyii
 
     public function getFile(){
         return Url::to(['/admin/file/download', 'id' => $this->id]);
+    }
+
+    public function getFileUrl(){
+        return $this->model->getLink();
     }
 
     public function getLink(){

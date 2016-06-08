@@ -6,6 +6,7 @@ use yii\base\Arrayable;
 use yii\base\ArrayableTrait;
 use yii\easyii\helpers\Image;
 use yii\easyii\models\Setting;
+use yii\helpers\StringHelper;
 
 /**
  * Class ApiObject
@@ -21,6 +22,18 @@ abstract class ApiObject extends \yii\base\Object implements Arrayable
 
     /** @var \yii\base\Model  */
     public $model;
+
+    public static function getModuleName()
+    {
+        return Module::getModuleName(self::className());
+    }
+
+    public static function getShortName()
+    {
+        $reflection = new \ReflectionClass(self::className());
+
+        return lcfirst($reflection->getShortName());
+    }
 
     /**
      * Generates ApiObject, attaching all settable properties to the child object
