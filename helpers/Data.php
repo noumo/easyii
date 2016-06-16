@@ -25,6 +25,8 @@ class Data
 
     public static function getLocale()
     {
-        return strtolower(substr(Yii::$app->language, 0, 2));
+        $muti_lan_array=['zh-cn','zh-tw'];
+		$language=strtolower(trim(Yii::$app->language));
+        return in_array($language,$muti_lan_array,false)?$language:substr($language, 0, 2); 
     }
 }
