@@ -41,7 +41,7 @@ class Element extends BaseElement
 
 		$api = $namespace . '\\api\\' . ucfirst($this->module);
 		$function = $this->function;
-		$parameters = explode(',', $this->parameters);
+		$parameters = array_filter(explode(',', $this->parameters));
 
 		$data = call_user_func_array([$api, $function], $parameters);
 
