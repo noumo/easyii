@@ -85,7 +85,10 @@ class Widget extends BaseWidget
 			$view = 'detailView';
 		}
 
-		if ($html = $this->generateHtmlData($view, $data)) {
+		if (is_string($data)) {
+			$view = 'view';
+		}
+		elseif ($html = $this->generateHtmlData($view, $data)) {
 			$data = $html;
 			$view = 'view';
 		}
