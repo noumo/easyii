@@ -76,7 +76,8 @@ class LoginForm extends ActiveRecord
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = Admin::findByUsername($this->username);
+            $userIdentityClass = Yii::$app->user->identityClass;
+            $this->_user = $userIdentityClass::findByUsername($this->username);
         }
 
         return $this->_user;
