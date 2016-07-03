@@ -28,8 +28,6 @@ abstract class BaseElement extends ActiveRecord
 	const STATUS_OFF = 0;
 	const STATUS_ON = 1;
 
-	public $wrapper;
-
 	public $scenario = 'insert';
 
 	public $readOnly = false;
