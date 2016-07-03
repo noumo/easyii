@@ -61,7 +61,8 @@ class DateTimePicker extends \yii\base\Widget
             $this->options['locale'] = Data::getLocale();
         }
         $clientOptions = (count($this->options)) ? Json::encode($this->options) : '';
-        $time = $this->hasModel() ? $this->model->{$this->attribute} : $this->value;
+        $value = $this->hasModel() ? $this->model->{$this->attribute} : $this->value;
+
         $this->getView()->registerJs('
             (function(){
                 var dtpContainer = $("#'.$this->widgetId.'");
@@ -71,7 +72,7 @@ class DateTimePicker extends \yii\base\Widget
                     $("#'.$this->inputId.'").val(e.date.unix());
                 })
                 .data("DateTimePicker")
-                .date(moment('.($time * 1000).'));
+                .date(moment("'.$value.'"));
 
                 $("[type=text]", dtpContainer).focus(function(e){
                     dtpContainer.data("DateTimePicker").show();
