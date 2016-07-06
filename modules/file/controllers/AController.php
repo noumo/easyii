@@ -45,6 +45,14 @@ class AController extends Controller
             else{
                 if(($fileInstanse = UploadedFile::getInstance($model, 'file')))
                 {
+                    if ($model->slug){
+                        $ext = explode('.', $fileInstanse->name);
+                        $ext = array_pop($ext);
+                        $fileInstanse->name = $model->slug;
+                        if ($ext){
+                            $fileInstanse->name .= '.'.$ext;
+                        }
+                    }
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
                         $model->file = Upload::file($fileInstanse, 'files', false);

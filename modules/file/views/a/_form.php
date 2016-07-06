@@ -15,7 +15,7 @@ use yii\easyii\widgets\SeoForm;
 <?php endif; ?>
 
 <?php if(IS_ROOT) : ?>
-    <?= $form->field($model, 'slug') ?>
+    <?= $form->field($model, 'slug')->hint(Yii::t('easyii', 'If specified, the slug will be used as filename. The file extension will be appended to it.')) ?>
     <?= SeoForm::widget(['model' => $model]) ?>
 <?php endif; ?>
 
