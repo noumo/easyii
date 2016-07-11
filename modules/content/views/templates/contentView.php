@@ -5,7 +5,5 @@
  */
 ?>
 
-<div class="content">
-	<?= $content->render() ?>
-</div>
+<?= $content->render() ?>
 
