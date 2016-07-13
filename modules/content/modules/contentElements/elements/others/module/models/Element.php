@@ -8,7 +8,7 @@ use yii\helpers\StringHelper;
 
 class Element extends BaseElement
 {
-	const FORMAT_HTML = 'htlm';
+	const FORMAT_HTML = 'html';
 	const FORMAT_LIST = 'list';
 	const FORMAT_DETAIL = 'detail';
 
@@ -28,9 +28,8 @@ class Element extends BaseElement
 		return array_merge(parent::rules(),
 			[
 				[['module', 'function'], 'string'],
-				[['item_id'], 'integer'],
 				['format', 'in', 'range' => array_keys(self::$formats)],
-				[['module', 'function', 'parameters', 'format', 'item_id'], 'safe']
+				[['module', 'function', 'parameters', 'format'], 'safe']
 			]);
 	}
 
