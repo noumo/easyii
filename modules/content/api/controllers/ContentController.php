@@ -68,7 +68,7 @@ trait ContentController
 		if ($this->content->model) {
 			/** @var \yii\web\View $view */
 			$view = $this->controller->view;
-			$view->title = \Yii::$app->name . " - " . $this->content->seo('title', $this->content->model->title);
+			$view->title = $this->content->seo('title', $this->content->model->title) . " - " . \Yii::$app->name;
 		}
 	}
 
