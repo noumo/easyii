@@ -25,7 +25,7 @@ $this->title = Yii::t('easyii', 'Modules');
             <tr>
                 <td><?= $module->primaryKey ?></td>
                 <td><a href="<?= Url::to(['/admin/modules/edit/', 'id' => $module->primaryKey]) ?>" title="<?= Yii::t('easyii', 'Edit') ?>"><?= $module->name ?></a></td>
-                <td><?= $module->title ?></td>
+                <td><?= Yii::t('easyii', $module->title) ?></td>
                 <td>
                     <?php if($module->icon) : ?>
                         <span class="glyphicon glyphicon-<?= $module->icon ?>"></span> <?= $module->icon ?>
