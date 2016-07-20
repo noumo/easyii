@@ -136,5 +136,5 @@ return [
     'Carousel' => 'Карусель',
     'Files' => 'Файлы',
     'Text blocks' => 'Текстовые блоки',
-    'E-mail subscribe' => 'Емейл подписка',
+    'E-mail subscribe' => 'Емейл-подписка',
 ];
