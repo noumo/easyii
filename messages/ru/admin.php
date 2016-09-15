@@ -126,6 +126,7 @@ return [
 
     'Orders' => 'Заказы',
     'Catalog' => 'Каталог',
+    'Manufacturers' => 'Производители',
     'Photo Gallery' => 'Фото-галерея',
     'Guestbook' => 'Гостевая книга',
     'News' => 'Новости',
