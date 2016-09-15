@@ -127,6 +127,8 @@ return [
     'Orders' => 'Заказы',
     'Catalog' => 'Каталог',
     'Manufacturers' => 'Производители',
+    'Currencies' => 'Валюты',
+    'Import' => 'Импорт',
     'Photo Gallery' => 'Фото-галерея',
     'Guestbook' => 'Гостевая книга',
     'News' => 'Новости',
