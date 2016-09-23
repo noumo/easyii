@@ -140,4 +140,5 @@ return [
     'Files' => 'Файлы',
     'Text blocks' => 'Текстовые блоки',
     'E-mail subscribe' => 'Емейл-подписка',
+    'Situations' => 'Ситуации',
 ];
