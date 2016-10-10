@@ -141,4 +141,5 @@ return [
     'Text blocks' => 'Текстовые блоки',
     'E-mail subscribe' => 'Емейл-подписка',
     'Situations' => 'Ситуации',
+    'Comments' => 'Комментарии',
 ];
