@@ -17,6 +17,7 @@ use yii\helpers\Html;
 class Text extends API
 {
     private $_texts = [];
+    private $_keys = [];
 
     public function init()
     {
@@ -37,11 +38,16 @@ class Text extends API
 
     private function findText($id_slug)
     {
-        foreach ($this->_texts as $item) {
-            if($item['slug'] == $id_slug || $item['text_id'] == $id_slug){
-                return $item;
+        if (empty($this->_keys)) {
+            foreach ($this->_texts as $n => $item) {
+                $this->_keys[$item['slug']] = $n;
+                $this->_keys[$item['text_id']] = $n;
             }
         }
+
+        if (isset($this->_keys[$id_slug]))
+            return $this->_texts[$this->_keys[$id_slug]];
+        
         return null;
     }
 
