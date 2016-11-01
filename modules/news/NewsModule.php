@@ -15,6 +15,7 @@ class NewsModule extends \yii\easyii\components\Module
         'title' => [
             'en' => 'News',
             'ru' => 'Новости',
+            'cn' => '新闻',
         ],
         'icon' => 'bullhorn',
         'order_num' => 70,

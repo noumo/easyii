@@ -9,6 +9,7 @@ class FaqModule extends \yii\easyii\components\Module
         'title' => [
             'en' => 'FAQ',
             'ru' => 'Вопросы и ответы',
+            'cn' => '常见问题解答',
         ],
         'icon' => 'question-sign',
         'order_num' => 45,
