@@ -18,6 +18,7 @@ class ShopcartModule extends \yii\easyii\components\Module
         'title' => [
             'en' => 'Orders',
             'ru' => 'Заказы',
+            'cn' => '订单',
         ],
         'icon' => 'shopping-cart',
         'order_num' => 120,
