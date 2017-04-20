@@ -21,7 +21,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "2.0.11",
+        "yiisoft/yii2": "^2.0.12",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "creocoder/yii2-nested-sets": "0.9.*",
