@@ -1,11 +1,14 @@
 <?php
+
+use yii\helpers\ArrayHelper;
+
 $this->title = $subject;
 ?>
-<p><?= nl2br($feedback->answer_text) ?></p>
+<p><?= $html_answer ?></p>
 <br/>
 <br/>
 <hr>
-<p><?= Yii::$app->formatter->asDatetime($feedback->time, 'medium') ?> you wrote:</p>
+<p><?= $nice_date ?> you wrote:</p>
 <p>
-    <?php foreach(explode("\n", $feedback->text) as $line) echo '> '.$line.'<br/>'; ?>
+    <?php foreach(explode("\n", ArrayHelper::getValue($feedback, 'text')) as $line) echo '> '.$line.'<br/>'; ?>
 </p>
