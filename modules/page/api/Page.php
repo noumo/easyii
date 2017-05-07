@@ -4,6 +4,7 @@ namespace yii\easyii\modules\page\api;
 use Yii;
 use yii\easyii\modules\page\models\Page as PageModel;
 use yii\helpers\Html;
+use yii\web\NotFoundHttpException;
 
 /**
  * Page module API
@@ -24,18 +25,72 @@ class Page extends \yii\easyii\components\API
         return $this->_pages[$id_slug];
     }
 
+    public function api_menu()
+    {
+        $result = [];
+        foreach(PageModel::tree() as $page) {
+            if($page->show_in_menu)
+            {
+                $temp = $this->buildMenuItem($page);
+                $temp['children'] = [];
+                if (!empty($page->children)) {
+                    foreach ($page->children as $child) {
+                        if($child->show_in_menu) {
+                            $temp['children'][] = $this->buildMenuItem($child);
+                        }
+                    }
+                }
+                $result[] = $temp;
+            }
+        }
+        return $result;
+    }
+
     private function findPage($id_slug)
     {
-        $page = PageModel::find()->where(['or', 'page_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
+        try {
+            $result = new PageObject(PageModel::get($id_slug));
+        } catch (NotFoundHttpException $e) {
+            $result = $this->notFound($id_slug);
+        }
 
-        return $page ? new PageObject($page) : $this->notFound($id_slug);
+        return $result;
     }
 
     private function notFound($id_slug)
     {
-        $page = new PageModel([
-            'slug' => $id_slug
-        ]);
-        return new PageObject($page);
+        $config = ['slug' => $id_slug];
+        if(IS_ROOT && preg_match(PageModel::$SLUG_PATTERN, $id_slug)){
+            $config['title'] = $config['text'] = Html::a(Yii::t('easyii/page/api', 'Create page'), ['/admin/page/a/create', 'slug' => $id_slug], ['target' => '_blank']);
+        } else {
+            throw new NotFoundHttpException(Yii::t('easyii', 'Page not found'));
+        }
+        return new PageObject(new PageModel($config));
+    }
+
+    private function buildMenuItem($page)
+    {
+        $result = [
+            'label' => $page->title,
+            'active' => false
+        ];
+        $controller = Yii::$app->controller;
+
+        if($page->slug == 'index') {
+            $result['url'] = \yii\helpers\Url::home();
+            if($controller->id == 'site' && $controller->action->id == 'index') {
+                $result['active'] = true;
+            }
+        } else {
+            if($page->depth == 0) {
+                $result['url'] = \yii\helpers\Url::to(['/' . $page->slug]);
+                if($controller->id == $page->slug) {
+                    $result['active'] = true;
+                }
+            } else {
+                $result['url'] = \yii\helpers\Url::to(['/' . PageModel::get($page->parent)->slug . '/' . $page->slug]);
+            }
+        }
+        return $result;
     }
 }

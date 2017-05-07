@@ -37,7 +37,7 @@ class Carousel extends API
     public function api_widget($width, $height, $clientOptions = [])
     {
         if(!count($this->_items)){
-            return LIVE_EDIT ? Html::a(Yii::t('easyii/carousel/api', 'Create carousel'), ['/admin/carousel/a/create'], ['target' => '_blank']) : '';
+            return LIVE_EDIT_ENABLED ? Html::a(Yii::t('easyii/carousel/api', 'Create carousel'), ['/admin/carousel/a/create'], ['target' => '_blank']) : '';
         }
         if(count($clientOptions)){
             $this->clientOptions = array_merge($this->clientOptions, $clientOptions);
@@ -67,7 +67,7 @@ class Carousel extends API
             'items' => $items
         ]);
 
-        return LIVE_EDIT ? API::liveEdit($widget, Url::to(['/admin/carousel']), 'div') : $widget;
+        return LIVE_EDIT_ENABLED ? API::liveEdit($widget, Url::to(['/admin/carousel']), 'div') : $widget;
     }
 
     public function api_items()

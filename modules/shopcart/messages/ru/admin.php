@@ -3,6 +3,8 @@ return [
     'Orders' => 'Заказы',
     'Order' => 'Заказ',
     'Order updated' => 'Заказ обновлен',
+    'Order deleted' => 'Заказ удален',
+    'Item deleted' => 'Вложение удалено',
     'Blank' => 'Незаполнен',
     'Pending' => 'Ожидает',
     'Processed' => 'В обработке',

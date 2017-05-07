@@ -33,12 +33,12 @@ class Good extends \yii\easyii\components\ActiveRecord
 
     public function getItem()
     {
-        return $this->hasOne(Item::className(), ['item_id' => 'item_id']);
+        return $this->hasOne(Item::className(), ['id' => 'item_id']);
     }
 
     public function getOrder()
     {
-        return $this->hasOne(Order::className(), ['order_id' => 'order_id']);
+        return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
 
     public function beforeSave($insert)

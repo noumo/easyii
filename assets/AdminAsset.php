@@ -14,6 +14,7 @@ class AdminAsset extends \yii\web\AssetBundle
         'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapAsset',
         'yii\easyii\assets\SwitcherAsset',
+        'yii\easyii\assets\FancyboxAsset',
     ];
     public $jsOptions = array(
         'position' => \yii\web\View::POS_HEAD

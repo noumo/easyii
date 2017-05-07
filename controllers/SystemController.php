@@ -2,12 +2,15 @@
 namespace yii\easyii\controllers;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\easyii\helpers\WebConsole;
+use yii\easyii\models\LoginForm;
 use yii\easyii\models\Setting;
+use yii\helpers\FileHelper;
 
 class SystemController extends \yii\easyii\components\Controller
 {
-    public $rootActions = ['*'];
+    public $rootActions = ['all'];
 
     public function actionIndex()
     {
@@ -46,10 +49,15 @@ class SystemController extends \yii\easyii\components\Controller
         return $this->back();
     }
 
-    public function actionLiveEdit($id)
+    public function actionLogs()
     {
-        Yii::$app->session->set('easyii_live_edit', $id);
-        $this->back();
+        $data = new ActiveDataProvider([
+            'query' => LoginForm::find()->desc(),
+        ]);
+
+        return $this->render('logs', [
+            'data' => $data
+        ]);
     }
 
     private function deleteDir($directory)

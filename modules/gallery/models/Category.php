@@ -12,7 +12,7 @@ class Category extends \yii\easyii\components\CategoryModel
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'category_id'])->where(['class' => self::className()])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'id'])->where(['class' => self::className()])->sort();
     }
 
     public function afterDelete()

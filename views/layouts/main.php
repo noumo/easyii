@@ -23,10 +23,9 @@ $moduleName = $this->context->module->id;
     <div class="container">
         <div class="wrapper">
             <div class="header">
-                <div class="logo">
-                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png">
-                    EasyiiCMS
-                </div>
+                <a href="<?= Url::to(['/admin']) ?>" class="logo">
+                    <img src="<?= $asset->baseUrl ?>/img/logo_20.png">EasyiiCMS
+                </a>
                 <div class="nav">
                     <a href="<?= Yii::$app->homeUrl ?>" class="pull-left"><i class="glyphicon glyphicon-home"></i> <?= Yii::t('easyii', 'Open site') ?></a>
                     <a href="<?= Url::to(['/admin/sign/out']) ?>" class="pull-right"><i class="glyphicon glyphicon-log-out"></i> <?= Yii::t('easyii', 'Logout') ?></a>
@@ -61,10 +60,6 @@ $moduleName = $this->context->module->id;
                         <a href="<?= Url::to(['/admin/system']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'system') ? 'active' :'' ?>">
                             <i class="glyphicon glyphicon-hdd"></i>
                             <?= Yii::t('easyii', 'System') ?>
-                        </a>
-                        <a href="<?= Url::to(['/admin/logs']) ?>" class="menu-item <?= ($moduleName == 'admin' && $this->context->id == 'logs') ? 'active' :'' ?>">
-                            <i class="glyphicon glyphicon-align-justify"></i>
-                            <?= Yii::t('easyii', 'Logs') ?>
                         </a>
                     <?php endif; ?>
                 </div>

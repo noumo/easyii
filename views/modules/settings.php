@@ -28,4 +28,4 @@ $this->title = $model->title;
 <?php else : ?>
     <?= $model->title ?> <?= Yii::t('easyii', 'module doesn`t have any settings.') ?>
 <?php endif; ?>
-<a href="<?= Url::to(['/admin/modules/restore-settings', 'id' => $model->module_id]) ?>" class="pull-right text-warning"><i class="glyphicon glyphicon-flash"></i> <?= Yii::t('easyii', 'Restore default settings') ?></a>
+<a href="<?= Url::to(['/admin/modules/restore-settings', 'id' => $model->id]) ?>" class="pull-right text-warning"><i class="glyphicon glyphicon-flash"></i> <?= Yii::t('easyii', 'Restore default settings') ?></a>

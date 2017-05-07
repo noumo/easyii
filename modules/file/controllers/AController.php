@@ -3,23 +3,27 @@ namespace yii\easyii\modules\file\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortByNumAction;
 use yii\widgets\ActiveForm;
 use yii\web\UploadedFile;
-
 use yii\easyii\components\Controller;
 use yii\easyii\modules\file\models\File;
 use yii\easyii\helpers\Upload;
-use yii\easyii\behaviors\SortableController;
 
 class AController extends Controller
 {
-    public function behaviors()
+    public $modelClass = 'yii\easyii\modules\file\models\File';
+
+    public function actions()
     {
         return [
-            [
-                'class' => SortableController::className(),
-                'model' => File::className()
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'successMessage' => Yii::t('easyii/file', 'File deleted')
             ],
+            'up' => SortByNumAction::className(),
+            'down' => SortByNumAction::className(),
         ];
     }
 
@@ -47,7 +51,7 @@ class AController extends Controller
                 {
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
-                        $model->file = Upload::file($fileInstanse, 'files', false);
+                        $model->file = Upload::file($fileInstanse, 'file', false);
                         $model->size = $fileInstanse->size;
 
                         if($model->save()){
@@ -79,12 +83,7 @@ class AController extends Controller
 
     public function actionEdit($id)
     {
-        $model = File::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -96,7 +95,7 @@ class AController extends Controller
                 {
                     $model->file = $fileInstanse;
                     if($model->validate(['file'])){
-                        $model->file = Upload::file($fileInstanse, 'files', false);
+                        $model->file = Upload::file($fileInstanse, 'file', false);
                         $model->size = $fileInstanse->size;
                         $model->time = time();
                     }
@@ -123,25 +122,5 @@ class AController extends Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = File::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/file', 'File deleted'));
-    }
-
-    public function actionUp($id)
-    {
-        return $this->move($id, 'up');
-    }
-
-    public function actionDown($id)
-    {
-        return $this->move($id, 'down');
     }
 }

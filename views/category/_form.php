@@ -1,5 +1,6 @@
 <?php
 use yii\easyii\helpers\Image;
+use yii\easyii\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -21,25 +22,36 @@ $settings = $this->context->module->settings;
             <option value="" class="smooth"><?= Yii::t('easyii', 'No') ?></option>
             <?php foreach($class::find()->sort()->asArray()->all() as $node) : ?>
                 <option
-                    value="<?= $node['category_id'] ?>"
-                    <?php if($parent == $node['category_id']) echo 'SELECTED' ?>
-                    style="padding-left: <?= $node['depth']*20 ?>px;"
+                    value="<?= $node['id'] ?>"
+                    <?php if($parent == $node['id']) echo 'SELECTED' ?>
+                    style="padding-left: <?= $node['depth'] * 20 ?>px;"
                 ><?= $node['title'] ?></option>
             <?php endforeach; ?>
         </select>
     </div>
 <?php endif; ?>
 
-<?php if($settings['categoryThumb']) : ?>
-    <?php if($model->image) : ?>
-        <img src="<?= Image::thumb($model->image, 240) ?>">
+<?php if(!empty($settings['categoryDescription'])) : ?>
+    <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
+<?php endif; ?>
+
+<?php if(!empty($settings['categoryThumb'])) : ?>
+    <?php if($model->image_file) : ?>
+        <a href="<?= $model->image ?>" class="fancybox"><img src="<?= Image::thumb($model->image_file, 240, 180) ?>"></a>
         <a href="<?= Url::to(['/admin/'.$this->context->moduleName.'/a/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
     <?php endif; ?>
-    <?= $form->field($model, 'image')->fileInput() ?>
+    <?= $form->field($model, 'image_file')->fileInput() ?>
+<?php endif; ?>
+
+<?php if(!empty($settings['categoryTags'])) : ?>
+    <?= $form->field($model, 'tagNames')->widget(TagsInput::className()) ?>
 <?php endif; ?>
 
 <?php if(IS_ROOT) : ?>
     <?= $form->field($model, 'slug') ?>
+    <?php if(isset($model->attributes['cache'])) : ?>
+        <?= $form->field($model, 'cache')->checkbox() ?>
+    <?php endif; ?>
     <?= SeoForm::widget(['model' => $model]) ?>
 <?php endif; ?>
 

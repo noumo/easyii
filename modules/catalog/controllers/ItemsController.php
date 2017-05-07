@@ -2,52 +2,68 @@
 namespace yii\easyii\modules\catalog\controllers;
 
 use Yii;
-use yii\easyii\behaviors\StatusController;
-use yii\web\UploadedFile;
-use yii\helpers\Html;
-
+use yii\easyii\actions\ChangeStatusAction;
+use yii\easyii\actions\ClearImageAction;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\actions\SortByDateAction;
+use yii\easyii\behaviors\Fields;
 use yii\easyii\components\Controller;
+use yii\easyii\modules\catalog\CatalogModule;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
-use yii\easyii\helpers\Image;
-use yii\easyii\behaviors\SortableDateController;
 use yii\widgets\ActiveForm;
 
 class ItemsController extends Controller
 {
+    public $modelClass = 'yii\easyii\modules\catalog\models\Item';
+    public $categoryClass = 'yii\easyii\modules\catalog\models\Category';
+
+    public function actions()
+    {
+        $className = Item::className();
+        return [
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'model' => $className,
+                'successMessage' => Yii::t('easyii/catalog', 'Item deleted')
+            ],
+            'clear-image' => ClearImageAction::className(),
+            'up' => [
+                'class' => SortByDateAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
+            'down' => [
+                'class' => SortByDateAction::className(),
+                'addititonalEquality' => ['category_id']
+            ],
+            'on' => ChangeStatusAction::className(),
+            'off' => ChangeStatusAction::className(),
+        ];
+    }
+
     public function behaviors()
     {
         return [
-            [
-                'class' => SortableDateController::className(),
-                'model' => Item::className(),
-            ],
-            [
-                'class' => StatusController::className(),
-                'model' => Item::className()
-            ]
+            'fields' => Fields::className()
         ];
     }
 
     public function actionIndex($id)
     {
-        if(!($model = Category::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
         return $this->render('index', [
-            'model' => $model
+            'category' => $this->findCategory($id)
         ]);
     }
 
-
     public function actionCreate($id)
     {
-        if(!($category = Category::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $category = $this->findCategory($id);
 
-        $model = new Item;
+        $model = new Item([
+            'category_id' => $id,
+            'time' => time(),
+            'available' => 1
+        ]);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -55,17 +71,8 @@ class ItemsController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                $model->category_id = $category->primaryKey;
-                $model->data = Yii::$app->request->post('Data');
+                $model->data = $this->parseData($model);
 
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'catalog');
-                    } else {
-                        $model->image = '';
-                    }
-                }
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit/', 'id' => $model->primaryKey]);
@@ -79,16 +86,15 @@ class ItemsController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'category' => $category,
-                'dataForm' => $this->generateForm($category->fields)
+                'dataForm' => $this->generateForm($category->fields),
+                'cats' => $this->getSameCats($category)
             ]);
         }
     }
 
     public function actionEdit($id)
     {
-        if(!($model = Item::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if(Yii::$app->request->isAjax){
@@ -96,17 +102,8 @@ class ItemsController extends Controller
                 return ActiveForm::validate($model);
             }
             else {
-                $model->data = Yii::$app->request->post('Data');
-
-                if (isset($_FILES) && $this->module->settings['itemThumb']) {
-                    $model->image = UploadedFile::getInstance($model, 'image');
-                    if ($model->image && $model->validate(['image'])) {
-                        $model->image = Image::upload($model->image, 'catalog');
-                    } else {
-                        $model->image = $model->oldAttributes['image'];
-                    }
-                }
-
+                $model->data = $this->parseData($model);
+                
                 if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/catalog', 'Item updated'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
@@ -119,100 +116,26 @@ class ItemsController extends Controller
         else {
             return $this->render('edit', [
                 'model' => $model,
-                'dataForm' => $this->generateForm($model->category->fields, $model->data)
+                'dataForm' => $this->generateForm($model->category->fields, $model->data),
+                'cats' => $this->getSameCats($model->category)
             ]);
         }
     }
 
     public function actionPhotos($id)
     {
-        if(!($model = Item::findOne($id))){
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
-
         return $this->render('photos', [
-            'model' => $model,
+            'model' => $this->findModel($id),
         ]);
     }
 
-    public function actionClearImage($id)
+    public function getSameCats($cat)
     {
-        $model = Item::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-        }
-        elseif($model->image){
-            $model->image = '';
-            if($model->update()){
-                @unlink(Yii::getAlias('@webroot').$model->image);
-                $this->flash('success', Yii::t('easyii', 'Image cleared'));
-            } else {
-                $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
-            }
-        }
-        return $this->back();
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Item::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii/catalog', 'Item deleted'));
-    }
-
-    public function actionUp($id, $category_id)
-    {
-        return $this->move($id, 'up', ['category_id' => $category_id]);
-    }
-
-    public function actionDown($id, $category_id)
-    {
-        return $this->move($id, 'down', ['category_id' => $category_id]);
-    }
-
-    public function actionOn($id)
-    {
-        return $this->changeStatus($id, Item::STATUS_ON);
-    }
-
-    public function actionOff($id)
-    {
-        return $this->changeStatus($id, Item::STATUS_OFF);
-    }
-
-    private function generateForm($fields, $data = null)
-    {
-        $result = '';
-        foreach($fields as $field)
-        {
-            $value = !empty($data->{$field->name}) ? $data->{$field->name} : null;
-            if ($field->type === 'string') {
-                $result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::input('text', "Data[{$field->name}]", $value, ['class' => 'form-control']) .'</div>';
-            }
-            elseif ($field->type === 'text') {
-                $result .= '<div class="form-group"><label>'. $field->title .'</label>'. Html::textarea("Data[{$field->name}]", $value, ['class' => 'form-control']) .'</div>';
-            }
-            elseif ($field->type === 'boolean') {
-                $result .= '<div class="checkbox"><label>'. Html::checkbox("Data[{$field->name}]", $value, ['uncheck' => 0]) .' '. $field->title .'</label></div>';
-            }
-            elseif ($field->type === 'select') {
-                $options = ['' => Yii::t('easyii/catalog', 'Select')];
-                foreach($field->options as $option){
-                    $options[$option] = $option;
-                }
-                $result .= '<div class="form-group"><label>'. $field->title .'</label><select name="Data['.$field->name.']" class="form-control">'. Html::renderSelectOptions($value, $options) .'</select></div>';
-            }
-            elseif ($field->type === 'checkbox') {
-                $options = '';
-                foreach($field->options as $option){
-                    $checked = $value && in_array($option, $value);
-                    $options .= '<br><label>'. Html::checkbox("Data[{$field->name}][]", $checked, ['value' => $option]) .' '. $option .'</label>';
-                }
-                $result .= '<div class="checkbox well well-sm"><b>'. $field->title .'</b>'. $options .'</div>';
+        $result = [];
+        $fieldsHash = md5(json_encode($cat->fields));
+        foreach(Category::cats() as $cat){
+            if(md5(json_encode($cat->fields)) == $fieldsHash && (!count($cat->children) || CatalogModule::setting('itemsInFolder'))) {
+                $result[$cat->id] = $cat->title;
             }
         }
         return $result;

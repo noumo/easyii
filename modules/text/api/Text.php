@@ -27,18 +27,19 @@ class Text extends API
         });
     }
 
-    public function api_get($id_slug)
+    public function api_get($id_slug, $liveEditable = true)
     {
         if(($text = $this->findText($id_slug)) === null){
             return $this->notFound($id_slug);
         }
-        return LIVE_EDIT ? API::liveEdit($text['text'], Url::to(['/admin/text/a/edit/', 'id' => $text['text_id']])) : $text['text'];
+        $textContent = nl2br($text['text']);
+        return ($liveEditable && LIVE_EDIT_ENABLED) ? API::liveEdit($textContent ? $textContent : '[' . Yii::t('easyii/text/api', 'Empty text') . ']', Url::to(['/admin/text/a/edit/', 'id' => $text['id']])) : $textContent;
     }
 
     private function findText($id_slug)
     {
         foreach ($this->_texts as $item) {
-            if($item['slug'] == $id_slug || $item['text_id'] == $id_slug){
+            if($item['slug'] == $id_slug || $item['id'] == $id_slug){
                 return $item;
             }
         }
@@ -49,7 +50,7 @@ class Text extends API
     {
         $text = '';
 
-        if(!Yii::$app->user->isGuest && preg_match(TextModel::$SLUG_PATTERN, $id_slug)){
+        if(IS_ROOT && preg_match(TextModel::$SLUG_PATTERN, $id_slug)){
             $text = Html::a(Yii::t('easyii/text/api', 'Create text'), ['/admin/text/a/create', 'slug' => $id_slug], ['target' => '_blank']);
         }
 

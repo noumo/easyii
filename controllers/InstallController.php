@@ -28,7 +28,7 @@ class InstallController extends \yii\web\Controller
     public function actionIndex()
     {
         if(!$this->checkDbConnection()){
-            $configFile = str_replace(Yii::getAlias('@webroot'), '', Yii::getAlias('@app')).'/config/db.php';
+            $configFile = str_replace(Yii::getAlias('@webroot'), '', Yii::getAlias('@app')) . '/config/db.php';
             return $this->showError(Yii::t('easyii/install', 'Cannot connect to database. Please configure `{0}`.', $configFile));
         }
         if($this->module->installed){
@@ -37,7 +37,7 @@ class InstallController extends \yii\web\Controller
 
         $installForm = new InstallForm();
 
-        if ($installForm->load(Yii::$app->request->post())) {
+        if ($installForm->load(Yii::$app->request->post()) && $installForm->validate()) {
             $this->createUploadsDir();
 
             WebConsole::migrate();
@@ -51,8 +51,6 @@ class InstallController extends \yii\web\Controller
             return $this->redirect(['/admin/install/finish']);
         }
         else {
-            $installForm->robot_email = 'noreply@'.Yii::$app->request->serverName;
-
             return $this->render('index', [
                 'model' => $installForm
             ]);
@@ -108,7 +106,7 @@ class InstallController extends \yii\web\Controller
 
     private function createUploadsDir()
     {
-        $uploadsDir = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . 'uploads';
+        $uploadsDir = Yii::getAlias('@uploads');
         $uploadsDirExists = file_exists($uploadsDir);
         if(($uploadsDirExists && !is_writable($uploadsDir)) || (!$uploadsDirExists && !mkdir($uploadsDir, 0777))){
             throw new ServerErrorHttpException('Cannot create uploads folder at `'.$uploadsDir.'` Please check write permissions.');

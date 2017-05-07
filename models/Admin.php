@@ -6,7 +6,7 @@ use Yii;
 class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\IdentityInterface
 {
     static $rootUser = [
-        'admin_id' => 0,
+        'id' => 0,
         'username' => 'root',
         'password' => '',
         'auth_key' => '',
@@ -56,7 +56,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
     {
         $result = null;
         try {
-            $result = $id == self::$rootUser['admin_id']
+            $result = $id == self::$rootUser['id']
                 ? static::createRootUser()
                 : static::findOne($id);
         } catch (\yii\base\InvalidConfigException $e) {
@@ -79,7 +79,7 @@ class Admin extends \yii\easyii\components\ActiveRecord implements \yii\web\Iden
 
     public function getId()
     {
-        return $this->admin_id;
+        return $this->id;
     }
 
     public function getAuthKey()

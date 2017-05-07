@@ -26,7 +26,7 @@ class Taggable extends \yii\base\Behavior
 
     public function getTags()
     {
-        return $this->owner->hasMany(Tag::className(), ['tag_id' => 'tag_id'])->via('tagAssigns');
+        return $this->owner->hasMany(Tag::className(), ['id' => 'tag_id'])->via('tagAssigns');
     }
 
     public function getTagNames()
@@ -67,7 +67,7 @@ class Taggable extends \yii\base\Behavior
                 $tag->frequency++;
                 if ($tag->save()) {
                     $updatedTags[] = $tag;
-                    $tagAssigns[] = [$modelClass, $this->owner->primaryKey, $tag->tag_id];
+                    $tagAssigns[] = [$modelClass, $this->owner->primaryKey, $tag->id];
                 }
             }
 
@@ -87,7 +87,7 @@ class Taggable extends \yii\base\Behavior
         }
 
         if (count($pks)) {
-            Tag::updateAllCounters(['frequency' => -1], ['in', 'tag_id', $pks]);
+            Tag::updateAllCounters(['frequency' => -1], ['in', 'id', $pks]);
         }
         Tag::deleteAll(['frequency' => 0]);
         TagAssign::deleteAll(['class' => get_class($this->owner), 'item_id' => $this->owner->primaryKey]);

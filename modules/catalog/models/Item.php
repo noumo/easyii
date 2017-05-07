@@ -2,9 +2,12 @@
 namespace yii\easyii\modules\catalog\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\ImageFile;
+use yii\easyii\behaviors\JsonColumns;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\catalog\CatalogModule;
 
 class Item extends \yii\easyii\components\ActiveRecord
 {
@@ -22,7 +25,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['title', 'required'],
             ['title', 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['image_file', 'image'],
             ['description', 'safe'],
             ['price', 'number'],
             ['discount', 'integer', 'max' => 99],
@@ -30,6 +33,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
+            ['available', 'default', 'value' => 1],
             ['status', 'default', 'value' => self::STATUS_ON],
         ];
     }
@@ -38,7 +42,8 @@ class Item extends \yii\easyii\components\ActiveRecord
     {
         return [
             'title' => Yii::t('easyii', 'Title'),
-            'image' => Yii::t('easyii', 'Image'),
+            'category_id' => Yii::t('easyii', 'Category'),
+            'image_file' => Yii::t('easyii', 'Image'),
             'description' => Yii::t('easyii', 'Description'),
             'available' => Yii::t('easyii/catalog', 'Available'),
             'price' => Yii::t('easyii/catalog', 'Price'),
@@ -50,39 +55,25 @@ class Item extends \yii\easyii\components\ActiveRecord
 
     public function behaviors()
     {
-        return [
+        $behaviors = [
             'seoBehavior' => SeoBehavior::className(),
             'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
-            ]
+                'class' => SlugBehavior::className(),
+                'immutable' => CatalogModule::setting('itemSlugImmutable')
+            ],
+            'jsonColumns' => [
+                'class' => JsonColumns::className(),
+                'columns' => ['fields', 'data']
+            ],
         ];
-    }
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if(!$this->data || (!is_object($this->data) && !is_array($this->data))){
-                $this->data = new \stdClass();
-            }
-
-            $this->data = json_encode($this->data);
-
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
-            }
-
-            return true;
-        } else {
-            return false;
+        if(CatalogModule::setting('itemThumb')){
+            $behaviors['imageFileBehavior'] = ImageFile::className();
         }
+        return $behaviors;
     }
 
     public function afterSave($insert, $attributes){
         parent::afterSave($insert, $attributes);
-
-        $this->parseData();
 
         ItemData::deleteAll(['item_id' => $this->primaryKey]);
 
@@ -105,20 +96,14 @@ class Item extends \yii\easyii\components\ActiveRecord
         ])->execute();
     }
 
-    public function afterFind()
-    {
-        parent::afterFind();
-        $this->parseData();
-    }
-
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'item_id'])->where(['class' => self::className()])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'id'])->where(['class' => self::className()])->sort();
     }
 
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['category_id' => 'category_id']);
+        return Category::get($this->category_id);
     }
 
     public function afterDelete()
@@ -129,14 +114,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             $photo->delete();
         }
 
-        if($this->image) {
-            @unlink(Yii::getAlias('@webroot') . $this->image);
-        }
-
         ItemData::deleteAll(['item_id' => $this->primaryKey]);
     }
 
-    private function parseData(){
-        $this->data = $this->data !== '' ? json_decode($this->data) : [];
-    }
 }

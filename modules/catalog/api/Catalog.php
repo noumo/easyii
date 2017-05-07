@@ -8,6 +8,7 @@ use yii\easyii\modules\catalog\models\ItemData;
 use yii\easyii\widgets\Fancybox;
 use yii\easyii\modules\catalog\models\Category;
 use yii\easyii\modules\catalog\models\Item;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 
 /**
@@ -28,15 +29,13 @@ use yii\widgets\LinkPager;
 class Catalog extends \yii\easyii\components\API
 {
     private $_cats;
-    private $_items;
     private $_adp;
     private $_item = [];
-    private $_last;
 
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -46,48 +45,54 @@ class Catalog extends \yii\easyii\components\API
         return Category::tree();
     }
 
-    public function api_cats()
+    public function api_cats($options = [])
     {
-        return Category::cats();
+        $result = [];
+        foreach(Category::cats() as $model){
+            $result[] = new CategoryObject($model);
+        }
+        if(!empty($options['tags'])){
+            foreach($result as $i => $item){
+                if(!in_array($options['tags'], $item->tags)){
+                    unset($result[$i]);
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $query = Item::find()->with(['seo', 'category'])->status(Item::STATUS_ON);
+        $query = Item::find()->with(['seo'])->status(Item::STATUS_ON);
 
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-            if(!empty($options['orderBy'])){
-                $query->orderBy($options['orderBy']);
-            } else {
-                $query->sortDate();
-            }
-            if(!empty($options['filters'])){
-                $query = self::applyFilters($options['filters'], $query);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new ItemObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
         }
-        return $this->_items;
+        if(!empty($options['orderBy'])){
+            $query->orderBy($options['orderBy']);
+        } else {
+            $query->sortDate();
+        }
+        if(!empty($options['filters'])){
+            $query = self::applyFilters($options['filters'], $query);
+        }
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new ItemObject($model);
+        }
+        return $result;
     }
 
     public function api_last($limit = 1, $where = null)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
 
         $query = Item::find()->with('seo')->sortDate()->status(Item::STATUS_ON)->limit($limit);
@@ -98,13 +103,7 @@ class Catalog extends \yii\easyii\components\API
         foreach($query->all() as $item){
             $result[] = new ItemObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        }else{
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_get($id_slug)
@@ -132,22 +131,26 @@ class Catalog extends \yii\easyii\components\API
             'options' => $options
         ]);
     }
+
+    private function findItem($id_slug)
+    {
+        if(is_numeric($id_slug)) {
+            $condition = ['or', 'id=:id_slug', 'slug=:id_slug'];
+        } else {
+            $condition = 'slug=:id_slug';
+        }
+        if(!($item = Item::find()->where($condition, [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())){
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
+        }
+        return new ItemObject($item);
+    }
     
     public static function applyFilters($filters, $query)
     {
         if(is_array($filters)){
 
-            if(!empty($filters['price'])){
-                $price = $filters['price'];
-                if(is_array($price) && count($price) == 2) {
-                    if(!$price[0]){
-                        $query->andFilterWhere(['<=', 'price', (int)$price[1]]);
-                    } elseif(!$price[1]) {
-                        $query->andFilterWhere(['>=', 'price', (int)$price[0]]);
-                    } else {
-                        $query->andFilterWhere(['between', 'price', (int)$price[0], (int)$price[1]]);
-                    }
-                }
+            if(!empty($filters['price']) && ($priceCondition = self::buildConditionArray($filters['price'], 'price * ( 1 - discount / 100 )'))){
+                $query->andFilterWhere($priceCondition);
                 unset($filters['price']);
             }
             if(count($filters)){
@@ -157,42 +160,33 @@ class Catalog extends \yii\easyii\components\API
                     if(!is_array($value)) {
                         $subQuery->orFilterWhere(['and', ['name' => $field], ['value' => $value]]);
                         $filtersApplied++;
-                    } elseif(count($value) == 2){
-                        if(!$value[0]){
-                            $additionalCondition = ['<=', 'value', (int)$value[1]];
-                        } elseif(!$value[1]) {
-                            $additionalCondition = ['>=', 'value', (int)$value[0]];
-                        } else {
-                            $additionalCondition = ['between', 'value', (int)$value[0], (int)$value[1]];
-                        }
+                    } elseif(($additionalCondition = self::buildConditionArray($value, 'value'))){
                         $subQuery->orFilterWhere(['and', ['name' => $field], $additionalCondition]);
-
                         $filtersApplied++;
                     }
                 }
                 if($filtersApplied) {
-                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = '.Item::tableName().'.item_id');
+                    $query->join('LEFT JOIN', ['f' => $subQuery], 'f.item_id = ' . Item::tableName() . '.id');
                     $query->andFilterWhere(['f.filter_matched' => $filtersApplied]);
                 }
             }
         }
         return $query;
     }
-    
 
-    private function findCategory($id_slug)
+    private static function buildConditionArray($data, $fieldName)
     {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
-    }
-
-    private function findItem($id_slug)
-    {
-        if(!($item = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())){
+        if(empty($data) || !is_array($data) || count($data) < 2 || !in_array($data[0], ['>', '>=', '<', '<=', '!=', '<>', 'between', 'in', 'not in'])) {
             return null;
         }
-
-        return new ItemObject($item);
+        $result = [
+            $data[0],
+            $fieldName,
+            $data[1]
+        ];
+        if(!empty($data[2])) {
+            $result[] = $data[2];
+        }
+        return $result;
     }
 }

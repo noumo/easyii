@@ -1,7 +1,6 @@
 <?php
 namespace yii\easyii\widgets;
 
-use Yii;
 use yii\base\Widget;
 use yii\base\InvalidConfigException;
 use yii\easyii\models\Photo;

@@ -2,93 +2,150 @@
 namespace yii\easyii\modules\page\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
+use yii\easyii\behaviors\Fields;
+use yii\easyii\behaviors\SortableModel;
+use yii\easyii\components\CategoryController;
+use yii\easyii\modules\page\PageModule;
 use yii\widgets\ActiveForm;
-
-use yii\easyii\components\Controller;
 use yii\easyii\modules\page\models\Page;
 
-class AController extends Controller
+class AController extends CategoryController
 {
-    public $rootActions = ['create', 'delete'];
+    public $categoryClass = 'yii\easyii\modules\page\models\Page';
+    public $modelClass = 'yii\easyii\modules\page\models\Page';
+
+    public function behaviors()
+    {
+        return [
+            'fields' => Fields::className()
+        ];
+    }
 
     public function actionIndex()
     {
-        $data = new ActiveDataProvider([
-            'query' => Page::find()->desc()
-        ]);
         return $this->render('index', [
-            'data' => $data
+            'pages' => Page::cats()
         ]);
     }
 
-    public function actionCreate($slug = null)
+    /**
+     * Create form
+     *
+     * @param null $parent
+     * @return array|string|\yii\web\Response
+     * @throws \yii\web\HttpException
+     */
+    public function actionCreate($slug = null, $parent = null)
     {
         $model = new Page;
 
+        $fields = [];
+        if($parent && ($parentPage = Page::findOne($parent))) {
+            $fields = $parentPage->fields;
+        } elseif(PageModule::setting('defaultFields')) {
+            $settingFields = json_decode(PageModule::setting('defaultFields'));
+            if(!json_last_error() && $settingFields && is_array($settingFields) && count($settingFields)){
+                $fields = $settingFields;
+            }
+        }
+        $model->fields = $fields;
+        $model->slug = $slug;
+
         if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
+            if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
-            }
-            else{
-                if($model->save()){
+            } else {
+                $model->status = Page::STATUS_ON;
+                $model->data = $this->parseData($model);
+
+                if ($model->create(Yii::$app->request->post('parent', null))) {
                     $this->flash('success', Yii::t('easyii/page', 'Page created'));
-                    return $this->redirect(['/admin/'.$this->module->id]);
-                }
-                else{
+                    return $this->redirect(['/admin/page', 'id' => $model->primaryKey]);
+                } else {
                     $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
                     return $this->refresh();
                 }
             }
-        }
-        else {
-            if($slug) $model->slug = $slug;
-
+        } else {
             return $this->render('create', [
-                'model' => $model
+                'model' => $model,
+                'dataForm' => $this->generateForm($model->fields),
+                'parent' => $parent
             ]);
         }
     }
 
+    /**
+     * Edit form
+     *
+     * @param $id
+     * @return array|string|\yii\web\Response
+     * @throws \yii\web\HttpException
+     */
     public function actionEdit($id)
     {
-        $model = Page::findOne($id);
-
-        if($model === null){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/'.$this->module->id]);
-        }
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            if(Yii::$app->request->isAjax){
+            if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
                 return ActiveForm::validate($model);
-            }
-            else{
-                if($model->save()){
+            } else {
+                $model->data = $this->parseData($model);
+
+                if ($model->save()) {
                     $this->flash('success', Yii::t('easyii/page', 'Page updated'));
-                }
-                else{
+                } else {
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));
                 }
                 return $this->refresh();
             }
-        }
-        else {
+        } else {
             return $this->render('edit', [
-                'model' => $model
+                'model' => $model,
+                'dataForm' => $this->generateForm($model->fields, $model->data),
             ]);
         }
     }
 
+    /**
+     * Copy page
+     *
+     * @param $id
+     * @return array|string|\yii\web\Response
+     * @throws \yii\web\HttpException
+     */
+    public function actionCopy($id)
+    {
+        $model = new Page();
+        $model->load($this->findModel($id)->attributes, '');
+        $model->slug = null;
+
+        if ($model->create()) {
+            $this->flash('success', Yii::t('easyii/page', 'Page copied'));
+        } else {
+            $this->flash('error', Yii::t('easyii', 'Create error. {0}', $model->formatErrors()));
+        }
+        return $this->back();
+    }
+
+    /**
+     * Delete the category by ID
+     *
+     * @param $id
+     * @return mixed
+     */
     public function actionDelete($id)
     {
-        if(($model = Page::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
+        $model = $this->findModel($id);
+
+        $children = $model->children()->all();
+        $model->deleteWithChildren();
+        foreach ($children as $child) {
+            $child->afterDelete();
         }
+
         return $this->formatResponse(Yii::t('easyii/page', 'Page deleted'));
     }
 }

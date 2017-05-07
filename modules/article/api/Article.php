@@ -5,9 +5,11 @@ use Yii;
 
 use yii\data\ActiveDataProvider;
 use yii\easyii\models\Tag;
+use yii\easyii\modules\article\ArticleModule;
 use yii\easyii\modules\article\models\Category;
 use yii\easyii\modules\article\models\Item;
 use yii\easyii\widgets\Fancybox;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 
 /**
@@ -28,15 +30,13 @@ use yii\widgets\LinkPager;
 class Article extends \yii\easyii\components\API
 {
     private $_cats;
-    private $_items;
     private $_adp;
     private $_item = [];
-    private $_last;
 
     public function api_cat($id_slug)
     {
         if(!isset($this->_cats[$id_slug])) {
-            $this->_cats[$id_slug] = $this->findCategory($id_slug);
+            $this->_cats[$id_slug] = new CategoryObject(Category::get($id_slug));
         }
         return $this->_cats[$id_slug];
     }
@@ -46,59 +46,65 @@ class Article extends \yii\easyii\components\API
         return Category::tree();
     }
 
-    public function api_cats()
+    public function api_cats($options = [])
     {
-        return Category::cats();
+        $result = [];
+        foreach(Category::cats() as $model){
+            $result[] = new CategoryObject($model);
+        }
+        if(!empty($options['tags'])){
+            foreach($result as $i => $item){
+                if(!in_array($options['tags'], $item->tags)){
+                    unset($result[$i]);
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $with = ['seo', 'category'];
-            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
-                $with[] = 'tags';
-            }
-            $query = Item::find()->with($with)->status(Item::STATUS_ON);
-
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-            if(!empty($options['tags'])){
-                $query
-                    ->innerJoinWith('tags', false)
-                    ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
-                    ->addGroupBy('item_id');
-            }
-            if(!empty($options['orderBy'])){
-                $query->orderBy($options['orderBy']);
-            } else {
-                $query->sortDate();
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new ArticleObject($model);
-            }
+        $with = ['seo', 'category'];
+        if(ArticleModule::setting('enableTags')){
+            $with[] = 'tags';
         }
-        return $this->_items;
+        $query = Item::find()->with($with)->status(Item::STATUS_ON);
+
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
+        }
+        if(!empty($options['tags'])){
+            $query
+                ->innerJoinWith('tags', false)
+                ->andWhere([Tag::tableName() . '.name' => (new Item())->filterTagValues($options['tags'])])
+                ->addGroupBy('id');
+        }
+        if(!empty($options['orderBy'])){
+            $query->orderBy($options['orderBy']);
+        } else {
+            $query->sortDate();
+        }
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new ArticleObject($model);
+        }
+        return $result;
     }
 
     public function api_last($limit = 1, $where = null)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
 
         $with = ['seo'];
-        if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+        if(ArticleModule::setting('enableTags')){
             $with[] = 'tags';
         }
         $query = Item::find()->with($with)->status(Item::STATUS_ON)->sortDate()->limit($limit);
@@ -109,13 +115,7 @@ class Article extends \yii\easyii\components\API
         foreach($query->all() as $item){
             $result[] = new ArticleObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        }else{
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_get($id_slug)
@@ -144,21 +144,17 @@ class Article extends \yii\easyii\components\API
         return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
     }
 
-    private function findCategory($id_slug)
-    {
-        $category = Category::find()->where(['or', 'category_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-
-        return $category ? new CategoryObject($category) : null;
-    }
-
     private function findItem($id_slug)
     {
-        $article = Item::find()->where(['or', 'item_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one();
-        if($article) {
-            $article->updateCounters(['views' => 1]);
-            return new ArticleObject($article);
+        if(is_numeric($id_slug)) {
+            $condition = ['or', 'id=:id_slug', 'slug=:id_slug'];
         } else {
-            return null;
+            $condition = 'slug=:id_slug';
         }
+        if(!($article = Item::find()->where($condition, [':id_slug' => $id_slug])->status(Item::STATUS_ON)->one())) {
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
+        }
+        $article->updateCounters(['views' => 1]);
+        return new ArticleObject($article);
     }
 }

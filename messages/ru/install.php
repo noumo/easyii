@@ -17,5 +17,11 @@ return [
     'Installation completed' => 'Установка завершена',
     'Installation error' => 'Ошибка установки',
     'Cannot connect to database. Please configure `{0}`.' => 'Ошибка при подключении к базе данных. Пожалуйста проверьте настройки `{0}`.',
-    'EasyiiCMS is already installed. If you want to reinstall easyiiCMS, please drop all tables with prefix `easyii_` from your database manually.' => 'EasyiiCMS уже установлена. Если вы хотите произвести переустановку, удалите все таблицы с префиксом `easyii_` в вашей базе данных.'
+    'EasyiiCMS is already installed. If you want to reinstall easyiiCMS, please drop all tables with prefix `easyii_` from your database manually.' => 'EasyiiCMS уже установлена. Если вы хотите произвести переустановку, удалите все таблицы с префиксом `easyii_` в вашей базе данных.',
+    'Max image width on upload which will not resize' => 'Максимальная ширина загружаемых изображений, которые автоматически не сжимаются',
+    'List of Redactor Widget plugins separated with comma' => 'Список плагинов редактора Redactor через запятую',
+    'Google analytics service account email' => 'E-mail сервис аккаунта Google Analytics',
+    'Google analytics profile id' => 'Номер профиля Google Analytics',
+    'Path to Google analytics service account p12 key file' => 'Путь к файлу ключей p12 сервис аккаунта Google Analytics',
+    'Google Maps API key' => 'Google Maps API ключ',
 ];

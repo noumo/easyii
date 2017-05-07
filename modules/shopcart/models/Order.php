@@ -5,6 +5,7 @@ use Yii;
 use yii\easyii\behaviors\CalculateNotice;
 use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
+use yii\easyii\modules\shopcart\ShopcartModule;
 use yii\easyii\validators\EscapeValidator;
 use yii\helpers\Url;
 
@@ -30,8 +31,8 @@ class Order extends \yii\easyii\components\ActiveRecord
     {
         return [
             [['name', 'address'], 'required', 'on' => 'confirm'],
-            ['email', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enableEmail']; }],
-            ['phone', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && Yii::$app->getModule('admin')->activeModules['shopcart']->settings['enablePhone']; }],
+            ['email', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && ShopcartModule::setting('enableEmail'); }],
+            ['phone', 'required', 'when' => function($model){ return $model->scenario == 'confirm' && ShopcartModule::setting('enablePhone'); }],
             [['name', 'address', 'phone', 'comment'], 'trim'],
             ['email', 'email'],
             ['name', 'string', 'max' => 32],
@@ -95,7 +96,7 @@ class Order extends \yii\easyii\components\ActiveRecord
 
     public function getGoods()
     {
-        return $this->hasMany(Good::className(), ['order_id' => 'order_id']);
+        return $this->hasMany(Good::className(), ['order_id' => 'id']);
     }
 
     public function getCost()
@@ -138,15 +139,13 @@ class Order extends \yii\easyii\components\ActiveRecord
 
     public function mailAdmin()
     {
-        $settings = Yii::$app->getModule('admin')->activeModules['shopcart']->settings;
-
-        if(!$settings['mailAdminOnNewOrder']){
+        if(!ShopcartModule::setting('mailAdminOnNewOrder')){
             return false;
         }
         return Mail::send(
             Setting::get('admin_email'),
-            $settings['subjectOnNewOrder'],
-            $settings['templateOnNewOrder'],
+            ShopcartModule::setting('subjectOnNewOrder'),
+            ShopcartModule::setting('templateOnNewOrder'),
             [
                 'order' => $this,
                 'link' => Url::to(['/admin/shopcart/a/view', 'id' => $this->primaryKey], true)
@@ -156,15 +155,13 @@ class Order extends \yii\easyii\components\ActiveRecord
 
     public function notifyUser()
     {
-        $settings = Yii::$app->getModule('admin')->activeModules['shopcart']->settings;
-
         return Mail::send(
             $this->email,
-            $settings['subjectNotifyUser'],
-            $settings['templateNotifyUser'],
+            ShopcartModule::setting('subjectNotifyUser'),
+            ShopcartModule::setting('templateNotifyUser'),
             [
                 'order' => $this,
-                'link' => Url::to([$settings['frontendShopcartRoute'], 'id' => $this->primaryKey, 'token' => $this->access_token], true)
+                'link' => Url::to([ShopcartModule::setting('frontendShopcartRoute'), 'id' => $this->primaryKey, 'token' => $this->access_token], true)
             ]
         );
     }

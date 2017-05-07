@@ -23,7 +23,7 @@ $(function(){
             if(/^image\/(jpeg|png|gif)$/.test(file.type))
             {
                 var formData = new FormData();
-                formData.append('Photo[image]', file);
+                formData.append('Photo[image_file]', file);
 
                 $.ajax({
                     url: $this.closest('form').attr('action'),
@@ -36,7 +36,7 @@ $(function(){
                     success: function(response){
                         if(response.result === 'success'){
                             var html = $(photoTemplate
-                                .replace(/\{\{photo_id\}\}/g, response.photo.id)
+                                .replace(/\{\{id\}\}/g, response.photo.id)
                                 .replace(/\{\{photo_thumb\}\}/g, response.photo.thumb)
                                 .replace(/\{\{photo_image\}\}/g, response.photo.image)
                                 .replace(/\{\{photo_description\}\}/g, ''))
@@ -107,7 +107,7 @@ $(function(){
         var fileData = $this.prop('files')[0];
         var formData = new FormData();
         var changeButton = $this.siblings('.change-image-button').addClass('disabled');
-        formData.append('Photo[image]', fileData);
+        formData.append('Photo[image_file]', fileData);
         $.ajax({
             url: $this.siblings('.change-image-button').attr('href'),
             dataType: 'json',

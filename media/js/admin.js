@@ -50,8 +50,8 @@ $(function(){
         return false;
     });
 
-    $('.switch').switcher({copy: {en: {yes: '', no: ''}}}).on('change', function(){
-        var checkbox = $(this);
+    $($('.switch').switcher({copy: {en: {yes: '', no: ''}}}).parent('.switcher')).on('click', function(){
+        var checkbox = $(this).find(':checkbox');
         checkbox.switcher('setDisabled', true);
 
         $.getJSON(checkbox.data('link') + '/' + (checkbox.is(':checked') ? 'on' : 'off') + '/' + checkbox.data('id'), function(response){
@@ -75,6 +75,7 @@ $(function(){
     });
 
     window.notify = new Notify();
+    $('.fancybox').fancybox();
 });
 
 var Notify = function() {

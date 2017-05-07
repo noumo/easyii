@@ -3,7 +3,9 @@ namespace yii\easyii\modules\guestbook\api;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\modules\guestbook\GuestbookModule;
 use yii\helpers\Url;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -27,8 +29,7 @@ class Guestbook extends \yii\easyii\components\API
     const SENT_VAR = 'guestbook_sent';
 
     private $_adp;
-    private $_last;
-    private $_items;
+    private $_item = [];
 
     private $_defaultFormOptions = [
         'errorUrl' => '',
@@ -37,50 +38,45 @@ class Guestbook extends \yii\easyii\components\API
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $query = GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate();
+        $query = GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate();
 
-            if(!empty($options['where'])){
-                $query->andFilterWhere($options['where']);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new PostObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->andFilterWhere($options['where']);
         }
-        return $this->_items;
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+
+        foreach($this->_adp->models as $model){
+            $result[] = new PostObject($model);
+        }
+        return $result;
+    }
+
+    public function api_get($id)
+    {
+        if(!isset($this->_item[$id])) {
+            $this->_item[$id] = $this->findPost($id);
+        }
+        return $this->_item[$id];
     }
 
     public function api_last($limit = 1)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
         foreach(GuestbookModel::find()->status(GuestbookModel::STATUS_ON)->sortDate()->limit($limit)->all() as $item){
             $result[] = new PostObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        } else {
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_form($options = [])
     {
         $model = new GuestbookModel;
-        $settings = Yii::$app->getModule('admin')->activeModules['guestbook']->settings;
         $options = array_merge($this->_defaultFormOptions, $options);
 
         ob_start();
@@ -94,12 +90,12 @@ class Guestbook extends \yii\easyii\components\API
 
         echo $form->field($model, 'name');
 
-        if($settings['enableTitle']) echo $form->field($model, 'title');
-        if($settings['enableEmail']) echo $form->field($model, 'email');
+        if(GuestbookModule::setting('enableTitle')) echo $form->field($model, 'title');
+        if(GuestbookModule::setting('enableEmail')) echo $form->field($model, 'email');
 
         echo $form->field($model, 'text')->textarea();
 
-        if($settings['enableCaptcha']) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
+        if(GuestbookModule::setting('enableCaptcha')) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 
         echo Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-primary']);
         ActiveForm::end();
@@ -126,5 +122,13 @@ class Guestbook extends \yii\easyii\components\API
     public function api_pages()
     {
         return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
+    }
+
+    private function findPost($id)
+    {
+        if(!($file = GuestbookModel::find()->where(['id' => ':id'], [':id' => $id])->status(GuestbookModel::STATUS_ON)->one())){
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
+        }
+        return new PostObject($file);
     }
 }

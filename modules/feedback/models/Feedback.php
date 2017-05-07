@@ -5,6 +5,7 @@ use Yii;
 use yii\easyii\behaviors\CalculateNotice;
 use yii\easyii\helpers\Mail;
 use yii\easyii\models\Setting;
+use yii\easyii\modules\feedback\FeedbackModule;
 use yii\easyii\validators\ReCaptchaValidator;
 use yii\easyii\validators\EscapeValidator;
 use yii\helpers\Url;
@@ -27,14 +28,17 @@ class Feedback extends \yii\easyii\components\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'email', 'text'], 'required'],
+            ['name', 'required'],
+            ['email', 'required', 'when' => function($model) { return (!FeedbackModule::setting('enablePhone') || !$model->phone); }],
+            ['phone', 'required', 'when' => function($model) { return (!FeedbackModule::setting('enableEmail') || !$model->email); }],
+            ['text', 'required', 'when' => function($model) { return FeedbackModule::setting('enableText'); }],
             [['name', 'email', 'phone', 'title', 'text'], 'trim'],
             [['name','title', 'text'], EscapeValidator::className()],
             ['title', 'string', 'max' => 128],
             ['email', 'email'],
             ['phone', 'match', 'pattern' => '/^[\d\s-\+\(\)]+$/'],
             ['reCaptcha', ReCaptchaValidator::className(), 'when' => function($model){
-                return $model->isNewRecord && Yii::$app->getModule('admin')->activeModules['feedback']->settings['enableCaptcha'];
+                return $model->isNewRecord && FeedbackModule::setting('enableCaptcha');
             }],
         ];
     }
@@ -90,27 +94,23 @@ class Feedback extends \yii\easyii\components\ActiveRecord
 
     public function mailAdmin()
     {
-        $settings = Yii::$app->getModule('admin')->activeModules['feedback']->settings;
-
-        if(!$settings['mailAdminOnNewFeedback']){
+        if(!FeedbackModule::setting('mailAdminOnNewFeedback')){
             return false;
         }
         return Mail::send(
             Setting::get('admin_email'),
-            $settings['subjectOnNewFeedback'],
-            $settings['templateOnNewFeedback'],
+            FeedbackModule::setting('subjectOnNewFeedback'),
+            FeedbackModule::setting('templateOnNewFeedback'),
             ['feedback' => $this, 'link' => Url::to(['/admin/feedback/a/view', 'id' => $this->primaryKey], true)]
         );
     }
 
     public function sendAnswer()
     {
-        $settings = Yii::$app->getModule('admin')->activeModules['feedback']->settings;
-
         return Mail::send(
             $this->email,
             $this->answer_subject,
-            $settings['answerTemplate'],
+            FeedbackModule::setting('answerTemplate'),
             ['feedback' => $this],
             ['replyTo' => Setting::get('admin_email')]
         );

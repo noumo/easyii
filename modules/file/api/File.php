@@ -4,6 +4,7 @@ namespace yii\easyii\modules\file\api;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\easyii\modules\file\models\File as FileModel;
+use yii\web\NotFoundHttpException;
 use yii\widgets\LinkPager;
 
 /**
@@ -20,31 +21,32 @@ use yii\widgets\LinkPager;
 class File extends \yii\easyii\components\API
 {
     private $_adp;
-    private $_last;
-    private $_items;
     private $_item = [];
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
-            $this->_items = [];
+        $result = [];
 
-            $query = FileModel::find()->with('seo')->sort();
+        $query = FileModel::find()->with('seo');
 
-            if(!empty($options['where'])){
-                $query->where($options['where']);
-            }
-
-            $this->_adp = new ActiveDataProvider([
-                'query' => $query,
-                'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
-            ]);
-
-            foreach($this->_adp->models as $model){
-                $this->_items[] = new FileObject($model);
-            }
+        if(!empty($options['where'])){
+            $query->where($options['where']);
         }
-        return $this->_items;
+
+        $this->_adp = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => !empty($options['pagination']) ? $options['pagination'] : []
+        ]);
+        if(!empty($options['orderBy'])){
+            $query->orderBy($options['orderBy']);
+        } else {
+            $query->sort();
+        }
+
+        foreach($this->_adp->models as $model){
+            $result[] = new FileObject($model);
+        }
+        return $result;
     }
 
     public function api_get($id_slug)
@@ -57,10 +59,6 @@ class File extends \yii\easyii\components\API
 
     public function api_last($limit = 1, $where = null)
     {
-        if($limit === 1 && $this->_last){
-            return $this->_last;
-        }
-
         $result = [];
 
         $query = FileModel::find()->with('seo')->sort()->limit($limit);
@@ -70,13 +68,7 @@ class File extends \yii\easyii\components\API
         foreach($query->all() as $item){
             $result[] = new FileObject($item);
         }
-
-        if($limit > 1){
-            return $result;
-        } else {
-            $this->_last = count($result) ? $result[0] : null;
-            return $this->_last;
-        }
+        return $result;
     }
 
     public function api_pagination()
@@ -91,8 +83,14 @@ class File extends \yii\easyii\components\API
 
     private function findFile($id_slug)
     {
-        $file = FileModel::find()->where(['or', 'file_id=:id_slug', 'slug=:id_slug'], [':id_slug' => $id_slug])->one();
-
-        return $file ? new FileObject($file) : null;
+        if(is_numeric($id_slug)) {
+            $condition = ['or', 'id=:id_slug', 'slug=:id_slug'];
+        } else {
+            $condition = 'slug=:id_slug';
+        }
+        if(!($file = FileModel::find()->where($condition, [':id_slug' => $id_slug])->one())){
+            throw new NotFoundHttpException(Yii::t('easyii', 'Not found'));
+        }
+        return new FileObject($file);
     }
 }

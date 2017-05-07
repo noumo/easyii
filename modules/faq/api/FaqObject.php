@@ -7,11 +7,15 @@ use yii\helpers\Url;
 class FaqObject extends \yii\easyii\components\ApiObject
 {
     public function getQuestion(){
-        return LIVE_EDIT ? API::liveEdit($this->model->question, $this->editLink) : $this->model->question;
+        return LIVE_EDIT_ENABLED ? API::liveEdit($this->model->question, $this->editLink) : $this->model->question;
     }
 
     public function getAnswer(){
-        return LIVE_EDIT ? API::liveEdit($this->model->answer, $this->editLink) : $this->model->answer;
+        return LIVE_EDIT_ENABLED ? API::liveEdit($this->model->answer, $this->editLink) : $this->model->answer;
+    }
+
+    public function getTags(){
+        return $this->model->tagsArray;
     }
 
     public function  getEditLink(){

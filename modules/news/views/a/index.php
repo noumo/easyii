@@ -14,9 +14,7 @@ $module = $this->context->module->id;
     <table class="table table-hover">
         <thead>
             <tr>
-                <?php if(IS_ROOT) : ?>
-                    <th width="50">#</th>
-                <?php endif; ?>
+                <th width="50">#</th>
                 <th><?= Yii::t('easyii', 'Title') ?></th>
                 <th width="120"><?= Yii::t('easyii', 'Views') ?></th>
                 <th width="100"><?= Yii::t('easyii', 'Status') ?></th>
@@ -26,9 +24,7 @@ $module = $this->context->module->id;
         <tbody>
     <?php foreach($data->models as $item) : ?>
             <tr data-id="<?= $item->primaryKey ?>">
-                <?php if(IS_ROOT) : ?>
-                    <td><?= $item->primaryKey ?></td>
-                <?php endif; ?>
+                <td><?= $item->primaryKey ?></td>
                 <td><a href="<?= Url::to(['/admin/'.$module.'/a/edit/', 'id' => $item->primaryKey]) ?>"><?= $item->title ?></a></td>
                 <td><?= $item->views ?></td>
                 <td class="status">

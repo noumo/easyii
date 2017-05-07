@@ -2,6 +2,7 @@
 namespace yii\easyii\modules\feedback\api;
 
 use Yii;
+use yii\easyii\modules\feedback\FeedbackModule;
 use yii\easyii\modules\feedback\models\Feedback as FeedbackModel;
 
 use yii\helpers\Html;
@@ -30,7 +31,6 @@ class Feedback extends \yii\easyii\components\API
     public function api_form($options = [])
     {
         $model = new FeedbackModel;
-        $settings = Yii::$app->getModule('admin')->activeModules['feedback']->settings;
         $options = array_merge($this->_defaultFormOptions, $options);
 
         ob_start();
@@ -43,14 +43,14 @@ class Feedback extends \yii\easyii\components\API
         echo Html::hiddenInput('successUrl', $options['successUrl'] ? $options['successUrl'] : Url::current([self::SENT_VAR => 1]));
 
         echo $form->field($model, 'name');
-        echo $form->field($model, 'email')->input('email');
 
-        if($settings['enablePhone']) echo $form->field($model, 'phone');
-        if($settings['enableTitle']) echo $form->field($model, 'title');
+        if(FeedbackModule::setting('enableEmail')) echo $form->field($model, 'email')->input('email');
+        if(FeedbackModule::setting('enablePhone')) echo $form->field($model, 'phone');
+        if(FeedbackModule::setting('enableTitle')) echo $form->field($model, 'title');
 
-        echo $form->field($model, 'text')->textarea();
+        if(FeedbackModule::setting('enableText')) echo $form->field($model, 'text')->textarea();
 
-        if($settings['enableCaptcha']) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
+        if(FeedbackModule::setting('enableCaptcha')) echo $form->field($model, 'reCaptcha')->widget(ReCaptcha::className());
 
         echo Html::submitButton(Yii::t('easyii', 'Send'), ['class' => 'btn btn-primary']);
         ActiveForm::end();

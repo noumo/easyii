@@ -32,6 +32,7 @@ return [
     'File' => 'Файл',
     'Views' => 'Просмотры',
     'Description' => 'Описание',
+    'Create item' => 'Добавить запись',
     'Delete item' => 'Удалить запись',
     'No records found' => 'Здесь пока пусто',
     'Save' => 'Сохранить',
@@ -58,6 +59,7 @@ return [
     'Add subcategory' => 'Добавить подкатегорию',
     'Anti-spam check' => 'Проверка на спам',
     'Actions' => 'Действия',
+    'Category' => 'Категория',
 
     'Not found' => 'Не найдено',
     'Create error. {0}' => 'Ошибка при создании. {0}',
@@ -111,6 +113,7 @@ return [
     'Assets cleared' => 'Assets очищены',
     'Cache flushed' => 'Кэш успешно сброшен',
     'Logs' => 'Логи',
+    'Tools' => 'Инструменты',
     'Seo texts' => 'Seo тексты',
 
     'Categories' => 'Категории',
@@ -120,9 +123,31 @@ return [
     'Category updated' => 'Категория обновлена',
     'Category deleted' => 'Категория удалена',
     'Category image cleared' => 'Изображение очищено',
+    'Category not found' => 'Категория не найдена',
+    'Parent category' => 'Родительская категория',
 
     'Clear image' => 'Очистить изображение',
     'Image cleared' => 'Изображение очищено',
 
+    'Fields' => 'Дополнительные поля',
+    'Manage fields' => 'Редактировать поля',
+    'Add field' => 'Добавить поле',
+    'Save fields' => 'Сохранить поля',
+    'Type options with `comma` as delimiter' => 'Элементы списка через запятую',
+    'Type' => 'Тип поля',
+    'Options' => 'Опции',
+    'Select' => 'Выбрать',
+
+    'New on website' => 'Новое на сайте',
+    'Statistics' => 'Статистика',
+    'Month' => 'Месяц',
+    'Week' => 'Неделя',
+    'Today' => 'Сегодня',
+    'Active users' => 'На сайте',
+    'Sessions and views' => 'Сессии и просмотры',
+    'Countries' => 'Страны',
+    'Sources' => 'Источники',
+    'chart is loading' => 'график загружается',
+    'Show on map' => 'На карте'
 
 ];

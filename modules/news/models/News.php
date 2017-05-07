@@ -2,11 +2,27 @@
 namespace yii\easyii\modules\news\models;
 
 use Yii;
-use yii\behaviors\SluggableBehavior;
+use yii\easyii\behaviors\ImageFile;
 use yii\easyii\behaviors\SeoBehavior;
+use yii\easyii\behaviors\SlugBehavior;
 use yii\easyii\behaviors\Taggable;
 use yii\easyii\models\Photo;
+use yii\easyii\modules\news\NewsModule;
 use yii\helpers\StringHelper;
+
+/**
+ * @property integer $id
+ * @property string $title
+ * @property string $short
+ * @property string $text
+ * @property string $image_file
+ * @property string $slug
+ * @property integer $time
+ * @property integer $views
+ * @property integer $status
+ *
+ * @property string $image
+ */
 
 class News extends \yii\easyii\components\ActiveRecord
 {
@@ -24,7 +40,7 @@ class News extends \yii\easyii\components\ActiveRecord
             [['text', 'title'], 'required'],
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
-            ['image', 'image'],
+            ['image_file', 'image'],
             [['views', 'time', 'status'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
@@ -40,7 +56,7 @@ class News extends \yii\easyii\components\ActiveRecord
             'title' => Yii::t('easyii', 'Title'),
             'text' => Yii::t('easyii', 'Text'),
             'short' => Yii::t('easyii/news', 'Short'),
-            'image' => Yii::t('easyii', 'Image'),
+            'image_file' => Yii::t('easyii', 'Image'),
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
             'tagNames' => Yii::t('easyii', 'Tags'),
@@ -49,33 +65,32 @@ class News extends \yii\easyii\components\ActiveRecord
 
     public function behaviors()
     {
-        return [
+        $behaviors = [
             'seoBehavior' => SeoBehavior::className(),
             'taggabble' => Taggable::className(),
             'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
-                'ensureUnique' => true
+                'class' => SlugBehavior::className(),
+                'immutable' => NewsModule::setting('slugImmutable')
             ],
         ];
+
+        if(NewsModule::setting('enableThumb')){
+            $behaviors['imageFileBehavior'] = ImageFile::className();
+        }
+
+        return $behaviors;
     }
 
     public function getPhotos()
     {
-        return $this->hasMany(Photo::className(), ['item_id' => 'news_id'])->where(['class' => self::className()])->sort();
+        return $this->hasMany(Photo::className(), ['item_id' => 'id'])->where(['class' => self::className()])->sort();
     }
-
-
 
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            $settings = Yii::$app->getModule('admin')->activeModules['news']->settings;
-            $this->short = StringHelper::truncate($settings['enableShort'] ? $this->short : strip_tags($this->text), $settings['shortMaxLength']);
+            $this->short = StringHelper::truncate(NewsModule::setting('enableShort') ? $this->short : strip_tags($this->text), NewsModule::setting('shortMaxLength'));
 
-            if(!$insert && $this->image != $this->oldAttributes['image'] && $this->oldAttributes['image']){
-                @unlink(Yii::getAlias('@webroot').$this->oldAttributes['image']);
-            }
             return true;
         } else {
             return false;
@@ -85,10 +100,6 @@ class News extends \yii\easyii\components\ActiveRecord
     public function afterDelete()
     {
         parent::afterDelete();
-
-        if($this->image){
-            @unlink(Yii::getAlias('@webroot').$this->image);
-        }
 
         foreach($this->getPhotos()->all() as $photo){
             $photo->delete();

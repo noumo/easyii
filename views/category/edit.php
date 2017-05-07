@@ -3,5 +3,5 @@ $this->title = Yii::t('easyii', 'Edit category');
 ?>
 <?= $this->render('_menu') ?>
 
-<?php if(!empty($this->params['submenu'])) echo $this->render('_submenu', ['model' => $model], $this->context); ?>
+<?php if($model instanceof \yii\easyii\components\CategoryWithFieldsModel) echo $this->render('_submenu', ['model' => $model]); ?>
 <?= $this->render('_form', ['model' => $model]) ?>

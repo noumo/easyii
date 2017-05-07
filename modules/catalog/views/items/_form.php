@@ -4,7 +4,6 @@ use yii\easyii\widgets\DateTimePicker;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use yii\easyii\widgets\Redactor;
 use yii\easyii\widgets\SeoForm;
 
 $settings = $this->context->module->settings;
@@ -15,23 +14,23 @@ $module = $this->context->module->id;
     'options' => ['enctype' => 'multipart/form-data', 'class' => 'model-form']
 ]); ?>
 <?= $form->field($model, 'title') ?>
+
+<?php if(!empty($cats) && count($cats)) : ?>
+    <?= $form->field($model, 'category_id')->dropDownList($cats) ?>
+<?php endif; ?>
+
 <?php if($settings['itemThumb']) : ?>
-    <?php if($model->image) : ?>
-        <img src="<?= Image::thumb($model->image, 240) ?>">
+    <?php if($model->image_file) : ?>
+        <a href="<?= $model->image ?>" class="fancybox"><img src="<?= Image::thumb($model->image_file, 240, 180) ?>"></a>
         <a href="<?= Url::to(['/admin/'.$module.'/items/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
     <?php endif; ?>
-    <?= $form->field($model, 'image')->fileInput() ?>
+    <?= $form->field($model, 'image_file')->fileInput() ?>
 <?php endif; ?>
+
 <?= $dataForm ?>
+
 <?php if($settings['itemDescription']) : ?>
-    <?= $form->field($model, 'description')->widget(Redactor::className(),[
-        'options' => [
-            'minHeight' => 400,
-            'imageUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'catalog'], true),
-            'fileUpload' => Url::to(['/admin/redactor/upload', 'dir' => 'catalog'], true),
-            'plugins' => ['fullscreen']
-        ]
-    ]) ?>
+    <?= $form->field($model, 'description')->widget(\yii\easyii\widgets\Redactor::className()) ?>
 <?php endif; ?>
 
 <?= $form->field($model, 'available') ?>

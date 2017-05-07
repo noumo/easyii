@@ -3,10 +3,19 @@ namespace yii\easyii\models;
 
 use Yii;
 use yii\easyii\behaviors\SortableModel;
+use yii\easyii\helpers\Upload;
 
+/**
+ * @property integer $id
+ * @property integer $item_id
+ * @property string $image_file
+ * @property string $description
+ * @property string $class
+ *
+ * @property string $image
+*/
 class Photo extends \yii\easyii\components\ActiveRecord
 {
-    const PHOTO_MAX_WIDTH = 1900;
     const PHOTO_THUMB_WIDTH = 120;
     const PHOTO_THUMB_HEIGHT = 90;
 
@@ -20,7 +29,7 @@ class Photo extends \yii\easyii\components\ActiveRecord
         return [
             [['class', 'item_id'], 'required'],
             ['item_id', 'integer'],
-            ['image', 'image'],
+            ['image_file', 'image'],
             ['description', 'trim']
         ];
     }
@@ -36,6 +45,11 @@ class Photo extends \yii\easyii\components\ActiveRecord
     {
         parent::afterDelete();
 
-        @unlink(Yii::getAlias('@webroot').$this->image);
+        Upload::delete($this->image_file);
+    }
+
+    public function getImage()
+    {
+        return Upload::getFileUrl($this->image_file);
     }
 }

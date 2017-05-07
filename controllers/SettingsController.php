@@ -3,12 +3,27 @@ namespace yii\easyii\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\easyii\actions\DeleteAction;
+use yii\easyii\components\Controller;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 use yii\widgets\ActiveForm;
 use yii\easyii\models\Setting;
 
-class SettingsController extends \yii\easyii\components\Controller
+class SettingsController extends Controller
 {
     public $rootActions = ['create', 'delete'];
+    public $modelClass = 'yii\easyii\models\Setting';
+
+    public function actions()
+    {
+        return [
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'successMessage' => Yii::t('easyii', 'Setting deleted')
+            ]
+        ];
+    }
 
     public function actionIndex()
     {
@@ -51,11 +66,10 @@ class SettingsController extends \yii\easyii\components\Controller
 
     public function actionEdit($id)
     {
-        $model = Setting::findOne($id);
+        $model = $this->findModel($id);
 
-        if($model === null || ($model->visibility < (IS_ROOT ? Setting::VISIBLE_ROOT : Setting::VISIBLE_ALL))){
-            $this->flash('error', Yii::t('easyii', 'Not found'));
-            return $this->redirect(['/admin/settings']);
+        if($model->visibility < (IS_ROOT ? Setting::VISIBLE_ROOT : Setting::VISIBLE_ALL)){
+            throw new ForbiddenHttpException();
         }
 
         if ($model->load(Yii::$app->request->post())) {
@@ -78,15 +92,5 @@ class SettingsController extends \yii\easyii\components\Controller
                 'model' => $model
             ]);
         }
-    }
-
-    public function actionDelete($id)
-    {
-        if(($model = Setting::findOne($id))){
-            $model->delete();
-        } else {
-            $this->error = Yii::t('easyii', 'Not found');
-        }
-        return $this->formatResponse(Yii::t('easyii', 'Setting deleted'));
     }
 }

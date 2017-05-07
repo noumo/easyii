@@ -27,305 +27,305 @@ class m000000_000000_install extends \yii\db\Migration
     {
         //ADMINS
         $this->createTable(models\Admin::tableName(), [
-            'admin_id' => 'pk',
-            'username' => Schema::TYPE_STRING . '(32) NOT NULL',
-            'password' => Schema::TYPE_STRING . '(64) NOT NULL',
-            'auth_key' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'access_token' => Schema::TYPE_STRING . '(128) DEFAULT NULL'
+            'id' => $this->primaryKey(),
+            'username' => $this->string(32)->notNull(),
+            'password' => $this->string(64)->notNull(),
+            'auth_key' => $this->string(128),
+            'access_token' => $this->string(128),
         ], $this->engine);
         $this->createIndex('access_token', models\Admin::tableName(), 'access_token', true);
 
         //LOGINFORM
         $this->createTable(models\LoginForm::tableName(), [
-            'log_id' => 'pk',
-            'username' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'password' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'user_agent' => Schema::TYPE_STRING . '(1024) NOT NULL',
-            'time' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'success' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'username' => $this->string(128),
+            'password' => $this->string(128),
+            'ip' => $this->string(16),
+            'user_agent' => $this->string(1024),
+            'time' => $this->integer()->defaultValue(0),
+            'success' => $this->boolean()->defaultValue(0)
         ], $this->engine);
 
         //MODULES
         $this->createTable(models\Module::tableName(), [
-            'module_id' => 'pk',
-            'name' => Schema::TYPE_STRING . '(64) NOT NULL',
-            'class' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'icon' => Schema::TYPE_STRING . '(32) NOT NULL',
-            'settings' => Schema::TYPE_TEXT . ' NOT NULL',
-            'notice' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'order_num' => Schema::TYPE_INTEGER,
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'name' => $this->string(64)->notNull(),
+            'class' => $this->string(128)->notNull(),
+            'title' => $this->string(128)->notNull(),
+            'icon' => $this->string(32),
+            'settings' => $this->text(),
+            'notice' => $this->integer()->defaultValue(0),
+            'order_num' => $this->integer()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(0)
         ], $this->engine);
         $this->createIndex('name', models\Module::tableName(), 'name', true);
 
         //PHOTOS
         $this->createTable(models\Photo::tableName(), [
-            'photo_id' => 'pk',
-            'class' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
-            'image' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'description' => Schema::TYPE_STRING . '(1024) NOT NULL',
-            'order_num' => Schema::TYPE_INTEGER . " NOT NULL",
+            'id' => $this->primaryKey(),
+            'class' => $this->string(128)->notNull(),
+            'item_id' => $this->integer()->notNull(),
+            'image' => $this->string(128)->notNull(),
+            'description' => $this->string(1024),
+            'order_num' => $this->integer()->defaultValue(0),
         ], $this->engine);
         $this->createIndex('model_item', models\Photo::tableName(), ['class', 'item_id']);
 
         //SEOTEXT
         $this->createTable(models\SeoText::tableName(), [
-            'seotext_id' => 'pk',
-            'class' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
-            'h1' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'keywords' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'description' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
+            'id' => $this->primaryKey(),
+            'class' => $this->string(128)->notNull(),
+            'item_id' => $this->integer()->notNull(),
+            'h1' => $this->string(255),
+            'title' => $this->string(255),
+            'keywords' => $this->string(255),
+            'description' => $this->string(255),
         ], $this->engine);
         $this->createIndex('model_item', models\SeoText::tableName(), ['class', 'item_id'], true);
 
         //SETTINGS
         $this->createTable(models\Setting::tableName(), [
-            'setting_id' => 'pk',
-            'name' => Schema::TYPE_STRING . '(64) NOT NULL',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'value' => Schema::TYPE_STRING . '(1024) NOT NULL',
-            'visibility' => Schema::TYPE_BOOLEAN . " DEFAULT '0'",
+            'id' => $this->primaryKey(),
+            'name' => $this->string(64)->notNull(),
+            'title' => $this->string(128)->notNull(),
+            'value' => $this->string(1024),
+            'visibility' => $this->boolean()->defaultValue(0),
         ], $this->engine);
         $this->createIndex('name', models\Setting::tableName(), 'name', true);
 
         //CAROUSEL MODULE
         $this->createTable(Carousel::tableName(), [
-            'carousel_id' => 'pk',
-            'image' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'link' => Schema::TYPE_STRING . '(255) NOT NULL',
-            'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
-            'order_num' => Schema::TYPE_INTEGER,
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'image' => $this->string(128)->notNull(),
+            'link' => $this->string(255),
+            'title' => $this->string(255),
+            'text' => $this->string(1024),
+            'order_num' => $this->integer()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(1),
         ], $this->engine);
 
         //CATALOG MODULE
         $this->createTable(catalog\models\Category::tableName(), [
-            'category_id' => 'pk',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'fields' => Schema::TYPE_TEXT . ' NOT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'tree' => Schema::TYPE_INTEGER,
-            'lft' => Schema::TYPE_INTEGER,
-            'rgt' => Schema::TYPE_INTEGER,
-            'depth' => Schema::TYPE_INTEGER,
-            'order_num' => Schema::TYPE_INTEGER,
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'title' => $this->string(128)->notNull(),
+            'image' => $this->string(128),
+            'fields' => $this->text(),
+            'slug' => $this->string(128),
+            'tree' => $this->integer(),
+            'lft' => $this->integer(),
+            'rgt' => $this->integer(),
+            'depth' => $this->integer(),
+            'order_num' => $this->integer()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
         $this->createIndex('slug', catalog\models\Category::tableName(), 'slug', true);
 
         $this->createTable(catalog\models\Item::tableName(), [
-            'item_id' => 'pk',
-            'category_id' => Schema::TYPE_INTEGER,
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'description' => Schema::TYPE_TEXT . ' DEFAULT NULL',
-            'available' => Schema::TYPE_INTEGER . " DEFAULT '1'",
-            'price' => Schema::TYPE_FLOAT . " DEFAULT '0'",
-            'discount' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'data' => Schema::TYPE_TEXT . ' NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'category_id' => $this->integer(),
+            'title' => $this->string(128)->notNull(),
+            'description' => $this->text(),
+            'available' => $this->integer()->defaultValue(1),
+            'price' => $this->float()->defaultValue(0),
+            'discount' => $this->integer()->defaultValue(0),
+            'data' => $this->text(),
+            'image' => $this->string(128),
+            'slug' => $this->string(128),
+            'time' => $this->integer()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
         $this->createIndex('slug', catalog\models\Item::tableName(), 'slug', true);
 
         $this->createTable(catalog\models\ItemData::tableName(), [
-            'data_id' => 'pk',
-            'item_id' => Schema::TYPE_INTEGER,
-            'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'value' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
+            'id' => $this->primaryKey(),
+            'item_id' => $this->integer(),
+            'name' => $this->string(128)->notNull(),
+            'value' => $this->string(1024),
         ], $this->engine);
         $this->createIndex('item_id_name', catalog\models\ItemData::tableName(), ['item_id', 'name']);
         $this->createIndex('value', catalog\models\ItemData::tableName(), 'value(300)');
 
         //SHOPCART MODULE
         $this->createTable(shopcart\models\Order::tableName(), [
-            'order_id' => 'pk',
-            'name' => Schema::TYPE_STRING . '(64) NOT NULL',
-            'address' => Schema::TYPE_STRING . '(255) NOT NULL',
-            'phone' => Schema::TYPE_STRING . '(64) NOT NULL',
-            'email' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'comment' => Schema::TYPE_STRING . '(1024) NOT NULL',
-            'remark' => Schema::TYPE_STRING . '(1024) NOT NULL',
-            'access_token' => Schema::TYPE_STRING . '(32) NOT NULL',
-            'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'new' => Schema::TYPE_BOOLEAN . " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'name' => $this->string(64),
+            'address' => $this->string(1024),
+            'phone' => $this->string(64),
+            'email' => $this->string(128),
+            'comment' => $this->string(1024),
+            'remark' => $this->string(1024),
+            'access_token' => $this->string(32),
+            'ip' => $this->string(16),
+            'time' => $this->integer()->defaultValue(0),
+            'new' => $this->boolean()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(0)
         ], $this->engine);
 
         $this->createTable(shopcart\models\Good::tableName(), [
-            'good_id' => 'pk',
-            'order_id' => Schema::TYPE_INTEGER,
-            'item_id' => Schema::TYPE_INTEGER,
-            'count' => Schema::TYPE_INTEGER,
-            'options' => Schema::TYPE_STRING . '(255) NOT NULL',
-            'price' => Schema::TYPE_FLOAT . " DEFAULT '0'",
-            'discount' => Schema::TYPE_INTEGER . " DEFAULT '0'",
+            'id' => $this->primaryKey(),
+            'order_id' => $this->integer(),
+            'item_id' => $this->integer(),
+            'count' => $this->integer(),
+            'options' => $this->string(255),
+            'price' => $this->float()->defaultValue(0),
+            'discount' => $this->integer()->defaultValue(0),
         ], $this->engine);
 
         //FEEDBACK MODULE
         $this->createTable(Feedback::tableName(), [
-            'feedback_id' => 'pk',
-            'name' => Schema::TYPE_STRING . '(64) NOT NULL',
-            'email' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'phone' => Schema::TYPE_STRING . '(64) DEFAULT NULL',
-            'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'text' => Schema::TYPE_TEXT . ' NOT NULL',
-            'answer_subject' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'answer_text' => Schema::TYPE_TEXT . ' DEFAULT NULL',
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'name' => Schema::TYPE_STRING,
+            'email' => $this->string(128)->notNull(),
+            'phone' => $this->string(64),
+            'title' => $this->string(128),
+            'text' => $this->text()->notNull(),
+            'answer_subject' => $this->string(128),
+            'answer_text' => $this->text(),
+            'time' => $this->integer()->defaultValue(0),
+            'ip' => $this->string(16),
+            'status' => $this->boolean()->defaultValue(0)
         ], $this->engine);
 
         //FILE MODULE
         $this->createTable(File::tableName(), [
-            'file_id' => 'pk',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'file' => Schema::TYPE_STRING . '(255) NOT NULL',
-            'size' => Schema::TYPE_INTEGER .  ' NOT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'downloads' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'order_num' => Schema::TYPE_INTEGER,
+            'id' => $this->primaryKey(),
+            'title' => $this->string(128)->notNull(),
+            'file' => $this->string(255)->notNull(),
+            'size' => $this->integer()->defaultValue(0),
+            'slug' => $this->string(128),
+            'downloads' => $this->integer()->defaultValue(0),
+            'time' => $this->integer()->defaultValue(0),
+            'order_num' => $this->integer(),
         ], $this->engine);
         $this->createIndex('slug', File::tableName(), 'slug', true);
 
         //GALLERY MODULE
         $this->createTable(gallery\models\Category::tableName(), [
-            'category_id' => 'pk',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'tree' => Schema::TYPE_INTEGER,
-            'lft' => Schema::TYPE_INTEGER,
-            'rgt' => Schema::TYPE_INTEGER,
-            'depth' => Schema::TYPE_INTEGER,
-            'order_num' => Schema::TYPE_INTEGER,
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'title' => $this->string(128)->notNull(),
+            'image' => $this->string(128),
+            'slug' => $this->string(128),
+            'tree' => $this->integer(),
+            'lft' => $this->integer(),
+            'rgt' => $this->integer(),
+            'depth' => $this->integer(),
+            'order_num' => $this->integer(),
+            'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
         $this->createIndex('slug', gallery\models\Category::tableName(), 'slug', true);
 
         //GUESTBOOK MODULE
         $this->createTable(Guestbook::tableName(), [
-            'guestbook_id' => 'pk',
-            'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'title' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'text' => Schema::TYPE_TEXT . ' NOT NULL',
-            'answer' => Schema::TYPE_TEXT . ' DEFAULT NULL',
-            'email' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'new' => Schema::TYPE_BOOLEAN . " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'name' => $this->string(128)->notNull(),
+            'title' => $this->string(128),
+            'text' => $this->text()->notNull(),
+            'answer' => $this->text(),
+            'email' => $this->string(128),
+            'time' => $this->integer()->defaultValue(0),
+            'ip' => $this->string(16),
+            'new' => $this->boolean()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(0)
         ], $this->engine);
 
         //NEWS MODULE
         $this->createTable(News::tableName(), [
-            'news_id' => 'pk',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
-            'text' => Schema::TYPE_TEXT . ' NOT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'views' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'title' => $this->string(128)->notNull(),
+            'image' => $this->string(128),
+            'short' => $this->string(1024),
+            'text' => $this->text(),
+            'slug' => $this->string(128),
+            'time' => $this->integer()->defaultValue(0),
+            'views' => $this->integer()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
         $this->createIndex('slug', News::tableName(), 'slug', true);
 
         //ARTICLE MODULE
         $this->createTable(article\models\Category::tableName(), [
-            'category_id' => 'pk',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'order_num' => Schema::TYPE_INTEGER,
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'tree' => Schema::TYPE_INTEGER,
-            'lft' => Schema::TYPE_INTEGER,
-            'rgt' => Schema::TYPE_INTEGER,
-            'depth' => Schema::TYPE_INTEGER,
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'title' => $this->string(128)->notNull(),
+            'image' => $this->string(128),
+            'order_num' => $this->integer(),
+            'slug' => $this->string(128),
+            'tree' => $this->integer(),
+            'lft' => $this->integer(),
+            'rgt' => $this->integer(),
+            'depth' => $this->integer(),
+            'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
         $this->createIndex('slug', article\models\Category::tableName(), 'slug', true);
 
         $this->createTable(article\models\Item::tableName(), [
-            'item_id' => 'pk',
-            'category_id' => Schema::TYPE_INTEGER,
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'image' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'short' => Schema::TYPE_STRING . '(1024) DEFAULT NULL',
-            'text' => Schema::TYPE_TEXT . ' NOT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL',
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'views' => Schema::TYPE_INTEGER . " DEFAULT '0'",
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'category_id' => $this->integer(),
+            'title' => $this->string(128)->notNull(),
+            'image' => $this->string(128),
+            'short' => $this->string(1024),
+            'text' => $this->text(),
+            'slug' => $this->string(128),
+            'time' => $this->integer()->defaultValue(0),
+            'views' => $this->integer()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
         $this->createIndex('slug', article\models\Item::tableName(), 'slug', true);
 
         //PAGE MODULE
         $this->createTable(Page::tableName(), [
-            'page_id' => 'pk',
-            'title' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'text' => Schema::TYPE_TEXT . ' NOT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL'
+            'id' => $this->primaryKey(),
+            'title' => $this->string(128)->notNull(),
+            'text' => $this->text(),
+            'slug' => $this->string(128)
         ], $this->engine);
         $this->createIndex('slug', Page::tableName(), 'slug', true);
 
         //FAQ MODULE
         $this->createTable(Faq::tableName(), [
-            'faq_id' => 'pk',
-            'question' => Schema::TYPE_TEXT . ' NOT NULL',
-            'answer' => Schema::TYPE_TEXT . ' NOT NULL',
-            'order_num' => Schema::TYPE_INTEGER,
-            'status' => Schema::TYPE_BOOLEAN . " DEFAULT '1'"
+            'id' => $this->primaryKey(),
+            'question' => $this->text()->notNull(),
+            'answer' => $this->text()->notNull(),
+            'order_num' => $this->integer()->defaultValue(0),
+            'status' => $this->boolean()->defaultValue(1)
         ], $this->engine);
 
         //SUBSCRIBE MODULE
         $this->createTable(Subscriber::tableName(), [
-            'subscriber_id' => 'pk',
-            'email' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'ip' => Schema::TYPE_STRING . '(16) NOT NULL',
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'email' => $this->string(128)->notNull(),
+            'ip' => $this->string(16),
+            'time' => $this->integer()->defaultValue(0)
         ], $this->engine);
         $this->createIndex('email', Subscriber::tableName(), 'email', true);
 
         $this->createTable(History::tableName(), [
-            'history_id' => 'pk',
-            'subject' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'body' => Schema::TYPE_TEXT . ' NOT NULL',
-            'sent' => Schema::TYPE_INTEGER .  " DEFAULT '0'",
-            'time' => Schema::TYPE_INTEGER .  " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'subject' => $this->string(128)->notNull(),
+            'body' => $this->text(),
+            'sent' => $this->integer()->defaultValue(0),
+            'time' => $this->integer()->defaultValue(0)
         ], $this->engine);
 
         //TEXT MODULE
         $this->createTable(Text::tableName(), [
-            'text_id' => 'pk',
-            'text' => Schema::TYPE_TEXT . ' NOT NULL',
-            'slug' => Schema::TYPE_STRING . '(128) DEFAULT NULL'
+            'id' => $this->primaryKey(),
+            'text' => $this->text()->notNull(),
+            'slug' => $this->string(128)
         ], $this->engine);
         $this->createIndex('slug', Text::tableName(), 'slug', true);
 
         //Tags
         $this->createTable(models\Tag::tableName(), [
-            'tag_id' => 'pk',
-            'name' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'frequency' => Schema::TYPE_INTEGER . " DEFAULT '0'"
+            'id' => $this->primaryKey(),
+            'name' => $this->string(128)->notNull(),
+            'frequency' => $this->integer()->defaultValue(0)
         ], $this->engine);
         $this->createIndex('name', models\Tag::tableName(), 'name', true);
 
         $this->createTable(models\TagAssign::tableName(), [
-            'class' => Schema::TYPE_STRING . '(128) NOT NULL',
-            'item_id' => Schema::TYPE_INTEGER . " NOT NULL",
-            'tag_id' => Schema::TYPE_INTEGER . " NOT NULL",
+            'class' => $this->string(128)->notNull(),
+            'item_id' => $this->integer()->notNull(),
+            'tag_id' => $this->integer()->notNull(),
         ], $this->engine);
         $this->createIndex('class', models\TagAssign::tableName(), 'class');
         $this->createIndex('item_tag', models\TagAssign::tableName(), ['item_id', 'tag_id']);
