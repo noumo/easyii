@@ -124,5 +124,22 @@ return [
     'Clear image' => 'Очистить изображение',
     'Image cleared' => 'Изображение очищено',
 
-
+    'Orders' => 'Заказы',
+    'Catalog' => 'Каталог',
+    'Manufacturers' => 'Производители',
+    'Currencies' => 'Валюты',
+    'Import' => 'Импорт',
+    'Photo Gallery' => 'Фото-галерея',
+    'Guestbook' => 'Гостевая книга',
+    'News' => 'Новости',
+    'Articles' => 'Статьи',
+    'Feedback' => 'Обратная связь',
+    'Pages' => 'Страницы',
+    'FAQ' => 'Вопросы-Ответы',
+    'Carousel' => 'Карусель',
+    'Files' => 'Файлы',
+    'Text blocks' => 'Текстовые блоки',
+    'E-mail subscribe' => 'Емейл-подписка',
+    'Situations' => 'Ситуации',
+    'Comments' => 'Комментарии',
 ];
