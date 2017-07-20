@@ -25,7 +25,7 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
         "creocoder/yii2-nested-sets": "0.9.*",
-        "bower-asset/fancybox": "*",
+        "fancyapps/fancybox": "*",
         "bower-asset/jquery.switcher": "*",
         "bower-asset/eonasdan-bootstrap-datetimepicker": "^4.7@dev",
         "2amigos/yii2-selectize-widget": "~1.0"
