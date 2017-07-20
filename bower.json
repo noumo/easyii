@@ -1,0 +1,23 @@
+{
+    "name": "market",
+    "authors": [
+        "Michael Chehivskiy <michael.chehivskiy@gmail.com>"
+    ],
+    "description": "",
+    "main": "",
+    "license": "MIT",
+    "homepage": "",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "vendor/bower",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "fancybox": "2.1.5",
+        "jquery.switcher": "*",
+        "eonasdan-bootstrap-datetimepicker": "^4.7@dev"
+    }
+}
