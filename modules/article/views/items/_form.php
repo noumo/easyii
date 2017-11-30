@@ -22,11 +22,14 @@ $module = $this->context->module->id;
         <a href="<?= Url::to(['/admin/'.$module.'/items/clear-image', 'id' => $model->primaryKey]) ?>" class="text-danger confirm-delete" title="<?= Yii::t('easyii', 'Clear image')?>"><?= Yii::t('easyii', 'Clear image')?></a>
     <?php endif; ?>
     <?= $form->field($model, 'image')->fileInput() ?>
+    <?= $form->field($model, 'include_image')->checkBox() ?>
 <?php endif; ?>
 
 <?php if($this->context->module->settings['enableShort']) : ?>
     <?= $form->field($model, 'short')->textarea() ?>
+    <?= $form->field($model, 'include_short')->checkBox() ?>
 <?php endif; ?>
+<?= $form->field($model, 'show_on_front_page')->checkBox() ?>
 
 <?= $form->field($model, 'text')->widget(Redactor::className(),[
     'options' => [

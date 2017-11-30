@@ -42,6 +42,7 @@ class AController extends Controller
     public function actionCreate()
     {
         $model = new News;
+        $model->news_category = isset($_GET['type']) ? $_GET['type'] : 'Kjede';
         $model->time = time();
 
         if ($model->load(Yii::$app->request->post())) {

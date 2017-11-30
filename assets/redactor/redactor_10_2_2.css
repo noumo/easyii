@@ -841,14 +841,9 @@ body .redactor-box-fullscreen {
 }
 .redactor-editor blockquote {
   margin-left: 1.6em !important;
-  padding: 0;
-  text-align: left;
+  padding-left: 0;
   color: #777;
   font-style: italic;
-}
-.redactor-editor blockquote:before,
-.redactor-editor blockquote:after {
-  content: '';
 }
 .redactor-editor ul,
 .redactor-editor ol {

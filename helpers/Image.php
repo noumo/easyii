@@ -31,8 +31,10 @@ class Image
         {
             $info = pathinfo($filename);
             $thumbName = $info['filename'] . '-' . md5( filemtime($filename) . (int)$width . (int)$height . (int)$crop ) . '.' . $info['extension'];
-            $thumbFile = Yii::getAlias('@webroot') . DIRECTORY_SEPARATOR . Upload::$UPLOADS_DIR . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $thumbName;
-            $thumbWebFile = '/' . Upload::$UPLOADS_DIR . '/thumbs/' . $thumbName;
+            $webRoot = Yii::getAlias('@webroot');
+            $thumbFile = $webRoot . DIRECTORY_SEPARATOR . Upload::$UPLOADS_DIR . DIRECTORY_SEPARATOR . 'thumbs' . DIRECTORY_SEPARATOR . $thumbName;
+            $thumbWebFile = '/' . ((strpos(Yii::getAlias('@web'), 'beta') !== false) ? ('beta' . DIRECTORY_SEPARATOR ) : '' ) . Upload::$UPLOADS_DIR . '/thumbs/' . $thumbName;
+
             if(file_exists($thumbFile)){
                 return $thumbWebFile;
             }

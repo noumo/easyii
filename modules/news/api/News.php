@@ -30,11 +30,11 @@ class News extends \yii\easyii\components\API
 
     public function api_items($options = [])
     {
-        if(!$this->_items){
+        if(!$this->_items || !empty($options['nocache'])){
             $this->_items = [];
 
             $with = ['seo'];
-            if(Yii::$app->getModule('admin')->activeModules['news']->settings['enableTags']){
+            if(isset(Yii::$app->getModule('admin')->activeModules['news']) && Yii::$app->getModule('admin')->activeModules['news']->settings['enableTags']) {
                 $with[] = 'tags';
             }
             $query = NewsModel::find()->with($with)->status(NewsModel::STATUS_ON);
@@ -114,9 +114,9 @@ class News extends \yii\easyii\components\API
         return $this->_adp ? $this->_adp->pagination : null;
     }
 
-    public function api_pages()
+    public function api_pages($options = [])
     {
-        return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
+        return $this->_adp ? LinkPager::widget(array_merge($options, ['pagination' => $this->_adp->pagination])) : '';
     }
 
     private function findNews($id_slug)

@@ -51,13 +51,13 @@ class Article extends \yii\easyii\components\API
         return Category::cats();
     }
 
-    public function api_items($options = [])
+    public function api_items($options = [], $front_page = false)
     {
         //if(!$this->_items){
             $this->_items = [];
 
             $with = ['seo', 'category'];
-            if(Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']){
+            if(isset(Yii::$app->getModule('admin')->activeModules['article']) && Yii::$app->getModule('admin')->activeModules['article']->settings['enableTags']) {
                 $with[] = 'tags';
             }
             $query = Item::find()->with($with)->status(Item::STATUS_ON);
@@ -67,6 +67,11 @@ class Article extends \yii\easyii\components\API
             }
 
             $query->andFilterWhere(['franchise_id' => Yii::$app->session['dbFranchiseID']]);
+
+            if( $front_page )
+            {
+                $query->andFilterWhere(['show_on_front_page' => 1]);
+            }
 
             if(!empty($options['tags'])){
                 $query
@@ -142,9 +147,9 @@ class Article extends \yii\easyii\components\API
         return $this->_adp ? $this->_adp->pagination : null;
     }
 
-    public function api_pages()
+    public function api_pages($options = [])
     {
-        return $this->_adp ? LinkPager::widget(['pagination' => $this->_adp->pagination]) : '';
+        return $this->_adp ? LinkPager::widget(array_merge($options, ['pagination' => $this->_adp->pagination])) : '';
     }
 
     private function findCategory($id_slug)

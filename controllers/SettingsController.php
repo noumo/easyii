@@ -39,22 +39,30 @@ class SettingsController extends \yii\easyii\components\Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Setting created'));
-                    if( $model->name == "franchise_logo" )
-                    {
-                        Yii::$app->session['dbFranchiseLogo'] = $model->value;
-                    }
-                    else if( $model->name == "franchise_main_color" )
-                    {
-                        Yii::$app->session['dbFranchiseMainColor'] = $model->value;
-                    }
-                    else if( $model->name == "franchise_font_color" )
-                    {
-                        Yii::$app->session['dbFranchiseFontColor'] = $model->value;
-                    }
-                    else if( $model->name == "franchise_highlight_color" )
-                    {
-                        Yii::$app->session['dbFranchiseHighlightColor'] = $model->value;
-                    }
+                    // if( $model->name == "franchise_logo" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseLogo'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_print_logo" )
+                    // {
+                    //     Yii::$app->session['dbFranchisePrintLogo'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_main_color" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseMainColor'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_font_color" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseFontColor'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_highlight_color" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseHighlightColor'] = $model->value;
+                    // }
+
+                    Yii::$app->session[$model->name] = $model->value;
+
+
 
                     return $this->redirect('/admin/settings');
                 }
@@ -90,22 +98,27 @@ class SettingsController extends \yii\easyii\components\Controller
 
                 if($model->save()){
                     $this->flash('success', Yii::t('easyii', 'Setting updated'));
-                    if( $model->name == "franchise_logo" )
-                    {
-                        Yii::$app->session['dbFranchiseLogo'] = $model->value;
-                    }
-                    else if( $model->name == "franchise_main_color" )
-                    {
-                        Yii::$app->session['dbFranchiseMainColor'] = $model->value;
-                    }
-                    else if( $model->name == "franchise_font_color" )
-                    {
-                        Yii::$app->session['dbFranchiseFontColor'] = $model->value;
-                    }
-                    else if( $model->name == "franchise_highlight_color" )
-                    {
-                        Yii::$app->session['dbFranchiseHighlightColor'] = $model->value;
-                    }
+                    // if( $model->name == "franchise_logo" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseLogo'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_print_logo" )
+                    // {
+                    //     Yii::$app->session['dbFranchisePrintLogo'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_main_color" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseMainColor'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_font_color" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseFontColor'] = $model->value;
+                    // }
+                    // else if( $model->name == "franchise_highlight_color" )
+                    // {
+                    //     Yii::$app->session['dbFranchiseHighlightColor'] = $model->value;
+                    // }
+                    Yii::$app->session[$model->name] = $model->value;
                 }
                 else{
                     $this->flash('error', Yii::t('easyii', 'Update error. {0}', $model->formatErrors()));

@@ -25,11 +25,12 @@ class News extends \yii\easyii\components\ActiveRecord
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
-            [['views', 'time', 'status'], 'integer'],
+            [['views', 'time', 'status', 'include_image', 'include_short'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['status', 'default', 'value' => self::STATUS_ON],
+            ['news_category', 'string'],
             ['tagNames', 'safe']
         ];
     }
@@ -44,6 +45,9 @@ class News extends \yii\easyii\components\ActiveRecord
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
             'tagNames' => Yii::t('easyii', 'Tags'),
+            'include_image' => Yii::t('easyii', 'Include overview image in main article'),
+            'include_short' => Yii::t('easyii', 'Include short in main article'),
+            'news_category' => Yii::t('easyii', 'News Category')
         ];
     }
 
@@ -64,8 +68,6 @@ class News extends \yii\easyii\components\ActiveRecord
     {
         return $this->hasMany(Photo::className(), ['item_id' => 'news_id'])->where(['class' => self::className()])->sort();
     }
-
-
 
     public function beforeSave($insert)
     {

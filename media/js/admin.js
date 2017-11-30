@@ -4,7 +4,27 @@ $(function(){
         var button = $(this).addClass('disabled');
         var title = button.attr('title');
 
-        if(confirm(title ? title+'?' : 'Confirm the deletion')){
+        confirm( title ? title+'?' : 'Confirm the deletion', function(data) {
+            if( data )
+            {
+                if(button.data('reload')){
+                    return true;
+                }
+                $.getJSON(button.attr('href'), function(response){
+                    button.removeClass('disabled');
+                    if(response.result === 'success'){
+                        notify.success(response.message);
+                        button.closest('tr').fadeOut(function(){
+                            this.remove();
+                        });
+                    } else {
+                        alert(response.error);
+                    }
+                });
+            }
+        });
+
+        /*if(confirm(title ? title+'?' : 'Confirm the deletion')){
             if(button.data('reload')){
                 return true;
             }
@@ -19,7 +39,7 @@ $(function(){
                     alert(response.error);
                 }
             });
-        }
+        }*/
         return false;
     });
 

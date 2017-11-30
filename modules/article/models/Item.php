@@ -25,7 +25,7 @@ class Item extends \yii\easyii\components\ActiveRecord
             [['title', 'short', 'text'], 'trim'],
             ['title', 'string', 'max' => 128],
             ['image', 'image'],
-            [['category_id', 'views', 'time', 'status'], 'integer'],
+            [['category_id', 'views', 'time', 'status', 'include_image', 'include_short', 'show_on_front_page'], 'integer'],
             ['time', 'default', 'value' => time()],
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
@@ -44,6 +44,9 @@ class Item extends \yii\easyii\components\ActiveRecord
             'time' => Yii::t('easyii', 'Date'),
             'slug' => Yii::t('easyii', 'Slug'),
             'tagNames' => Yii::t('easyii', 'Tags'),
+            'include_image' => Yii::t('easyii', 'Include overview image in main article'),
+            'include_short' => Yii::t('easyii', 'Include short in main article'),
+            'show_on_front_page' => Yii::t('easyii', 'Show article on front page')
         ];
     }
 

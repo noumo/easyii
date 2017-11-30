@@ -68,6 +68,22 @@ class ItemsController extends Controller
                 $model->franchise_id = Yii::$app->session['dbFranchiseID'];
 
                 if ($model->save()) {
+                    if( $model->show_on_front_page == 1 )
+                    {
+                        $items = Item::find()->select(['item_id','time'])->where(['show_on_front_page' => 1, 'franchise_id' => Yii::$app->session['dbFranchiseID']])->orderBy('time DESC')->asArray()->all();
+
+                        if( count($items) > 3 )
+                        {
+                            for( $i = 3; $i < count($items); $i++ )
+                            {
+                                $itemToUpdate = $items[$i];
+                                $itemToUpdate = Item::find()->where(['item_id' => $itemToUpdate['item_id']])->one();
+                                $itemToUpdate->show_on_front_page = 0;
+                                $itemToUpdate->save();
+                            }
+                        }
+                    }
+
                     $this->flash('success', Yii::t('easyii/article', 'Article created'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
                 } else {
@@ -107,6 +123,22 @@ class ItemsController extends Controller
                 $model->franchise_id = Yii::$app->session['dbFranchiseID'];
 
                 if ($model->save()) {
+                    if( $model->show_on_front_page == 1 )
+                    {
+                        $items = Item::find()->select(['item_id','time'])->where(['show_on_front_page' => 1, 'franchise_id' => Yii::$app->session['dbFranchiseID']])->orderBy('time DESC')->asArray()->all();
+
+                        if( count($items) > 3 )
+                        {
+                            for( $i = 3; $i < count($items); $i++ )
+                            {
+                                $itemToUpdate = $items[$i];
+                                $itemToUpdate = Item::find()->where(['item_id' => $itemToUpdate['item_id']])->one();
+                                $itemToUpdate->show_on_front_page = 0;
+                                $itemToUpdate->save();
+                            }
+                        }
+                    }
+
                     $this->flash('success', Yii::t('easyii/article', 'Article updated'));
                     return $this->redirect(['/admin/'.$this->module->id.'/items/edit', 'id' => $model->primaryKey]);
                 } else {

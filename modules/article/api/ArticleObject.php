@@ -28,11 +28,23 @@ class ArticleObject extends \yii\easyii\components\ApiObject
     }
 
     public function getShort(){
-        return LIVE_EDIT ? API::liveEdit($this->model->short, $this->editLink) : $this->model->short;
+        return LIVE_EDIT ? API::liveEdit($this->model->short, $this->editLink, 'div') : $this->model->short;
     }
 
     public function getText(){
         return LIVE_EDIT ? API::liveEdit($this->model->text, $this->editLink, 'div') : $this->model->text;
+    }
+
+    public function getInclude_Image(){
+        return LIVE_EDIT ? API::liveEdit($this->model->include_image, $this->editLink) : $this->model->include_image;
+    }
+
+    public function getInclude_Short(){
+        return LIVE_EDIT ? API::liveEdit($this->model->include_short, $this->editLink) : $this->model->include_short;
+    }
+
+    public function getShow_On_Front_Page(){
+        return LIVE_EDIT ? API::liveEdit($this->model->show_on_front_page, $this->editLink) : $this->model->show_on_front_page;
     }
 
     public function getCat(){

@@ -102,7 +102,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
         $tree = $cache->get($key);
         if( Yii::$app->session['refreshCMSCache'] || !$tree ){
-            Yii::$app->session['refreshCMSCache'] = null;
+            unset(Yii::$app->session['refreshCMSCache']);
             $tree = static::generateTree();
             $cache->set($key, $tree, 3600);
         }
@@ -120,7 +120,7 @@ class CategoryModel extends \yii\easyii\components\ActiveRecord
 
         $flat = $cache->get($key);
         if( Yii::$app->session['refreshCMSCache'] || !$flat ){
-            Yii::$app->session['refreshCMSCache'] = null;
+            unset(Yii::$app->session['refreshCMSCache']);
             $flat = static::generateFlat();
             $cache->set($key, $flat, 3600);
         }

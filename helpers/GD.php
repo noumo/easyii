@@ -49,14 +49,14 @@ class GD
         }
         elseif(!$height)
         {
-            if ($this->_width > $width) {
+            //if ($this->_width > $width) {
                 $ratio = $this->_width / $width;
                 $newWidth = $width;
                 $newHeight = round($this->_height / $ratio);
-            } else {
+            /*} else {
                 $newWidth = $this->_width;
                 $newHeight = $this->_height;
-            }
+            }*/
         }
         else
         {

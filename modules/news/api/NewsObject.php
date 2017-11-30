@@ -13,6 +13,7 @@ class NewsObject extends \yii\easyii\components\ApiObject
     public $image;
     public $views;
     public $time;
+    public $news_id;
 
     private $_photos;
 
@@ -21,11 +22,23 @@ class NewsObject extends \yii\easyii\components\ApiObject
     }
 
     public function getShort(){
-        return LIVE_EDIT ? API::liveEdit($this->model->short, $this->editLink) : $this->model->short;
+        return LIVE_EDIT ? API::liveEdit($this->model->short, $this->editLink, 'div') : $this->model->short;
     }
 
     public function getText(){
         return LIVE_EDIT ? API::liveEdit($this->model->text, $this->editLink, 'div') : $this->model->text;
+    }
+
+    public function getEnum(){
+        return LIVE_EDIT ? API::liveEdit($this->model->news_category, $this->editLink, 'div') : $this->model->news_category;
+    }
+
+    public function getInclude_Image(){
+        return LIVE_EDIT ? API::liveEdit($this->model->include_image, $this->editLink) : $this->model->include_image;
+    }
+
+    public function getInclude_Short(){
+        return LIVE_EDIT ? API::liveEdit($this->model->include_short, $this->editLink) : $this->model->include_short;
     }
 
     public function getTags(){

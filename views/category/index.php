@@ -10,7 +10,6 @@ $baseUrl = '/admin/'.$this->context->moduleName;
 ?>
 
 <?= $this->render('_menu') ?>
-
 <?php if(sizeof($cats) > 0) : ?>
     <table class="table table-hover">
         <tbody>
