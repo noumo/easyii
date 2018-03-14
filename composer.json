@@ -7,7 +7,6 @@
     "type": "yii2-extension",
     "license": "GNU GPL V3",
     "minimum-stability": "dev",
-    "version": "1.0.0",
     "support": {
         "wiki": "http://easyiicms.com/docs",
         "source": "https://github.com/xoduz/easyii.git",
