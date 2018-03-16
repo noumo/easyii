@@ -9,13 +9,13 @@
     "minimum-stability": "dev",
     "support": {
         "wiki": "http://easyiicms.com/docs",
-        "source": "https://github.com/xoduz/easyii.git",
-        "issues": "https://github.com/xoduz/easyii/issues"
+        "source": "https://github.com/attybean/easyii.git",
+        "issues": "https://github.com/attybean/easyii/issues"
     },
     "authors": [
         {
-            "name": "Geir Ove Alnes",
-            "email": "xoduz@xoduz.org",
+            "name": "Attybean",
+            "email": "",
             "role" : "Developer"
         }
     ],
