@@ -5,7 +5,7 @@
     "keywords": ["easyii"],
     "homepage": "http://easyiicms.com",
     "type": "yii2-extension",
-    "license": "GNU GPL V3",
+    "license": "GPL-3.0-or-later",
     "minimum-stability": "dev",
     "support": {
         "wiki": "http://easyiicms.com/docs",
