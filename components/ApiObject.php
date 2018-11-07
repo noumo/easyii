@@ -8,7 +8,10 @@ use yii\easyii\helpers\Image;
  * Class ApiObject
  * @package yii\easyii\components
  */
-class ApiObject extends \yii\base\Object
+if(!class_exists('yii\base\BaseObject'))
+    class_alias('yii\base\Object', 'yii\base\BaseObject');
+
+class ApiObject extends \yii\base\BaseObject
 {
     /** @var \yii\base\Model  */
     public $model;

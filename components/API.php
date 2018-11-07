@@ -7,7 +7,10 @@ use Yii;
  * Base API component. Used by all modules
  * @package yii\easyii\components
  */
-class API extends \yii\base\Object
+if(!class_exists('yii\base\BaseObject'))
+    class_alias('yii\base\Object', 'yii\base\BaseObject');
+
+class API extends \yii\base\BaseObject
 {
     /** @var  array */
     static $classes;
