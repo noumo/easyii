@@ -61,11 +61,14 @@ class Carousel extends API
             $items[] = $temp;
         }
 
-        $widget = \yii\bootstrap\Carousel::widget([
+        $widgetItems = [
             'options' => ['class' => 'slide'],
             'clientOptions' => $this->clientOptions,
             'items' => $items
-        ]);
+        ];
+            if(isset($this->clientOptions['controls']))
+                $widgetItems['controls'] = $this->clientOptions['controls'];
+        $widget = \yii\bootstrap\Carousel::widget($widgetItems);
 
         return LIVE_EDIT ? API::liveEdit($widget, Url::to(['/admin/carousel']), 'div') : $widget;
     }
