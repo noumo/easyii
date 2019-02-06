@@ -1,0 +1,33 @@
+// Power Function
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  }
+
+  @return $value;
+}
+
+// Strip Units
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+// Clearfix
+@mixin clearfix {
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+// Scale Font Size
+@mixin font-scaled-size-up($scale) {
+    font-size: 1em * pow($font-scale, $scale);
+}
+@mixin font-scaled-size-down($scale) {
+    font-size: 1em / pow($font-scale, $scale);
+}

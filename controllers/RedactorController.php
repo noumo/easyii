@@ -32,7 +32,9 @@ class RedactorController extends \yii\easyii\components\Controller
 
     public function actionUpload($dir = '')
     {
-        $fileInstance = UploadedFile::getInstanceByName('file');
+        // $fileInstance = UploadedFile::getInstanceByName('file');
+        //multiple file upload is now supported by reactor: 01.12.2018
+        $fileInstance = UploadedFile::getInstanceByName('file[0]');
         if ($fileInstance) {
             $file = Image::upload($fileInstance, $dir);
             if($file) {
@@ -116,8 +118,10 @@ class RedactorController extends \yii\easyii\components\Controller
     private function getResponse($fileName)
     {
         return [
-            'filelink' => $fileName,
-            'filename' => basename($fileName)
+            // 'filelink' => $fileName,
+            // 'filename' => basename($fileName)
+            //support for redactors multi file upload 
+            'file-0' => ['url'=>$fileName, 'name' => basename($fileName), 'id' => '1']
         ];
     }
 }

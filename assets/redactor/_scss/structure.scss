@@ -1,0 +1,25 @@
+.redactor-structure {
+
+	h1, h2, h3, h4, h5, h6, div {
+		position: relative;
+		&:before {
+			width: 24px;
+			position: absolute;
+			font-size: 10px;
+			font-weight: normal;
+			opacity: .3;
+			left: -26px;
+			top: 50%;
+			margin-top: -7px;
+			text-align: right;
+		}
+	}
+	h1:before  { content: "h1";  }
+	h2:before  { content: "h2";  }
+	h3:before  { content: "h3";  }
+	h4:before  { content: "h4";  }
+	h5:before  { content: "h5";  }
+	h6:before  { content: "h6";  }
+	div:before { content: "div"; }
+
+}

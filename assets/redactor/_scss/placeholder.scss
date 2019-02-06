@@ -1,0 +1,14 @@
+.redactor-placeholder:before {
+    position: absolute;
+    content: attr(placeholder);
+    color: rgba(0, 0, 0, .4);
+    font-weight: normal;
+}
+.redactor-in figcaption[placeholder]:empty:before {
+    content: attr(placeholder);
+    color: rgba(0, 0, 0, .4);
+    font-weight: normal;
+}
+.redactor-in figcaption[placeholder]:empty:focus:before {
+    content: "";
+}

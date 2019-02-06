@@ -1,0 +1,43 @@
+.redactor-toolbar-wrapper-air {
+    position: absolute;
+    z-index: $z-index-toolbar-wrraper-air;
+}
+.redactor-air {
+	padding: 6px 3px 2px 8px;
+	max-width: 576px;
+	min-width: 200px;
+	border-radius: 4px;
+    background: rgba(0, 0, 0, .97);
+}
+.redactor-air a {
+    background: rgba(#252525, .95);
+    box-shadow: none;
+	color: rgba(#fff, .9);
+}
+.redactor-air a:hover {
+	background: #3d79f2;
+}
+.redactor-air a.redactor-button-active {
+	background-color: rgba(255, 255, 255, .15);
+	color: #fff;
+}
+.redactor-air a.redactor-button-disabled {
+	&:hover {
+		color: #fff;
+	}
+}
+.redactor-air-helper {
+    position: absolute;
+    right: 0;
+    top: 0;
+    line-height: 1;
+    font-size: 15px;
+    color: #000;
+    background: rgba(255, 255, 255, .85);
+    border-bottom-left-radius: 4px;
+    padding: 7px 10px 6px 10px;
+    cursor: pointer;
+    &:hover {
+        background: #fff;
+    }
+}

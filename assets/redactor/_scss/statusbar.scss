@@ -1,0 +1,35 @@
+.redactor-statusbar {
+    font-family: $monospace-font-family;
+    margin: 0;
+    padding: 8px 10px;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    background: #f8f8f8;
+    box-sizing: border-box;
+    border: none;
+
+    & li {
+        float: left;
+        font-size: 12px;
+        color: rgba(0, 0, 0, .5);
+        padding: 0 10px;
+        line-height: 16px;
+        border-right: 1px solid rgba(0, 0, 0, .1);
+    }
+    & li:last-child {
+        border-right-color: transparent;
+    }
+    & a {
+        color: rgba(0, 0, 0, .5);
+        text-decoration: underline;
+    }
+    & a:hover {
+        color: #f03c69;
+        text-decoration: underline;
+    }
+
+    &:empty {
+        display: none;
+    }
+}
