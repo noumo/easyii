@@ -1,0 +1,117 @@
+.redactor-dropdown {
+    font-family: $base-font-family;
+    display: none;
+    position: absolute;
+    z-index: $z-index-dropdown;
+    background-color: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .2);
+    border-radius: 2px;
+    width: 264px;
+    max-height: 250px;
+    margin: 0;
+    margin-top: -1px;
+    overflow: auto;
+    font-size: 15px;
+    padding: 0;
+    & a span {
+        display: inline-block;
+        line-height: 1;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+    & a {
+        display: block;
+        text-decoration: none;
+        padding: 10px 8px;
+        white-space: nowrap;
+        border-bottom: 1px solid rgba(0, 0, 0, .05);
+    }
+    & a:last-child {
+        border-bottom-color: transparent;
+    }
+    & a {
+        color: #000;
+        &:hover {
+            color: #fff !important;
+            background-color: #449aef !important;
+        }
+        &.redactor-dropdown-item-disabled {
+            color: rgba(0, 0, 0, .4);
+            background: #fff;
+        }
+    }
+}
+.redactor-dropdown-cells {
+    margin: 10px auto;
+    & a,
+    & span {
+        float: left;
+        cursor: pointer;
+        box-sizing: border-box;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+    }
+}
+.redactor-dropdown-selector {
+    display: flex;
+    text-align: center;
+
+    & span {
+        flex-grow: 1;
+        font-size: 12px;
+        padding: 8px;
+        cursor: pointer;
+        &:hover {
+            background: #eee;
+        }
+        &.active {
+            cursor: text;
+            color: rgba(0, 0, 0, .3);
+            background: #eee;
+        }
+    }
+}
+
+// Block Format
+.redactor-dropdown-format {
+	& .redactor-dropdown-item-blockquote {
+		color: rgba(0, 0, 0, .4);
+		font-style: italic;
+	}
+	& .redactor-dropdown-item-pre {
+		font-family: monospace, sans-serif;
+	}
+	& .redactor-dropdown-item-h1 {
+		font-size: 40px;
+		font-weight: bold;
+		line-height: 32px;
+	}
+	& .redactor-dropdown-item-h2 {
+		font-size: 32px;
+		font-weight: bold;
+		line-height: 32px;
+	}
+	& .redactor-dropdown-item-h3 {
+		font-size: 24px;
+		font-weight: bold;
+		line-height: 24px;
+	}
+	& .redactor-dropdown-item-h4 {
+		font-size: 21px;
+		font-weight: bold;
+		line-height: 24px;
+	}
+	& .redactor-dropdown-item-h5 {
+		font-size: 18px;
+		font-weight: bold;
+		line-height: 24px;
+	}
+	& .redactor-dropdown-item-h6 {
+		font-size: 14px;
+		text-transform: uppercase;
+		font-weight: bold;
+		line-height: 24px;
+	}
+}

@@ -1,0 +1,237 @@
+.redactor-styles {
+
+    // ui
+    margin: 0;
+    padding: 16px 18px;
+
+    // content
+    color: $color-text;
+    font-family: $base-font-family;
+    font-size: $font-size;
+    line-height: $base-line;
+    box-sizing: border-box;
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
+    }
+
+    &[dir="rtl"] {
+		direction: rtl;
+		unicode-bidi: embed;
+
+		ul,
+		ol {
+			li {
+				text-align: right;
+			}
+		}
+		ul,
+		ol,
+		ul ul,
+		ol ol,
+		ul ol,
+		ol ul {
+			margin: 0 $base-line-ems 0 0;
+		}
+		figcaption {
+    		text-align: right;
+		}
+	}
+    a,
+    a:hover {
+        color: $color-link;
+    }
+	p,
+	dl,
+	blockquote,
+	hr,
+	pre,
+	table,
+	figure,
+	address {
+		padding: 0;
+		margin: 0;
+		margin-bottom: $text-margin-bottom;
+	}
+    ul,
+    ol {
+        padding: 0;
+
+        &,
+        & ul,
+        & ol {
+            margin: 0 0 0 $base-line-ems;
+        }
+    }
+	ul li,
+	ol li {
+		text-align: left;
+	}
+	ol ol li {
+		list-style-type: lower-alpha;
+	}
+	ol ol ol li {
+		list-style-type: lower-roman;
+	}
+    ul,
+	ol {
+    	margin-bottom: $text-margin-bottom;
+	}
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-weight: $headings-font-weight;
+		color: $color-headings;
+		text-rendering: optimizeLegibility;
+		margin: 0;
+		padding: 0;
+		margin-bottom: $headings-margin-bottom;
+		line-height: $headings-base-line;
+	}
+	h1 { @include font-scaled-size-up(4); }
+    h2 { @include font-scaled-size-up(3); }
+    h3 { @include font-scaled-size-up(2); }
+    h4 { @include font-scaled-size-up(1); }
+    h5 { font-size: 1em; }
+    h6 {
+        @include font-scaled-size-down(1);
+        text-transform: uppercase;
+        letter-spacing: .035em;
+    }
+	blockquote {
+    	font-style: italic;
+    	color: rgba(0, 0, 0, .5);
+        border: none;
+	}
+    table {
+        width: 100%;
+    }
+	time, small, var, code, kbd, mark {
+        display: inline-block;
+        font-family: $monospace-font-family;
+        font-size: 87.5%;
+        line-height: 1;
+        color: rgba($color-text, .9);
+    }
+    var, cite {
+        opacity: .6;
+    }
+    var {
+        font-style: normal;
+    }
+    dfn,
+    abbr {
+        text-transform: uppercase;
+        &[title] {
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(0, 0, 0, .5);
+            cursor: help;
+        }
+    }
+    code, kbd {
+        position: relative;
+        top: -1px;
+        padding: 0.25em;
+        padding-bottom: 0.2em;
+        border-radius: 2px;
+    }
+    code {
+        background-color: $color-silver;
+    }
+    mark {
+        border-radius: 2px;
+        padding: 0.125em 0.25em;
+        background-color: $color-warning;
+    }
+    kbd {
+        border: 1px solid $color-lightgray;
+    }
+    sub,
+    sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+    }
+    sub {
+        bottom: -0.25em;
+    }
+    sup {
+        top: -0.5em;
+    }
+    // Preformatted
+    pre  {
+        font-family: $monospace-font-family;
+        font-size: .9em;
+    }
+    pre,
+    pre code {
+        background-color: $color-aluminum;
+        padding: 0;
+        top: 0;
+        display: block;
+        line-height: $base-line;
+        color: rgba($color-text, .85);
+        overflow: none;
+        white-space: pre-wrap;
+    }
+    pre {
+        padding: 1rem;
+    }
+	// tables
+	table {
+		border-collapse: collapse;
+		max-width: 100%;
+		width: 100%;
+
+		caption {
+			text-transform: uppercase;
+			padding: 0;
+			color: rgba(0, 0, 0, .5);
+			font-size: 11px;
+		}
+
+		th,
+		td {
+			border: 1px solid #eee;
+			padding: 16px;
+			padding-bottom: 15px;
+		}
+
+		tfoot th,
+		tfoot td {
+			color: rgba(0, 0, 0, .5);
+		}
+	}
+	// Responsive media
+	img,
+	video,
+	audio,
+	embed,
+	object {
+		max-width: 100%;
+	}
+	img,
+	video,
+	embed,
+	object {
+		height: auto !important;
+	}
+	img {
+		vertical-align: middle;
+		-ms-interpolation-mode: bicubic;
+	}
+    // Figure
+    figcaption {
+        display: block;
+    	opacity: .6;
+		font-size: 12px;
+		font-style: italic;
+		text-align: left;
+	}
+}

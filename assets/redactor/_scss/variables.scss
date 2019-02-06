@@ -1,0 +1,88 @@
+// Z-INDEX
+// ---------------------------------------------------------------------------
+$z-index-toolbar: 100 !default;
+$z-index-toolbar-wrraper-air: 100 !default;
+$z-index-overlay: 1051 !default;
+$z-index-contextbar: 1051 !default;
+$z-index-dropdown: 1051 !default;
+$z-index-modal: 1051 !default;
+$z-index-fullscreen: 1051 !default;
+$z-index-toolbar-button-tooltip: 1052 !default;
+$z-index-fullscreen-dropdown: 1052 !default;
+$z-index-fullscreen-overlay: 1098 !default;
+$z-index-fullscreen-modal: 1099 !default;
+
+
+// TEXT
+// ---------------------------------------------------------------------------
+$base-font-family: "Trebuchet MS", 'Helvetica Neue', Helvetica, Tahoma, sans-serif !default;
+$monospace-font-family: Consolas, Menlo, Monaco, "Courier New", monospace !default;
+
+// Scale
+$font-scale: 1.2 !default;
+
+// Font Size
+$font-size: 1em !default;
+
+// Baseline
+$base-line: 1.5 !default;
+$base-line-ems: $base-line * 1em !default;
+
+// Margin
+$text-margin-bottom: $font-size !default;
+
+// HEADINGS
+// ---------------------------------------------------------------------------
+
+// Baseline
+$headings-base-line: 1.2 !default;
+
+// Weight
+$headings-font-weight: bold !default;
+
+// Margin
+$headings-margin-bottom: 0.5em !default;
+
+
+// COLORS
+// ---------------------------------------------------------------------------
+
+// Text
+$color-text: #333 !default;
+$color-headings: #111 !default;
+
+// Links
+$color-link: #3397ff !default;
+$color-link-hover: #ff3265 !default;
+
+// States
+$color-error: #ff3265 !default;
+$color-success: #2fc4b6 !default;
+$color-warning: #fdb833 !default;
+$color-focus: #007dff !default;
+
+// Grayscale
+$color-black: #101012 !default;
+$color-darkgray: #707580 !default;
+$color-midgray: #969fa9 !default;
+$color-gray: #cacfd4 !default;
+$color-lightgray: #e5e7e9 !default;
+$color-silver: #eff1f2 !default;
+$color-aluminum: #f6f7f8 !default;
+
+// TABLES
+// ---------------------------------------------------------------------------
+
+// Padding
+$table-padding-tb: 1em !default;
+$table-padding-rl: 1em !default;
+
+// Border
+$table-border: 1px solid $color-silver !default;
+
+// Striped
+$table-background-striped: $color-aluminum !default;
+
+// OVERLAY
+// ---------------------------------------------------------------------------
+$overlay-background-color: rgba($color-black, .18) !default;

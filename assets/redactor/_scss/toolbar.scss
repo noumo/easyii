@@ -1,0 +1,120 @@
+.redactor-toolbar-wrapper {
+    position: relative;
+}
+.redactor-toolbar,
+.redactor-air {
+    z-index: $z-index-toolbar;
+    font-family: $base-font-family;
+    position: relative;
+	margin: 0 !important;
+	padding: 0;
+	list-style: none !important;
+	line-height: 1 !important;
+	background: none;
+	border: none;
+	box-sizing: border-box;
+}
+.redactor-box.redactor-styles-on {
+    & .redactor-toolbar {
+	    padding: 18px 16px 0 16px;
+	}
+}
+.redactor-toolbar a,
+.redactor-air a {
+    display: inline-block;
+    box-sizing: border-box;
+	font-size: 14px;
+	text-align: center;
+	padding: 10px 15px 9px 15px;
+	cursor: pointer;
+	outline: none;
+	border: none;
+	vertical-align: middle;
+	text-decoration: none;
+	zoom: 1;
+	position: relative;
+	color: rgba(0, 0, 0, .85);
+	border-radius: 2px;
+    background: rgba(255, 255, 255, .97);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .22);
+    margin-right: 5px;
+    margin-bottom: 4px;
+}
+.redactor-toolbar,
+.redactor-air {
+    a.re-button-icon {
+	    font-size: 16px;
+        padding: 9px 15px 6px 15px;
+    }
+}
+.redactor-toolbar,
+.redactor-air {
+    a:hover {
+	    outline: none;
+        color: #fff;
+        background: #449aef;
+    }
+}
+.redactor-toolbar a.redactor-button-active {
+    background: rgba(245, 245, 245, .95);
+    color: rgba(0, 0, 0, .4);
+}
+.redactor-toolbar,
+.redactor-air {
+    a.redactor-button-disabled {
+        opacity: 0.3;
+    	&:hover {
+    		color: #333;
+    		outline: none;
+    		background-color: transparent !important;
+    		cursor: default;
+    	}
+    }
+}
+.redactor-source-view {
+    & .redactor-toolbar {
+        background: #252525;
+    }
+    & .redactor-toolbar a {
+        background: #000;
+        color: #fff;
+        &:hover {
+            background: #449aef;
+        }
+    }
+    & .redactor-toolbar a.redactor-button-disabled {
+    	&:hover {
+		    color: #fff !important;
+    		background-color: #000 !important;
+        }
+    }
+}
+.re-button-tooltip {
+	display: none;
+	position: absolute;
+	white-space: nowrap;
+    top: 0;
+    z-index: $z-index-toolbar-button-tooltip;
+    background: rgba(0, 0, 0, .9);
+    border-radius: 3px;
+    padding: 5px 9px;
+    color: rgba(255, 255, 255, .8);
+    font-size: 12px;
+    line-height: 1;
+    font-family: $monospace-font-family;
+
+    &:after {
+    	bottom: 100%;
+    	left: 50%;
+    	border: solid transparent;
+    	content: " ";
+    	height: 0;
+    	width: 0;
+    	position: absolute;
+    	pointer-events: none;
+    	border-color: none;
+    	border-bottom-color: rgba(0, 0, 0, .9);
+    	border-width: 4px;
+    	margin-left: -4px;
+    }
+}

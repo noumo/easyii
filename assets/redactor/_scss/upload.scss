@@ -1,0 +1,27 @@
+.upload-redactor-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	border: 5px dashed rgba(#007dff, .15);
+	position: relative;
+	width: 100%;
+	min-height: 220px;
+	background: #fff;
+	cursor: pointer;
+	overflow: hidden;
+	text-align: center;
+}
+.upload-redactor-placeholder {
+	font-size: 15px;
+	line-height: 1.5;
+	color: rgba(0, 0, 0, .3);
+	font-style: italic;
+}
+
+.upload-redactor-hover { background-color: rgba(#007dff, .075);   }
+.upload-redactor-error { background-color: rgba(#ff3265, .075);   }
+
+.upload-redactor-box-hover { outline: 5px dashed rgba(#007dff, .3); }
+.upload-redactor-box-error { outline: 5px dashed rgba(#ff3265, .3);  }

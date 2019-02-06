@@ -1,0 +1,20 @@
+.redactor-box-fullscreen {
+	z-index: $z-index-fullscreen;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.redactor-box-fullscreen-target {
+    position: absolute !important;
+}
+.redactor-body-fullscreen .redactor-dropdown,
+.redactor-body-fullscreen .redactor-context-toolbar {
+    z-index: $z-index-fullscreen-dropdown;
+}
+.redactor-body-fullscreen #redactor-overlay {
+    z-index: $z-index-fullscreen-overlay;
+}
+.redactor-body-fullscreen #redactor-modal {
+    z-index: $z-index-fullscreen-modal;
+}
