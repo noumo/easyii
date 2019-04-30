@@ -43,7 +43,7 @@ class AdminModule extends \yii\base\Module implements BootstrapInterface
 
         if (Yii::$app instanceof yii\web\Application) {
             define('IS_ROOT', !Yii::$app->user->isGuest && Yii::$app->user->identity->isRoot());
-        define('IS_ADMIN', !Yii::$app->user->isGuest && \Yii::$app->user->can('Franchise CMS C'));
+            define('IS_ADMIN', !Yii::$app->user->isGuest && \Yii::$app->user->can(96/*'Franchise CMS C'*/));
             define('LIVE_EDIT', !Yii::$app->user->isGuest && Yii::$app->session->get('easyii_live_edit'));
         }
     }

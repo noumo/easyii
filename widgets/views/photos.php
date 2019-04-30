@@ -25,10 +25,10 @@ $photoTemplate = '<tr data-id="{{photo_id}}">'.(IS_ROOT ? '<td>{{photo_id}}</td>
     </td>\
     <td class="control vtop">\
         <div class="btn-group btn-group-sm" role="group">\
-            <a href="' . Url::to(['/admin/photos/up/{{photo_id}}'] + $linkParams) . '" class="btn btn-default move-up" title="'. Yii::t('easyii', 'Move up') .'"><span class="glyphicon glyphicon-arrow-up"></span></a>\
-            <a href="' . Url::to(['/admin/photos/down/{{photo_id}}'] + $linkParams) . '" class="btn btn-default move-down" title="'. Yii::t('easyii', 'Move down') .'"><span class="glyphicon glyphicon-arrow-down"></span></a>\
-            <a href="' . Url::to(['/admin/photos/image/{{photo_id}}'] + $linkParams) . '" class="btn btn-default change-image-button" title="'. Yii::t('easyii', 'Change image') .'"><span class="glyphicon glyphicon-floppy-disk"></span></a>\
-            <a href="' . Url::to(['/admin/photos/delete/{{photo_id}}']) . '" class="btn btn-default color-red delete-photo" title="'. Yii::t('easyii', 'Delete item') .'"><span class="glyphicon glyphicon-remove"></span></a>\
+            <a href="' . Url::to(['/admin/photos/up/{{photo_id}}'] + $linkParams) . '" class="btn btn-default move-up" title="'. Yii::t('easyii', 'Move up') .'"><i class="fa fa-arrow-up"></i></a>\
+            <a href="' . Url::to(['/admin/photos/down/{{photo_id}}'] + $linkParams) . '" class="btn btn-default move-down" title="'. Yii::t('easyii', 'Move down') .'"><i class="fa fa-arrow-down"></i></a>\
+            <a href="' . Url::to(['/admin/photos/image/{{photo_id}}'] + $linkParams) . '" class="btn btn-default change-image-button" title="'. Yii::t('easyii', 'Change image') .'"><i class="fa fa-save"></i></a>\
+            <a href="' . Url::to(['/admin/photos/delete/{{photo_id}}']) . '" class="btn btn-primary color-red delete-photo" title="'. Yii::t('easyii', 'Delete item') .'"><i class="fa fa-trash-alt"></i></a>\
             <input type="file" name="Photo[image]" class="change-image-input hidden">\
         </div>\
     </td>\
@@ -38,7 +38,7 @@ var photoTemplate = '{$photoTemplate}';
 ", \yii\web\View::POS_HEAD);
 $photoTemplate = str_replace('>\\', '>', $photoTemplate);
 ?>
-<button id="photo-upload" class="btn btn-success text-uppercase"><span class="glyphicon glyphicon-arrow-up"></span> <?= Yii::t('easyii', 'Upload')?></button>
+<button id="photo-upload" class="btn btn-success text-uppercase"><span class="fa fa-arrow-up"></span> <?= Yii::t('easyii', 'Upload')?></button>
 <small id="uploading-text" class="smooth"><?= Yii::t('easyii', 'Uploading. Please wait')?><span></span></small>
 
 <table id="photo-table" class="table table-hover" style="display: <?= count($photos) ? 'table' : 'none' ?>;">

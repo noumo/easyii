@@ -30,7 +30,7 @@ class News extends \yii\easyii\components\ActiveRecord
             ['slug', 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
             ['slug', 'default', 'value' => null],
             ['status', 'default', 'value' => self::STATUS_ON],
-            ['news_category', 'string'],
+            [['news_category', 'news_type'], 'string'],
             ['tagNames', 'safe']
         ];
     }
